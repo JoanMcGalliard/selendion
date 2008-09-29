@@ -37,11 +37,15 @@ public class SeleniumIdeReader {
         String contents = new ResourceFinder(this.getClass()).getResourceAsString(htmlFile);
         String table = contents.substring(contents.indexOf("<table"), contents
                 .indexOf("</table"));
+        if (table.indexOf("<tbody") > -1 ) {
+             table = table.substring(table.indexOf("<tbody"), table
+                .indexOf("</tbody"));
+        }
         String[] rows = table.split("[ 	]*<[tT][rR][^>]*>");
 
         String[][] return_val = new String[rows.length - 1][3];
         for (int i = 1; i < rows.length; i++) {
-            rows[i] = rows[i].replaceFirst("</[tT][rR][^>]*> *$", "").trim();
+            rows[i] = rows[i].replaceFirst("</[tT][rR].*>.*", "").trim();
             String[] cols = rows[i].split("[ 	]*<[tT][Dd][^>]*>");
             for (int j = 1; j < 4; j++) {
 
@@ -61,6 +65,7 @@ public class SeleniumIdeReader {
     public boolean runSeleniumScript(String filepath, Evaluator evaluator) throws Exception {
         String[][] seleniumCommands = readSelenium(filepath);
         boolean result = true;
+        try {
         for (int i = 0; i < seleniumCommands.length; i++) {
             String[] command = seleniumCommands[i];
             if (command[1] == null || command[2] == null) {
@@ -68,6 +73,10 @@ public class SeleniumIdeReader {
             } else if (execute(command[0], command[1], command[2], evaluator) == false) {
                 result = false;
             }
+        }
+        }
+        catch (Exception e) {
+            throw new Exception ("Error while running " + filepath + ": " + e.toString());
         }
         return result;
     }
@@ -91,7 +100,8 @@ public class SeleniumIdeReader {
             selenium.waitForElementPresent(arg1);
         } else if (command.equals("verifyElementPresent")) {
             return selenium.isElementPresent(arg1);
-        } else if (command.equals("XXX")) {
+        } else if (command.equals("select")) {
+             selenium.select(arg1, arg2);
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {

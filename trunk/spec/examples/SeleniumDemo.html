@@ -2,7 +2,7 @@
 <link href="../../../concordion.css" rel="stylesheet" type="text/css"/>
 <body>
 
-<h1>Webcordion </h1>
+<h1>Selendion </h1>
 
 
 
@@ -10,22 +10,18 @@
  
 
 
-
-<p>Time to <i concordion:startSelenium="'a','b','c','d'">start selenium</i>  </p>
+<p concordion:startSelenium="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl ">Time to start selenium
+server with:  host <i concordion:set="#seleniumServerHost">localhost</i>;
+    port <i concordion:set="#seleniumServerport">4444</i>;
+    for <i concordion:set="#browser">*firefox</i>;
+    and base url <i concordion:set="#baseUrl">http://selendion.org</i> </p>
 
 <p>Execute selenium script
-    <a href="testcase.htmltml" concordion:execute="#script=#HREF">Demo</a>
+    <a href="input.html" concordion:runSelenium="#HREF">Demo</a>
           
                                                                                                 <br/>
     <i concordion:set="#question">Why are we here?</i></p>
 
-<p>
-    <a href="testcase.html" concordion:runSelenium="#HREF">Test Case</a>
-</p>
-
-<p>
-    <b concordion:assertEquals="#answer">The question "Why are we here?" has no answer in  /spec/examples/testcase.html</b>
-</p>
 
 <p>Time to <i concordion:stopSelenium="">stop selenium</i>  </p>   
 
