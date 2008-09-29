@@ -1,0 +1,50 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<link href="../../../concordion.css" rel="stylesheet" type="text/css"/>
+<body>
+
+<h1>Webcordion </h1>
+
+
+
+
+ 
+
+
+
+<p>Time to <i concordion:startSelenium="'a','b','c','d'">start selenium</i>  </p>
+
+<p>Execute selenium script
+    <a href="testcase.htmltml" concordion:execute="#script=#HREF">Demo</a>
+          
+                                                                                                <br/>
+    <i concordion:set="#question">Why are we here?</i></p>
+
+<p>
+    <a href="testcase.html" concordion:runSelenium="#HREF">Test Case</a>
+</p>
+
+<p>
+    <b concordion:assertEquals="#answer">The question "Why are we here?" has no answer in  /spec/examples/testcase.html</b>
+</p>
+
+<p>Time to <i concordion:stopSelenium="">stop selenium</i>  </p>   
+
+
+<!--
+<table concordion:runSelenium="#xxx" >
+    <tr>
+        <th concordion:set="#question" >Question</th>
+        <th concordion:assertEquals="#answer">Expected Answer</th>
+    </tr>
+    <tr>
+        <td>What is the meaning of life?</td>
+        <td>The question "What is the meaning of life?" has no answer in  /spec/examples/testcase.html</td>
+    </tr>
+    <tr>
+        <td>Who is the best java developer?</td>
+        <td>The question "Who is the best java developer?" has no answer in  /spec/examples/testcase.html</td>
+    </tr>
+</table>
+    -->
+</body>
+</html>
