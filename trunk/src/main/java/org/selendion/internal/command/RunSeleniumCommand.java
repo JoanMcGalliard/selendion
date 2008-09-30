@@ -16,7 +16,6 @@ public class RunSeleniumCommand extends AbstractCommand {
     private SeleniumIdeReader seleniumIdeReader;
 
 
-
     public RunSeleniumCommand(DocumentParser documentParser, SeleniumIdeReader seleniumIdeReader) {
         this.documentParser = documentParser;
         this.seleniumIdeReader = seleniumIdeReader;
@@ -26,6 +25,12 @@ public class RunSeleniumCommand extends AbstractCommand {
     @Override
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
         Strategy strategy;
+        CommandCallList childCommands = commandCall.getChildren();
+
+        childCommands.setUp(evaluator, resultRecorder);
+        childCommands.execute(evaluator, resultRecorder);
+        childCommands.verify(evaluator, resultRecorder);
+
         if (commandCall.getElement().isNamed("table")) {
             strategy = new TableStrategy();
         } else {
@@ -57,15 +62,10 @@ public class RunSeleniumCommand extends AbstractCommand {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
-            evaluator.setVariable("#answer", "The question   \"" + evaluator.getVariable("#question") +
-                    "\" has no answer in " + seleniumFile);
-
 
             childCommands.execute(evaluator, resultRecorder);
             childCommands.verify(evaluator, resultRecorder);
         }
-
-
 
 
     }
@@ -75,15 +75,14 @@ public class RunSeleniumCommand extends AbstractCommand {
 
 
         public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
-            TableSupport tableSupport = new TableSupport(commandCall, documentParser);
-            Row[] detailRows = tableSupport.getDetailRows();
-            for (Row detailRow : detailRows) {
-                commandCall.setElement(detailRow.getElement());
-                //tableSupport.copyCommandCallsTo(detailRow);
-                commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow, commandCall.getResource()));
-                commandCall.execute(evaluator, resultRecorder);
-            }
-        }
+               TableSupport tableSupport = new TableSupport(commandCall, documentParser);
+               Row[] detailRows = tableSupport.getDetailRows();
+               for (Row detailRow : detailRows) {
+                   commandCall.setElement(detailRow.getElement());
+                   commandCall.setChildren(tableSupport.getCommandCallsFor(detailRow, commandCall.getResource()));
+                   commandCall.execute(evaluator, resultRecorder);
+               }
+           }
 
     }
 }

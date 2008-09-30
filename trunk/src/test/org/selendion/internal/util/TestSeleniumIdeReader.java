@@ -7,7 +7,6 @@ package org.selendion.internal.util;
 import org.selendion.internal.util.SeleniumIdeReader;
 import org.junit.*;
 import static org.junit.Assert.*;
-import junit.framework.TestCase;
 
 /**
  * Created by IntelliJ IDEA.
@@ -40,16 +39,18 @@ public class TestSeleniumIdeReader {
     @org.junit.Test
     public void testReadSelenium() {
         SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
-        String[][] expectedResult = {        
-        { "Only one column", null, null },
-        { "two", "columns", null },
-        { "all", "three", "columns" },
-        { "three columns, 2 empty", "", "" },
-        { "three columns", "1 empty", "" },
-        { "three columns", "", "middle one empty" },
-        { "Two columns, one used", "", null }} ;
+        String[][] expectedResult = {
+                {"Only one column", null, null},
+                {"two", "columns", null},
+                {"all", "three", "columns"},
+                {"three columns, 2 empty", "", ""},
+                {"three columns", "1 empty", ""},
+                {"three columns", "", "middle one empty"},
+                {"Two columns, one used", "", null}};
 
-        String[][] actualResult = seleniumIdeReader.readSelenium("test_data/testcase.html");
+        String[][] actualResult = seleniumIdeReader.readSelenium("test_data/seleniumIdeExample.html");
+        assertEquals(actualResult, expectedResult);
+        actualResult = seleniumIdeReader.readSelenium("test_data/simpleExample.html");
         assertEquals(actualResult, expectedResult);
 
 
