@@ -22,6 +22,4 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_CONCORDION_2007, "stopSelenium",  stopSeleniumCommand);
 
     }
-    
-
 }

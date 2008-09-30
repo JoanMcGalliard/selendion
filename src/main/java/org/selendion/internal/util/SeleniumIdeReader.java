@@ -8,12 +8,13 @@ import org.concordion.internal.util.ResourceFinder;
 import org.concordion.api.Evaluator;
 import org.selendion.integration.selenium.SeleniumDriver;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 
 public class SeleniumIdeReader {
     private SeleniumDriver selenium;
     private boolean started=false;
-
-
 
 
     public void start(String seleniumHost, int seleniumPort, String browser, String baseUrl) {
@@ -27,10 +28,6 @@ public class SeleniumIdeReader {
         if (started)  {
             selenium.stop();
         }
-    }
-    protected void finalize() throws Throwable {
-        stop();
-        super.finalize();
     }
 
     String[][] readSelenium(String htmlFile) {
@@ -86,6 +83,9 @@ public class SeleniumIdeReader {
         if (!started) {
             throw new Exception("Please start selenium before running scripts." );
         }
+        command=replaceVariables(command, evaluator);
+        arg1=replaceVariables(arg1, evaluator);
+        arg2=replaceVariables(arg2, evaluator);
         if (command.equals("click")) {
             selenium.click(arg1);
         } else if (command.equals("open")) {
@@ -102,8 +102,10 @@ public class SeleniumIdeReader {
             return selenium.isElementPresent(arg1);
         } else if (command.equals("select")) {
              selenium.select(arg1, arg2);
-        } else if (command.equals("XXX")) {
-        } else if (command.equals("XXX")) {
+        } else if (command.equals("store")) {
+            evaluator.setVariable("#"+arg2, arg1);
+        } else if (command.equals("storeText")) {
+            evaluator.setVariable("#"+arg2, selenium.getText(arg1));
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
@@ -116,5 +118,17 @@ public class SeleniumIdeReader {
         return true;
     }
 
+    private Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
+
+    private String replaceVariables(String string, Evaluator evaluator) {
+
+        Matcher m=variablePattern.matcher(string);
+
+        while (m.matches()) {
+            string = m.group(1)+evaluator.getVariable("#"+m.group(2))+m.group(3);
+            m=variablePattern.matcher(string);
+        }
+        return string;
+    }
 
 }
