@@ -25,12 +25,6 @@ public class RunSeleniumCommand extends AbstractCommand {
     @Override
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
         Strategy strategy;
-        CommandCallList childCommands = commandCall.getChildren();
-
-        childCommands.setUp(evaluator, resultRecorder);
-        childCommands.execute(evaluator, resultRecorder);
-        childCommands.verify(evaluator, resultRecorder);
-
         if (commandCall.getElement().isNamed("table")) {
             strategy = new TableStrategy();
         } else {

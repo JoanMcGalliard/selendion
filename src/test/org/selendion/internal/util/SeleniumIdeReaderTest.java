@@ -15,9 +15,9 @@ import static org.junit.Assert.*;
  * Time: 5:03:55 AM
  * To change this template use File | Settings | File Templates.
  */
-public class TestSeleniumIdeReader {
+public class SeleniumIdeReaderTest {
 
-    public TestSeleniumIdeReader() {
+    public SeleniumIdeReaderTest() {
     } // constructor
 
     @BeforeClass
@@ -49,9 +49,9 @@ public class TestSeleniumIdeReader {
                 {"Two columns, one used", "", null}};
 
         String[][] actualResult = seleniumIdeReader.readSelenium("test_data/seleniumIdeExample.html");
-        assertEquals(actualResult, expectedResult);
+        assertArrayEquals(actualResult, expectedResult);
         actualResult = seleniumIdeReader.readSelenium("test_data/simpleExample.html");
-        assertEquals(actualResult, expectedResult);
+        assertArrayEquals(actualResult, expectedResult);
 
 
     } // testReadSelenium()
