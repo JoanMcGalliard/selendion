@@ -8,6 +8,7 @@ import org.concordion.internal.ConcordionBuilder;
 import org.selendion.internal.command.RunSeleniumCommand;
 import org.selendion.internal.command.StopSeleniumCommand;
 import org.selendion.internal.command.StartSeleniumCommand;
+import org.selendion.internal.command.RunTestCommand;
 import org.selendion.internal.util.SeleniumIdeReader;
 
 
@@ -18,6 +19,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(documentParser, seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
+    private RunTestCommand runSelendionTestCommand = new RunTestCommand();
 
     {
         withApprovedCommand(NAMESPACE_SELENDION, "execute", executeCommand);
@@ -25,11 +27,13 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "assertEquals", assertEqualsCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "verifyRows", verifyRowsCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "assertFalse", assertFalseCommand);
-//        withApprovedCommand(NAMESPACE_SELENDION, "assertTrue", assertTrueCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "assertTrue", assertTrueCommand);
 
         withApprovedCommand(NAMESPACE_SELENDION, "startSelenium", startSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "runSelenium", runSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "stopSelenium", stopSeleniumCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "runTest", runSelendionTestCommand);
+
 
     }
 }
