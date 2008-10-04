@@ -1,0 +1,49 @@
+Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
+===================================================================
+--- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 42)
++++ src/main/java/org/concordion/internal/ConcordionBuilder.java	(working copy)
+@@ -48,13 +48,13 @@
+     private SpecificationReader specificationReader;
+     private EvaluatorFactory evaluatorFactory = new SimpleEvaluatorFactory();
+     private SpecificationCommand specificationCommand = new SpecificationCommand();
+-    private AssertEqualsCommand assertEqualsCommand = new AssertEqualsCommand();
+-    private AssertTrueCommand assertTrueCommand = new AssertTrueCommand();
+-    private AssertFalseCommand assertFalseCommand = new AssertFalseCommand();
+-    private ExecuteCommand executeCommand = new ExecuteCommand();
+-    private RunCommand runCommand = new RunCommand();
+-    private VerifyRowsCommand verifyRowsCommand = new VerifyRowsCommand();
+-    private EchoCommand echoCommand = new EchoCommand();
++    protected AssertEqualsCommand assertEqualsCommand = new AssertEqualsCommand();
++    protected AssertTrueCommand assertTrueCommand = new AssertTrueCommand();
++    protected AssertFalseCommand assertFalseCommand = new AssertFalseCommand();
++    protected ExecuteCommand executeCommand = new ExecuteCommand();
++    protected RunCommand runCommand = new RunCommand();
++    protected VerifyRowsCommand verifyRowsCommand = new VerifyRowsCommand();
++    protected EchoCommand echoCommand = new EchoCommand();
+     private File baseOutputDir;
+     private ThrowableCaughtPublisher throwableListenerPublisher = new ThrowableCaughtPublisher();
+     
+@@ -105,7 +105,7 @@
+         return this;
+     }
+     
+-    private ConcordionBuilder withApprovedCommand(String namespaceURI, String commandName, Command command) {
++    protected ConcordionBuilder withApprovedCommand(String namespaceURI, String commandName, Command command) {
+         ThrowableCatchingDecorator throwableCatchingDecorator = new ThrowableCatchingDecorator(new LocalTextDecorator(command));
+         throwableCatchingDecorator.addThrowableListener(throwableListenerPublisher);
+         Command decoratedCommand = throwableCatchingDecorator;
+Index: src/main/java/org/concordion/internal/DocumentParser.java
+===================================================================
+--- src/main/java/org/concordion/internal/DocumentParser.java	(revision 42)
++++ src/main/java/org/concordion/internal/DocumentParser.java	(working copy)
+@@ -57,7 +57,10 @@
+                     CommandCall commandCall = new CommandCall(command, new Element(xomElement), expression, resource);
+                     parentCommandCall.appendChild(commandCall);
+                     parentCommandCall = commandCall;
++                } else {
++                    throw new RuntimeException("Unknown command " + commandName + " in namespace " + namespaceURI + ".");
+                 }
++
+             }
+         }
+         

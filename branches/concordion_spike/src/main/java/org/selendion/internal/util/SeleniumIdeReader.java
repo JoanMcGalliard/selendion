@@ -4,39 +4,51 @@
 
 package org.selendion.internal.util;
 
-import org.concordion.internal.util.ResourceFinder;
+import org.concordion.internal.util.IOUtil;
 import org.concordion.api.Evaluator;
 import org.selendion.integration.selenium.SeleniumDriver;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.InputStreamReader;
 
 
 public class SeleniumIdeReader {
     private SeleniumDriver selenium;
-    private boolean started=false;
+    private boolean started = false;
 
 
     public void start(String seleniumHost, int seleniumPort, String browser, String baseUrl) {
         selenium = new SeleniumDriver(
-        seleniumHost,seleniumPort,browser,
-        baseUrl);
+                seleniumHost, seleniumPort, browser,
+                baseUrl);
         selenium.start();
-        started=true;
+        started = true;
     }
+
     public void stop() {
-        if (started)  {
+        if (started) {
             selenium.stop();
         }
     }
 
     String[][] readSelenium(String htmlFile) {
-        String contents = new ResourceFinder(this.getClass()).getResourceAsString(htmlFile);
+        Reader reader = new InputStreamReader(this.getClass().getResourceAsStream(htmlFile));
+        String contents = null;
+        try {
+            contents = IOUtil.readAsString(reader);
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         String table = contents.substring(contents.indexOf("<table"), contents
                 .indexOf("</table"));
-        if (table.indexOf("<tbody") > -1 ) {
-             table = table.substring(table.indexOf("<tbody"), table
-                .indexOf("</tbody"));
+        if (table.indexOf("<tbody") > -1) {
+            table = table.substring(table.indexOf("<tbody"), table
+                    .indexOf("</tbody"));
         }
         String[] rows = table.split("[ 	]*<[tT][rR][^>]*>");
 
@@ -58,22 +70,22 @@ public class SeleniumIdeReader {
         return return_val;
     }
 
-    
+
     public boolean runSeleniumScript(String filepath, Evaluator evaluator) throws Exception {
         String[][] seleniumCommands = readSelenium(filepath);
         boolean result = true;
         try {
-        for (int i = 0; i < seleniumCommands.length; i++) {
-            String[] command = seleniumCommands[i];
-            if (command[1] == null || command[2] == null) {
-                System.out.println("Skipping " + command[0]);
-            } else if (execute(command[0], command[1], command[2], evaluator) == false) {
-                result = false;
+            for (int i = 0; i < seleniumCommands.length; i++) {
+                String[] command = seleniumCommands[i];
+                if (command[1] == null || command[2] == null) {
+                    System.out.println("Skipping " + command[0]);
+                } else if (execute(command[0], command[1], command[2], evaluator) == false) {
+                    result = false;
+                }
             }
         }
-        }
         catch (Exception e) {
-            throw new Exception ("Error while running " + filepath + ": " + e.toString());
+            throw new Exception("Error while running " + filepath + ": " + e.toString());
         }
         return result;
     }
@@ -81,11 +93,11 @@ public class SeleniumIdeReader {
     private boolean execute(String command, String arg1, String arg2, Evaluator evaluator)
             throws Exception {
         if (!started) {
-            throw new Exception("Please start selenium before running scripts." );
+            throw new Exception("Please start selenium before running scripts.");
         }
-        command=replaceVariables(command, evaluator);
-        arg1=replaceVariables(arg1, evaluator);
-        arg2=replaceVariables(arg2, evaluator);
+        command = replaceVariables(command, evaluator);
+        arg1 = replaceVariables(arg1, evaluator);
+        arg2 = replaceVariables(arg2, evaluator);
         if (command.equals("click")) {
             selenium.click(arg1);
         } else if (command.equals("open")) {
@@ -101,11 +113,11 @@ public class SeleniumIdeReader {
         } else if (command.equals("verifyElementPresent")) {
             return selenium.isElementPresent(arg1);
         } else if (command.equals("select")) {
-             selenium.select(arg1, arg2);
+            selenium.select(arg1, arg2);
         } else if (command.equals("store")) {
-            evaluator.setVariable("#"+arg2, arg1);
+            evaluator.setVariable("#" + arg2, arg1);
         } else if (command.equals("storeText")) {
-            evaluator.setVariable("#"+arg2, selenium.getText(arg1));
+            evaluator.setVariable("#" + arg2, selenium.getText(arg1));
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
@@ -122,11 +134,11 @@ public class SeleniumIdeReader {
 
     private String replaceVariables(String string, Evaluator evaluator) {
 
-        Matcher m=variablePattern.matcher(string);
+        Matcher m = variablePattern.matcher(string);
 
         while (m.matches()) {
-            string = m.group(1)+evaluator.getVariable("#"+m.group(2))+m.group(3);
-            m=variablePattern.matcher(string);
+            string = m.group(1) + evaluator.getVariable("#" + m.group(2)) + m.group(3);
+            m = variablePattern.matcher(string);
         }
         return string;
     }
