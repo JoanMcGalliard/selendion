@@ -79,3 +79,6 @@ li {
 .commentary, .commentary * {
   font-size: 8pt;
 }
+.attention {
+    color: #ff0000
+}

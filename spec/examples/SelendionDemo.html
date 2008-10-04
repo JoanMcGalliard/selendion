@@ -1,6 +1,6 @@
 <html xmlns:concordion="http://www.selendion.org/2008">
 <head><title>Selendion Demo</title></head>
-<link href="../../css/concordion.css" rel="stylesheet" type="text/css"/>
+<link href="../../css/selendion.css" rel="stylesheet" type="text/css"/>
 <body>
 
 <h1>Selendion Demo</h1>
@@ -11,20 +11,19 @@
     host <i concordion:set="#seleniumServerHost">localhost</i>;
     port <i concordion:set="#seleniumServerport">4444</i>;
     for <i concordion:set="#browser">*firefox</i>;
-    and base url <a concordion:execute="#baseUrl=#HREF" href="http://selendion.org">the selendion site</a>.</p>
+    and base url <a concordion:set="#baseUrl" href="http://selendion.org">http://selendion.org</a>.</p>
 
 
 
 
 <p>
     If a visitor to the site with these defaults
-    <a href="test_data/defaults.html" concordion:runSelenium="#HREF">defaults</a>
+    <a href="test_data/defaults.html" concordion:runSelenium="#TEXT">test_data/defaults.html</a>
     but choosing a username <i concordion:set="#username">brian</i>
-    <a concordion:runSelenium="#HREF" href="test_data/input.html">creates a new user</a>.
+    <a concordion:runSelenium="#TEXT" href="test_data/input.html">test_data/input.html</a>.
     </p>
-<p>then we expect to see <a concordion:set="#rowScript=#HREF"
-                     href="test_data/getRow.html">these
-    results</a>:</p>
+<p>then we expect to see <a concordion:set="#rowScript"
+                     href="test_data/getRow.html">test_data/getRow.html</a>:</p>
        
 
 <table concordion:runSelenium="#rowScript">
