@@ -46,7 +46,7 @@ public class RunSeleniumCommand extends AbstractCommand {
             try {
                 seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator);
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                throw new RuntimeException(e);
             }
             childCommands.execute(evaluator, resultRecorder);
             childCommands.verify(evaluator, resultRecorder);

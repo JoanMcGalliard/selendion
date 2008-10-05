@@ -10,18 +10,21 @@ import org.selendion.internal.SelendionBuilder;
 
 
 public abstract class SelendionTestCase extends ConcordionTestCase {
-    private boolean expectedToPass =true;
+    private boolean expectedToPass = true;
+
     public void setExpectedToPass(boolean expectedToPass) {
-        this.expectedToPass =expectedToPass;
+        this.expectedToPass = expectedToPass;
     }
-    protected boolean isExpectedToPass() {
-        return expectedToPass;
-    }
+
      public void testProcessSpecification() throws Throwable {
         ResultSummary resultSummary = new SelendionBuilder().build().process(this);
         resultSummary.print(System.out);
-        resultSummary.assertIsSatisfied(isExpectedToPass());
+        if (expectedToPass) {
+            resultSummary.assertIsSatisfied();
+        } else {
+            assertTrue("Test is not expected to pass, yet is passing", resultSummary.getExceptionCount() + resultSummary.getFailureCount() > 0);
+        }
     }
-  
+
 
 }
