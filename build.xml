@@ -79,8 +79,12 @@
         <jar destfile="${dir.dist}/${productName}-${version}.jar"
                 basedir="${dir.classes}"
                 compress="false">
-            <exclude name="spec/**"/>
+            <exclude name="examples/**"/>
             <exclude name="src/test/**"/>
+            <zipfileset src="lib/concordion-r42-patched.jar"/>
+            <zipfileset src="lib/selenium-java-client-driver.jar"/>
+            <zipfileset src="lib/selenium-server.jar"/>
+            <indexjars/>
         </jar>
     </target>
 
