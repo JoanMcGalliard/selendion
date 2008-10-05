@@ -4,40 +4,13 @@
 
 package org.selendion.internal.util;
 
-import org.selendion.internal.util.SeleniumIdeReader;
-import org.junit.*;
+
 import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jem
- * Date: Sep 29, 2008
- * Time: 5:03:55 AM
- * To change this template use File | Settings | File Templates.
- */
+
 public class SeleniumIdeReaderTest {
-
-    public SeleniumIdeReaderTest() {
-    } // constructor
-
-    @BeforeClass
-    public static void unitSetup() {
-    } // unitSetup()
-
-    @AfterClass
-    public static void unitCleanup() {
-    } // unitCleanup()
-
-    @Before
-    public void methodSetup() {
-    } // methodSetup()
-
-    @After
-    public void methodCleanup() {
-    } // methodCleanup()
-
     @org.junit.Test
-    public void testReadSelenium() {
+    public void testReadSelenium() throws Exception {
         SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
         String[][] expectedResult = {
                 {"Only one column", null, null},

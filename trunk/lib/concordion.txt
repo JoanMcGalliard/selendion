@@ -1,0 +1,2 @@
+The included Concordion library is the http://concordion.googlecode.com/svn/trunk/ (r42)
+with concordion.patch applied.
