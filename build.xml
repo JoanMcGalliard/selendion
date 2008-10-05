@@ -27,6 +27,14 @@
             </classpath>
         </java>
     </target>
+    <target name="start.webserver">
+        <java classname="support.Fizmez.FizmezWebServer"
+              failonerror="true">
+            <classpath>
+                <pathelement path="${dir.classes}" /> 
+            </classpath>
+              </java>
+    </target>
 
     <target name="clean">
         <delete dir="${dir.build}"/>
@@ -55,7 +63,7 @@
         </copy>
     </target>
 
-    <target name="run.tests" depends="compile, start.selenium">
+    <target name="run.tests" depends="compile, start.webserver, start.selenium">
         <mkdir dir="${dir.test.output}"/>
         <mkdir dir="${dir.selendion.output}"/>
 
@@ -89,7 +97,7 @@
              basedir="${dir.classes}"
              compress="false">
             <exclude name="examples/**"/>
-            <exclude name="src/test/**"/>
+            <exclude name="support/**"/>
             <zipfileset src="lib/concordion-r42-patched.jar"/>
             <zipfileset src="lib/selenium-java-client-driver.jar"/>
             <zipfileset src="lib/selenium-server.jar"/>
