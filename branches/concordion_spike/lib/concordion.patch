@@ -1,3 +1,43 @@
+Index: src/test/java/test/concordion/internal/ExpressionTest.java
+===================================================================
+--- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 42)
++++ src/test/java/test/concordion/internal/ExpressionTest.java	(working copy)
+@@ -25,7 +25,18 @@
+         , "myMethod(#var1, #var2) ? 's1' : 's2'"
+         , "#var.myMethod()"
+         , "#var.myMethod(#var1)"
+-        , "#var.myMethod(#var1, #var2)"};
++        , "#var.myMethod(#var1, #var2)"
++        , "'string value'"
++        , "100"
++        , "0"
++        , "10.00"
++        , "-.6"
++        , "-0.6"
++        , "true"
++        , "false"
++        , "myMethod(false)"
++        , "myMethod(10)"
++        , "myMethod('strng value')" };
+     
+     public void testWhitespaceIsIgnoredInEvaluationExpressions() throws Exception {
+         assertValidEvaluationExpression("myMethod(#var1,   #var2)");
+Index: src/test/resources/spec/examples/Demo.html
+===================================================================
+--- src/test/resources/spec/examples/Demo.html	(revision 42)
++++ src/test/resources/spec/examples/Demo.html	(working copy)
+@@ -28,6 +28,11 @@
+             The first name <span concordion:assertTrue="#firstName.startsWith(#letter)">starts 
+             with <b concordion:set="#letter">B</b></span>.
+         </p>
++
++        <p>
++            If he logs in again, the greeting will still be:
++            <b concordion:assertEquals="greetingFor('Bob')">Hello Bob!</b>
++        </p>
+     </div>
+ 
+ </body>
 Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 ===================================================================
 --- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 42)
@@ -32,18 +72,31 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
          ThrowableCatchingDecorator throwableCatchingDecorator = new ThrowableCatchingDecorator(new LocalTextDecorator(command));
          throwableCatchingDecorator.addThrowableListener(throwableListenerPublisher);
          Command decoratedCommand = throwableCatchingDecorator;
+Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
+===================================================================
+--- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 42)
++++ src/main/java/org/concordion/internal/SimpleEvaluator.java	(working copy)
+@@ -25,8 +25,8 @@
+     private static String PROPERTY_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";
+     private static String STRING_PATTERN = "'[^']+'";
+     private static String LHS_VARIABLE_PATTERN = "#" + METHOD_NAME_PATTERN;
+-    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT)";
+-    
++    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
++
+     public static void validateEvaluationExpression(String expression) {
+         
+         // Examples of possible expressions in test.concordion.internal.ExpressionTest
 Index: src/main/java/org/concordion/internal/DocumentParser.java
 ===================================================================
 --- src/main/java/org/concordion/internal/DocumentParser.java	(revision 42)
 +++ src/main/java/org/concordion/internal/DocumentParser.java	(working copy)
-@@ -57,7 +57,10 @@
+@@ -57,6 +57,8 @@
                      CommandCall commandCall = new CommandCall(command, new Element(xomElement), expression, resource);
                      parentCommandCall.appendChild(commandCall);
                      parentCommandCall = commandCall;
 +                } else {
 +                    throw new RuntimeException("Unknown command " + commandName + " in namespace " + namespaceURI + ".");
                  }
-+
              }
          }
-         

@@ -11,9 +11,9 @@ import org.selendion.integration.selenium.SeleniumDriver;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.InputStreamReader;
+import java.io.InputStream;
 
 
 public class SeleniumIdeReader {
@@ -35,13 +35,17 @@ public class SeleniumIdeReader {
         }
     }
 
-    String[][] readSelenium(String htmlFile) {
-        Reader reader = new InputStreamReader(this.getClass().getResourceAsStream(htmlFile));
+    String[][] readSelenium(String htmlFile)  {
+        InputStream stream = this.getClass().getResourceAsStream(htmlFile);
+        if (stream == null) {
+            throw new RuntimeException(String.format("Could not read selenium file %s.", htmlFile));
+        }
+        Reader reader = new InputStreamReader(stream);
         String contents = null;
         try {
             contents = IOUtil.readAsString(reader);
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            System.out.println(e);
         }
 
         String table = contents.substring(contents.indexOf("<table"), contents
@@ -74,23 +78,18 @@ public class SeleniumIdeReader {
     public boolean runSeleniumScript(String filepath, Evaluator evaluator) throws Exception {
         String[][] seleniumCommands = readSelenium(filepath);
         boolean result = true;
-        try {
             for (int i = 0; i < seleniumCommands.length; i++) {
                 String[] command = seleniumCommands[i];
                 if (command[1] == null || command[2] == null) {
                     System.out.println("Skipping " + command[0]);
-                } else if (execute(command[0], command[1], command[2], evaluator) == false) {
+                } else if (!execute(command[0], command[1], command[2], evaluator, filepath)) {
                     result = false;
                 }
             }
-        }
-        catch (Exception e) {
-            throw new Exception("Error while running " + filepath + ": " + e.toString());
-        }
         return result;
     }
 
-    private boolean execute(String command, String arg1, String arg2, Evaluator evaluator)
+    private boolean execute(String command, String arg1, String arg2, Evaluator evaluator, String filename)
             throws Exception {
         if (!started) {
             throw new Exception("Please start selenium before running scripts.");
@@ -125,7 +124,7 @@ public class SeleniumIdeReader {
         } else if (command.equals("XXX")) {
 
         } else {
-            throw new Exception("Unsupported selenium command: " + command);
+            throw new Exception(String.format("Unsupported selenium command: %s in %s.", command, filename));
         }
         return true;
     }
