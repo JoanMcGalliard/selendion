@@ -5,7 +5,6 @@
 package org.selendion.integration.selenium;
 
 import com.thoughtworks.selenium.DefaultSelenium;
-import org.concordion.api.Evaluator;
 
 public class SeleniumDriver extends DefaultSelenium {
 
@@ -41,13 +40,8 @@ public class SeleniumDriver extends DefaultSelenium {
         waitForPageToLoad(timeout);
     }
 
-    public void pause(int milliseconds) {
-        try {
+    public void pause(int milliseconds) throws InterruptedException {
             Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
 

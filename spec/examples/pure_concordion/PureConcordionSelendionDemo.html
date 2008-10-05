@@ -1,8 +1,10 @@
-<html xmlns:concordion="http://www.concordion.org/2007/concordion">
-<link href="../../../concordion.css" rel="stylesheet" type="text/css" />
+<html xmlns:concordion="http://www.selendion.org/2008">
+<link href="../../../css/selendion.css" rel="stylesheet" type="text/css" />
+<head><title>Pure Concordinon Using Selendion Namespace Demo</title></head>
+
 <body>
 
-    <h1>Demo</h1>
+    <h1>Pure Concordinon Using Selendion Namespace Demo</h1>
 
     <p>
     	After a user logs into the system, a greeting is
@@ -14,20 +16,16 @@
 		<h3>Example</h3>
 		
         <p>
-            When user <b concordion:set="#firstName">Bob</b>
+            When user <i concordion:set="#firstName">Bob</i>
             logs in, the greeting will be:
             <b concordion:assertEquals="greetingFor(#firstName)">Hello Bob!</b>
         </p>
         
         <p>
             The first name <span concordion:assertTrue="#firstName.startsWith(#letter)">starts 
-            with <b concordion:set="#letter">B</b></span>.
+            with <i concordion:set="#letter">B</i></span>.
         </p>
         
-        <p>
-            The first name <span concordion:assertTrue="#firstName.startsWith(#letter)">starts 
-            with <b concordion:set="#letter">B</b></span>.
-        </p>
     </div>
 
 </body>
