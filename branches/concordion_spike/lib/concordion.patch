@@ -22,6 +22,36 @@ Index: src/test/java/test/concordion/internal/ExpressionTest.java
      
      public void testWhitespaceIsIgnoredInEvaluationExpressions() throws Exception {
          assertValidEvaluationExpression("myMethod(#var1,   #var2)");
+@@ -38,6 +49,7 @@
+         assertValidSetVariableExpression("  #var   =    myProp");
+         assertValidSetVariableExpression("#var=myProp");
+         assertValidSetVariableExpression("#var=myMethod(#var1,#var2)");
++        assertValidSetVariableExpression("#var='bob'");
+     }
+     
+     public void testAllEvaluationExpressions() throws Exception {
+Index: src/test/java/spec/examples/NewFeaturesTest.java
+===================================================================
+--- src/test/java/spec/examples/NewFeaturesTest.java	(revision 42)
++++ src/test/java/spec/examples/NewFeaturesTest.java	(working copy)
+@@ -2,9 +2,5 @@
+ 
+ import org.concordion.integration.junit3.ConcordionTestCase;
+ 
+-public class DemoTest extends ConcordionTestCase {
+-
+-    public String greetingFor(String firstName) {
+-        return String.format("Hello %s!", firstName);
+-    }
+-}
++public class NewFeaturesTest extends ConcordionTestCase {
++}
+\ No newline at end of file
+
+Property changes on: src/test/java/spec/examples/NewFeaturesTest.java
+___________________________________________________________________
+Added: svn:mergeinfo
+
 Index: src/test/resources/spec/examples/Demo.html
 ===================================================================
 --- src/test/resources/spec/examples/Demo.html	(revision 42)
@@ -38,6 +68,34 @@ Index: src/test/resources/spec/examples/Demo.html
      </div>
  
  </body>
+Index: src/test/resources/spec/examples/NewFeatures.html
+===================================================================
+--- src/test/resources/spec/examples/NewFeatures.html	(revision 0)
++++ src/test/resources/spec/examples/NewFeatures.html	(revision 0)
+@@ -0,0 +1,22 @@
++<html xmlns:concordion="http://www.concordion.org/2007/concordion">
++<link href="../../../concordion.css" rel="stylesheet" type="text/css" />
++<body>
++
++    <h1>New Features</h1>
++
++
++    <h2>Literal values in set</h2>
++    <div class="example">
++        <p>In this case we just want to assert that <i concordion:set="#value='bob'">explicitly setting
++        the value to 'bob'</i> actually results in the value being set to
++        <b concordion:assertEquals="#value">bob</b>.</p>
++    </div>
++
++
++    <div class="example">
++        <p>In this case we just want to assert that <a href="Demo.html" concordion:set="#link=#HREF">this link</a> is
++        <b concordion:assertEquals="#link">Demo.html</b></p>
++    </div>
++
++</body>
++</html>
+\ No newline at end of file
 Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 ===================================================================
 --- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 42)
@@ -82,11 +140,29 @@ Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
      private static String LHS_VARIABLE_PATTERN = "#" + METHOD_NAME_PATTERN;
 -    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT)";
 -    
-+    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
++    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#HREF|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
 +
      public static void validateEvaluationExpression(String expression) {
          
          // Examples of possible expressions in test.concordion.internal.ExpressionTest
+@@ -50,7 +50,9 @@
+         regexs.add(METHOD_CALL_PARAMS + TERNARY_STRING_RESULT);
+         regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_NO_PARAMS);
+         regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_PARAMS);
++        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
+         
++        
+         expression = expression.trim();
+         for (String regex : regexs) {
+             if (expression.matches(regex)) {
+@@ -71,6 +73,7 @@
+         regexs.add(RHS_VARIABLE_PATTERN);
+         regexs.add(LHS_VARIABLE_PATTERN + "\\." + PROPERTY_NAME_PATTERN);
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + PROPERTY_NAME_PATTERN);
++        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *\\)");
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)");
+         
 Index: src/main/java/org/concordion/internal/DocumentParser.java
 ===================================================================
 --- src/main/java/org/concordion/internal/DocumentParser.java	(revision 42)
@@ -100,3 +176,35 @@ Index: src/main/java/org/concordion/internal/DocumentParser.java
                  }
              }
          }
+Index: src/main/java/org/concordion/internal/command/LocalTextDecorator.java
+===================================================================
+--- src/main/java/org/concordion/internal/command/LocalTextDecorator.java	(revision 42)
++++ src/main/java/org/concordion/internal/command/LocalTextDecorator.java	(working copy)
+@@ -8,6 +8,7 @@
+ public class LocalTextDecorator extends AbstractCommandDecorator {
+ 
+     private static final String TEXT_VARIABLE = "#TEXT";
++    private static final String HREF_VARIABLE = "#HREF";
+ 
+     public LocalTextDecorator(Command command) {
+         super(command);
+@@ -15,12 +16,16 @@
+ 
+     @Override
+     protected void process(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder, Runnable runnable) {
+-        Object savedValue = evaluator.getVariable(TEXT_VARIABLE);
++        Object savedTextValue = evaluator.getVariable(TEXT_VARIABLE);
++        Object savedHrefValue = evaluator.getVariable(HREF_VARIABLE);
+         try {
+             evaluator.setVariable(TEXT_VARIABLE, commandCall.getElement().getText());
++            evaluator.setVariable(HREF_VARIABLE, commandCall.getElement().getAttributeValue("href"));
+             runnable.run();
+         } finally {
+-            evaluator.setVariable(TEXT_VARIABLE, savedValue);
+-        }        
++            evaluator.setVariable(TEXT_VARIABLE, savedTextValue);
++            evaluator.setVariable(HREF_VARIABLE, savedHrefValue);
++
++        }
+     }
+ }
