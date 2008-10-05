@@ -13,9 +13,9 @@ import org.openqa.selenium.server.SeleniumServer;
 public abstract class SelendionTestCase extends ConcordionTestCase {
     private boolean expectedToPass = true;
 
-    public void startSeleniumServer () throws Exception {
-        SeleniumServer.main(new String[]{});
-      }
+//    public void startSeleniumServer () throws Exception {
+//        SeleniumServer.main(new String[]{});
+//      }
 
     public void setExpectedToPass(boolean expectedToPass) {
         this.expectedToPass = expectedToPass;
