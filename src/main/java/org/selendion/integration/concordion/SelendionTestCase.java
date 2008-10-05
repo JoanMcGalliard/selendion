@@ -7,10 +7,15 @@ package org.selendion.integration.concordion;
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.concordion.api.ResultSummary;
 import org.selendion.internal.SelendionBuilder;
+import org.openqa.selenium.server.SeleniumServer;
 
 
 public abstract class SelendionTestCase extends ConcordionTestCase {
     private boolean expectedToPass = true;
+
+    public void startSeleniumServer () throws Exception {
+        SeleniumServer.main(new String[]{});
+      }
 
     public void setExpectedToPass(boolean expectedToPass) {
         this.expectedToPass = expectedToPass;
