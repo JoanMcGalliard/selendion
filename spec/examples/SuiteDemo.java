@@ -5,7 +5,7 @@ package examples;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 
-public class SuiteDemoTest extends SelendionTestCase {
+public class SuiteDemo extends SelendionTestCase {
 
 
 }

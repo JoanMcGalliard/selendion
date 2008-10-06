@@ -34,17 +34,18 @@ Index: src/test/java/spec/examples/NewFeaturesTest.java
 ===================================================================
 --- src/test/java/spec/examples/NewFeaturesTest.java	(revision 42)
 +++ src/test/java/spec/examples/NewFeaturesTest.java	(working copy)
-@@ -2,9 +2,5 @@
+@@ -2,9 +2,9 @@
  
  import org.concordion.integration.junit3.ConcordionTestCase;
  
 -public class DemoTest extends ConcordionTestCase {
 -
--    public String greetingFor(String firstName) {
--        return String.format("Hello %s!", firstName);
--    }
--}
 +public class NewFeaturesTest extends ConcordionTestCase {
+     public String greetingFor(String firstName) {
+         return String.format("Hello %s!", firstName);
+     }
+-}
++
 +}
 \ No newline at end of file
 
@@ -52,27 +53,11 @@ Property changes on: src/test/java/spec/examples/NewFeaturesTest.java
 ___________________________________________________________________
 Added: svn:mergeinfo
 
-Index: src/test/resources/spec/examples/Demo.html
-===================================================================
---- src/test/resources/spec/examples/Demo.html	(revision 42)
-+++ src/test/resources/spec/examples/Demo.html	(working copy)
-@@ -28,6 +28,11 @@
-             The first name <span concordion:assertTrue="#firstName.startsWith(#letter)">starts 
-             with <b concordion:set="#letter">B</b></span>.
-         </p>
-+
-+        <p>
-+            If he logs in again, the greeting will still be:
-+            <b concordion:assertEquals="greetingFor('Bob')">Hello Bob!</b>
-+        </p>
-     </div>
- 
- </body>
 Index: src/test/resources/spec/examples/NewFeatures.html
 ===================================================================
 --- src/test/resources/spec/examples/NewFeatures.html	(revision 0)
 +++ src/test/resources/spec/examples/NewFeatures.html	(revision 0)
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,34 @@
 +<html xmlns:concordion="http://www.concordion.org/2007/concordion">
 +<link href="../../../concordion.css" rel="stylesheet" type="text/css" />
 +<body>
@@ -86,11 +71,23 @@ Index: src/test/resources/spec/examples/NewFeatures.html
 +        the value to 'bob'</i> actually results in the value being set to
 +        <b concordion:assertEquals="#value">bob</b>.</p>
 +    </div>
++    <div class="example">
++
++    <p>
++        And that we can testing that the greeting for explitly passing 'Bob' as a parameter is still
++        <b concordion:assertEquals="greetingFor('Bob')">Hello Bob!</b>
++    </p>
++    </div>
 +
 +
 +    <div class="example">
 +        <p>In this case we just want to assert that <a href="Demo.html" concordion:set="#link=#HREF">this link</a> is
 +        <b concordion:assertEquals="#link">Demo.html</b></p>
++    </div>
++
++
++    <div class="example">
++        <p>Run the test in  <a href="Demo.html" concordion:run="concordion">this link</a>. </p>
 +    </div>
 +
 +</body>
@@ -100,7 +97,23 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 ===================================================================
 --- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 42)
 +++ src/main/java/org/concordion/internal/ConcordionBuilder.java	(working copy)
-@@ -48,13 +48,13 @@
+@@ -23,14 +23,7 @@
+ import org.concordion.internal.command.ThrowableCaughtListener;
+ import org.concordion.internal.command.ThrowableCaughtPublisher;
+ import org.concordion.internal.command.VerifyRowsCommand;
+-import org.concordion.internal.listener.AssertEqualsResultRenderer;
+-import org.concordion.internal.listener.BreadcrumbRenderer;
+-import org.concordion.internal.listener.DocumentStructureImprover;
+-import org.concordion.internal.listener.PageFooterRenderer;
+-import org.concordion.internal.listener.SpecificationExporter;
+-import org.concordion.internal.listener.StylesheetEmbedder;
+-import org.concordion.internal.listener.ThrowableRenderer;
+-import org.concordion.internal.listener.VerifyRowsResultRenderer;
++import org.concordion.internal.listener.*;
+ import org.concordion.internal.util.Check;
+ import org.concordion.internal.util.IOUtil;
+ 
+@@ -48,13 +41,13 @@
      private SpecificationReader specificationReader;
      private EvaluatorFactory evaluatorFactory = new SimpleEvaluatorFactory();
      private SpecificationCommand specificationCommand = new SpecificationCommand();
@@ -121,7 +134,15 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
      private File baseOutputDir;
      private ThrowableCaughtPublisher throwableListenerPublisher = new ThrowableCaughtPublisher();
      
-@@ -105,7 +105,7 @@
+@@ -75,6 +68,7 @@
+         assertTrueCommand.addAssertEqualsListener(new AssertEqualsResultRenderer());
+         assertFalseCommand.addAssertEqualsListener(new AssertEqualsResultRenderer());
+         verifyRowsCommand.addVerifyRowsListener(new VerifyRowsResultRenderer());
++        runCommand.addRunListener(new RunResultRenderer());
+         documentParser.addDocumentParsingListener(new DocumentStructureImprover());
+         String stylesheetContent = IOUtil.readResourceAsString(EMBEDDED_STYLESHEET_RESOURCE);
+         documentParser.addDocumentParsingListener(new StylesheetEmbedder(stylesheetContent));
+@@ -105,7 +99,7 @@
          return this;
      }
      
