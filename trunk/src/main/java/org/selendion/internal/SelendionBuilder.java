@@ -17,7 +17,8 @@ public class SelendionBuilder extends ConcordionBuilder {
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
-    private RunTestCommand runSelendionTestCommand = new RunTestCommand();
+    private AddToSuite addToSuite = new AddToSuite();
+    private RunSuite runSuite = new RunSuite();
     {
         withApprovedCommand(NAMESPACE_SELENDION, "run", runCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "execute", executeCommand);
@@ -31,6 +32,7 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "startSelenium", startSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "runSelenium", runSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "stopSelenium", stopSeleniumCommand);
-        withApprovedCommand(NAMESPACE_SELENDION, "runTest", runSelendionTestCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "addToSuite", addToSuite);
+        withApprovedCommand(NAMESPACE_SELENDION, "runSuite", runSuite);
     }
 }
