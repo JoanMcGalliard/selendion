@@ -24,6 +24,7 @@
               failonerror="true">
             <arg value="-port"/>
             <arg value="5555"/>
+            <arg value="-singleWindow"/>
             <classpath>
                 <pathelement location="lib/selenium-server.jar"/>
             </classpath>
