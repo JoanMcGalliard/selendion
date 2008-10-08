@@ -10,10 +10,13 @@ import org.selendion.integration.selenium.SeleniumDriver;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Set;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.InputStream;
+
+import com.thoughtworks.selenium.SeleniumException;
 
 
 public class SeleniumIdeReader {
@@ -35,7 +38,7 @@ public class SeleniumIdeReader {
         }
     }
 
-    String[][] readSelenium(String htmlFile)  {
+    String[][] readSelenium(String htmlFile) {
         InputStream stream = this.getClass().getResourceAsStream(htmlFile);
         if (stream == null) {
             throw new RuntimeException(String.format("Could not read selenium file %s.", htmlFile));
@@ -77,25 +80,48 @@ public class SeleniumIdeReader {
 
     public boolean runSeleniumScript(String filepath, Evaluator evaluator) throws Exception {
         String[][] seleniumCommands = readSelenium(filepath);
+        turnConcordionVarsToSeleniumVars(evaluator);
         boolean result = true;
         for (String[] command : seleniumCommands) {
             if (command[1] == null || command[2] == null) {
                 System.out.println("Skipping " + command[0]);
-            } else if (!execute(command[0], command[1], command[2], evaluator, filepath)) {
+            } else if (!execute(command[0], command[1], command[2], filepath)) {
                 result = false;
             }
         }
+        turnSeleniumVarsToConcordionVars(evaluator);
         return result;
     }
+    private void turnConcordionVarsToSeleniumVars(Evaluator evaluator) throws Exception {
+        Set keys=evaluator.getKeys();
+        System.out.println("Number of concordion keys " + keys.size());
+        for (Object key: keys) {
+            if (!key.getClass().equals(String.class)) {
+                throw new Exception ("Unexpected key " + key);
+            }
+            String keyString = (String) key;
+            if (keyString.matches("^[a-z].*")) {
+                selenium.getEval(String.format("storedVars['%s']='%s'", keyString,  evaluator.getVariable("#" + keyString)));
+            }
+        }
+    }
+    private void turnSeleniumVarsToConcordionVars(Evaluator evaluator) {
+        String [] storedVars=selenium.getEval("var arr = [];for (var name in storedVars) {arr.push(name);};arr").split(",");
+        System.out.println("Number of selenium vars " + storedVars.length);
 
-    private boolean execute(String command, String arg1, String arg2, Evaluator evaluator, String filename)
+        for (String var : storedVars) {
+            if (var.matches("^[a-z].*")) {
+                evaluator.setVariable("#"+var, selenium.getEval(String.format("storedVars['%s']", var)));
+            }
+        }
+    }
+
+
+    private boolean execute(String command, String arg1, String arg2, String filename)
             throws Exception {
         if (!started) {
             throw new Exception("Please start selenium before running scripts.");
         }
-        command = replaceVariables(command, evaluator);
-        arg1 = replaceVariables(arg1, evaluator);
-        arg2 = replaceVariables(arg2, evaluator);
         if (command.equals("click")) {
             selenium.click(arg1);
         } else if (command.equals("open")) {
@@ -113,17 +139,23 @@ public class SeleniumIdeReader {
         } else if (command.equals("select")) {
             selenium.select(arg1, arg2);
         } else if (command.equals("store")) {
-            evaluator.setVariable("#" + arg2, arg1);
+            selenium.getEval(String.format("storedVars['%s']='%s'", arg2, arg1));
         } else if (command.equals("storeText")) {
-            evaluator.setVariable("#" + arg2, selenium.getText(arg1));
+            selenium.getEval(String.format("storedVars['%s']='%s'", arg2, selenium.getText(arg1)));
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
         } else if (command.equals("XXX")) {
-
         } else {
-            throw new Exception(String.format("Unsupported selenium command: %s in %s.", command, filename));
+            // maybe it's a js extension
+            String js = "Selenium.prototype.do" + command.substring(0, 1).toUpperCase() + command.substring(1);
+            try {
+                selenium.getEval(String.format("%s('%s','%s')", js, arg1, arg2));
+            } catch (SeleniumException e) {
+                // It's not an extension, so throw an exception
+                throw new Exception(String.format("Unsupported selenium command: %s in %s.", command, filename));
+            }
         }
         return true;
     }

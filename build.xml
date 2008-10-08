@@ -22,6 +22,8 @@
     <target name="start.selenium">
         <java classname="org.openqa.selenium.server.SeleniumServer"
               failonerror="true">
+            <arg value="-port"/>
+            <arg value="5555"/>
             <classpath>
                 <pathelement location="lib/selenium-server.jar"/>
             </classpath>

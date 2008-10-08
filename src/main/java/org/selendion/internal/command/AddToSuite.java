@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.io.File;
 
 import javassist.Loader;
-import com.sun.tools.javac.Main;
+//import com.sun.tools.javac.Main;
 import junit.framework.TestSuite;
 import junit.framework.TestCase;
 

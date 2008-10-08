@@ -1,3 +1,27 @@
+Index: src/test/java/test/concordion/StubEvaluator.java
+===================================================================
+--- src/test/java/test/concordion/StubEvaluator.java	(revision 42)
++++ src/test/java/test/concordion/StubEvaluator.java	(working copy)
+@@ -3,6 +3,8 @@
+ import org.concordion.api.Evaluator;
+ import org.concordion.api.EvaluatorFactory;
+ 
++import java.util.Set;
++
+ public class StubEvaluator implements Evaluator, EvaluatorFactory {
+ 
+     private Object evaluationResult = null;
+@@ -18,6 +20,10 @@
+         return evaluationResult;
+     }
+ 
++    public Set getKeys() {
++        return null;  
++    }
++
+     public Object getVariable(String variableName) {
+         return null;
+     }
 Index: src/test/java/test/concordion/internal/ExpressionTest.java
 ===================================================================
 --- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 42)
@@ -93,6 +117,25 @@ Index: src/test/resources/spec/examples/NewFeatures.html
 +</body>
 +</html>
 \ No newline at end of file
+Index: src/main/java/org/concordion/api/Evaluator.java
+===================================================================
+--- src/main/java/org/concordion/api/Evaluator.java	(revision 42)
++++ src/main/java/org/concordion/api/Evaluator.java	(working copy)
+@@ -1,5 +1,7 @@
+ package org.concordion.api;
+ 
++import java.util.Set;
++
+ public interface Evaluator {
+ 
+     Object getVariable(String variableName);
+@@ -7,4 +9,6 @@
+     void setVariable(String variableName, Object value);
+ 
+     Object evaluate(String expression);
++
++    Set getKeys();
+ }
 Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 ===================================================================
 --- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 42)
@@ -183,6 +226,30 @@ Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
 +        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
          regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *\\)");
          regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)");
+         
+Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
+===================================================================
+--- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 42)
++++ src/main/java/org/concordion/internal/OgnlEvaluator.java	(working copy)
+@@ -8,6 +8,8 @@
+ import org.concordion.api.Evaluator;
+ import org.concordion.internal.util.Check;
+ 
++import java.util.Set;
++
+ public class OgnlEvaluator implements Evaluator {
+ 
+     private Object rootObject;
+@@ -35,6 +37,10 @@
+         }
+     }
+ 
++    public Set getKeys() {
++        return ognlContext.keySet();
++    }
++
+     private InvalidExpressionException invalidExpressionException(OgnlException e) {
+         Throwable cause = e;
          
 Index: src/main/java/org/concordion/internal/DocumentParser.java
 ===================================================================
