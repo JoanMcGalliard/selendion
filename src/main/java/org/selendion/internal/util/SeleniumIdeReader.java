@@ -11,12 +11,14 @@ import org.selendion.integration.selenium.SeleniumDriver;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Set;
+import java.util.Vector;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.InputStream;
 
 import com.thoughtworks.selenium.SeleniumException;
+import nu.xom.*;
 
 
 public class SeleniumIdeReader {
@@ -38,48 +40,53 @@ public class SeleniumIdeReader {
         }
     }
 
-    String[][] readSelenium(String htmlFile) {
-        InputStream stream = this.getClass().getResourceAsStream(htmlFile);
+    Vector<String[]>  readSelenium(String htmlFileName) throws IOException, ParsingException {
+        InputStream stream = this.getClass().getResourceAsStream(htmlFileName);
         if (stream == null) {
-            throw new RuntimeException(String.format("Could not read selenium file %s.", htmlFile));
+            throw new RuntimeException(String.format("Could not read selenium file %s.", htmlFileName));
         }
         Reader reader = new InputStreamReader(stream);
-        String contents = null;
-        try {
-            contents = IOUtil.readAsString(reader);
-        } catch (IOException e) {
-            System.out.println(e);
+
+        Builder builder = new Builder();
+        Document doc = builder.build(reader) ;
+
+
+
+        XPathContext xpc;
+        Nodes rows;
+        String uri = doc.getRootElement().getNamespaceURI();
+        if (uri.length() > 0) {
+            rows=doc.query("//ns:tr", new XPathContext("ns", uri));
+
+        } else {
+            rows=doc.query("//tr");
         }
 
-        String table = contents.substring(contents.indexOf("<table"), contents
-                .indexOf("</table"));
-        if (table.indexOf("<tbody") > -1) {
-            table = table.substring(table.indexOf("<tbody"), table
-                    .indexOf("</tbody"));
-        }
-        String[] rows = table.split("[ 	]*<[tT][rR][^>]*>");
-
-        String[][] return_val = new String[rows.length - 1][3];
-        for (int i = 1; i < rows.length; i++) {
-            rows[i] = rows[i].replaceFirst("</[tT][rR].*>.*", "").trim();
-            String[] cols = rows[i].split("[ 	]*<[tT][Dd][^>]*>");
-            for (int j = 1; j < 4; j++) {
-
-                if (cols.length > j) {
-                    return_val[i - 1][j - 1] = cols[j].replaceFirst(
-                            "</[tT][dD][^>]*>.*$", "").trim();
-                } else {
-                    return_val[i - 1][j - 1] = null;
+        Vector return_val = new Vector();
+        for (int r=0; r < rows.size(); r ++) {
+            Node rowNode=rows.get(r);
+            String [] row = new String [3];
+            int col=0;
+            for (int i = 0; i < rowNode.getChildCount(); i ++) {
+                Node colNode =rowNode.getChild(i);
+                if (colNode.getClass().equals(Element.class) ) {
+                    row[col] = colNode.getValue().trim();
+                    col++;
+                    if (col > 3) {
+                        break;
+                    }
                 }
             }
-
+            if (col >=3) {
+                return_val.add(row);
+            }
         }
         return return_val;
     }
 
 
     public boolean runSeleniumScript(String filepath, Evaluator evaluator) throws Exception {
-        String[][] seleniumCommands = readSelenium(filepath);
+       Vector<String[]> seleniumCommands = readSelenium(filepath);
         turnConcordionVarsToSeleniumVars(evaluator);
         boolean result = true;
         for (String[] command : seleniumCommands) {
@@ -122,6 +129,9 @@ public class SeleniumIdeReader {
         if (!started) {
             throw new Exception("Please start selenium before running scripts.");
         }
+        command=replaceCharacterEntities(command);
+        arg1=replaceCharacterEntities(arg1);
+        arg2=replaceCharacterEntities(arg2);
         if (command.equals("click")) {
             selenium.click(arg1);
         } else if (command.equals("open")) {
@@ -142,11 +152,18 @@ public class SeleniumIdeReader {
             selenium.getEval(String.format("storedVars['%s']='%s'", arg2, arg1));
         } else if (command.equals("storeText")) {
             selenium.getEval(String.format("storedVars['%s']='%s'", arg2, selenium.getText(arg1)));
-        } else if (command.equals("XXX")) {
-        } else if (command.equals("XXX")) {
-        } else if (command.equals("XXX")) {
-        } else if (command.equals("XXX")) {
-        } else if (command.equals("XXX")) {
+        } else if (command.equals("deleteCookie")) {
+            selenium.deleteCookie(arg1,arg2);
+        } else if (command.equals("addSelection")) {
+            selenium.addSelection(arg1,arg2);
+        } else if (command.equals("verifyVisible")) {
+            if (!selenium.isVisible(arg1)) {
+                return false;
+            }
+        } else if (command.equals("verifyElementNotPresent")) {
+            if (selenium.isElementPresent(arg1)) {
+                return false;
+            }
         } else {
             // maybe it's a js extension
             String js = "Selenium.prototype.do" + command.substring(0, 1).toUpperCase() + command.substring(1);
@@ -172,5 +189,16 @@ public class SeleniumIdeReader {
         }
         return string;
     }
+    private String replaceCharacterEntities(String string) {
+
+        string=string.replaceAll("&nbsp;", " ");
+        string=string.replaceAll("&lt;", "<");
+        string=string.replaceAll("&gt;", ">");
+        string=string.replaceAll("&amp;", "&");
+        string=string.replaceAll("&quot;", "\"");
+        string=string.replaceAll("&apos;", "'");
+        return string;
+    }
 
 }
+
