@@ -52,9 +52,6 @@ public class SeleniumIdeReader {
         Builder builder = new Builder(XMLReaderFactory.createXMLReader(Parser.class.getName()));
         Document doc = builder.build(reader) ;
 
-
-
-        XPathContext xpc;
         Nodes rows;
         String uri = doc.getRootElement().getNamespaceURI();
         if (uri.length() > 0) {
@@ -92,9 +89,7 @@ public class SeleniumIdeReader {
         turnConcordionVarsToSeleniumVars(evaluator);
         boolean result = true;
         for (String[] command : seleniumCommands) {
-            if (command[1] == null || command[2] == null) {
-                System.out.println("Skipping " + command[0]);
-            } else if (!execute(command[0], command[1], command[2], filepath)) {
+            if (command[1] !=  null && command[2] != null && !execute(command[0], command[1], command[2], filepath)) {
                 result = false;
             }
         }
@@ -103,7 +98,6 @@ public class SeleniumIdeReader {
     }
     private void turnConcordionVarsToSeleniumVars(Evaluator evaluator) throws Exception {
         Set keys=evaluator.getKeys();
-        System.out.println("Number of concordion keys " + keys.size());
         for (Object key: keys) {
             if (!key.getClass().equals(String.class)) {
                 throw new Exception ("Unexpected key " + key);
@@ -116,8 +110,6 @@ public class SeleniumIdeReader {
     }
     private void turnSeleniumVarsToConcordionVars(Evaluator evaluator) {
         String [] storedVars=selenium.getEval("var arr = [];for (var name in storedVars) {arr.push(name);};arr").split(",");
-        System.out.println("Number of selenium vars " + storedVars.length);
-
         for (String var : storedVars) {
             if (var.matches("^[a-z].*")) {
                 evaluator.setVariable("#"+var, selenium.getEval(String.format("storedVars['%s']", var)));

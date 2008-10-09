@@ -18,7 +18,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     public static final String NAMESPACE_SELENDION = "http://www.selendion.org/2008";
 
     private SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
-    private Vector<Class<? extends ConcordionTestCase>> suite = new Vector();
+    private Vector<String> suite = new Vector();
     
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
