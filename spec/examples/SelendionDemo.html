@@ -1,0 +1,93 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head><title>Selendion Demo</title></head>
+<link href="../../css/selendion.css" rel="stylesheet" type="text/css"/>
+<body>
+
+<h1>Selendion Demo</h1>
+
+<h2>Setup </h2>
+
+<p concordion:startSelenium="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a selenium server with:
+    host <i concordion:set="#seleniumServerHost">localhost</i>;
+    port <i concordion:set="#seleniumServerport">5555</i>;
+    for <i concordion:set="#browser">*firefox</i>;
+    and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">local host, port 55555</a>.</p>
+
+
+
+
+<p>
+    If a visitor to the site with these defaults
+    <a href="test_data/defaults.html" concordion:runSelenium="#HREF">defaults</a>
+    but choosing a username <i concordion:set="#username">brian</i>
+    <a concordion:runSelenium="#HREF" href="test_data/input.html">creates a new user</a>.
+    </p>
+<p>then we expect to see <a concordion:set="#rowScript=#HREF"
+                     href="test_data/getRow.html">these
+    results</a>:</p>
+       
+
+<table concordion:runSelenium="#rowScript">
+    <tr>
+        <th concordion:set="#rowNumber">Row number</th>
+        <th concordion:assertEquals="#fieldName">Name</th>
+        <th concordion:assertEquals="#fieldValue">Value</th>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>New Username</td>
+        <td>brian</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>New Password</td>
+        <td>Password1</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Name</td>
+        <td>Joan McGalliard</td>
+    </tr>
+
+    <tr>
+        <td>6</td>
+        <td>Email</td>
+        <td>joan@example.com</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>Phone</td>
+        <td>02088888888</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>Mobile</td>
+        <td>07777777777</td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>Sex</td>
+        <td>F</td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>Weight</td>
+        <td>L</td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td>Ara</td>
+        <td>44444444</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>Points</td>
+        <td>-1</td>
+    </tr>
+</table>
+
+<h2>Finally</h2>
+<i concordion:stopSelenium="">Stop the selenium server.</i>
+
+</body>
+</html>
