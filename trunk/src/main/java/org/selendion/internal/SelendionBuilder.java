@@ -9,6 +9,7 @@ import org.concordion.internal.command.*;
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.selendion.internal.command.*;
 import org.selendion.internal.util.SeleniumIdeReader;
+import org.selendion.internal.util.TestDescription;
 import org.selendion.internal.listener.RunSuiteResultRenderer;
 
 import java.util.Vector;
@@ -18,7 +19,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     public static final String NAMESPACE_SELENDION = "http://www.selendion.org/2008";
 
     private SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
-    private Vector<String> suite = new Vector();
+    private Vector<TestDescription> suite = new Vector();
     
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);

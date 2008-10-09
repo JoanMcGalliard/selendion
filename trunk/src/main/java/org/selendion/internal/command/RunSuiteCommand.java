@@ -47,10 +47,10 @@ public class RunSuiteCommand extends AbstractCommand {
         TestSuite testSuite;
         int threads = Integer.parseInt(evaluator.evaluate(commandCall.getExpression()).toString());
 
-        if (threads != 1 ) {
-            testSuite = new ActiveTestSuiteRestricted(6);
-        } else {
+        if (threads == 1 ) {
             testSuite = new TestSuite();
+        } else {
+            testSuite = new ActiveTestSuiteRestricted(threads);
         }
         for (TestDescription test : suite) {
             testSuite.addTestSuite(test.getClazz());
@@ -64,11 +64,6 @@ public class RunSuiteCommand extends AbstractCommand {
             failures.add(errors.nextElement().failedTest().getClass());
         }
         Element element = commandCall.getElement();
-        if (testResult.wasSuccessful()) {
-            announceSuccess(element);
-        } else {
-            announceFailure(element);
-        }
         Element list;
         if (threads != 1) {
             list = new Element("ul");
