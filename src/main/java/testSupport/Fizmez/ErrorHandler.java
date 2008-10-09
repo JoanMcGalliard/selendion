@@ -1,4 +1,4 @@
-package support.Fizmez;
+package testSupport.Fizmez;
 // David's Error Handler
 // 20010610 v1.0 Basic Functionality
 // 20040316 v1.1 Changed setErrorLevel to setLoggingLevel

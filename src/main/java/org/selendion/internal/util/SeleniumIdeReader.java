@@ -4,9 +4,12 @@
 
 package org.selendion.internal.util;
 
-import org.concordion.internal.util.IOUtil;
 import org.concordion.api.Evaluator;
 import org.selendion.integration.selenium.SeleniumDriver;
+import org.xml.sax.XMLReader;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.XMLReaderFactory;
+import org.ccil.cowan.tagsoup.Parser;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -40,14 +43,13 @@ public class SeleniumIdeReader {
         }
     }
 
-    Vector<String[]>  readSelenium(String htmlFileName) throws IOException, ParsingException {
+    Vector<String[]>  readSelenium(String htmlFileName) throws IOException, ParsingException, SAXException {
         InputStream stream = this.getClass().getResourceAsStream(htmlFileName);
         if (stream == null) {
             throw new RuntimeException(String.format("Could not read selenium file %s.", htmlFileName));
         }
         Reader reader = new InputStreamReader(stream);
-
-        Builder builder = new Builder();
+        Builder builder = new Builder(XMLReaderFactory.createXMLReader(Parser.class.getName()));
         Document doc = builder.build(reader) ;
 
 
