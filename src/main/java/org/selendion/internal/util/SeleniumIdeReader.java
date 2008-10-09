@@ -98,21 +98,26 @@ public class SeleniumIdeReader {
     }
     private void turnConcordionVarsToSeleniumVars(Evaluator evaluator) throws Exception {
         Set keys=evaluator.getKeys();
+        String array="storedVars = {";
         for (Object key: keys) {
             if (!key.getClass().equals(String.class)) {
                 throw new Exception ("Unexpected key " + key);
             }
             String keyString = (String) key;
             if (keyString.matches("^[a-z].*")) {
-                selenium.getEval(String.format("storedVars['%s']='%s'", keyString,  evaluator.getVariable("#" + keyString)));
+                array = String.format("%s %s: '%s', ", array, keyString, evaluator.getVariable("#" + keyString));
+
             }
         }
+        array = array.replaceFirst(", $", "}") ;
+        selenium.getEval(array);
     }
     private void turnSeleniumVarsToConcordionVars(Evaluator evaluator) {
-        String [] storedVars=selenium.getEval("var arr = [];for (var name in storedVars) {arr.push(name);};arr").split(",");
+        String [] storedVars=selenium.getEval("var arr = [];for (var name in storedVars) {arr.push('#'+name+' '+storedVars[name]);};arr").split(",");
         for (String var : storedVars) {
-            if (var.matches("^[a-z].*")) {
-                evaluator.setVariable("#"+var, selenium.getEval(String.format("storedVars['%s']", var)));
+            String[] nvp=var.split(" ",2);
+            if (nvp[0].matches("^#[a-z].*")) {
+                evaluator.setVariable(nvp[0], nvp[1]);
             }
         }
     }
