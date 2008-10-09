@@ -104,6 +104,7 @@
             <zipfileset src="lib/concordion-r42-patched.jar"/>
             <zipfileset src="lib/selenium-java-client-driver.jar"/>
             <zipfileset src="lib/selenium-server.jar"/>
+            <zipfileset src="lib/tagsoup-1.2.jar"/>
             <indexjars/>
         </jar>
     </target>
