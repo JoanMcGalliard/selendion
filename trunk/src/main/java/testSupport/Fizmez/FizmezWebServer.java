@@ -1,4 +1,4 @@
-package support.Fizmez;
+package testSupport.Fizmez;
 /**
  * Instantiates a webserver on the port specified in the config file
  * (./conf/httpd.conf).
