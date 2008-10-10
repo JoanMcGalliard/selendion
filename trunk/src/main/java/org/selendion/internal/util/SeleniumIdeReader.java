@@ -101,15 +101,18 @@ public class SeleniumIdeReader {
                 table.appendChild(tr);
             }
         }
-//        Element span = new Element("span");
-//        span.appendChild(new Element("input")
-//                .addStyleClass("seleniumTableButton")
-//                .setId("seleniumTableButton" + buttonId)
-//                .addAttribute("type", "button")
-//                .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + element.getText() + "')")
-//                .addAttribute("value", "View " + element.getText()));
-//        span.appendChild(table);
-        element.insertChildAfter(table);
+        Element span = new Element("span");
+        span.appendChild(new Element("input")
+                .addStyleClass("seleniumTableButton")
+                .setId("seleniumTableButton" + buttonId)
+                .addAttribute("type", "button")
+                .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + element.getText() + "')")
+                .addAttribute("value", element.getText()));
+        table.setId("seleniumTable" + buttonId);
+        table.addAttribute("class", "seleniumTable");
+        span.appendChild(table);
+        element.insertAfter(span);
+        element.addAttribute("class", "invisible");
         turnSeleniumVarsToConcordionVars(evaluator);
         return result;
     }
