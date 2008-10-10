@@ -20,8 +20,7 @@
             />
 
     <target name="start.selenium">
-        <java classname="org.openqa.selenium.server.SeleniumServer"
-              failonerror="true">
+        <java classname="org.openqa.selenium.server.SeleniumServer">
             <arg value="-port"/>
             <arg value="5555"/>
             <arg value="-singleWindow"/>
@@ -31,8 +30,7 @@
         </java>
     </target>
     <target name="start.webserver">
-        <java classname="testSupport.Fizmez.FizmezWebServer"
-              failonerror="true">
+        <java classname="testSupport.Fizmez.FizmezWebServer">
             <classpath>
                 <pathelement path="${dir.classes}" /> 
             </classpath>
@@ -61,6 +59,7 @@
 
         <copy todir="${dir.classes}">
             <fileset dir="src/main/java" excludes="**/*.java"/>
+            <fileset dir="src/main/resources" excludes="**/*.java"/>
             <fileset dir="src/test" excludes="**/*.java"/>
             <fileset dir="spec" excludes="**/*.java"/>
         </copy>

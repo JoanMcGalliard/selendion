@@ -140,7 +140,36 @@ Index: src/main/java/org/concordion/api/Element.java
 ===================================================================
 --- src/main/java/org/concordion/api/Element.java	(revision 42)
 +++ src/main/java/org/concordion/api/Element.java	(working copy)
-@@ -106,6 +106,9 @@
+@@ -3,10 +3,7 @@
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+-import nu.xom.Attribute;
+-import nu.xom.Elements;
+-import nu.xom.Node;
+-import nu.xom.Nodes;
++import nu.xom.*;
+ 
+ public final class Element {
+ 
+@@ -27,6 +24,16 @@
+         return xomElement.getValue();
+     }
+ 
++    public void insertChildAfter(Element insert) {
++        ParentNode parent = xomElement.getParent();
++        for (int i=0; i < parent.getChildCount() ; i++) {
++            if (parent.getChild(i).equals(xomElement)) {
++                parent.insertChild(insert.xomElement, i+1) ;
++                break;
++            }
++        }
++    }
++
+     public Element addStyleClass(String styleClass) {
+         String currentClass = getAttributeValue("class");
+         if (currentClass != null) {
+@@ -106,6 +113,9 @@
      public Element getRootElement() {
          return new Element(xomElement.getDocument().getRootElement());
      }
