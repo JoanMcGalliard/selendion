@@ -11,6 +11,7 @@ import org.selendion.internal.command.*;
 import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.util.TestDescription;
 import org.selendion.internal.listener.RunSuiteResultRenderer;
+import org.selendion.internal.listener.RunSeleniumResultRenderer;
 
 import java.util.Vector;
 
@@ -43,6 +44,7 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "runSuite", runSuiteCommand);
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
+        runSeleniumCommand.addRunSeleniumListener(new RunSeleniumResultRenderer());
 
     }
 }

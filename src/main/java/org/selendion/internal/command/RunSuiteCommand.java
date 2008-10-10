@@ -85,8 +85,7 @@ public class RunSuiteCommand extends AbstractCommand {
             li.appendChild(testElement);
             list.appendChild(li);
         }
-        Element parent = element.getParent();
-        parent.appendChild(list);
+        element.insertChildAfter(list);
     }
 
     private void announceSuccess(Element element) {
