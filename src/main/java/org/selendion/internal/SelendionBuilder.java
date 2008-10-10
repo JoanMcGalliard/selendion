@@ -5,6 +5,8 @@
 package org.selendion.internal;
 
 import org.concordion.internal.ConcordionBuilder;
+import org.concordion.internal.listener.StylesheetEmbedder;
+import org.concordion.internal.util.IOUtil;
 import org.concordion.internal.command.*;
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.selendion.internal.command.*;
@@ -21,7 +23,9 @@ public class SelendionBuilder extends ConcordionBuilder {
 
     private SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
     private Vector<TestDescription> suite = new Vector();
-    
+    private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/selendion/internal/resource/embedded.css";
+
+
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
@@ -45,6 +49,8 @@ public class SelendionBuilder extends ConcordionBuilder {
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
         runSeleniumCommand.addRunSeleniumListener(new RunSeleniumResultRenderer());
+         String stylesheetContent = IOUtil.readResourceAsString(EMBEDDED_STYLESHEET_RESOURCE);
+        documentParser.addDocumentParsingListener(new StylesheetEmbedder(stylesheetContent));
 
     }
 }
