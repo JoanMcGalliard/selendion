@@ -6,7 +6,6 @@ package org.selendion.internal.command;
 
 import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
-import org.concordion.api.Result;
 import org.concordion.api.Element;
 import org.concordion.internal.*;
 import org.concordion.internal.util.Announcer;
@@ -68,7 +67,7 @@ public class RunSeleniumCommand extends AbstractCommand {
             try {
                 if (!element.getParent().getLocalName().equals("table")) {
 
-                result = seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator, element,listeners, buttonId++);
+                result = seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator, element,listeners, buttonId++, resultRecorder);
                 } else {
                     result = seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator);
 
@@ -78,10 +77,10 @@ public class RunSeleniumCommand extends AbstractCommand {
             }
             if (!element.getParent().getLocalName().equals("table")) {
                 if (result) {
-                    resultRecorder.record(Result.SUCCESS);
+
+
                     announceSuccess(element);
                 } else {
-                    resultRecorder.record(Result.FAILURE);
                     announceFailure(element);
                 }
             }

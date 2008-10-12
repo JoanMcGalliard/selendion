@@ -11,17 +11,21 @@
     host <i concordion:set="#seleniumServerHost">localhost</i>;
     port <i concordion:set="#seleniumServerport">5555</i>;
     for <i concordion:set="#browser">*firefox</i>;
-    and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">local host, port 55555</a>.</p>
+    and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
 
 
-<p>First set var1 to be <i concordion:set="#var1">Variable 1</i> and var2 to be <i concordion:set="#var2">Variable 2</i>
+<p>First set var1 to be <i concordion:set="#var1">Variable 1</i> and var2 to be
+    <i concordion:set="#var2">Variable 2</i>
+    <!--and var3 is an array of <i concordion:set="#var3]=['1','2', '3']">1,2,3</i>.-->
 </p>
 
 <p>Before running the script var1 should be <b concordion:assertEquals="#var1">Variable 1</b>, var 2
-should be <b concordion:assertEquals="#var2">Variable 2</b> and  var 3
-should be <b concordion:assertEquals="#var3">(null)</b></p>
+    should be <b concordion:assertEquals="#var2">Variable 2</b> and var 4
+    should be <b concordion:assertEquals="#var4">(null)</b></p>
+
 <p>after running <a href="test_data/vars.html" concordion:runSelenium="#HREF">
     this script</a> then var1 should be <b concordion:assertEquals="#var1">Variable 2</b> and var2 should still be
-    <b concordion:assertEquals="#var2">Variable 2</b>.  Var3 should now be <b concordion:assertEquals="#var3">new variable</b>.</p>
+    <b concordion:assertEquals="#var2">Variable 2</b>. Var4 should now be <b concordion:assertEquals="#var4">new
+    variable</b>.</p>
 </body>
 </html>
