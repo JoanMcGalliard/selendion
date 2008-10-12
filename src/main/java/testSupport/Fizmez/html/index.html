@@ -1,38 +1,113 @@
-<font color="red">  </font>
-<form method="get" action="result.html">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Index.html</title>
+    
+
+</head>
+<body>
 
 
+<font color="red"> </font>
 
-<table border=0>
-<tr><td>Username (required):</td><td> <input type="Text" size=30
-name="new_username" value=""></td></tr>
-<tr><td>Password (required):</td><td> <input type="password" size=20
-name="new_password" value=""></td></tr>
-<tr><td>Password (re-type):</td><td> <input type="password" size=20
-name="password2" value=""></td></tr>
+<form method="get" action="result.html" id="form">
 
-<tr><td>Full name:</td><td> <input type="Text" size=30
-name="name" value=""></td></tr>
-<tr><td>Email Address:</td><td> <input type="Text" size=30 name="email" value=""></td></tr>
-<tr><td>Phone:</td><td> <input type="Text" name="phone" value=""></td></tr>
-<tr><td>Mobile:</td><td> <input type="Text" name="mobile" value=""></td></tr>
-<tr><td>Sex:</td><td> <select name="sex">
-	<option value="M" >Male</option>
 
-	<option value="F" >Female</option>
-</select>
-<tr><td>Weight:</td><td> <select name="weight">
-	<option value="H" >Heavyweight</option>
-	<option value="L" >Lightweight</option>
-</select>
-<tr><td>ARA number:</td><td> <input type="Text" size=15 name="ara_number"
-value=""></td></tr>
+    <table id="input_table" border=0>
+        <tr>
+            <td>Username (required):</td>
+            <td><input type="Text" size=30
+                       name="new_username" value=""></td>
+        </tr>
+        <tr>
+            <td>Password (required):</td>
+            <td><input type="password" size=20
+                       name="new_password" value=""></td>
+        </tr>
+        <tr>
+            <td>Password (re-type):</td>
+            <td><input type="password" size=20
+                       name="password2" value=""></td>
+        </tr>
+        <tr>
+            <td>Full name:</td>
 
-<tr><td>ARA Points:<br>(use -1 for novice)</td><td valign="top"> <input type="Text" size=3 name="ara_points"
-value=""></td></tr>
-<tr>
-</table>
+            <td><input type="Text" size=30
+                       name="name" value=""></td>
+        </tr>
+        <tr>
+            <td>Email Address:</td>
+            <td><input type="Text" size=30 name="email" value=""></td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
 
-<input type="Submit" name="submit" value="Create user">
+            <td><input type="Text" name="phone" value=""></td>
+        </tr>
+        <tr>
+            <td>Mobile:</td>
+            <td><input type="Text" name="mobile" value=""></td>
+        </tr>
+        <tr>
+            <td>Sex:</td>
+
+            <td><select name="sex">
+                <option value="M">Male</option>
+
+                <option value="F">Female</option>
+            </select>
+        <tr>
+            <td>Weight:</td>
+            <td><input type=checkbox name="heavyweight">
+
+                Heavyweight</td>
+
+        <tr>
+            <td>ARA number:</td>
+            <td><input type="Text" size=15 name="ara_number"
+                       value=""></td>
+        </tr>
+        <tr>
+            <td>Favourite colours</td>
+
+            <td><select multiple size=5 name="colours">
+                <option value="red">red</option>
+                <option value="green">green</option>
+                <option value="blue">blue</option>
+                <option value="yellow">yellow</option>
+                <option value="black">black</option>
+
+                <option value="gold">gold</option>
+            </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>ARA Points:<br>(use -1 for novice)</td>
+            <td valign="top"><input type="Text" size=3 name="ara_points"
+                                    value=""></td>
+
+        </tr>
+        <tr>
+    </table>
+
+    <input type="Submit" id="submit" name="submit" value="Create user">
+</form>
+<p><input type="button" value="Click for popup" id="pop" onClick="javascript:window.open('popup.html','Window1','menubar=no,width=430,height=360,toolbar=no')"></p>
+<p><a onClick="confirm('O RLY?');" href="index.html">Click for confirm</a></p>
+
+<p><a href="index.html">Click for this page again</a></p>
+
+<form>
+<input type="button" onclick=
+"alert('O NOES')"
+value="Javascript alert">
 </form>
 
+
+<p><input type="button" onclick="javascript:prompt('GIMMEH', '')" value="Javascript prompt">
+   </p>
+
+</body>
+</html>
