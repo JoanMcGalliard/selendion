@@ -26,6 +26,8 @@ import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.InputStream;
 
+import com.thoughtworks.selenium.SeleniumException;
+
 
 public class SeleniumIdeReader {
     private SeleniumDriver selenium;
@@ -156,6 +158,7 @@ public class SeleniumIdeReader {
         if (!started) {
             throw new Exception("Please start selenium before running scripts.");
         }
+        System.out.println(command);
         command = replaceCharacterEntities(command);
         arg1 = replaceCharacterEntities(arg1);
         arg2 = replaceCharacterEntities(arg2);
@@ -166,6 +169,81 @@ public class SeleniumIdeReader {
                 selenium.waitForPageToLoad();
             }
             return result;
+        }
+        //All getFoo and isFoo methods on the Selenium prototype automatically result in the availability
+        // of storeFoo, assertFoo, assertNotFoo, verifyFoo, verifyNotFoo, waitForFoo, and waitForNotFoo commands.
+
+        if (command.matches("^store[A-Z].*")) {
+            try {
+                storeVar(arg1,seleniumGetNoParams(command.replaceFirst("^store", "")));
+            } catch (SeleniumIdeException e) {
+                try {
+                    storeVar(arg2,seleniumGetOneParam(command.replaceFirst("^store", ""), arg1));
+                } catch (SeleniumIdeException e1) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+            }
+            return new CommandResult(true, ""); 
+        }
+        if (command.matches("^assertNot[A-Z].*")) {
+            Object actualObject;
+            String expected;
+            try {
+                actualObject = seleniumGetNoParams(command.replaceFirst("^assertNot", ""));
+                expected = arg1;
+            } catch (SeleniumIdeException e) {
+                try {
+                    actualObject = seleniumGetOneParam(command.replaceFirst("^assertNot", ""), arg1);
+                } catch (SeleniumIdeException e1) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                expected = arg2;
+            }
+            String actual;
+            if (actualObject.getClass() == String.class) {
+                actual=(String)actualObject;
+            } else if (actualObject.getClass() == Number.class) {
+                actual= ((Number)actualObject).toString();
+            } else {
+                throw new Exception ("@TODO");
+            }
+
+            if (actual.equals(expected)) {
+                return new CommandResult(false, "Failed");
+
+            } else {
+                return new CommandResult(true, "");
+                
+            }
+        }
+        if (command.matches("^assert[A-Z].*")) {
+            Object actualObject;
+            String expected;
+            try {
+                actualObject = seleniumGetNoParams(command.replaceFirst("^assert", ""));
+                expected = arg1;
+            } catch (SeleniumIdeException e) {
+                try {
+                    actualObject = seleniumGetOneParam(command.replaceFirst("^assert", ""), arg1);
+                } catch (SeleniumIdeException e1) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                expected = arg2;
+            }
+            String actual;
+            if (actualObject.getClass() == String.class) {
+                actual=(String)actualObject;
+            } else if (actualObject.getClass() == Number.class) {
+                actual= ((Number)actualObject).toString();
+            } else {
+                throw new Exception ("@TODO");
+            }
+
+            if (actual.equals(expected)) {
+                return new CommandResult(true, "");
+            } else {
+                return new CommandResult(false, "Expected: " + expected + "; Actual: " + actualObject);
+            }
         }
         try {
 
@@ -398,7 +476,7 @@ public class SeleniumIdeReader {
                 return new CommandResult(true, "");
             }
             if (command.equals("store")) {
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, arg1));
+                storeVar(arg2,arg1);
                 return new CommandResult(true, "");
             }
             if (command.equals("submit")) {
@@ -443,266 +521,20 @@ public class SeleniumIdeReader {
             }
 
             //selenium accessors
-            if (command.equals("storeAlert")) {
-                String var = selenium.getAlert();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
+
+            if (command.equals("assertSelected")) {
+                return new CommandResult(false, "This deprecated command is not supported in Selendion");
             }
-            if (command.equals("storeAllButtons")) {
-                String [] var = selenium.getAllButtons();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeAllFields")) {
-                String [] var = selenium.getAllFields();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeAllLinks")) {
-                String  [] var = selenium.getAllLinks();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeAllWindowIds")) {
-                String  [] var = selenium.getAllWindowIds();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeAllWindowNames")) {
-                String [] var = selenium.getAllWindowNames();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeAllWindowTitles")) {
-                String [] var = selenium.getAllWindowTitles();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeAttribute")) {
-                String var = selenium.getAttribute(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeAttributeFromAllWindows")) {
-                String  [] var = selenium.getAttributeFromAllWindows(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeBodyText")) {
-                String var = selenium.getBodyText();
-                System.out.println(String.format("storedVars['%s']='%s'", arg1, var));
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeConfirmation")) {
-                String var = selenium.getConfirmation();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeCookie")) {
-                String var = selenium.getCookie();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeCursorPosition")) {
-                String var = selenium.getCursorPosition(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeElementHeight")) {
-                String var = selenium.getElementHeight(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeElementIndex")) {
-                String var = selenium.getElementIndex(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeElementPositionLeft")) {
-                String var = selenium.getElementPositionLeft(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeElementPositionTop")) {
-                String var = selenium.getElementPositionTop(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeElementWidth")) {
-                String var = selenium.getElementWidth(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeEval")) {
-                String var = selenium.getEval(arg1) ;
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeExpression")) {
-                String var = selenium.getExpression(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeHtmlSource")) {
-                String var = selenium.getHtmlSource();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeLocation")) {
-                String var = selenium.getLocation();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeMouseSpeed")) {
-                String var = selenium.getMouseSpeed().toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storePrompt")) {
-                String var = selenium.getPrompt();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectedId")) {
-                String var = selenium.getSelectedId(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectedIds")) {
-                String var = selenium.getSelectedIds(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectedIndex")) {
-                String var = selenium.getSelectedIndex(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectedIndexes")) {
-                String var = selenium.getSelectedIndexes(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectedLabel")) {
-                String var = selenium.getSelectedLabel(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectedLabels")) {
-                String var = selenium.getSelectedLabels(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectedValue")) {
-                String var = selenium.getSelectedValue(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectedValues")) {
-                String var = selenium.getSelectedValues(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSelectOptions")) {
-                String var = selenium.getSelectOptions(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeTable")) {
-                String var = selenium.getTable(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeText")) {
-                String var = selenium.getText(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeTitle")) {
-                String var = selenium.getTitle();
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeValue")) {
-                String var = selenium.getValue(arg1);
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            // @TODO
-//            if (command.equals("storeWhetherThisFrameMatchFrameExpression")) {
-//                String var = selenium.getWhetherThisFrameMatchFrameExpression();
-//                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-//                return new CommandResult(true, "");
-//            }
-//            if (command.equals("storeWhetherThisWindowMatchWindowExpression")) {
-//                String var = selenium.getWhetherThisWindowMatchWindowExpression();
-//                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-//                return new CommandResult(true, "");
-//            }
-            if (command.equals("storeXpathCount")) {
-                String var = selenium.getXpathCount(arg1).toString();
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeAlertPresent")) {
-                String var = selenium.isAlertPresent() ? "true" : "false" ;
-                selenium.getEval(String.format("storedVars['%s']=%s", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeChecked")) {
-                String var = (selenium.isChecked(arg1) ? "true" : "false");
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeConfirmationPresent")) {
-                String var = (selenium.isConfirmationPresent()  ? "true" : "false");
-                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeEditable")) {
-                String var = selenium.isEditable(arg1)  ? "true" : "false";
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeElementPresent")) {
-                String var = selenium.isElementPresent(arg1)   ? "true" : "false";
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-//            @TODO
-//            if (command.equals("storeOrdered")) {
-//                String var = selenium.isOrdered();
-//                selenium.getEval(String.format("storedVars['%s']='%s'", arg1, var));
-//                return new CommandResult(true, "");
-//            }
-            if (command.equals("storePromptPresent")) {
-                String var = selenium.isPromptPresent()   ? "true" : "false";
-                selenium.getEval(String.format("storedVars['%s']=%s", arg1, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeSomethingSelected")) {
-                String var = selenium.isSomethingSelected(arg1)   ? "true" : "false";
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeTextPresent")) {
-                String var = selenium.isTextPresent(arg1)   ? "true" : "false";
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
-            if (command.equals("storeVisible")) {
-                String var = selenium.isVisible(arg1)  ? "true" : "false";
-                selenium.getEval(String.format("storedVars['%s']=%s", arg2, var));
-                return new CommandResult(true, "");
-            }
+
 
             //@TODO - remove this when related are done
             if (command.equals("assertConfirmation")) {
                 String var = selenium.getConfirmation();
                 return new CommandResult(true, "");
             }
-            
+
+
+
 
         }
         catch (Exception se) {
@@ -737,6 +569,199 @@ public class SeleniumIdeReader {
             m = variablePattern.matcher(string);
         }
         return string;
+    }
+
+    private void storeVar (String name, Object value) {
+        Class clazz=value.getClass();
+        if (clazz == String.class) {
+            selenium.getEval(String.format("storedVars['%s']='%s'", name, ((String)value).replaceAll("\\n", " ").replaceAll("'", "\\\\'")));
+        } else if (clazz == boolean.class) {
+        selenium.getEval(String.format("storedVars['%s']=%s", name, ((Boolean)value) ? "true" : "false"));
+        } else if (clazz == String[].class) {
+            String valueStr="";
+            for (String str : (String []) value) {
+                valueStr = valueStr +"'" + str + "', ";
+            }
+            valueStr=valueStr.replaceFirst("[ ,]*$", "");
+            selenium.getEval(String.format("storedVars['%s']=%s", name, "["+valueStr+"]"));
+
+        } else if (clazz == Number.class) {
+
+        selenium.getEval(String.format("storedVars['%s']=%s", name, value.toString()));
+        }
+    }
+    private Object seleniumGetNoParams(String command) throws SeleniumIdeException {
+        String unimplemented = "This command is not currently supported in Selendion.  Please raise a request for its addition at http://code.google.com/p/selendion/issues/list, including an example.";
+        try {
+            if (command.equals("Alert")) {
+                return selenium.getAlert();
+            }
+            if (command.equals("AllButtons")) {
+                return selenium.getAllButtons();
+            }
+            if (command.equals("AllFields")) {
+                return selenium.getAllFields();
+            }
+            if (command.equals("AllLinks")) {
+                return selenium.getAllLinks();
+            }
+            if (command.equals("AllWindowIds")) {
+                return selenium.getAllWindowIds();
+            }
+            if (command.equals("AllWindowNames")) {
+                return selenium.getAllWindowNames();
+            }
+            if (command.equals("AllWindowTitles")) {
+                return selenium.getAllWindowTitles();
+            }
+            if (command.equals("BodyText")) {
+                return selenium.getBodyText();
+            }
+            if (command.equals("Confirmation")) {
+                return selenium.getConfirmation();
+            }
+            if (command.equals("Cookie")) {
+                return selenium.getCookie();
+            }
+            if (command.equals("HtmlSource")) {
+                return selenium.getHtmlSource();
+            }
+            if (command.equals("Location")) {
+                return selenium.getLocation();
+            }
+            if (command.equals("MouseSpeed")) {
+                return selenium.getMouseSpeed();
+            }
+            if (command.equals("Prompt")) {
+                return selenium.getPrompt();
+            }
+            if (command.equals("AlertPresent")) {
+                return selenium.isAlertPresent();
+            }
+            if (command.equals("Title")) {
+                return selenium.getTitle();
+            }
+
+            if (command.equals("ConfirmationPresent")) {
+                return selenium.isConfirmationPresent();
+            }
+            if (command.equals("PromptPresent")) {
+                return selenium.isPromptPresent();
+            }
+        }
+        catch (SeleniumException e) {
+            //@TODO
+            return null;
+
+        }
+        if (command.equals("WhetherThisWindowMatchWindowExpression")) {
+            throw new RuntimeException(unimplemented);
+        }
+        if (command.equals("WhetherThisFrameMatchFrameExpression")) {
+            throw new RuntimeException(unimplemented);
+        }
+        if (command.equals("Ordered")) {
+            throw new RuntimeException(unimplemented);
+        }
+        throw new SeleniumIdeException ("Command " + command + " not found.");
+
+    }
+    private Object seleniumGetOneParam(String command, String arg1) throws SeleniumIdeException {
+
+              if (command.equals("Attribute")) {
+            return selenium.getAttribute(arg1);
+        }
+        if (command.equals("AttributeFromAllWindows")) {
+            return selenium.getAttributeFromAllWindows(arg1);
+        }
+        if (command.equals("CursorPosition")) {
+            return selenium.getCursorPosition(arg1);
+        }
+        if (command.equals("ElementHeight")) {
+            return selenium.getElementHeight(arg1);
+        }
+        if (command.equals("ElementIndex")) {
+            return selenium.getElementIndex(arg1);
+        }
+        if (command.equals("ElementPositionLeft")) {
+            return selenium.getElementPositionLeft(arg1);
+        }
+        if (command.equals("ElementPositionTop")) {
+            return selenium.getElementPositionTop(arg1);
+        }
+        if (command.equals("ElementWidth")) {
+            return selenium.getElementWidth(arg1);
+        }
+        if (command.equals("Eval")) {
+            return selenium.getEval(arg1);
+        }
+        if (command.equals("Expression")) {
+            return selenium.getExpression(arg1);
+        }
+
+        if (command.equals("SelectedId")) {
+            return selenium.getSelectedId(arg1);
+        }
+        if (command.equals("SelectedIds")) {
+            return selenium.getSelectedIds(arg1);
+        }
+        if (command.equals("SelectedIndex")) {
+            return selenium.getSelectedIndex(arg1);
+        }
+        if (command.equals("SelectedIndexes")) {
+            return selenium.getSelectedIndexes(arg1);
+        }
+        if (command.equals("SelectedLabel")) {
+            return selenium.getSelectedLabel(arg1);
+        }
+        if (command.equals("SelectedLabels")) {
+            return selenium.getSelectedLabels(arg1);
+        }
+        if (command.equals("SelectedValue")) {
+            return selenium.getSelectedValue(arg1);
+        }
+        if (command.equals("SelectedValues")) {
+            return selenium.getSelectedValues(arg1);
+        }
+        if (command.equals("SelectOptions")) {
+            return selenium.getSelectOptions(arg1);
+        }
+        if (command.equals("Table")) {
+            return selenium.getTable(arg1);
+        }
+        if (command.equals("Text")) {
+            return selenium.getText(arg1);
+        }
+
+        if (command.equals("Value")) {
+            return selenium.getValue(arg1);
+        }
+        if (command.equals("XpathCount")) {
+            return selenium.getXpathCount(arg1);
+        }
+
+        if (command.equals("Checked")) {
+            return selenium.isChecked(arg1);
+        }
+        if (command.equals("Editable")) {
+            return selenium.isEditable(arg1);
+        }
+        if (command.equals("ElementPresent")) {
+            return selenium.isElementPresent(arg1);
+        }
+
+        if (command.equals("SomethingSelected")) {
+            return selenium.isSomethingSelected(arg1);
+        }
+        if (command.equals("TextPresent")) {
+            return selenium.isTextPresent(arg1);
+        }
+        if (command.equals("Visible")) {
+            return selenium.isVisible(arg1);
+        }
+
+        throw new SeleniumIdeException ("Command " + command + " not found.");
+
     }
 
     private String replaceCharacterEntities(String string) {
@@ -806,6 +831,12 @@ public class SeleniumIdeReader {
 
         public String getMessage() {
             return message;
+        }
+    }
+
+    private class SeleniumIdeException extends Throwable {
+        public SeleniumIdeException(String s) {
+            super(s);
         }
     }
 }
