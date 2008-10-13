@@ -131,7 +131,7 @@ public class SeleniumIdeReader {
             }
             String keyString = (String) key;
             if (keyString.matches("^[a-z].*")) {
-                array = String.format("%s %s: '%s', ", array, keyString, evaluator.getVariable("#" + keyString));
+                array = String.format("%s %s: '%s', ", array, keyString, evaluator.getVariable("#" + keyString).toString().replaceFirst("\\\\|$", "") .replaceAll("'", "\\\\'") );
 
             }
         }
@@ -158,10 +158,12 @@ public class SeleniumIdeReader {
         if (!started) {
             throw new Exception("Please start selenium before running scripts.");
         }
+        try {
         System.out.println(command);
         command = replaceCharacterEntities(command);
         arg1 = replaceCharacterEntities(arg1);
         arg2 = replaceCharacterEntities(arg2);
+
         if (command.matches(".*AndWait$")) {
             CommandResult result=execute(command.replaceFirst("AndWait$", ""), arg1, arg2);
             if (result.getSuccess()) {
@@ -245,7 +247,6 @@ public class SeleniumIdeReader {
                 return new CommandResult(false, "Expected: " + expected + "; Actual: " + actualObject);
             }
         }
-        try {
 
             // Selenium actions
             if (command.equals("addSelection")) {
@@ -536,23 +537,23 @@ public class SeleniumIdeReader {
 
 
 
-        }
-        catch (Exception se) {
-            //@TODO
-            return new CommandResult(false, "tried to run selenium command: " + se.toString());
 
-        }
         // maybe it's a js extension
         String js = "Selenium.prototype.do" + command.substring(0, 1).toUpperCase() + command.substring(1);
-        try {
-
+                                                                   
             selenium.getEval(String.format("%s('%s','%s')", js, arg1, arg2));
             return null;
-        } catch (Exception e) {
+             }
+        catch (SeleniumException se) {
+            //@TODO
+            return new CommandResult(false, se.getMessage());
+
+        }
+         catch (Exception e) {
             //@TODO
             // It's not an extension, so throw an exception
 //                throw new Exception(String.format("Unsupported selenium command: %s in %s.", command, filename));
-            return new CommandResult(false, "geteval failed " + e.toString());
+            return new CommandResult(false, e.toString());
 
         }
 
@@ -592,7 +593,6 @@ public class SeleniumIdeReader {
     }
     private Object seleniumGetNoParams(String command) throws SeleniumIdeException {
         String unimplemented = "This command is not currently supported in Selendion.  Please raise a request for its addition at http://code.google.com/p/selendion/issues/list, including an example.";
-        try {
             if (command.equals("Alert")) {
                 return selenium.getAlert();
             }
@@ -648,12 +648,8 @@ public class SeleniumIdeReader {
             if (command.equals("PromptPresent")) {
                 return selenium.isPromptPresent();
             }
-        }
-        catch (SeleniumException e) {
             //@TODO
-            return null;
 
-        }
         if (command.equals("WhetherThisWindowMatchWindowExpression")) {
             throw new RuntimeException(unimplemented);
         }
