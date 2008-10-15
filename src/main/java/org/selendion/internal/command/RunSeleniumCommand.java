@@ -22,7 +22,7 @@ public class RunSeleniumCommand extends AbstractCommand {
 
     private SeleniumIdeReader seleniumIdeReader;
     private Announcer<RunSeleniumListener> listeners = Announcer.to(RunSeleniumListener.class);
-    private int buttonId=1;
+    private int buttonId = 1;
     private Set<Element> rootElementsWithScript = new HashSet<Element>();
 
 
@@ -53,7 +53,6 @@ public class RunSeleniumCommand extends AbstractCommand {
     private class DefaultStrategy implements Strategy {
         private static final String TOGGLING_SCRIPT_RESOURCE_PATH = "/org/selendion/internal/resource/selenium-visibility-toggler.js";
 
-        
 
         public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
             Element element = commandCall.getElement();
@@ -66,11 +65,9 @@ public class RunSeleniumCommand extends AbstractCommand {
             boolean result;
             try {
                 if (!element.getParent().getLocalName().equals("table")) {
-
-                result = seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator, element,listeners, buttonId++, resultRecorder);
+                    result = seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator, element, listeners, buttonId++, resultRecorder);
                 } else {
                     result = seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator);
-
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -89,17 +86,17 @@ public class RunSeleniumCommand extends AbstractCommand {
         }
 
         private void ensureDocumentHasSeleniumTogglingScript(Element element) {
-                Element rootElement = element.getRootElement();
-                if (!rootElementsWithScript.contains(rootElement)) {
-                    rootElementsWithScript.add(rootElement);
-                    Element head = rootElement.getFirstDescendantNamed("head");
-                    if (head == null) {
-                        System.out.println(rootElement.toXML());
-                    }
-                    Check.notNull(head, "Document <head> section is missing");
-                    Element script = new Element("script").addAttribute("type", "text/javascript");
-                    head.prependChild(script);
-                    script.appendText(IOUtil.readResourceAsString(TOGGLING_SCRIPT_RESOURCE_PATH, "UTF-8"));
+            Element rootElement = element.getRootElement();
+            if (!rootElementsWithScript.contains(rootElement)) {
+                rootElementsWithScript.add(rootElement);
+                Element head = rootElement.getFirstDescendantNamed("head");
+                if (head == null) {
+                    System.out.println(rootElement.toXML());
+                }
+                Check.notNull(head, "Document <head> section is missing");
+                Element script = new Element("script").addAttribute("type", "text/javascript");
+                head.prependChild(script);
+                script.appendText(IOUtil.readResourceAsString(TOGGLING_SCRIPT_RESOURCE_PATH, "UTF-8"));
             }
 
         }

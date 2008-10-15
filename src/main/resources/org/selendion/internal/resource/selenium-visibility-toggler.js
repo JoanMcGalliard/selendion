@@ -33,6 +33,6 @@ function toggleSeleniumTable(seleniumTableNumber, seleniumTableName) {
     seleniumTableButton.value = seleniumTableName;
   } else {
     makeVisible(seleniumTable);
-    seleniumTableButton.value = "Hide " +seleniumTableName;
+    seleniumTableButton.value = "hide";
   }
 }
