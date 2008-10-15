@@ -25,10 +25,10 @@ import java.io.InputStream;
 
 import com.thoughtworks.selenium.SeleniumException;
 
-public class SeleniumIdeReader {
+public class SeleniumIdeReader extends junit.framework.TestCase {
     private SeleniumDriver selenium;
     private boolean started = false;
-    private static String VARIABLE_PATTERN ="[a-z][A-Za-z0-9_]*";
+    private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
 
     public void start(String seleniumHost, int seleniumPort, String browser, String baseUrl) {
         selenium = new SeleniumDriver(
@@ -68,6 +68,7 @@ public class SeleniumIdeReader {
         td.appendText(element.getText());
         tr.appendChild(td);
         table.appendChild(tr);
+        boolean exception = false;
         for (String[] command : seleniumCommands) {
             if (command[1] != null && command[2] != null) {
                 tr = new Element("tr");
@@ -77,29 +78,44 @@ public class SeleniumIdeReader {
                 tr.appendChild(td);
                 td = new Element("td").appendText(command[2]);
                 tr.appendChild(td);
-                CommandResult rowResponse = execute(command[0], command[1], command[2]);
-                td = new Element("td").appendText(rowResponse.getMessage());
-                tr.appendChild(td);
-                if (rowResponse.getSuccess()) {
-                    listeners.announce().successReported(new RunSeleniumSuccessEvent(tr));
-                    resultRecorder.record(Result.SUCCESS);
-                } else {
-                    result = false;
-                    listeners.announce().failureReported(new RunSeleniumFailureEvent(tr));
-                    resultRecorder.record(Result.FAILURE);
+                td = new Element("td");
+                if (!exception) {
+                    CommandResult rowResponse;
+                    try {
+                        rowResponse = execute(command[0], command[1], command[2]);
+
+                        td.appendText(rowResponse.getMessage());
+                        if (rowResponse.getSuccess()) {
+                            listeners.announce().successReported(new RunSeleniumSuccessEvent(tr));
+                            resultRecorder.record(Result.SUCCESS);
+                        } else {
+                            result = false;
+                            listeners.announce().failureReported(new RunSeleniumFailureEvent(tr));
+                            resultRecorder.record(Result.FAILURE);
+                        }
+                    }
+                    catch (Throwable e) {
+                        exception = true;
+                        result = false;
+                        td.appendText(e.getMessage());
+                        listeners.announce().failureReported(new RunSeleniumFailureEvent(tr));
+                        resultRecorder.record(Result.FAILURE);
+                    }
                 }
+                tr.appendChild(td);
                 table.appendChild(tr);
             }
         }
         Element span = new Element("span");
+        String text=element.getText().replaceAll(" *\\n *", " ").trim();
         span.appendChild(new Element("input")
                 .addStyleClass("seleniumTableButton")
                 .setId("seleniumTableButton" + buttonId)
                 .addAttribute("type", "button")
                 .addAttribute("type", "button")
                 .addAttribute("class", result ? "success" : "failure")
-                .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + element.getText() + "')")
-                .addAttribute("value", element.getText()));
+                .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + text + "')")
+                .addAttribute("value", text));
         table.setId("seleniumTable" + buttonId);
         table.addAttribute("class", "seleniumTable");
         span.appendChild(table);
@@ -131,7 +147,7 @@ public class SeleniumIdeReader {
         String[] storedVars = selenium.getEval("var arr = [];for (var name in storedVars) {arr.push('#'+name+' '+storedVars[name]);};arr").split(",");
         for (String var : storedVars) {
             String[] nvp = var.split(" ", 2);
-            if (nvp[0].matches("#"+ VARIABLE_PATTERN)) {
+            if (nvp[0].matches("#" + VARIABLE_PATTERN)) {
                 evaluator.setVariable(nvp[0], nvp[1]);
             }
         }
@@ -143,10 +159,12 @@ public class SeleniumIdeReader {
         } else if (obj.getClass() == Number.class) {
             return ((Number) obj).toString();
         } else if (obj.getClass() == String[].class) {
-            String ret = "";
+            String ret = null;
             for (String str : (String[]) obj) {
-                if (ret.length() > 0) {
-                    ret=ret+",";
+                if (ret == null) {
+                    ret = "";
+                } else {
+                    ret = ret + ",";
                 }
                 ret = ret + str;
             }
@@ -172,6 +190,27 @@ public class SeleniumIdeReader {
                 storeVar(arg2, arg1);
                 return new CommandResult(true, "");
             }
+            if (command.equals("waitForCondition")) {
+                selenium.waitForCondition(arg1, arg2);
+                return new CommandResult(true, "");
+
+            }
+            if (command.equals("waitForFrameToLoad")) {
+                selenium.waitForFrameToLoad(arg1, arg2);
+                return new CommandResult(true, "");
+
+            }
+            if (command.equals("waitForPageToLoad")) {
+                selenium.waitForPageToLoad();
+                return new CommandResult(true, "");
+
+            }
+            if (command.equals("waitForPopUp")) {
+                selenium.waitForPopUp(arg1, arg2);
+                return new CommandResult(true, "");
+            }
+
+
             if (command.matches(".*AndWait$")) {
                 try {
                     seleniumAction(command.replaceFirst("AndWait$", ""), arg1, arg2);
@@ -195,7 +234,7 @@ public class SeleniumIdeReader {
                 }
                 try {
                     Object jjj = seleniumGet(command.replaceFirst("^store", ""), arg1, arg2);
-                        storeVar(varName, jjj);
+                    storeVar(varName, jjj);
 //                        storeVar(varName, seleniumGet(command.replaceFirst("^store", ""), arg1, arg2));
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
@@ -210,9 +249,9 @@ public class SeleniumIdeReader {
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
-                String actual=seleniumObjectToString(actualObject);
+                String actual = seleniumObjectToString(actualObject);
 
-                assert (!actual.equals(expected));
+                assertFalse(actual.equals(expected));
                 return new CommandResult(true, "");
             }
             if (command.matches("^assert[A-Z].*")) {
@@ -223,8 +262,8 @@ public class SeleniumIdeReader {
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
-                String actual=seleniumObjectToString(actualObject);
-                assert (actual.equals(expected));
+                String actual = seleniumObjectToString(actualObject);
+                assertEquals(expected, actual);
                 return new CommandResult(true, "");
             }
             if (command.matches("^verifyNot[A-Z].*")) {
@@ -235,7 +274,7 @@ public class SeleniumIdeReader {
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
-                String actual=seleniumObjectToString(actualObject);
+                String actual = seleniumObjectToString(actualObject);
                 if (!actual.equals(expected)) {
                     return new CommandResult(true, "");
                 } else {
@@ -252,7 +291,7 @@ public class SeleniumIdeReader {
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
-                String actual=seleniumObjectToString(actualObject);
+                String actual = seleniumObjectToString(actualObject);
                 if (actual.equals(expected)) {
                     return new CommandResult(true, "");
                 } else {
@@ -267,18 +306,11 @@ public class SeleniumIdeReader {
                     try {
                         actualObject = seleniumGet(command.replaceFirst("^waitForNot", ""), arg1, arg2);
 
-                        String actual;
-                        if (actualObject.getClass() == String.class) {
-                            actual = (String) actualObject;
-                        } else if (actualObject.getClass() == Number.class) {
-                            actual = ((Number) actualObject).toString();
-                        } else {
-                            throw new Exception("");
-                        }
+                        String actual = seleniumObjectToString(actualObject);
                         if (!actual.equals(expected)) {
                             return new CommandResult(true, "");
                         }
-                    }  catch (SeleniumIdeException se ) {
+                    } catch (SeleniumIdeException se) {
                         throw se;
                     }
                     catch (Exception e) {
@@ -299,18 +331,11 @@ public class SeleniumIdeReader {
                     try {
                         actualObject = seleniumGet(command.replaceFirst("^waitFor", ""), arg1, arg2);
 
-                        String actual;
-                        if (actualObject.getClass() == String.class) {
-                            actual = (String) actualObject;
-                        } else if (actualObject.getClass() == Number.class) {
-                            actual = ((Number) actualObject).toString();
-                        } else {
-                            throw new Exception("");
-                        }
+                        String actual = seleniumObjectToString(actualObject);
                         if (actual.equals(expected)) {
                             return new CommandResult(true, "");
                         }
-                    }  catch (SeleniumIdeException se ) {
+                    } catch (SeleniumIdeException se) {
                         throw se;
                     }
                     catch (Exception e) {
@@ -460,14 +485,6 @@ public class SeleniumIdeReader {
             selenium.typeKeys(arg1, arg2);
         } else if (command.equals("uncheck")) {
             selenium.uncheck(arg1);
-        } else if (command.equals("waitForCondition")) {
-            selenium.waitForCondition(arg1, arg2);
-        } else if (command.equals("waitForFrameToLoad")) {
-            selenium.waitForFrameToLoad(arg1, arg2);
-        } else if (command.equals("waitForPageToLoad")) {
-            selenium.waitForPageToLoad();
-        } else if (command.equals("waitForPopUp")) {
-            selenium.waitForPopUp(arg1, arg2);
         } else if (command.equals("windowFocus")) {
             selenium.windowFocus();
         } else if (command.equals("windowMaximize")) {

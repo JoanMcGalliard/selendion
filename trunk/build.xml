@@ -100,9 +100,15 @@
              compress="false">
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
-            <zipfileset src="lib/concordion-r42-patched.jar"/>
-            <zipfileset src="lib/selenium-java-client-driver.jar"/>
-            <zipfileset src="lib/selenium-server.jar"/>
+            <zipfileset src="lib/concordion-r42-patched.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/selenium-java-client-driver.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/selenium-server.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
             <zipfileset src="lib/tagsoup-1.2.jar"/>
             <indexjars/>
         </jar>

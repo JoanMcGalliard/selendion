@@ -5,22 +5,27 @@
 
 <h2>Set up</h2>
 
-<p concordion:startSelenium="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a selenium server with:
+<p>Selenium server variables:
     host <i concordion:set="#seleniumServerHost">localhost</i>;
     port <i concordion:set="#seleniumServerport">5555</i>;
     for <i concordion:set="#browser">*firefox</i>;
     and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
 
-<h2>Set up</h2>
+<i concordion:startSelenium="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start the server</i>
+<h2>Run the tests</h2>
 
 <p>This is to make sure that Selendion can understand all selenium commands from the <a
         href="http://selenium-core.openqa.org/reference.html">
     selenium documentation</a> : </p>
 <ol>
-    <!--<li><a href="test_data/selenium_coverage/actions.html" concordion:runSelenium="#HREF">Actions</a></li>-->
+    <li>
+        <a href="test_data/selenium_coverage/seleniumAccessorsRelatedAssertions.html" concordion:runSelenium="#HREF">Accessors related assertions</a></li>
+    
+    <li><a href="test_data/selenium_coverage/actions.html" concordion:runSelenium="#HREF">Actions</a></li>
     <li><a href="test_data/selenium_coverage/andWait.html" concordion:runSelenium="#HREF">Actions AndWait</a></li>
-    <!--<li><a href="test_data/selenium_coverage/accessors.html" concordion:runSelenium="#HREF">Accessors</a></li>-->
-    <li><a href="test_data/selenium_coverage/seleniumAccessorsRelatedAssertions.html" concordion:runSelenium="#HREF">Accessors related assertions</a></li>
+
+    <li><a href="test_data/selenium_coverage/accessors.html" concordion:runSelenium="#HREF">Accessors</a></li>
+
     <li><a href="test_data/selenium_coverage/parameterAndJavascriptSubstitution.html" concordion:runSelenium="#HREF">
         parameter and javascript substitutions
     </a></li>
