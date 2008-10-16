@@ -22,12 +22,13 @@
     but choosing a username <i concordion:set="#username">brian</i>
     <a concordion:runSelenium="#HREF" href="test_data/input.html">creates a new user</a>.
     </p>
-<p>then we expect to see <a concordion:set="#rowScript=#HREF"
-                     href="test_data/getRow.html">these
-    results</a>:</p>
+<p>then we expect to see <a concordion:set="#rowNameScript=#HREF"
+                     href="test_data/getRowName.html">these
+    names</a> and <a concordion:set="#rowValueScript=#HREF"
+                     href="test_data/getRowValue.html">these values</a> :</p>
        
 
-<table concordion:runSelenium="#rowScript">
+<table concordion:runSelenium="#rowNameScript,#rowValueScript">
     <tr>
         <th concordion:set="#rowNumber">Row number</th>
         <th concordion:assertEquals="#fieldName">Name</th>

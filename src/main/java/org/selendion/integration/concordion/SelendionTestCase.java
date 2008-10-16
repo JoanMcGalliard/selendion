@@ -7,6 +7,7 @@ package org.selendion.integration.concordion;
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.concordion.api.ResultSummary;
 import org.selendion.internal.SelendionBuilder;
+import org.selendion.internal.SelendionEvaluatorFactory;
 import org.openqa.selenium.server.SeleniumServer;
 
 
@@ -17,8 +18,8 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
         this.expectedToPass = expectedToPass;
     }
 
-     public void testProcessSpecification() throws Throwable {
-        ResultSummary resultSummary = new SelendionBuilder().build().process(this);
+    public void testProcessSpecification() throws Throwable {
+        ResultSummary resultSummary = new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory()).build().process(this);
         resultSummary.print(System.out);
         if (expectedToPass) {
             resultSummary.assertIsSatisfied();

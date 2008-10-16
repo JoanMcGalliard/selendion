@@ -17,6 +17,8 @@ import org.selendion.internal.RunSeleniumListener;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 
 public class RunSeleniumCommand extends AbstractCommand {
 
@@ -60,26 +62,47 @@ public class RunSeleniumCommand extends AbstractCommand {
             CommandCallList childCommands = commandCall.getChildren();
 
             childCommands.setUp(evaluator, resultRecorder);
-            String seleniumFile = commandCall.getResource().getRelativeResource(evaluator.evaluate(commandCall.getExpression()).toString()).getPath();
+
+            Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
+            List<String> seleniumFileNames = new ArrayList<String>();
+            String testName="";
+
+            if (evaluatedExpression.getClass().equals(String.class)) {
+                seleniumFileNames.add(commandCall.getResource().getRelativeResource((String) evaluatedExpression).getPath());
+                testName= ((String) evaluatedExpression).replaceAll(" *\\n *", " ").trim();
+            } else {
+            Object[] files = (Object[]) evaluatedExpression;
+            for (Object obj : files) {
+                seleniumFileNames.add(commandCall.getResource().getRelativeResource((String) obj).getPath());
+                if (testName.length() > 0) {
+                    testName=testName+"|";
+                }
+                testName=testName+((String) obj).replaceFirst("^.*/", "").replaceFirst("\\.htm[l]?$", "").trim();
+            }
+            }
             evaluator.evaluate(commandCall.getExpression());
             boolean result;
+            Element resultElement;
             try {
                 if (!element.getParent().getLocalName().equals("table")) {
-                    result = seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator, element, listeners, buttonId++, resultRecorder);
+                    resultElement = new Element("span");
+                    testName = element.getText().replaceAll(" *\\n *", " ").trim();
+
+                    result = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
+                    element.insertAfter(resultElement);
+                    element.addAttribute("class", "invisible");                    
                 } else {
-                    result = seleniumIdeReader.runSeleniumScript(seleniumFile, evaluator);
+                    resultElement = new Element("td");
+                    element.appendChild(resultElement);
+                    result = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            if (!element.getParent().getLocalName().equals("table")) {
-                if (result) {
-
-
-                    announceSuccess(element);
-                } else {
-                    announceFailure(element);
-                }
+            if (result) {
+                announceSuccess(resultElement);
+            } else {
+                announceFailure(resultElement);
             }
             childCommands.execute(evaluator, resultRecorder);
             childCommands.verify(evaluator, resultRecorder);
@@ -95,7 +118,9 @@ public class RunSeleniumCommand extends AbstractCommand {
                 }
                 Check.notNull(head, "Document <head> section is missing");
                 Element script = new Element("script").addAttribute("type", "text/javascript");
-                head.prependChild(script);
+                if (head != null) {
+                    head.prependChild(script);
+                }
                 script.appendText(IOUtil.readResourceAsString(TOGGLING_SCRIPT_RESOURCE_PATH, "UTF-8"));
             }
 
@@ -109,6 +134,7 @@ public class RunSeleniumCommand extends AbstractCommand {
 
             TableSupport tableSupport = new TableSupport(commandCall);
 
+            
             Row[] detailRows = tableSupport.getDetailRows();
 
             for (Row detailRow : detailRows) {
@@ -119,6 +145,9 @@ public class RunSeleniumCommand extends AbstractCommand {
                 tableSupport.copyCommandCallsTo(detailRow);
                 commandCall.execute(evaluator, resultRecorder);
             }
+            Element columnHeader = new Element("td");
+            columnHeader.appendText("Selenium");
+            tableSupport.getLastHeaderRow().getElement().appendChild(columnHeader);
         }
 
 
