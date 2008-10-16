@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Set;
 import java.util.Vector;
+import java.util.List;
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.InputStream;
@@ -44,28 +45,23 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         }
     }
 
-    public boolean runSeleniumScript(String filepath, Evaluator evaluator) {
-        Vector<String[]> seleniumCommands = readSelenium(filepath);
-        turnConcordionVarsToSeleniumVars(evaluator);
-        boolean result = true;
-        for (String[] command : seleniumCommands) {
-            if (command[1] != null && command[2] != null && execute(command[0], command[1], command[2]) != null) {
-                result = false;
-            }
-        }
-        turnSeleniumVarsToConcordionVars(evaluator);
-        return result;
-    }
 
-    public boolean runSeleniumScript(String filepath, Evaluator evaluator, Element element, Announcer<RunSeleniumListener> listeners, int buttonId, ResultRecorder resultRecorder) throws Exception {
-        Vector<String[]> seleniumCommands = readSelenium(filepath);
+    public boolean runSeleniumScript(List<String> filepaths, Evaluator evaluator, String title, Element resultElement, Announcer<RunSeleniumListener> listeners, int buttonId, ResultRecorder resultRecorder) throws Exception {
+        Vector<String[]> seleniumCommands = new Vector<String[]>();
+        for (String filepath : filepaths) {
+            seleniumCommands.addAll(readSelenium(filepath));
+        }
         turnConcordionVarsToSeleniumVars(evaluator);
         boolean result = true;
         Element table = new Element("table");
         Element tr = new Element("tr");
         Element td = new Element("th");
         td.addAttribute("colspan", "4");
-        td.appendText(element.getText());
+        String[] titles = title.split("\\|");
+        for (String t : titles)  {
+            td.appendText(t);
+            td.appendChild(new Element("br"));
+        }
         tr.appendChild(td);
         table.appendChild(tr);
         boolean exception = false;
@@ -106,21 +102,16 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 table.appendChild(tr);
             }
         }
-        Element span = new Element("span");
-        String text=element.getText().replaceAll(" *\\n *", " ").trim();
-        span.appendChild(new Element("input")
+        resultElement.appendChild(new Element("input")
                 .addStyleClass("seleniumTableButton")
                 .setId("seleniumTableButton" + buttonId)
                 .addAttribute("type", "button")
-                .addAttribute("type", "button")
                 .addAttribute("class", result ? "success" : "failure")
-                .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + text + "')")
-                .addAttribute("value", text));
+                .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + title + "')")
+                .addAttribute("value", title.replaceAll("\\|", "\n")));
         table.setId("seleniumTable" + buttonId);
         table.addAttribute("class", "seleniumTable");
-        span.appendChild(table);
-        element.insertAfter(span);
-        element.addAttribute("class", "invisible");
+        resultElement.appendChild(table);
         turnSeleniumVarsToConcordionVars(evaluator);
         return result;
     }
@@ -330,7 +321,10 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 while (true) {
                     try {
                         actualObject = seleniumGet(command.replaceFirst("^waitFor", ""), arg1, arg2);
-
+                        if (actualObject.getClass().equals(Boolean.class) &&
+                                (Boolean) actualObject)   {
+                            return new CommandResult(true, "");
+                        }
                         String actual = seleniumObjectToString(actualObject);
                         if (actual.equals(expected)) {
                             return new CommandResult(true, "");
@@ -521,7 +515,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         Class clazz = value.getClass();
         if (clazz == String.class) {
             selenium.getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", " ").replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")));
-        } else if (clazz == boolean.class) {
+        } else if (clazz == Boolean.class) {
             selenium.getEval(String.format("storedVars['%s']=%s", name, ((Boolean) value) ? "true" : "false"));
         } else if (clazz == String[].class) {
             String valueStr = "";

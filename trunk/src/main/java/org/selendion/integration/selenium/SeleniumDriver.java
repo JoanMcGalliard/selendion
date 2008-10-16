@@ -8,13 +8,10 @@ import com.thoughtworks.selenium.DefaultSelenium;
 
 public class SeleniumDriver extends DefaultSelenium {
 
-
-
-
-
     private String timeout = "600000";
 
     public void setTimeout(String timeout) {
+        Integer.parseInt(timeout);
         super.setTimeout(timeout);
         this.timeout=timeout;
     }

@@ -8,7 +8,6 @@ import org.concordion.internal.ConcordionBuilder;
 import org.concordion.internal.listener.StylesheetEmbedder;
 import org.concordion.internal.util.IOUtil;
 import org.concordion.internal.command.*;
-import org.concordion.integration.junit3.ConcordionTestCase;
 import org.selendion.internal.command.*;
 import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.util.TestDescription;
@@ -22,8 +21,10 @@ public class SelendionBuilder extends ConcordionBuilder {
     public static final String NAMESPACE_SELENDION = "http://www.selendion.org/2008";
 
     private SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
-    private Vector<TestDescription> suite = new Vector();
+    private Vector<TestDescription> suite = new Vector<TestDescription>();
     private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/selendion/internal/resource/embedded.css";
+
+
 
 
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);

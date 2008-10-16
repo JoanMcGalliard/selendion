@@ -54,6 +54,15 @@ Index: src/test/java/test/concordion/internal/ExpressionTest.java
 ===================================================================
 --- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 42)
 +++ src/test/java/test/concordion/internal/ExpressionTest.java	(working copy)
+@@ -6,7 +6,7 @@
+ 
+ public class ExpressionTest extends TestCase {
+     
+-    private static String [] evaluationExpressions = new String [] { 
++    private static String [] evaluationExpressions = new String [] {
+           "myProp"
+         , "myMethod()"
+         , "myMethod(#var1)"
 @@ -25,7 +25,18 @@
          , "myMethod(#var1, #var2) ? 's1' : 's2'"
          , "#var.myMethod()"
@@ -82,6 +91,84 @@ Index: src/test/java/test/concordion/internal/ExpressionTest.java
      }
      
      public void testAllEvaluationExpressions() throws Exception {
+Index: src/test/java/test/concordion/internal/TableTest.java
+===================================================================
+--- src/test/java/test/concordion/internal/TableTest.java	(revision 0)
++++ src/test/java/test/concordion/internal/TableTest.java	(revision 0)
+@@ -0,0 +1,73 @@
++package test.concordion.internal;
++
++import junit.framework.TestCase;
++import org.concordion.internal.Table;
++import org.concordion.internal.Row;
++import org.concordion.api.Element;
++
++public class TableTest extends TestCase {
++    public void testGetLastHeaderRow() {
++        Element tableElement = new Element("table");
++        Element header = new Element("tr");
++        header.appendChild(new Element("th").appendText("Col head1"));
++        header.appendChild(new Element("th").appendText("Col head2"));
++        tableElement.appendChild(header);
++        Element row = new Element("tr");
++        row.appendChild(new Element("td").appendText("Col 1"));
++        row.appendChild(new Element("td").appendText("Col 2"));
++        tableElement.appendChild(row);
++        Table table = new Table(tableElement);
++
++        // Get header of plain table
++        assertEquals(table.getLastHeaderRow().getElement(), header);
++
++
++
++        row = new Element("tr");
++        row.appendChild(new Element("td").appendText("Col 1"));
++        row.appendChild(subTable());
++        tableElement.appendChild(row);
++
++        // Get header of table with sub table
++        assertEquals(table.getLastHeaderRow().getElement(), header);
++
++        tableElement = new Element("table");
++        Element thead = new Element("thead");
++        Element tbody = new Element("tbody");
++        header = new Element("tr");
++        header.appendChild(new Element("th").appendText("Col head1"));
++        header.appendChild(new Element("th").appendText("Col head2"));
++        thead.appendChild(header);
++        tableElement.appendChild(thead);
++        row = new Element("tr");
++        row.appendChild(new Element("td").appendText("Col 1"));
++        row.appendChild(new Element("td").appendText("Col 2"));
++        tbody.appendChild(row);
++        tableElement.appendChild(tbody);
++        table = new Table(tableElement);
++
++        // Get header of table with tbody/thead
++        assertEquals(table.getLastHeaderRow().getElement(), header);
++
++
++        row = new Element("tr");
++        row.appendChild(new Element("td").appendText("Col 1"));
++        row.appendChild(subTable());
++        tbody.appendChild(row);
++
++        // Get header of table with tbody/thead and sub table
++        assertEquals(table.getLastHeaderRow().getElement(), header);
++    }
++
++    private Element subTable() {
++         Element tableElement = new Element("table");
++        Element subTableHeader = new Element("tr");
++        subTableHeader.appendChild(new Element("th").appendText("Sub Table Header"));
++        tableElement.appendChild(subTableHeader);
++        Element row = new Element("tr");
++        row.appendChild(new Element("td").appendText("Col 1"));
++        tableElement.appendChild(row);
++        return tableElement;
++    }
++
++}
 Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 ===================================================================
 --- src/test/java/spec/concordion/results/exception/ExceptionTest.java	(revision 42)
@@ -122,29 +209,6 @@ Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 +        return ret;
      }
  }
-Index: src/test/java/spec/examples/NewFeaturesTest.java
-===================================================================
---- src/test/java/spec/examples/NewFeaturesTest.java	(revision 42)
-+++ src/test/java/spec/examples/NewFeaturesTest.java	(working copy)
-@@ -2,9 +2,9 @@
- 
- import org.concordion.integration.junit3.ConcordionTestCase;
- 
--public class DemoTest extends ConcordionTestCase {
--
-+public class NewFeaturesTest extends ConcordionTestCase {
-     public String greetingFor(String firstName) {
-         return String.format("Hello %s!", firstName);
-     }
--}
-+
-+}
-\ No newline at end of file
-
-Property changes on: src/test/java/spec/examples/NewFeaturesTest.java
-___________________________________________________________________
-Added: svn:mergeinfo
-
 Index: src/test/resources/spec/concordion/results/exception/Exception.html
 ===================================================================
 --- src/test/resources/spec/concordion/results/exception/Exception.html	(revision 42)
@@ -167,46 +231,13 @@ Index: src/test/resources/spec/concordion/results/exception/Exception.html
  </pre>
  
  
-Index: src/test/resources/spec/examples/NewFeatures.html
-===================================================================
---- src/test/resources/spec/examples/NewFeatures.html	(revision 0)
-+++ src/test/resources/spec/examples/NewFeatures.html	(revision 0)
-@@ -0,0 +1,34 @@
-+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
-+<link href="../../../concordion.css" rel="stylesheet" type="text/css" />
-+<body>
-+
-+    <h1>New Features</h1>
-+
-+
-+    <h2>Literal values in set</h2>
-+    <div class="example">
-+        <p>In this case we just want to assert that <i concordion:set="#value='bob'">explicitly setting
-+        the value to 'bob'</i> actually results in the value being set to
-+        <b concordion:assertEquals="#value">bob</b>.</p>
-+    </div>
-+    <div class="example">
-+
-+    <p>
-+        And that we can testing that the greeting for explitly passing 'Bob' as a parameter is still
-+        <b concordion:assertEquals="greetingFor('Bob')">Hello Bob!</b>
-+    </p>
-+    </div>
-+
-+
-+    <div class="example">
-+        <p>In this case we just want to assert that <a href="Demo.html" concordion:set="#link=#HREF">this link</a> is
-+        <b concordion:assertEquals="#link">Demo.html</b></p>
-+    </div>
-+
-+
-+    <div class="example">
-+        <p>Run the test in  <a href="Demo.html" concordion:run="concordion">this link</a>. </p>
-+    </div>
-+
-+</body>
-+</html>
+@@ -95,4 +97,4 @@
+     </ul>        
+ 
+ </body>
+-</html>
 \ No newline at end of file
++</html>
 Index: src/main/java/org/concordion/api/Evaluator.java
 ===================================================================
 --- src/main/java/org/concordion/api/Evaluator.java	(revision 42)
@@ -416,6 +447,38 @@ Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
 +
      private InvalidExpressionException invalidExpressionException(OgnlException e) {
          Throwable cause = e;
+         
+Index: src/main/java/org/concordion/internal/Table.java
+===================================================================
+--- src/main/java/org/concordion/internal/Table.java	(revision 42)
++++ src/main/java/org/concordion/internal/Table.java	(working copy)
+@@ -41,15 +41,23 @@
+         }
+         return detailRows.toArray(new Row[detailRows.size()]);
+     }
+-    
++
+     private Row[] getRows() {
+         List<Row> rows = new ArrayList<Row>();
+-        for (Element rowElement : tableElement.getDescendantElements("tr")) {
+-            rows.add(new Row(rowElement));
++        for (Element subElement : tableElement.getChildElements()) {
++            if (subElement.getLocalName().equals("tr")) {
++                rows.add(new Row(subElement));
++            } else if (subElement.getLocalName().equals("tbody") || subElement.getLocalName().equals("thead")) {
++                for (Element subSubElement : subElement.getChildElements()) {
++                    if (subSubElement.getLocalName().equals("tr")) {
++                        rows.add(new Row(subSubElement));
++                    }
++                }
++            }
+         }
+         return rows.toArray(new Row[rows.size()]);
+     }
+-    
++
+     public Row addDetailRow() {
+         Element rowElement = new Element("tr");
          
 Index: src/main/java/org/concordion/internal/DocumentParser.java
 ===================================================================
