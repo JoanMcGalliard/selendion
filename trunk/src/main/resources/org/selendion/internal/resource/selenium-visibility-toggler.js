@@ -1,8 +1,6 @@
 /* Selenium Table Toggling */
 
 function getElementById(id) {
-  var element;
-
   if (document.getElementById) { // standard
     return document.getElementById(id);
   } else if (document.all) { // old IE versions
@@ -11,6 +9,7 @@ function getElementById(id) {
     return document.layers[id];
   }
   alert("Sorry, but your web browser is not supported by Concordion.");
+    return null;
 }
 
 function isVisible(element) {

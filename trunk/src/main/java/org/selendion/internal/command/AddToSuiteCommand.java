@@ -4,7 +4,6 @@ import org.concordion.internal.command.AbstractCommand;
 import org.concordion.internal.CommandCall;
 import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
-import org.concordion.api.Resource;
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.selendion.internal.util.TestDescription;
 
@@ -39,20 +38,19 @@ public class AddToSuiteCommand extends AbstractCommand {
         if (f.isFile()) {
             suite.add(new TestDescription(htmlFilename, getTitleOfPage(htmlFilename), getClass(htmlResource) ));
         } else if (f.isDirectory()) {
-            walk(htmlFilename, htmlResource, commandCall.getResource());
+            walk(htmlFilename, htmlResource);
         }
     }
 
-    private void walk(String htmlFilename, String htmlResource, Resource resource) {
+    private void walk(String htmlFilename, String htmlResource) {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         File f = new File(contextClassLoader.getResource(htmlResource).getPath());
         if (f.isFile() && f.toString().matches(".*\\.html")) {
-            System.out.println("Adding "+ htmlResource );
             suite.add(new TestDescription(htmlFilename, getTitleOfPage(htmlResource), getClass(htmlResource) ));
 
         }  else if (f.isDirectory()) {
             for (String sub : f.list()) {
-                walk(htmlFilename.replaceFirst("/$", "") + "/" + sub, htmlResource.replaceFirst("/$", "") + "/" + sub, resource);
+                walk(htmlFilename.replaceFirst("/$", "") + "/" + sub, htmlResource.replaceFirst("/$", "") + "/" + sub);
             }
         }
     }
@@ -71,7 +69,7 @@ public class AddToSuiteCommand extends AbstractCommand {
             try {
                 testClass = (Class<? extends ConcordionTestCase>) loader.loadClass(className);
             } catch (ClassNotFoundException e1) {
-                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                //ignore
             }
         }
         return testClass;

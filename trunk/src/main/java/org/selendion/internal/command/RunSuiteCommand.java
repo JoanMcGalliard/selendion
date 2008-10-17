@@ -5,29 +5,17 @@ import org.concordion.internal.CommandCall;
 import org.concordion.internal.util.Announcer;
 import org.concordion.api.*;
 import org.concordion.api.Element;
-import org.concordion.integration.junit3.ConcordionTestCase;
 import org.selendion.internal.RunSuiteListener;
 import org.selendion.internal.util.TestDescription;
 import org.selendion.internal.util.ActiveTestSuiteRestricted;
-import org.junit.Test;
-import org.xml.sax.helpers.XMLReaderFactory;
-import org.xml.sax.SAXException;
-import org.ccil.cowan.tagsoup.Parser;
+
 
 import java.util.Vector;
-import java.util.Set;
 import java.util.Enumeration;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.io.IOException;
 
 import junit.framework.TestSuite;
 import junit.framework.TestResult;
 import junit.framework.TestFailure;
-import junit.extensions.ActiveTestSuite;
-import junit.runner.TestCaseClassLoader;
-import nu.xom.*;
 
 
 public class RunSuiteCommand extends AbstractCommand {
@@ -58,7 +46,7 @@ public class RunSuiteCommand extends AbstractCommand {
         TestResult testResult = new TestResult();
         testSuite.run(testResult);
 
-        Vector<Class> failures = new Vector();
+        Vector<Class> failures = new Vector<Class>();
         Enumeration<TestFailure> errors = testResult.errors();
         while (errors.hasMoreElements()) {
             failures.add(errors.nextElement().failedTest().getClass());

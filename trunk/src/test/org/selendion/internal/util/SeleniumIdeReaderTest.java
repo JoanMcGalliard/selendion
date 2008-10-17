@@ -14,7 +14,7 @@ public class SeleniumIdeReaderTest {
     @org.junit.Test
     public void testReadSelenium() throws Exception {
         SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
-        Vector<String[]>  expectedResult = new Vector();
+        Vector<String[]>  expectedResult = new Vector<String[] >();
         expectedResult.add(new String [] {"all", "three", "columns"});
         expectedResult.add(new String [] {"three columns, 2 empty", "", ""});
         expectedResult.add(new String [] {"three columns", "1 empty", ""});

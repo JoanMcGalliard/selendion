@@ -4,11 +4,6 @@
 
 package org.selendion.internal;
 
-
-import static org.junit.Assert.*;
-
-import java.util.Vector;
-
 import junit.framework.TestCase;
 
 
