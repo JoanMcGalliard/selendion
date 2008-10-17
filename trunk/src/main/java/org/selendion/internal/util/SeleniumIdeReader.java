@@ -223,9 +223,25 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 try {
                     storeVar(varName, seleniumGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
                 } catch (SeleniumException se) {
-                    return new CommandResult(true, "");
+                    //ignore
                 }
                 catch (SeleniumIdeException e) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                return new CommandResult(true, "");
+            }
+            if (command.matches("^storeNot[A-Z].*")) {
+                String varName = arg2.length() > 0 ? arg2 : arg1;
+
+                if (!varName.matches(VARIABLE_PATTERN)) {
+                    return new CommandResult(false, "Illegal variable name: " + varName);
+                }
+                try {
+                    Object answer=seleniumGet(command.replaceFirst("^storeNot", ""), arg1, arg2);
+                    if (answer.getClass().equals(Boolean.class)) {
+                    storeVar(varName, !(Boolean)answer);
+                    }
+                } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
                 return new CommandResult(true, "");
@@ -305,6 +321,46 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 } else {
                     return new CommandResult(false, "Expected: " + expected + "; Actual: " + actual);
                 }
+            }
+            if (command.matches("^waitForPageToLoadIfNot[A-Z].*")) {
+                Object actualObject;
+                String expected = arg2.length() > 0 ? arg2 : arg1;
+                try {
+                    actualObject = seleniumGet(command.replaceFirst("^waitForPageToLoadIfNot", ""), arg1, arg2);
+                } catch (SeleniumIdeException e) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                boolean condition;
+                if (actualObject.getClass().equals(Boolean.class)) {
+                    condition = (Boolean) actualObject;
+                } else {
+                    String actual = seleniumObjectToString(actualObject);
+                    condition = actual.equals(expected);
+                }
+                if (!condition) {
+                    selenium.waitForPageToLoad();
+                }
+                return new CommandResult(true, "");
+            }
+            if (command.matches("^waitForPageToLoadIf[A-Z].*")) {
+                Object actualObject;
+                String expected = arg2.length() > 0 ? arg2 : arg1;
+                try {
+                    actualObject = seleniumGet(command.replaceFirst("^waitForPageToLoadIf", ""), arg1, arg2);
+                } catch (SeleniumIdeException e) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                boolean condition;
+                if (actualObject.getClass().equals(Boolean.class)) {
+                    condition = (Boolean) actualObject;
+                } else {
+                    String actual = seleniumObjectToString(actualObject);
+                    condition = actual.equals(expected);
+                }
+                if (condition) {
+                    selenium.waitForPageToLoad();
+                }
+                return new CommandResult(true, "");
             }
             if (command.matches("^waitForNot[A-Z].*")) {
                 Object actualObject;
@@ -536,7 +592,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         if (clazz == String.class) {
             selenium.getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", " ").replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")));
         } else if (clazz == Boolean.class) {
-            selenium.getEval(String.format("storedVars['%s']=%s", name, ((Boolean) value) ? "true" : "false"));
+            selenium.getEval(String.format("storedVars['%s']=%s", name, ((Boolean) value).booleanValue() ? "true" : "false"));
         } else if (clazz == String[].class) {
             String valueStr = "";
             for (String str : (String[]) value) {

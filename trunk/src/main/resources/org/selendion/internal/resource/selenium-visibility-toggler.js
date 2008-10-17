@@ -29,7 +29,7 @@ function toggleSeleniumTable(seleniumTableNumber, seleniumTableName) {
   var seleniumTableButton = getElementById("seleniumTableButton" + seleniumTableNumber);
   if (isVisible(seleniumTable)) {
     makeInvisible(seleniumTable);
-    seleniumTableButton.value = seleniumTableName;
+    seleniumTableButton.value = seleniumTableName.replace(/\|/g,"\n");
   } else {
     makeVisible(seleniumTable);
     seleniumTableButton.value = "hide";
