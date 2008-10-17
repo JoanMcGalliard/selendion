@@ -5,7 +5,9 @@
 package org.selendion.internal;
 
 import org.concordion.internal.ConcordionBuilder;
+import org.concordion.internal.DocumentParser;
 import org.concordion.internal.listener.StylesheetEmbedder;
+import org.concordion.internal.listener.DocumentStructureImprover;
 import org.concordion.internal.util.IOUtil;
 import org.concordion.internal.command.*;
 import org.selendion.internal.command.*;
@@ -26,7 +28,8 @@ public class SelendionBuilder extends ConcordionBuilder {
 
 
 
-
+    private DocumentParser documentParser = new DocumentParser(commandRegistry);
+    
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
@@ -50,6 +53,7 @@ public class SelendionBuilder extends ConcordionBuilder {
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
         runSeleniumCommand.addRunSeleniumListener(new RunSeleniumResultRenderer());
+        documentParser.addDocumentParsingListener(new DocumentStructureImprover());
          String stylesheetContent = IOUtil.readResourceAsString(EMBEDDED_STYLESHEET_RESOURCE);
         documentParser.addDocumentParsingListener(new StylesheetEmbedder(stylesheetContent));
 
