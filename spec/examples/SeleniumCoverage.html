@@ -12,6 +12,7 @@
     and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
 
 <i concordion:startSelenium="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start the server</i>
+
 <h2>Run the tests</h2>
 
 <p>This is to make sure that Selendion can understand all selenium commands from the <a
@@ -19,8 +20,9 @@
     selenium documentation</a> : </p>
 <ol>
     <li>
-        <a href="test_data/selenium_coverage/seleniumAccessorsRelatedAssertions.html" concordion:runSelenium="#HREF">Accessors related assertions</a></li>
-    
+        <a href="test_data/selenium_coverage/seleniumAccessorsRelatedAssertions.html" concordion:runSelenium="#HREF">Accessors
+            related assertions</a></li>
+
     <li><a href="test_data/selenium_coverage/actions.html" concordion:runSelenium="#HREF">Actions</a></li>
     <li><a href="test_data/selenium_coverage/andWait.html" concordion:runSelenium="#HREF">Actions AndWait</a></li>
 
@@ -31,6 +33,9 @@
     </a></li>
     <li><a href="test_data/selenium_coverage/userExtensions.html" concordion:runSelenium="#HREF">
         User extensions
+    </a></li>
+    <li><a href="test_data/selenium_coverage/storeIfAvailable.html" concordion:runSelenium="#HREF">
+        Store if available
     </a></li>
 
 </ol>

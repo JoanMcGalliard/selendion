@@ -148,7 +148,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         if (obj.getClass() == String.class) {
             return (String) obj;
         } else if (obj.getClass() == Number.class) {
-            return ((Number) obj).toString();
+            return  obj.toString();
         } else if (obj.getClass() == String[].class) {
             String ret = null;
             for (String str : (String[]) obj) {
@@ -170,7 +170,6 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             throw new RuntimeException("Please start selenium before running scripts.");
         }
         try {
-            System.out.println(command);
             command = replaceVariables(replaceCharacterEntities(command));
             arg1 = replaceVariables(replaceCharacterEntities(arg1));
             arg2 = replaceVariables(replaceCharacterEntities(arg2));
@@ -215,8 +214,22 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 }
 
             }
-            //All getFoo and isFoo methods on the Selenium prototype automatically result in the availability
-            // of storeFoo, assertFoo, assertNotFoo, verifyFoo, verifyNotFoo, waitForFoo, and waitForNotFoo commands.
+            if (command.matches("^storeIfAvailable[A-Z].*")) {
+                String varName = arg2.length() > 0 ? arg2 : arg1;
+
+                if (!varName.matches(VARIABLE_PATTERN)) {
+                    return new CommandResult(false, "Illegal variable name: " + varName);
+                }
+                try {
+                    storeVar(varName, seleniumGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
+                } catch (SeleniumException se) {
+                    return new CommandResult(true, "");
+                }
+                catch (SeleniumIdeException e) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                return new CommandResult(true, "");
+            }
             if (command.matches("^store[A-Z].*")) {
                 String varName = arg2.length() > 0 ? arg2 : arg1;
 
@@ -224,9 +237,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(false, "Illegal variable name: " + varName);
                 }
                 try {
-                    Object jjj = seleniumGet(command.replaceFirst("^store", ""), arg1, arg2);
-                    storeVar(varName, jjj);
-//                        storeVar(varName, seleniumGet(command.replaceFirst("^store", ""), arg1, arg2));
+                    storeVar(varName, seleniumGet(command.replaceFirst("^store", ""), arg1, arg2));
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -265,6 +276,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
+                if (actualObject.getClass().equals(Boolean.class))   {
+                           return new CommandResult(!(Boolean) actualObject, "");
+               }
                 String actual = seleniumObjectToString(actualObject);
                 if (!actual.equals(expected)) {
                     return new CommandResult(true, "");
@@ -281,6 +295,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     actualObject = seleniumGet(command.replaceFirst("^verify", ""), arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
+                }
+                 if (actualObject.getClass().equals(Boolean.class))   {
+                            return new CommandResult((Boolean) actualObject, "");
                 }
                 String actual = seleniumObjectToString(actualObject);
                 if (actual.equals(expected)) {
@@ -305,6 +322,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                         throw se;
                     }
                     catch (Exception e) {
+                        // try again
                     }
                     if (System.currentTimeMillis() - start > Integer.parseInt(selenium.getTimeout())) {
                         throw new Exception("Timeout");
@@ -333,6 +351,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                         throw se;
                     }
                     catch (Exception e) {
+                        //try again
                     }
                     if (System.currentTimeMillis() - start > Integer.parseInt(selenium.getTimeout())) {
                         throw new Exception("Timeout");
@@ -442,6 +461,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 selenium.pause(new Integer(arg1));
             } catch (InterruptedException e1) {
+                //ignore
             }
         } else if (command.equals("refresh")) {
             selenium.refresh();
@@ -711,8 +731,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             throw new RuntimeException(String.format("Could not read selenium file %s.", htmlFileName));
         }
         Reader reader = new InputStreamReader(stream);
-        nu.xom.Builder builder = null;
-        nu.xom.Document doc = null;
+        nu.xom.Builder builder;
+        nu.xom.Document doc;
         try {
             builder = new nu.xom.Builder(XMLReaderFactory.createXMLReader(Parser.class.getName()));
             doc = builder.build(reader);
@@ -726,7 +746,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         } else {
             rows = doc.query("//tr");
         }
-        Vector return_val = new Vector();
+        Vector<String[]> return_val = new Vector<String[]>();
         for (int r = 0; r < rows.size(); r++) {
             nu.xom.Node rowNode = rows.get(r);
             String[] row = new String[3];

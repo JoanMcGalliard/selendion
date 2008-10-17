@@ -1,10 +1,7 @@
 package org.selendion.internal.listener;
 
 import org.concordion.internal.listener.ThrowableRenderer;
-import org.selendion.internal.RunSuiteListener;
 import org.selendion.internal.RunSeleniumListener;
-import org.selendion.internal.command.RunSuiteSuccessEvent;
-import org.selendion.internal.command.RunSuiteFailureEvent;
 import org.selendion.internal.command.RunSeleniumSuccessEvent;
 import org.selendion.internal.command.RunSeleniumFailureEvent;
 

@@ -113,9 +113,6 @@ public class RunSeleniumCommand extends AbstractCommand {
             if (!rootElementsWithScript.contains(rootElement)) {
                 rootElementsWithScript.add(rootElement);
                 Element head = rootElement.getFirstDescendantNamed("head");
-                if (head == null) {
-                    System.out.println(rootElement.toXML());
-                }
                 Check.notNull(head, "Document <head> section is missing");
                 Element script = new Element("script").addAttribute("type", "text/javascript");
                 if (head != null) {

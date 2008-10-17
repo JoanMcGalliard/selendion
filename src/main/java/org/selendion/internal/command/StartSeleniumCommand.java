@@ -26,10 +26,10 @@ public class StartSeleniumCommand extends AbstractCommand {
         childCommands.execute(evaluator, resultRecorder);
         childCommands.verify(evaluator, resultRecorder);
 
-        String seleniumServerHost = "";
-        int seleniumServerPort = 4444;
-        String browser = "";
-        String baseUrl = "";
+        String seleniumServerHost;
+        int seleniumServerPort;
+        String browser;
+        String baseUrl;
         try
 
         {
@@ -50,7 +50,7 @@ public class StartSeleniumCommand extends AbstractCommand {
                 )
 
         {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e);
         }
 
         seleniumIdeReader.start(seleniumServerHost, seleniumServerPort, browser, baseUrl);

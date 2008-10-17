@@ -8,7 +8,6 @@ import org.concordion.integration.junit3.ConcordionTestCase;
 import org.concordion.api.ResultSummary;
 import org.selendion.internal.SelendionBuilder;
 import org.selendion.internal.SelendionEvaluatorFactory;
-import org.openqa.selenium.server.SeleniumServer;
 
 
 public abstract class SelendionTestCase extends ConcordionTestCase {

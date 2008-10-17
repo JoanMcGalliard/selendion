@@ -46,6 +46,7 @@ public class ActiveTestSuiteRestricted extends TestSuite {
             try {
                 wait();
             } catch (Exception e) {
+                //ignore
             }
         }
         Thread t= new Thread() {
