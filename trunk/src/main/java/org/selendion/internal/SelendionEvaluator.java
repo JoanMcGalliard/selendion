@@ -11,7 +11,7 @@ public class SelendionEvaluator extends SimpleEvaluator {
     }
 
     public Object evaluate(String expression) {
-        if (expression.contains(",")) {
+        if (expression.contains(",") && !expression.contains("(")) {
             List<Object> returnValue = new ArrayList<Object>();
             for (String subExpression : expression.split(",")) {
                 returnValue.add(super.evaluate(subExpression));

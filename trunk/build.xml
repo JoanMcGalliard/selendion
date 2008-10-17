@@ -96,7 +96,8 @@
 
         <jar destfile="${dir.dist}/${productName}-${version}.jar"
              basedir="${dir.classes}"
-             compress="false">
+             compress="false"
+             filesetmanifest="skip">
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
             <zipfileset src="lib/concordion-r42-patched.jar">
