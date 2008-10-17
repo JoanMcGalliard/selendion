@@ -1,0 +1,35 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<link href="../../../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+    <h1>New Features</h1>
+
+
+    <h2>Literal values in set</h2>
+    <div class="example">
+        <p>In this case we just want to assert that <i concordion:set="#value='bob'">explicitly setting
+        the value to 'bob'</i> actually results in the value being set to
+        <b concordion:assertEquals="#value">bob</b>.</p>
+    </div>
+    <div class="example">
+
+    <p>
+        And that we can testing that the greeting for explitly passing 'Bob' as a parameter is still
+        <b concordion:assertEquals="greetingFor('Bob')">Hello Bob!</b>
+    </p>
+    </div>
+
+
+    <div class="example">
+        <p>In this case we just want to assert that <a href="Demo.html" concordion:set="#link=#HREF">this link</a> is
+        <b concordion:assertEquals="#link">Demo.html</b></p>
+    </div>
+
+
+    <div class="example">
+        <p>Run the test in  <a href="Demo.html" concordion:run="concordion">this link</a>. </p>
+    </div>
+
+</body>
+</html>
