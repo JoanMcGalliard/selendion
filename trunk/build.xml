@@ -49,7 +49,7 @@
 
         <javac classpathref="compile.classpath"
                destdir="${dir.classes}"
-               srcdir="src/main/java:src/test:spec"
+               srcdir="src/main/java:src/test:spec:concordion-tests/java"
                debug="yes"
                failonerror="yes"
                source="1.5"
@@ -61,6 +61,8 @@
             <fileset dir="src/main/resources" excludes="**/*.java"/>
             <fileset dir="src/test" excludes="**/*.java"/>
             <fileset dir="spec" excludes="**/*.java"/>
+            <fileset dir="concordion-tests/java" excludes="**/*.java"/>
+            <fileset dir="concordion-tests/resources" excludes="**/*.java"/>
         </copy>
     </target>
 
@@ -84,6 +86,10 @@
                     <exclude name="**/Abstract*"/>
                 </fileset>
                 <fileset dir="spec">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/Abstract*"/>
+                </fileset>
+                <fileset dir="concordion-tests/java">
                     <include name="**/*Test.java"/>
                     <exclude name="**/Abstract*"/>
                 </fileset>
