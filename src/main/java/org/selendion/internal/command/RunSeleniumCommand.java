@@ -65,20 +65,22 @@ public class RunSeleniumCommand extends AbstractCommand {
 
             Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
             List<String> seleniumFileNames = new ArrayList<String>();
-            String testName="";
+            String testName = "";
 
             if (evaluatedExpression.getClass().equals(String.class)) {
                 seleniumFileNames.add(commandCall.getResource().getRelativeResource((String) evaluatedExpression).getPath());
-                testName= ((String) evaluatedExpression).replaceAll(" *\\n *", " ").trim();
+                testName = ((String) evaluatedExpression).replaceAll(" *\\n *", " ").trim();
             } else {
-            Object[] files = (Object[]) evaluatedExpression;
-            for (Object obj : files) {
-                seleniumFileNames.add(commandCall.getResource().getRelativeResource((String) obj).getPath());
-                if (testName.length() > 0) {
-                    testName=testName+"|";
+                Object[] files = (Object[]) evaluatedExpression;
+                for (Object obj : files) {
+                    if (obj != null && ((String) obj).length() > 0) {
+                        seleniumFileNames.add(commandCall.getResource().getRelativeResource((String) obj).getPath());
+                        if (testName.length() > 0) {
+                            testName = testName + "|";
+                        }
+                        testName = testName + ((String) obj).replaceFirst("^.*/", "").replaceFirst("\\.htm[l]?$", "").trim();
+                    }
                 }
-                testName=testName+((String) obj).replaceFirst("^.*/", "").replaceFirst("\\.htm[l]?$", "").trim();
-            }
             }
             evaluator.evaluate(commandCall.getExpression());
             boolean result;
@@ -90,7 +92,7 @@ public class RunSeleniumCommand extends AbstractCommand {
 
                     result = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
                     element.insertAfter(resultElement);
-                    element.addAttribute("class", "invisible");                    
+                    element.addAttribute("class", "invisible");
                 } else {
                     resultElement = new Element("td");
                     element.appendChild(resultElement);
@@ -131,7 +133,7 @@ public class RunSeleniumCommand extends AbstractCommand {
 
             TableSupport tableSupport = new TableSupport(commandCall);
 
-            
+
             Row[] detailRows = tableSupport.getDetailRows();
 
             for (Row detailRow : detailRows) {

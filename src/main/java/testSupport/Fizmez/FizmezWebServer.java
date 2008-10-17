@@ -236,6 +236,11 @@ public class FizmezWebServer extends ErrorHandler implements Runnable {
                                     notice("400 Bad Request (Malformed GET string [" + requestLine + "])");
                                     headerError = true;
                                 } else {
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                                    }
                                     requestUri = matcher.group(1);
                                     requestHttpVersion = matcher.group(2);
                                     debug("Valid HTTP GET request for [" + requestUri + "] using HTTP version [" + requestHttpVersion + "]");
