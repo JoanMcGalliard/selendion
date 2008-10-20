@@ -1,6 +1,6 @@
 <project name="selendion" default="build" basedir=".">
 
-    <property name="version" value="0.1"/>
+    <property name="version" value="0.2"/>
     <property name="productName" value="selendion"/>
     <property name="ProductName" value="Selendion"/>
 
@@ -16,7 +16,7 @@
 
     <target name="build"
             description="Builds everything from scratch"
-            depends="compile, run.tests, build.jar, build.srczip"
+            depends="compile, run.tests, build.jar, build.srczip, build.dependencies.jar"
             />
 
     <target name="start.selenium">
@@ -25,6 +25,7 @@
             <arg value="5555"/>
             <classpath>
                 <pathelement location="lib/selenium-server.jar"/>
+                <pathelement location="lib/junit-4.5.jar"/>
             </classpath>
         </java>
     </target>
@@ -106,6 +107,7 @@
              filesetmanifest="skip">
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
+            <exclude name="spec/**"/>
             <zipfileset src="lib/concordion-r42-patched.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
@@ -115,7 +117,43 @@
             <zipfileset src="lib/selenium-server.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/tagsoup-1.2.jar"/>
+            <indexjars/>
+        </jar>
+    </target>
+    <target name="build.dependencies.jar" depends="compile">
+        <mkdir dir="${dir.dist}"/>
+
+        <jar destfile="${dir.dist}/${productName}-${version}-with-dependencies.jar"
+             basedir="${dir.classes}"
+             compress="false"
+             filesetmanifest="skip">
+            <exclude name="examples/**"/>
+            <exclude name="support/**"/>
+            <exclude name="spec/**"/>
+            <zipfileset src="lib/concordion-r42-patched.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/selenium-java-client-driver.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/selenium-server.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/javassist_3.9.0.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/junit-4.5.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/ognl-2.6.9.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/tagsoup-1.2.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="lib/xom-1.1.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>            
             <indexjars/>
         </jar>
     </target>
@@ -126,16 +164,6 @@
         <zip destfile="${dir.dist}/${productName}-${version}-src.zip"
              basedir="src/main/java"
              compress="false">
-        </zip>
-    </target>
-
-    <target name="dist" depends="clean,build">
-        <zip destfile="${dir.dist}/${productName}-${version}.zip" compress="true">
-            <zipfileset prefix="${productName}-${version}" dir=".">
-                <exclude name="dist/*-src.zip"/>
-                <exclude name="build/**"/>
-                <exclude name="bin/**"/>
-            </zipfileset>
         </zip>
     </target>
 
