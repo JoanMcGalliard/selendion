@@ -1,7 +1,7 @@
 Index: src/main/java/org/concordion/api/Evaluator.java
 ===================================================================
 --- src/main/java/org/concordion/api/Evaluator.java	(revision 42)
-+++ src/main/java/org/concordion/api/Evaluator.java	Wed Oct 08 08:04:37 BST 2008
++++ src/main/java/org/concordion/api/Evaluator.java	Fri Oct 17 23:14:15 BST 2008
 @@ -1,5 +1,7 @@
  package org.concordion.api;
  
@@ -20,7 +20,7 @@ Index: src/main/java/org/concordion/api/Evaluator.java
 Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 ===================================================================
 --- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 42)
-+++ src/main/java/org/concordion/internal/ConcordionBuilder.java	Sat Oct 11 08:02:42 BST 2008
++++ src/main/java/org/concordion/internal/ConcordionBuilder.java	Fri Oct 17 23:15:30 BST 2008
 @@ -23,14 +23,7 @@
  import org.concordion.internal.command.ThrowableCaughtListener;
  import org.concordion.internal.command.ThrowableCaughtPublisher;
@@ -37,12 +37,13 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
  import org.concordion.internal.util.Check;
  import org.concordion.internal.util.IOUtil;
  
-@@ -44,17 +37,17 @@
+@@ -43,18 +36,18 @@
+     private SpecificationLocator specificationLocator = new ClassNameBasedSpecificationLocator();
      private Source source = new ClassPathSource();
      private Target target = null;
-     private CommandRegistry commandRegistry = new CommandRegistry();
--    private DocumentParser documentParser = new DocumentParser(commandRegistry);
-+    protected DocumentParser documentParser = new DocumentParser(commandRegistry);
+-    private CommandRegistry commandRegistry = new CommandRegistry();
++    protected CommandRegistry commandRegistry = new CommandRegistry();
+     private DocumentParser documentParser = new DocumentParser(commandRegistry);
      private SpecificationReader specificationReader;
      private EvaluatorFactory evaluatorFactory = new SimpleEvaluatorFactory();
      private SpecificationCommand specificationCommand = new SpecificationCommand();
@@ -80,10 +81,42 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
          ThrowableCatchingDecorator throwableCatchingDecorator = new ThrowableCatchingDecorator(new LocalTextDecorator(command));
          throwableCatchingDecorator.addThrowableListener(throwableListenerPublisher);
          Command decoratedCommand = throwableCatchingDecorator;
+Index: src/main/java/org/concordion/internal/command/LocalTextDecorator.java
+===================================================================
+--- src/main/java/org/concordion/internal/command/LocalTextDecorator.java	(revision 42)
++++ src/main/java/org/concordion/internal/command/LocalTextDecorator.java	Fri Oct 17 23:14:15 BST 2008
+@@ -8,6 +8,7 @@
+ public class LocalTextDecorator extends AbstractCommandDecorator {
+ 
+     private static final String TEXT_VARIABLE = "#TEXT";
++    private static final String HREF_VARIABLE = "#HREF";
+ 
+     public LocalTextDecorator(Command command) {
+         super(command);
+@@ -15,12 +16,16 @@
+ 
+     @Override
+     protected void process(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder, Runnable runnable) {
+-        Object savedValue = evaluator.getVariable(TEXT_VARIABLE);
++        Object savedTextValue = evaluator.getVariable(TEXT_VARIABLE);
++        Object savedHrefValue = evaluator.getVariable(HREF_VARIABLE);
+         try {
+             evaluator.setVariable(TEXT_VARIABLE, commandCall.getElement().getText());
++            evaluator.setVariable(HREF_VARIABLE, commandCall.getElement().getAttributeValue("href"));
+             runnable.run();
+         } finally {
+-            evaluator.setVariable(TEXT_VARIABLE, savedValue);
++            evaluator.setVariable(TEXT_VARIABLE, savedTextValue);
++            evaluator.setVariable(HREF_VARIABLE, savedHrefValue);
++
+-        }        
++        }
+     }
+ }
 Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 ===================================================================
 --- src/test/java/spec/concordion/results/exception/ExceptionTest.java	(revision 42)
-+++ src/test/java/spec/concordion/results/exception/ExceptionTest.java	Sat Oct 11 08:52:34 BST 2008
++++ src/test/java/spec/concordion/results/exception/ExceptionTest.java	Fri Oct 17 23:14:15 BST 2008
 @@ -9,6 +9,8 @@
  import org.concordion.internal.listener.ThrowableRenderer;
  
@@ -122,42 +155,10 @@ Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 -}
 +    }
 +}
-Index: src/main/java/org/concordion/internal/command/LocalTextDecorator.java
-===================================================================
---- src/main/java/org/concordion/internal/command/LocalTextDecorator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/command/LocalTextDecorator.java	Sun Oct 05 11:58:06 BST 2008
-@@ -8,6 +8,7 @@
- public class LocalTextDecorator extends AbstractCommandDecorator {
- 
-     private static final String TEXT_VARIABLE = "#TEXT";
-+    private static final String HREF_VARIABLE = "#HREF";
- 
-     public LocalTextDecorator(Command command) {
-         super(command);
-@@ -15,12 +16,16 @@
- 
-     @Override
-     protected void process(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder, Runnable runnable) {
--        Object savedValue = evaluator.getVariable(TEXT_VARIABLE);
-+        Object savedTextValue = evaluator.getVariable(TEXT_VARIABLE);
-+        Object savedHrefValue = evaluator.getVariable(HREF_VARIABLE);
-         try {
-             evaluator.setVariable(TEXT_VARIABLE, commandCall.getElement().getText());
-+            evaluator.setVariable(HREF_VARIABLE, commandCall.getElement().getAttributeValue("href"));
-             runnable.run();
-         } finally {
--            evaluator.setVariable(TEXT_VARIABLE, savedValue);
-+            evaluator.setVariable(TEXT_VARIABLE, savedTextValue);
-+            evaluator.setVariable(HREF_VARIABLE, savedHrefValue);
-+
--        }        
-+        }
-     }
- }
 Index: src/main/java/org/concordion/internal/Table.java
 ===================================================================
 --- src/main/java/org/concordion/internal/Table.java	(revision 42)
-+++ src/main/java/org/concordion/internal/Table.java	Fri Oct 17 00:46:49 BST 2008
++++ src/main/java/org/concordion/internal/Table.java	Fri Oct 17 23:14:15 BST 2008
 @@ -41,15 +41,23 @@
          }
          return detailRows.toArray(new Row[detailRows.size()]);
@@ -189,8 +190,8 @@ Index: src/main/java/org/concordion/internal/Table.java
          
 Index: src/test/java/test/concordion/internal/TableTest.java
 ===================================================================
---- src/test/java/test/concordion/internal/TableTest.java	Fri Oct 17 00:44:53 BST 2008
-+++ src/test/java/test/concordion/internal/TableTest.java	Fri Oct 17 00:44:53 BST 2008
+--- src/test/java/test/concordion/internal/TableTest.java	Fri Oct 17 23:14:15 BST 2008
++++ src/test/java/test/concordion/internal/TableTest.java	Fri Oct 17 23:14:15 BST 2008
 @@ -0,0 +1,72 @@
 +package test.concordion.internal;
 +
@@ -264,11 +265,10 @@ Index: src/test/java/test/concordion/internal/TableTest.java
 +    }
 +
 +}
-\ No newline at end of file
 Index: src/test/resources/spec/concordion/results/exception/Exception.html
 ===================================================================
 --- src/test/resources/spec/concordion/results/exception/Exception.html	(revision 42)
-+++ src/test/resources/spec/concordion/results/exception/Exception.html	Sat Oct 11 09:02:23 BST 2008
++++ src/test/resources/spec/concordion/results/exception/Exception.html	Fri Oct 17 23:14:15 BST 2008
 @@ -66,6 +66,8 @@
  &lt;del class="expected"&gt;some text&lt;/del&gt; _
  &lt;/span&gt; _
@@ -287,38 +287,17 @@ Index: src/test/resources/spec/concordion/results/exception/Exception.html
  </pre>
  
  
-Index: src/test/java/test/concordion/TestRig.java
-===================================================================
---- src/test/java/test/concordion/TestRig.java	(revision 42)
-+++ src/test/java/test/concordion/TestRig.java	Sat Oct 11 08:54:48 BST 2008
-@@ -6,8 +6,11 @@
- import org.concordion.api.EvaluatorFactory;
- import org.concordion.api.Resource;
- import org.concordion.api.ResultSummary;
-+import org.concordion.api.Element;
- import org.concordion.internal.ConcordionBuilder;
- import org.concordion.internal.SimpleEvaluatorFactory;
-+import nu.xom.Document;
-+import nu.xom.Nodes;
+@@ -95,4 +97,4 @@
+     </ul>        
  
- 
- public class TestRig {
-@@ -44,7 +47,11 @@
-             throw new RuntimeException("Test rig failed to process specification", e);
-         } 
-     }
-+    public Nodes unwrapFragment(Document document) {
-+        return document.query("/html/body/fragment/*");
- 
-+    }
-+
-     public ProcessingResult process(String html) {
-         Resource resource = new Resource("/testrig");
-         withResource(resource, html);
+ </body>
+-</html>
+\ No newline at end of file
++</html>
 Index: src/test/java/test/concordion/internal/ExpressionTest.java
 ===================================================================
 --- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 42)
-+++ src/test/java/test/concordion/internal/ExpressionTest.java	Sun Oct 05 11:32:19 BST 2008
++++ src/test/java/test/concordion/internal/ExpressionTest.java	Fri Oct 17 23:14:15 BST 2008
 @@ -25,7 +25,18 @@
          , "myMethod(#var1, #var2) ? 's1' : 's2'"
          , "#var.myMethod()"
@@ -347,10 +326,38 @@ Index: src/test/java/test/concordion/internal/ExpressionTest.java
      }
      
      public void testAllEvaluationExpressions() throws Exception {
+Index: src/test/java/test/concordion/TestRig.java
+===================================================================
+--- src/test/java/test/concordion/TestRig.java	(revision 42)
++++ src/test/java/test/concordion/TestRig.java	Fri Oct 17 23:14:15 BST 2008
+@@ -6,8 +6,11 @@
+ import org.concordion.api.EvaluatorFactory;
+ import org.concordion.api.Resource;
+ import org.concordion.api.ResultSummary;
++import org.concordion.api.Element;
+ import org.concordion.internal.ConcordionBuilder;
+ import org.concordion.internal.SimpleEvaluatorFactory;
++import nu.xom.Document;
++import nu.xom.Nodes;
+ 
+ 
+ public class TestRig {
+@@ -44,7 +47,11 @@
+             throw new RuntimeException("Test rig failed to process specification", e);
+         } 
+     }
++    public Nodes unwrapFragment(Document document) {
++        return document.query("/html/body/fragment/*");
+ 
++    }
++
+     public ProcessingResult process(String html) {
+         Resource resource = new Resource("/testrig");
+         withResource(resource, html);
 Index: src/test/java/test/concordion/StubEvaluator.java
 ===================================================================
 --- src/test/java/test/concordion/StubEvaluator.java	(revision 42)
-+++ src/test/java/test/concordion/StubEvaluator.java	Thu Oct 09 06:48:43 BST 2008
++++ src/test/java/test/concordion/StubEvaluator.java	Fri Oct 17 23:14:15 BST 2008
 @@ -3,6 +3,8 @@
  import org.concordion.api.Evaluator;
  import org.concordion.api.EvaluatorFactory;
@@ -374,7 +381,7 @@ Index: src/test/java/test/concordion/StubEvaluator.java
 Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
 ===================================================================
 --- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/SimpleEvaluator.java	Sun Oct 05 11:42:34 BST 2008
++++ src/main/java/org/concordion/internal/SimpleEvaluator.java	Fri Oct 17 23:14:15 BST 2008
 @@ -25,8 +25,8 @@
      private static String PROPERTY_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";
      private static String STRING_PATTERN = "'[^']+'";
@@ -406,8 +413,8 @@ Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
          
 Index: src/test/resources/spec/examples/NewFeatures.html
 ===================================================================
---- src/test/resources/spec/examples/NewFeatures.html	Sat Oct 11 08:07:07 BST 2008
-+++ src/test/resources/spec/examples/NewFeatures.html	Sat Oct 11 08:07:07 BST 2008
+--- src/test/resources/spec/examples/NewFeatures.html	Fri Oct 17 23:14:15 BST 2008
++++ src/test/resources/spec/examples/NewFeatures.html	Fri Oct 17 23:14:15 BST 2008
 @@ -0,0 +1,34 @@
 +<html xmlns:concordion="http://www.concordion.org/2007/concordion">
 +<link href="../../../concordion.css" rel="stylesheet" type="text/css" />
@@ -443,11 +450,10 @@ Index: src/test/resources/spec/examples/NewFeatures.html
 +
 +</body>
 +</html>
-\ No newline at end of file
 Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
 ===================================================================
 --- src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	(revision 42)
-+++ src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	Sat Oct 11 08:58:35 BST 2008
++++ src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	Fri Oct 17 23:14:15 BST 2008
 @@ -16,16 +16,18 @@
      private static final String TOGGLING_SCRIPT_RESOURCE_PATH = "/org/concordion/internal/resource/visibility-toggler.js";
      private long buttonId = 0;
@@ -474,8 +480,8 @@ Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
  
 Index: src/test/java/spec/examples/NewFeaturesTest.java
 ===================================================================
---- src/test/java/spec/examples/NewFeaturesTest.java	Mon Oct 06 00:26:52 BST 2008
-+++ src/test/java/spec/examples/NewFeaturesTest.java	Mon Oct 06 00:26:52 BST 2008
+--- src/test/java/spec/examples/NewFeaturesTest.java	Fri Oct 17 23:14:15 BST 2008
++++ src/test/java/spec/examples/NewFeaturesTest.java	Fri Oct 17 23:14:15 BST 2008
 @@ -0,0 +1,10 @@
 +package spec.examples;
 +
@@ -487,11 +493,10 @@ Index: src/test/java/spec/examples/NewFeaturesTest.java
 +    }
 +
 +}
-\ No newline at end of file
 Index: src/main/java/org/concordion/internal/DocumentParser.java
 ===================================================================
 --- src/main/java/org/concordion/internal/DocumentParser.java	(revision 42)
-+++ src/main/java/org/concordion/internal/DocumentParser.java	Sun Oct 05 08:46:34 BST 2008
++++ src/main/java/org/concordion/internal/DocumentParser.java	Fri Oct 17 23:14:15 BST 2008
 @@ -57,6 +57,8 @@
                      CommandCall commandCall = new CommandCall(command, new Element(xomElement), expression, resource);
                      parentCommandCall.appendChild(commandCall);
@@ -504,7 +509,7 @@ Index: src/main/java/org/concordion/internal/DocumentParser.java
 Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
 ===================================================================
 --- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Thu Oct 09 06:48:43 BST 2008
++++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Fri Oct 17 23:14:15 BST 2008
 @@ -8,6 +8,8 @@
  import org.concordion.api.Evaluator;
  import org.concordion.internal.util.Check;
@@ -528,7 +533,7 @@ Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
 Index: src/main/java/org/concordion/api/Element.java
 ===================================================================
 --- src/main/java/org/concordion/api/Element.java	(revision 42)
-+++ src/main/java/org/concordion/api/Element.java	Sat Oct 11 08:02:42 BST 2008
++++ src/main/java/org/concordion/api/Element.java	Fri Oct 17 23:14:15 BST 2008
 @@ -3,10 +3,7 @@
  import java.util.ArrayList;
  import java.util.List;
