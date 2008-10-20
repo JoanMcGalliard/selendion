@@ -16,6 +16,10 @@ import java.net.URL;
 import junit.runner.TestCaseClassLoader;
 import nu.xom.Document;
 import nu.xom.Builder;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
+import javassist.CannotCompileException;
 
 
 public class AddToSuiteCommand extends AbstractCommand {
@@ -69,7 +73,18 @@ public class AddToSuiteCommand extends AbstractCommand {
             try {
                 testClass = (Class<? extends ConcordionTestCase>) loader.loadClass(className);
             } catch (ClassNotFoundException e1) {
-                //ignore
+                ClassPool pool = ClassPool.getDefault();
+                CtClass parent;
+                try {
+                    parent = pool.getCtClass("org.selendion.integration.concordion.SelendionTestCase");
+                } catch (NotFoundException e2) {
+                    throw new RuntimeException("Can't find org.selendion.integration.concordion.SelendionTestCase",e);
+                }
+                try {
+                    testClass = pool.makeClass(className, parent).toClass();
+                } catch (CannotCompileException e2) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         return testClass;

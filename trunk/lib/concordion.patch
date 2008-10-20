@@ -42,8 +42,9 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
      private Source source = new ClassPathSource();
      private Target target = null;
 -    private CommandRegistry commandRegistry = new CommandRegistry();
+-    private DocumentParser documentParser = new DocumentParser(commandRegistry);
 +    protected CommandRegistry commandRegistry = new CommandRegistry();
-     private DocumentParser documentParser = new DocumentParser(commandRegistry);
++    protected DocumentParser documentParser = new DocumentParser(commandRegistry);
      private SpecificationReader specificationReader;
      private EvaluatorFactory evaluatorFactory = new SimpleEvaluatorFactory();
      private SpecificationCommand specificationCommand = new SpecificationCommand();
