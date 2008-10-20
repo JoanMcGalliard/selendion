@@ -26,10 +26,6 @@ public class SelendionBuilder extends ConcordionBuilder {
     private Vector<TestDescription> suite = new Vector<TestDescription>();
     private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/selendion/internal/resource/embedded.css";
 
-
-
-    private DocumentParser documentParser = new DocumentParser(commandRegistry);
-    
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
@@ -53,8 +49,9 @@ public class SelendionBuilder extends ConcordionBuilder {
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
         runSeleniumCommand.addRunSeleniumListener(new RunSeleniumResultRenderer());
+        documentParser = new DocumentParser(commandRegistry);
         documentParser.addDocumentParsingListener(new DocumentStructureImprover());
-         String stylesheetContent = IOUtil.readResourceAsString(EMBEDDED_STYLESHEET_RESOURCE);
+        String stylesheetContent = IOUtil.readResourceAsString(EMBEDDED_STYLESHEET_RESOURCE);
         documentParser.addDocumentParsingListener(new StylesheetEmbedder(stylesheetContent));
 
     }

@@ -5,7 +5,7 @@ package examples.suite;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 
-public class NotExpectedToPassDemo extends SelendionTestCase {
+public class NotExpectedToPassForSuiteDemo extends SelendionTestCase {
     public String greetingFor(String firstName) {
         return String.format("Hello %s!", firstName);
     }
