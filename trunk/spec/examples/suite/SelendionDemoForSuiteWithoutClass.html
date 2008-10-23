@@ -7,7 +7,7 @@
 
 <h2>Setup </h2>
 
-<p concordion:startSelenium="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a selenium server with:
+<p concordion:startBrowser="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with:
     host <i concordion:set="#seleniumServerHost">localhost</i>;
     port <i concordion:set="#seleniumServerport">5555</i>;
     for <i concordion:set="#browser">*firefox</i>;
@@ -88,7 +88,7 @@
 </table>
 
 <h2>Finally</h2>
-<i concordion:stopSelenium="">Stop the selenium server.</i>
+<i concordion:stopBrowser="">Close the browser.</i>
 
 </body>
 </html>
