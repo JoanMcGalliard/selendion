@@ -41,9 +41,9 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "verifyRows", verifyRowsCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "echo", echoCommand);
        
-        withApprovedCommand(NAMESPACE_SELENDION, "startSelenium", startSeleniumCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "startBrowser", startSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "runSelenium", runSeleniumCommand);
-        withApprovedCommand(NAMESPACE_SELENDION, "stopSelenium", stopSeleniumCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "stopBrowser", stopSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "addToSuite", addToSuiteCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "runSuite", runSuiteCommand);
 

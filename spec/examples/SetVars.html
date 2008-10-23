@@ -7,7 +7,7 @@
 
 <h2>Setup </h2>
 
-<p concordion:startSelenium="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a selenium server with:
+<p concordion:startBrowser="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with:
     host <i concordion:set="#seleniumServerHost">localhost</i>;
     port <i concordion:set="#seleniumServerport">5555</i>;
     for <i concordion:set="#browser">*firefox</i>;
@@ -29,6 +29,6 @@
     <b concordion:assertEquals="#var2">Variable 2</b>. Var4 should now be <b concordion:assertEquals="#var4">new
     variable</b>.</p>
 <H2>Tear Down</H2>
-<p>Finally <i concordion:stopSelenium="">stop the server</i></p>
+<p>Finally <i concordion:stopBrowser="">close the browser</i></p>
 </body>
 </html>
