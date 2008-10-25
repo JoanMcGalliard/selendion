@@ -2,7 +2,7 @@
 
 = Introduction =
 
-This code is an extension [http://code.google.com/p/concordion/ Concordion] but with changes: some required to allow the subclass to do what it needs to do; some bug fixes; and some extensions that belonged more easily or logically in the original class.  The included concordion jar file is the [http://code.google.com/p/concordion/source/detail?r=42 r42] version of concordion with concordion.patch applied.  If you already have a customized version of concordion, then you need to apply this patch to it.
+This code is an extension [http://code.google.com/p/concordion/ Concordion] but with changes: some required to allow the subclass to do what it needs to do; some bug fixes; and some enhancements that belonged more easily or logically in the original class.  The included concordion jar file is the [http://code.google.com/p/concordion/source/detail?r=42 r42] version of concordion with concordion.patch applied.  If you already have a customized version of concordion, then you need to apply this patch to it.
 
 *Note* This is a superset of concordion.  Any concordion tests should run in selendion.
 
@@ -135,85 +135,71 @@ and to the !OgnlEvaluator:
 +    }
 +
 }}}
-and change StubEvaluator to allow it to compile:
+and change !StubEvaluator to allow it to compile:
 {{{ 
 +    public Set getKeys() {
 +        return null;
 +    }
 }}}
 
-The following is still to be commented on....
+In concordion, if a link throws an exception, the view stack button is nearly useless, as it briefly shows the stack, then follows the link.  Most Selendion calls are wrapped around links, so this made debugging a real problem.  The fix was to insert the stack trace after the element that had the problem, instead of inside it.  So first add a method to Element that inserts straight after the current element:
 {{{
-
-Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
-===================================================================
---- src/test/java/spec/concordion/results/exception/ExceptionTest.java	(revision 42)
-+++ src/test/java/spec/concordion/results/exception/ExceptionTest.java	Sat Oct 25 08:35:57 BST 2008
-@@ -9,6 +9,8 @@
- import org.concordion.internal.listener.ThrowableRenderer;
- 
- import test.concordion.TestRig;
-+import nu.xom.Document;
-+import nu.xom.Nodes;
- 
- public class ExceptionTest extends ConcordionTestCase {
-     
-@@ -24,15 +26,22 @@
-     public String markAsException(String fragment, String expression, String errorMessage) {
-         Throwable t = new Throwable(errorMessage);
-         t.setStackTrace(stackTraceElements.toArray(new StackTraceElement[0]));
--        
++    public void insertAfter(Element insert) {
++        ParentNode parent = xomElement.getParent();
++        for (int i=0; i < parent.getChildCount() ; i++) {
++            if (parent.getChild(i).equals(xomElement)) {
++                parent.insertChild(insert.xomElement, i+1) ;
++                break;
++            }
++        }
++    }
 +
--        Element element = new Element((nu.xom.Element) new TestRig()
+}}}
+
+Then change !ThrowableRenderer to use this new method:
+{{{
++        Element span = new Element("span");
++        span.appendChild(stackTraceTogglingButton());
++        span.appendChild(stackTrace(event.getThrowable(), event.getExpression()));
++        element.insertAfter(span);
+}}}
+And modify the test for the new output:
+{{{
++&lt;/p&gt; _
++&lt;span&gt; _
+ [..]
+-&lt;/p&gt;
++&lt;/span&gt;
+}}}
+Because we now need to test not only the element but the one after it, we need to modify !ExceptionTest
+{{{
 +        Document document =  new TestRig()
              .processFragment(fragment)
--            .getXOMDocument()
 +            .getXOMDocument();
 +
 +        Element element = new Element((nu.xom.Element) document
-             .query("//p")
-             .get(0));
-             
-         new ThrowableRenderer().throwableCaught(new ThrowableCaughtEvent(t, element, expression));
-         
--        return element.toXML();
+[..]
 +        Nodes nodes = new TestRig().unwrapFragment(document);
 +        String ret = "";
 +        for (int i = 0; i< nodes.size(); i++) {
 +            ret = ret + nodes.get(i).toXML();
--    }
 +        }
 +        return ret;
--}
 +    }
 +}
-Index: src/main/java/org/concordion/internal/command/LocalTextDecorator.java
-===================================================================
---- src/main/java/org/concordion/internal/command/LocalTextDecorator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/command/LocalTextDecorator.java	Sat Oct 25 08:35:57 BST 2008
-@@ -3,11 +3,13 @@
- import org.concordion.api.Command;
- import org.concordion.api.Evaluator;
- import org.concordion.api.ResultRecorder;
-+import org.concordion.api.Element;
- import org.concordion.internal.CommandCall;
- 
- public class LocalTextDecorator extends AbstractCommandDecorator {
- 
-     private static final String TEXT_VARIABLE = "#TEXT";
+}}}
+And add the new method to !TestRig
+{{{
++    public Nodes unwrapFragment(Document document) {
++        return document.query("/html/body/fragment/*");
++    }
++
+}}}
+Because Selendion uses separate selenium files, we need to be able to use save or pass HREF values as parameters, so we added #HREF which is analogous to #TEXT first to !LocalTextDecorator
+
+{{{
 +    private static final String HREF_VARIABLE = "#HREF";
- 
-     public LocalTextDecorator(Command command) {
-         super(command);
-@@ -15,12 +17,23 @@
- 
-     @Override
-     protected void process(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder, Runnable runnable) {
--        Object savedValue = evaluator.getVariable(TEXT_VARIABLE);
-+        Object savedTextValue = evaluator.getVariable(TEXT_VARIABLE);
 +        Object savedHrefValue = evaluator.getVariable(HREF_VARIABLE);
-         try {
-             evaluator.setVariable(TEXT_VARIABLE, commandCall.getElement().getText());
 +            String href=commandCall.getElement().getAttributeValue("href");
 +            if (href == null) {
 +                Element a= commandCall.getElement().getFirstChildElement("a");
@@ -222,85 +208,15 @@ Index: src/main/java/org/concordion/internal/command/LocalTextDecorator.java
 +                }
 +            }
 +            evaluator.setVariable(HREF_VARIABLE, href);
-             runnable.run();
-         } finally {
--            evaluator.setVariable(TEXT_VARIABLE, savedValue);
-+            evaluator.setVariable(TEXT_VARIABLE, savedTextValue);
-+            evaluator.setVariable(HREF_VARIABLE, savedHrefValue);
-+
--        }        
-+        }
-     }
- }
+}}}
+While we are at it, allow literals to be passed as variables, as that can be useful, so we make this change to !SimpleEvaluator
+{{{
++    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#HREF|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
++        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
+}}}
 
- 
-Index: src/test/resources/spec/concordion/results/exception/Exception.html
-===================================================================
---- src/test/resources/spec/concordion/results/exception/Exception.html	(revision 42)
-+++ src/test/resources/spec/concordion/results/exception/Exception.html	Sat Oct 25 08:35:57 BST 2008
-@@ -66,6 +66,8 @@
- &lt;del class="expected"&gt;some text&lt;/del&gt; _
- &lt;/span&gt; _
- &lt;span class="exceptionMessage"&gt;My error message&lt;/span&gt; _
-+&lt;/p&gt; _
-+&lt;span&gt; _
- &lt;input class="stackTraceButton" id="stackTraceButton1" type="button" _
-  onclick="javascript:toggleStackTrace('1')" value="View Stack" /&gt; _
- &lt;span class="stackTrace" id="stackTrace1"&gt; _
-@@ -75,7 +77,7 @@
- &lt;span class="stackTraceEntry"&gt;at sun.reflect.NativeMethodAccessorImpl.invoke0 (Unknown Source)&lt;/span&gt; _
- &lt;span class="stackTraceEntry"&gt;at junit.framework.TestCase.runTest (TestCase.java:164)&lt;/span&gt; _
- &lt;/span&gt; _
--&lt;/p&gt;
-+&lt;/span&gt;
- </pre>
- 
- 
-@@ -95,4 +97,4 @@
-     </ul>        
- 
- </body>
--</html>
-\ No newline at end of file
-+</html>
-Index: src/test/java/test/concordion/TestRig.java
-===================================================================
---- src/test/java/test/concordion/TestRig.java	(revision 42)
-+++ src/test/java/test/concordion/TestRig.java	Sat Oct 25 08:35:57 BST 2008
-@@ -6,8 +6,11 @@
- import org.concordion.api.EvaluatorFactory;
- import org.concordion.api.Resource;
- import org.concordion.api.ResultSummary;
-+import org.concordion.api.Element;
- import org.concordion.internal.ConcordionBuilder;
- import org.concordion.internal.SimpleEvaluatorFactory;
-+import nu.xom.Document;
-+import nu.xom.Nodes;
- 
- 
- public class TestRig {
-@@ -44,7 +47,11 @@
-             throw new RuntimeException("Test rig failed to process specification", e);
-         } 
-     }
-+    public Nodes unwrapFragment(Document document) {
-+        return document.query("/html/body/fragment/*");
- 
-+    }
-+
-     public ProcessingResult process(String html) {
-         Resource resource = new Resource("/testrig");
-         withResource(resource, html);
-Index: src/test/java/test/concordion/internal/ExpressionTest.java
-===================================================================
---- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 42)
-+++ src/test/java/test/concordion/internal/ExpressionTest.java	Sat Oct 25 08:35:57 BST 2008
-@@ -25,7 +25,18 @@
-         , "myMethod(#var1, #var2) ? 's1' : 's2'"
-         , "#var.myMethod()"
-         , "#var.myMethod(#var1)"
--        , "#var.myMethod(#var1, #var2)"};
-+        , "#var.myMethod(#var1, #var2)"
+And test it in !ExpressionTest:
+{{{
 +        , "'string value'"
 +        , "100"
 +        , "0"
@@ -312,56 +228,11 @@ Index: src/test/java/test/concordion/internal/ExpressionTest.java
 +        , "myMethod(false)"
 +        , "myMethod(10)"
 +        , "myMethod('strng value')" };
-     
-     public void testWhitespaceIsIgnoredInEvaluationExpressions() throws Exception {
-         assertValidEvaluationExpression("myMethod(#var1,   #var2)");
-@@ -38,6 +49,7 @@
-         assertValidSetVariableExpression("  #var   =    myProp");
-         assertValidSetVariableExpression("#var=myProp");
-         assertValidSetVariableExpression("#var=myMethod(#var1,#var2)");
+[..]
 +        assertValidSetVariableExpression("#var='bob'");
-     }
-     
-     public void testAllEvaluationExpressions() throws Exception {
-
-Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
-===================================================================
---- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/SimpleEvaluator.java	Sat Oct 25 08:35:57 BST 2008
-@@ -25,8 +25,8 @@
-     private static String PROPERTY_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";
-     private static String STRING_PATTERN = "'[^']+'";
-     private static String LHS_VARIABLE_PATTERN = "#" + METHOD_NAME_PATTERN;
--    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT)";
-+    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#HREF|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
--    
-+
-     public static void validateEvaluationExpression(String expression) {
-         
-         // Examples of possible expressions in test.concordion.internal.ExpressionTest
-@@ -50,7 +50,9 @@
-         regexs.add(METHOD_CALL_PARAMS + TERNARY_STRING_RESULT);
-         regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_NO_PARAMS);
-         regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_PARAMS);
-+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
-         
-+        
-         expression = expression.trim();
-         for (String regex : regexs) {
-             if (expression.matches(regex)) {
-@@ -71,6 +73,7 @@
-         regexs.add(RHS_VARIABLE_PATTERN);
-         regexs.add(LHS_VARIABLE_PATTERN + "\\." + PROPERTY_NAME_PATTERN);
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + PROPERTY_NAME_PATTERN);
-+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *\\)");
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)");
-         
-Index: src/test/resources/spec/examples/NewFeatures.html
-===================================================================
---- src/test/resources/spec/examples/NewFeatures.html	Sat Oct 25 08:35:57 BST 2008
-+++ src/test/resources/spec/examples/NewFeatures.html	Sat Oct 25 08:35:57 BST 2008
-@@ -0,0 +1,61 @@
+}}}
+And finally test this in !NewFeaturesTest
+{{{
 +<html xmlns:concordion="http://www.concordion.org/2007/concordion">
 +<link href="../../concordion.css" rel="stylesheet" type="text/css"/>
 +<body>
@@ -423,106 +294,17 @@ Index: src/test/resources/spec/examples/NewFeatures.html
 +
 +</body>
 +</html>
-Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
-===================================================================
---- src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	(revision 42)
-+++ src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	Sat Oct 25 08:35:57 BST 2008
-@@ -16,16 +16,18 @@
-     private static final String TOGGLING_SCRIPT_RESOURCE_PATH = "/org/concordion/internal/resource/visibility-toggler.js";
-     private long buttonId = 0;
-     private Set<Element> rootElementsWithScript = new HashSet<Element>();
--    
-+
-     public void throwableCaught(ThrowableCaughtEvent event) {
-         buttonId++;
--        
-+
-         Element element = event.getElement();
-         element.appendChild(expectedSpan(element));
-         element.appendChild(exceptionMessage(event.getThrowable().getMessage()));
--        element.appendChild(stackTraceTogglingButton());
--        element.appendChild(stackTrace(event.getThrowable(), event.getExpression()));
-+        Element span = new Element("span");
-+        span.appendChild(stackTraceTogglingButton());
-+        span.appendChild(stackTrace(event.getThrowable(), event.getExpression()));
-+        element.insertAfter(span);
--        
-+
-         ensureDocumentHasTogglingScript(element);
-     }
- 
-Index: src/test/java/spec/examples/NewFeaturesTest.java
-===================================================================
---- src/test/java/spec/examples/NewFeaturesTest.java	Sat Oct 25 08:35:57 BST 2008
-+++ src/test/java/spec/examples/NewFeaturesTest.java	Sat Oct 25 08:35:57 BST 2008
-@@ -0,0 +1,10 @@
-+package spec.examples;
-+
-+import org.concordion.integration.junit3.ConcordionTestCase;
-+
-+public class NewFeaturesTest extends ConcordionTestCase {
-+    public String greetingFor(String firstName) {
-+        return String.format("Hello %s!", firstName);
-+    }
-+
-+}
-Index: src/main/java/org/concordion/internal/DocumentParser.java
-===================================================================
---- src/main/java/org/concordion/internal/DocumentParser.java	(revision 42)
-+++ src/main/java/org/concordion/internal/DocumentParser.java	Sat Oct 25 08:35:57 BST 2008
-@@ -57,6 +57,8 @@
-                     CommandCall commandCall = new CommandCall(command, new Element(xomElement), expression, resource);
-                     parentCommandCall.appendChild(commandCall);
-                     parentCommandCall = commandCall;
+}}}
+Concordion just ignores unrecognized concordion tags, but they (similarly to unknown variables) would always represent a typo, or using the wrong namespace.  This results in the test being ignored, which means it will pass.  This is fixed by throwing an exception in !DocumentParser if an unrecognised tag is seen:
+{{{
 +                } else {
 +                    throw new RuntimeException("Unknown command " + commandName + " in namespace " + namespaceURI + ".");
-                 }
-             }
-         }
-         
-Index: src/main/java/org/concordion/api/Element.java
-===================================================================
---- src/main/java/org/concordion/api/Element.java	(revision 42)
-+++ src/main/java/org/concordion/api/Element.java	Sat Oct 25 08:35:57 BST 2008
-@@ -3,10 +3,7 @@
- import java.util.ArrayList;
- import java.util.List;
- 
--import nu.xom.Attribute;
--import nu.xom.Elements;
--import nu.xom.Node;
--import nu.xom.Nodes;
-+import nu.xom.*;
- 
- public final class Element {
- 
-@@ -27,6 +24,16 @@
-         return xomElement.getValue();
-     }
- 
-+    public void insertAfter(Element insert) {
-+        ParentNode parent = xomElement.getParent();
-+        for (int i=0; i < parent.getChildCount() ; i++) {
-+            if (parent.getChild(i).equals(xomElement)) {
-+                parent.insertChild(insert.xomElement, i+1) ;
-+                break;
-+            }
-+        }
-+    }
-+
-     public Element addStyleClass(String styleClass) {
-         String currentClass = getAttributeValue("class");
-         if (currentClass != null) {
-@@ -106,6 +113,9 @@
-     public Element getRootElement() {
-         return new Element(xomElement.getDocument().getRootElement());
-     }
+
+}}}
+Finally added a utility method to Element, so that the selenium runner knows if it is being called in a table or not (so it can add the selenium results as a _td_ if it is):
+{{{
+
 +    public Element getParent() {
 +        return new Element((nu.xom.Element) xomElement.getParent());
 +    }
- 
-     public Element getFirstChildElement(String name) {
-         nu.xom.Element body = xomElement.getFirstChildElement(name);
-
-
 }}}
