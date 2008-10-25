@@ -2,16 +2,15 @@
 
 = Introduction =
 
-This code is an extension [http://code.google.com/p/concordion/ Concordion] but with changes: some required to allow the subclass to do what it needs to do; some bug fixes; and some extensions that belonged more easily or logically in the original class.  The include concordion jar file is the r42 version on concordion with concordion.patch applied.  If you already have a customized version of concordion, then you need to apply this patch to it.
+This code is an extension [http://code.google.com/p/concordion/ Concordion] but with changes: some required to allow the subclass to do what it needs to do; some bug fixes; and some extensions that belonged more easily or logically in the original class.  The included concordion jar file is the [http://code.google.com/p/concordion/source/detail?r=42 r42] version of concordion with concordion.patch applied.  If you already have a customized version of concordion, then you need to apply this patch to it.
 
 *Note* This is a superset of concordion.  Any concordion tests should run in selendion.
 
 = Details =
 
-The most important changes are access privileges changes to ConcordionBuilder, to allow the sub class to access methods and members:
+The most important changes are access privileges changes to !ConcordionBuilder, to allow the sub class to access methods and members:
 
-{{{
-     
+{{{  
 +    protected SpecificationLocator specificationLocator = new ClassNameBasedSpecificationLocator();
 +    protected Source source = new ClassPathSource();
 +    protected Target target = null;
@@ -34,7 +33,7 @@ There is also one bug fix in this file.  The new command _run_ has all the code 
 +        runCommand.addRunListener(new RunResultRenderer());
 }}}
 
-Selendion creates tables within tables.  The method in the org.concordion.internal.Table, _getRows_ gets all the rows in both the main table and the sub tables, so this is modified to explicitly only get the rows in the table or in thead and tbody if present.
+Selendion creates tables within tables.  The method in org.concordion.internal.Table, _getRows_, gets all the rows in both the main table and the sub tables, so this is modified to explicitly only get the rows in the table or in thead and tbody if present.
  
 
 {{{
@@ -53,10 +52,9 @@ Selendion creates tables within tables.  The method in the org.concordion.intern
 }}}
 
 
-The new class TableTest tests the above functionality.
+The new class !TableTest tests the above functionality.
 
-{{{
-        
+{{{  
 +public class TableTest extends TestCase {
 +    public void testGetLastHeaderRow() {
 +        Element tableElement = new Element("table");
@@ -125,28 +123,27 @@ The new class TableTest tests the above functionality.
 +}
 }}}
 
+Because Selendion passes variable back and forth between selenium and concordion, we need to know what variables are defined in concordion so we can can set them in selenium.  To do this we need to add a getKeys to the Evaluator:
+{{{
++    Set getKeys();
+}}}
+
+and to the !OgnlEvaluator:
+{{{
++    public Set getKeys() {
++        return ognlContext.keySet();
++    }
++
+}}}
+and change StubEvaluator to allow it to compile:
+{{{ 
++    public Set getKeys() {
++        return null;
++    }
+}}}
+
 The following is still to be commented on....
 {{{
-
-Index: src/main/java/org/concordion/api/Evaluator.java
-===================================================================
---- src/main/java/org/concordion/api/Evaluator.java	(revision 42)
-+++ src/main/java/org/concordion/api/Evaluator.java	Sat Oct 25 08:35:57 BST 2008
-@@ -1,5 +1,7 @@
- package org.concordion.api;
- 
-+import java.util.Set;
-+
- public interface Evaluator {
- 
-     Object getVariable(String variableName);
-@@ -7,4 +9,6 @@
-     void setVariable(String variableName, Object value);
- 
-     Object evaluate(String expression);
-+
-+    Set getKeys();
- }
 
 Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 ===================================================================
@@ -326,30 +323,7 @@ Index: src/test/java/test/concordion/internal/ExpressionTest.java
      }
      
      public void testAllEvaluationExpressions() throws Exception {
-Index: src/test/java/test/concordion/StubEvaluator.java
-===================================================================
---- src/test/java/test/concordion/StubEvaluator.java	(revision 42)
-+++ src/test/java/test/concordion/StubEvaluator.java	Sat Oct 25 08:35:57 BST 2008
-@@ -3,6 +3,8 @@
- import org.concordion.api.Evaluator;
- import org.concordion.api.EvaluatorFactory;
- 
-+import java.util.Set;
-+
- public class StubEvaluator implements Evaluator, EvaluatorFactory {
- 
-     private Object evaluationResult = null;
-@@ -18,6 +20,10 @@
-         return evaluationResult;
-     }
- 
-+    public Set getKeys() {
-+        return null;
-+    }
-+
-     public Object getVariable(String variableName) {
-         return null;
-     }
+
 Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
 ===================================================================
 --- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 42)
@@ -505,29 +479,6 @@ Index: src/main/java/org/concordion/internal/DocumentParser.java
                  }
              }
          }
-Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
-===================================================================
---- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Sat Oct 25 08:35:57 BST 2008
-@@ -8,6 +8,8 @@
- import org.concordion.api.Evaluator;
- import org.concordion.internal.util.Check;
- 
-+import java.util.Set;
-+
- public class OgnlEvaluator implements Evaluator {
- 
-     private Object rootObject;
-@@ -35,6 +37,10 @@
-         }
-     }
- 
-+    public Set getKeys() {
-+        return ognlContext.keySet();
-+    }
-+
-     private InvalidExpressionException invalidExpressionException(OgnlException e) {
-         Throwable cause = e;
          
 Index: src/main/java/org/concordion/api/Element.java
 ===================================================================
