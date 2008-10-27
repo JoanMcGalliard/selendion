@@ -4,10 +4,9 @@
 
 package org.selendion.internal;
 
-import org.concordion.internal.ConcordionBuilder;
-import org.concordion.internal.DocumentParser;
-import org.concordion.internal.listener.StylesheetEmbedder;
-import org.concordion.internal.listener.DocumentStructureImprover;
+import org.concordion.internal.*;
+import org.concordion.api.SpecificationReader;
+import org.concordion.internal.listener.*;
 import org.concordion.internal.util.IOUtil;
 import org.concordion.internal.command.*;
 import org.selendion.internal.command.*;
@@ -15,6 +14,7 @@ import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.util.TestDescription;
 import org.selendion.internal.listener.RunSuiteResultRenderer;
 import org.selendion.internal.listener.RunSeleniumResultRenderer;
+import org.selendion.Selendion;
 
 import java.util.Vector;
 
@@ -29,9 +29,11 @@ public class SelendionBuilder extends ConcordionBuilder {
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
+    private SpecificationCommand specificationCommand = new SpecificationCommand();    
     private AddToSuiteCommand addToSuiteCommand = new AddToSuiteCommand(suite);
     private RunSuiteCommand runSuiteCommand = new RunSuiteCommand(suite);
     {
+        withApprovedCommand("", "specification", specificationCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "run", runCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "execute", executeCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "set", new SetCommand());
@@ -55,4 +57,19 @@ public class SelendionBuilder extends ConcordionBuilder {
         documentParser.addDocumentParsingListener(new StylesheetEmbedder(stylesheetContent));
 
     }
+    public Selendion build() {
+        if (target == null) {
+            target = new FileTarget(getBaseOutputDir());
+        }
+        XMLParser xmlParser = new XMLParser();
+
+        specificationCommand.addSpecificationListener(new BreadcrumbRenderer(source, xmlParser));
+        specificationCommand.addSpecificationListener(new PageFooterRenderer(target));
+        specificationCommand.addSpecificationListener(new SpecificationExporter(target));
+
+        SpecificationReader specificationReader = new XMLSpecificationReader(source, xmlParser, documentParser);
+
+        return new Selendion (specificationLocator, specificationReader, evaluatorFactory);
+    }
+
 }
