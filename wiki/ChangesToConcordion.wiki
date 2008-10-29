@@ -1,4 +1,4 @@
-# Explaining concordion.patch
+#summary Explaining concordion.patch
 
 = Introduction =
 
