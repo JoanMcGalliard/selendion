@@ -1,0 +1,22 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head><title>For Each</title></head>
+<link href="../../css/selendion.css" rel="stylesheet" type="text/css"/>
+<body><h1>For Each</h1>
+
+<p> After a user logs into the system, a greeting is displayed saying "Hello [user's first name]!" </p>
+
+<div class="example">
+    <h3>Example</h3>
+
+    <p>For these men:</p>
+    <ul concordion:execute="#men =getList()">
+        <li concordion:execute="#men.add(#TEXT)">Bob</li>
+        <li concordion:execute="#men.add(#TEXT)">James</li>
+    </ul>
+    <span concordion:forEach="#firstName : #men">
+        <p> When user <i concordion:echo="#firstName"></i> logs in, the
+        greeting will be: <b concordion:assertEquals="greetingFor(#firstName)">Hello Sir!</b></p>
+    </span>
+</div>
+</body>
+</html>
