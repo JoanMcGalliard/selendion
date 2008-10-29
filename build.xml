@@ -104,7 +104,8 @@
         <jar destfile="${dir.dist}/${productName}-${version}.jar"
              basedir="${dir.classes}"
              compress="false"
-             filesetmanifest="skip">
+             filesetmanifest="skip"
+             manifest="src/main/resources/MANIFEST.MF">
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
             <exclude name="spec/**"/>
@@ -126,7 +127,8 @@
         <jar destfile="${dir.dist}/${productName}-${version}-with-dependencies.jar"
              basedir="${dir.classes}"
              compress="false"
-             filesetmanifest="skip">
+             filesetmanifest="skip"
+             manifest="src/main/resources/MANIFEST.MF">
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
             <exclude name="spec/**"/>
