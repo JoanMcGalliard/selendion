@@ -125,7 +125,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             }
             String keyString = (String) key;
             if (keyString.matches(VARIABLE_PATTERN)) {
-                array = String.format("%s %s: '%s', ", array, keyString, evaluator.getVariable("#" + keyString).toString().replaceFirst("\\\\|$", "").replaceAll("'", "\\\\'"));
+                array = String.format("%s %s: '%s', ", array, keyString, evaluator.getVariable("#" + keyString).toString().replaceFirst("\\\\|$", "").replaceAll("'", "\\\\'").replaceAll("\\n", " "));
             }
         }
         array = array.replaceFirst("[, ]$", "");
