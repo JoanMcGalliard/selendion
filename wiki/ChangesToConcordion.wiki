@@ -301,10 +301,17 @@ Concordion just ignores unrecognized concordion tags, but they (similarly to unk
 +                    throw new RuntimeException("Unknown command " + commandName + " in namespace " + namespaceURI + ".");
 
 }}}
-Finally added a utility method to Element, so that the selenium runner knows if it is being called in a table or not (so it can add the selenium results as a _td_ if it is):
+Finally added a utility method to Element, so that the selenium runner knows if it is being called in a table or not (so it can add the selenium results as a _td_ if it is), and copy to support forEach command:
 {{{
 
 +    public Element getParent() {
 +        return new Element((nu.xom.Element) xomElement.getParent());
 +    }
+
++     public Element copy() {
++        return new Element((nu.xom.Element) xomElement.copy());
+-}
++    }
++}
+
 }}}
