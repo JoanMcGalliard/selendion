@@ -34,7 +34,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     private SpecificationCommand specificationCommand = new SpecificationCommand();    
     private AddToSuiteCommand addToSuiteCommand = new AddToSuiteCommand(suite);
     private RunSuiteCommand runSuiteCommand = new RunSuiteCommand(suite);
-    private ForEachCommand forEachCommand = new ForEachCommand();
+    private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
     {
         withApprovedCommand("", "specification", specificationCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "run", runCommand);

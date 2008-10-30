@@ -5,7 +5,6 @@
 
 <p> After a user logs into the system, a greeting is displayed saying "Hello [user's first name]!" </p>
 
-<div class="example">
     <h3>Example</h3>
 
     <p>For these men:</p>
@@ -14,9 +13,19 @@
         <li concordion:execute="#men.add(#TEXT)">James</li>
     </ul>
     <span concordion:forEach="#firstName : #men">
+        <div class="example">
+
         <p> When user <i concordion:echo="#firstName"></i> logs in, the
         greeting will be: <b concordion:assertEquals="greetingFor(#firstName)">Hello Sir!</b></p>
+
+        </div>
     </span>
-</div>
+    <div class="example">
+
+    <p> When user <i concordion:set="#firstName">Mary</i> logs in, the
+    greeting will be: <b concordion:assertEquals="greetingFor(#firstName)">Hello Madam!</b></p>
+
+    </div>
+
 </body>
 </html>
