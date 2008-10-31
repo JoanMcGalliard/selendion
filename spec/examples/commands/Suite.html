@@ -1,0 +1,38 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<head>
+    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>For Each</title>
+</head>
+<body>
+
+<h1>For each</h1>
+
+<p>
+    For each means the element should be repeated for each value in the list
+</p>
+
+<div class="example">
+
+    <h3>Example</h3>
+
+    <p>
+        The output of running this:
+    </p>
+
+        <pre concordion:set="#snippet">&lt;p&gt;Add the directory &lt;a concordion:addToSuite="#HREF" href="suite/"&gt;suite&lt;/a&gt; and the file
+    &lt;a concordion:addToSuite="#HREF" href="SelendionDemo.html"&gt;Pure Concordinon Using
+        Selendion Namespace Demo&lt;/a&gt; to the test suite.&lt;/p&gt;
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;6&lt;/i&gt; threads.&lt;/p&gt;
+
+        </pre>
+
+    <p>Looks like this:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)"></pre>
+
+
+</div>
+
+</body>
+</html>

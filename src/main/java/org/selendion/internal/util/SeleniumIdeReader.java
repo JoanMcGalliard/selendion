@@ -267,9 +267,11 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
-                String actual = seleniumObjectToString(actualObject);
-
-                assertFalse(actual.equals(expected));
+                if (actualObject.getClass().equals(Boolean.class)) {
+                    assertTrue((Boolean) actualObject);
+                } else {
+                     assertFalse(seleniumObjectToString(actualObject).equals(expected));
+                }
                 return new CommandResult(true, "");
             }
             if (command.matches("^assert[A-Z].*")) {
@@ -280,8 +282,11 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
-                String actual = seleniumObjectToString(actualObject);
-                assertEquals(expected, actual);
+                if (actualObject.getClass().equals(Boolean.class)) {
+                    assertTrue((Boolean) actualObject);
+                } else {
+                     assertEquals(expected, seleniumObjectToString(actualObject));
+                }
                 return new CommandResult(true, "");
             }
             if (command.matches("^verifyNot[A-Z].*")) {

@@ -1,0 +1,15 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<link href="../../css/selendion.css" rel="stylesheet" type="text/css"/>
+<body>
+
+<h1>Run Selendion</h1>
+
+
+<div class="example">
+    <p>Before running the test, if we set #blah to <i concordion:set="#blah">old value</i>,
+        #blah should be <b concordion:assertEquals="#blah">old value</b>.</p>
+    <p>After <a href="SetValue.html" concordion:runSelendion="concordion">running the test</a>, #blah should be <b concordion:assertEquals="#blah">new value</b>. </p>
+</div>
+
+</body>
+</html>
