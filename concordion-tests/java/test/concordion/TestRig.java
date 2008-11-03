@@ -17,6 +17,7 @@ public class TestRig {
     private Object fixture = null;
     private EvaluatorFactory evaluatorFactory = new SimpleEvaluatorFactory();
     private StubSource stubSource = new StubSource();
+    private String resourceName="/testrig";
 
     public TestRig withFixture(Object fixture) {
         this.fixture = fixture;
@@ -37,22 +38,26 @@ public class TestRig {
             .withEvaluatorFactory(evaluatorFactory)
             .withTarget(stubTarget)
             .build();
-        
+
         try {
             ResultSummary resultSummary = concordion.process(resource, fixture);
             String xml = stubTarget.getWrittenString(resource);
             return new ProcessingResult(resultSummary, eventRecorder, xml);
         } catch (IOException e) {
             throw new RuntimeException("Test rig failed to process specification", e);
-        } 
+        }
     }
     public Nodes unwrapFragment(Document document) {
         return document.query("/html/body/fragment/*");
 
     }
 
+    public TestRig withResourceName(String resourceName) {
+        this.resourceName=resourceName;
+        return this;
+    }
     public ProcessingResult process(String html) {
-        Resource resource = new Resource("/testrig");
+        Resource resource = new Resource(resourceName);
         withResource(resource, html);
         return process(resource);
     }
@@ -61,7 +66,7 @@ public class TestRig {
         fragment = "<body><fragment>" + fragment + "</fragment></body>";
         return wrapWithNamespaceDeclaration(fragment);
     }
-    
+
     private String wrapWithNamespaceDeclaration(String fragment) {
         return "<html xmlns:concordion='"
             + SelendionBuilder.NAMESPACE_SELENDION + "'>"
@@ -73,7 +78,7 @@ public class TestRig {
         this.evaluatorFactory = new StubEvaluator().withStubbedResult(evaluationResult);
         return this;
     }
-    
+
     public TestRig withResource(Resource resource, String content) {
         stubSource.addResource(resource, content);
         return this;

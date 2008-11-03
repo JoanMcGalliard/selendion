@@ -34,6 +34,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     private SpecificationCommand specificationCommand = new SpecificationCommand();    
     private AddToSuiteCommand addToSuiteCommand = new AddToSuiteCommand(suite);
     private RunSuiteCommand runSuiteCommand = new RunSuiteCommand(suite);
+    private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suite);
     private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
     {
         withApprovedCommand("", "specification", specificationCommand);
@@ -51,6 +52,7 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "stopBrowser", stopSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "addToSuite", addToSuiteCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "runSuite", runSuiteCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "clearSuite", clearSuiteCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "forEach", forEachCommand);
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
@@ -61,6 +63,7 @@ public class SelendionBuilder extends ConcordionBuilder {
         documentParser.addDocumentParsingListener(new StylesheetEmbedder(stylesheetContent));
 
     }
+    //@Override
     public Selendion build() {
         if (target == null) {
             target = new FileTarget(getBaseOutputDir());

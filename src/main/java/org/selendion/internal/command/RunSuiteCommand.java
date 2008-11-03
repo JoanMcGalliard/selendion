@@ -12,6 +12,7 @@ import org.selendion.internal.util.ActiveTestSuiteRestricted;
 
 import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Hashtable;
 
 import junit.framework.TestSuite;
 import junit.framework.TestResult;
@@ -46,10 +47,11 @@ public class RunSuiteCommand extends AbstractCommand {
         TestResult testResult = new TestResult();
         testSuite.run(testResult);
 
-        Vector<Class> failures = new Vector<Class>();
+        Hashtable failures = new Hashtable();
         Enumeration<TestFailure> errors = testResult.errors();
         while (errors.hasMoreElements()) {
-            failures.add(errors.nextElement().failedTest().getClass());
+            TestFailure nextError = errors.nextElement();
+            failures.put(nextError.failedTest().getClass(), nextError.exceptionMessage());
         }
         Element element = commandCall.getElement();
         Element list;
@@ -59,19 +61,21 @@ public class RunSuiteCommand extends AbstractCommand {
             list = new Element("ol");
         }
         for (TestDescription test : suite) {
-            Element testElement = new Element("a");
-            testElement.addAttribute("href", test.getFile());
-            testElement.appendText(test.getTitle());
-            if (failures.contains(test.getClazz())) {
+            Element anchor = new Element("a");
+            anchor.addAttribute("href", test.getFile());
+            anchor.appendText(test.getTitle());
+            Element li = new Element("li");
+            li.appendChild(anchor);
+            list.appendChild(li);
+            if (failures.containsKey(test.getClazz())) {
                 resultRecorder.record(Result.FAILURE);
-                announceFailure(testElement);
+                announceFailure(anchor);
+                li.appendText(" " + failures.get(test.getClazz()));
             } else {
                 resultRecorder.record(Result.SUCCESS);
-                announceSuccess(testElement);
+                announceSuccess(anchor);
             }
-            Element li = new Element("li");
-            li.appendChild(testElement);
-            list.appendChild(li);
+
         }
         element.insertAfter(list);
     }
