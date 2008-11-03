@@ -45,12 +45,7 @@ public class SelendionClassFinder {
                 }
             }
         }
-
-
         if (!subclassOfSelendionTestCase(testClass)) {
-
-
-
             ClassPool pool = ClassPool.getDefault();
             CtClass parent;
             try {
