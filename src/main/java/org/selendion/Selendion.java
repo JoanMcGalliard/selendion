@@ -60,7 +60,14 @@ public class Selendion extends Concordion {
         this.evaluatorFactory = evaluatorFactory;    
         this.evaluator = null;
     }
+    public Selendion(SpecificationLocator specificationLocator, SpecificationReader specificationReader, Evaluator evaluator) {
 
+        super(specificationLocator, specificationReader,  null);
+        this.specificationLocator = specificationLocator;
+        this.specificationReader = specificationReader;
+        this.evaluatorFactory = null;
+        this.evaluator = evaluator;
+    }
     public ResultSummary process(Object fixture) throws IOException {
         return process(specificationLocator.locateSpecification(fixture), fixture);
     }
@@ -68,7 +75,9 @@ public class Selendion extends Concordion {
     public ResultSummary process(Resource resource, Object fixture) throws IOException {
         Specification specification = specificationReader.readSpecification(resource);
         SummarizingResultRecorder resultRecorder = new SummarizingResultRecorder();
-        evaluator = evaluatorFactory.createEvaluator(fixture);
+        if (evaluator == null ) {
+            evaluator  = evaluatorFactory.createEvaluator(fixture);
+        }
         specification.process(evaluator, resultRecorder);
         return resultRecorder;
     }

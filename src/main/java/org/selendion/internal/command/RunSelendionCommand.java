@@ -37,17 +37,14 @@ public class RunSelendionCommand extends AbstractCommand {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         URL url = contextClassLoader.getResource(htmlResource);
         if (url == null) {
-            throw new RuntimeException(String.format("Can't add %s to suite: file does not exist.", htmlFilename));
+            throw new RuntimeException(String.format("Can't run %s: file does not exist.", htmlFilename));
         }
         File f = new File(contextClassLoader.getResource(htmlResource).getPath());
         if (f.isFile()) {
             try {
-                Class<? extends SelendionTestCase> clazz = SelendionClassFinder.findSelendionClass(htmlResource);
-               TestCase test =  clazz.newInstance();
-                Evaluator subEvaluator = ((SelendionTestCase)test).getEvaluator();
-                transferValues(evaluator,subEvaluator);
-                clazz.getMethod("run").invoke(test);
-                transferValues(subEvaluator, evaluator);
+                Class clazz = SelendionClassFinder.findSelendionClass(htmlResource);
+               SelendionTestCase test =  (SelendionTestCase) clazz.newInstance();
+                clazz.getMethod("testProcessSpecification", Evaluator.class).invoke(test, evaluator);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -55,13 +52,15 @@ public class RunSelendionCommand extends AbstractCommand {
 //            test.getEvalutor();
 //            TestResult result = test.run();
 //            System.out.println(result);
+        }  else {
+            throw new RuntimeException(String.format("Can't run %s: ", htmlFilename));
         }
     }
 
     private void transferValues(Evaluator evaluator1, Evaluator evaluator2) {
         Set keys = evaluator1.getKeys();
         for (Object key : keys) {
-            evaluator2.setVariable((String)key, evaluator1.getVariable((String)key));
+            evaluator2.setVariable((String) key, evaluator1.getVariable("#" + key));
         }
 
     }

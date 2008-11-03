@@ -7,6 +7,7 @@ package org.selendion.internal;
 import org.concordion.internal.*;
 import org.concordion.api.SpecificationReader;
 import org.concordion.api.EvaluatorFactory;
+import org.concordion.api.Evaluator;
 import org.concordion.internal.listener.*;
 import org.concordion.internal.util.IOUtil;
 import org.concordion.internal.command.*;
@@ -38,6 +39,8 @@ public class SelendionBuilder extends ConcordionBuilder {
     private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suite);
     private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
     private RunSelendionCommand runSelendionCommand = new RunSelendionCommand();
+    private Evaluator evaluator = null;
+
     {
         withApprovedCommand("", "specification", specificationCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "run", runCommand);
@@ -79,7 +82,11 @@ public class SelendionBuilder extends ConcordionBuilder {
 
         SpecificationReader specificationReader = new XMLSpecificationReader(source, xmlParser, documentParser);
 
-        return new Selendion (specificationLocator, specificationReader, evaluatorFactory);
+        if (evaluator == null) {
+          return new Selendion (specificationLocator, specificationReader, evaluatorFactory);
+        } else {
+            return new Selendion (specificationLocator, specificationReader, evaluator);
+        }
     }
     protected File getBaseOutputDir() {
         if (baseOutputDir != null) {
@@ -93,6 +100,10 @@ public class SelendionBuilder extends ConcordionBuilder {
     }
     public SelendionBuilder withEvaluatorFactory(EvaluatorFactory evaluatorFactory) {
         return (SelendionBuilder) super.withEvaluatorFactory(evaluatorFactory);
+    }
+    public SelendionBuilder withEvaluator(Evaluator evaluator) {
+        this.evaluator = evaluator;
+        return  this;
     }
 
 
