@@ -11,6 +11,8 @@ import org.selendion.internal.SelendionBuilder;
 import org.selendion.internal.SelendionEvaluatorFactory;
 import org.selendion.Selendion;
 
+import java.sql.*;
+
 
 public abstract class SelendionTestCase extends ConcordionTestCase {
     private boolean expectedToPass = true;
@@ -45,6 +47,25 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
             assertTrue("Test is not expected to pass, yet is passing", resultSummary.getExceptionCount() + resultSummary.getFailureCount() > 0);
         }
     }
+    public ResultSet executeQueryAgainstE05(String query) throws Exception {
+
+        DriverManager.registerDriver        // load driver
+                (new oracle.jdbc.driver.OracleDriver());
+
+        Connection con = DriverManager.getConnection
+                ("jdbc:oracle:thin:@chorddbe05:1521:CCS051T", "readonly", "readonly");
+
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs.next()) {
+            return rs;
+        }
+        throw new Exception("oh no!");
+    }
+    public String getColumn(ResultSet rs, String column) throws SQLException {
+        return rs.getString(column ) ;
+    }
+    
 
 
 }

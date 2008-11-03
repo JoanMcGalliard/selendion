@@ -1,4 +1,4 @@
-package examples.commands;
+package examples.commands.support;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 

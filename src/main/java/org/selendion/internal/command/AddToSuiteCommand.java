@@ -4,24 +4,18 @@ import org.concordion.internal.command.AbstractCommand;
 import org.concordion.internal.CommandCall;
 import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
-import org.concordion.api.Resource;
 import org.selendion.internal.util.TestDescription;
-import org.selendion.internal.util.ExceptionThrowingSelendionTestCase;
 import org.selendion.internal.util.SelendionClassFinder;
-import org.selendion.integration.concordion.SelendionTestCase;
 
 
 import java.util.Vector;
 import java.util.Hashtable;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.net.URL;
 
-import junit.runner.TestCaseClassLoader;
 import nu.xom.Document;
 import nu.xom.Builder;
-import javassist.*;
 
 
 public class AddToSuiteCommand extends AbstractCommand {
@@ -44,21 +38,21 @@ public class AddToSuiteCommand extends AbstractCommand {
         }
         File f = new File(contextClassLoader.getResource(htmlResource).getPath());
         if (f.isFile()) {
-            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), SelendionClassFinder.findSelendionClass(htmlResource) ));
+            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), SelendionClassFinder.findSelendionClass(htmlResource),evaluator ));
         } else if (f.isDirectory()) {
-            walk(htmlFilename, htmlResource);
+            walk(htmlFilename, htmlResource, evaluator);
         }
     }
 
-    private void walk(String htmlFilename, String htmlResource) {
+    private void walk(String htmlFilename, String htmlResource, Evaluator evaluator) {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         File f = new File(contextClassLoader.getResource(htmlResource).getPath());
         if (f.isFile() && f.toString().matches(".*\\.html")) {
-            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), SelendionClassFinder.findSelendionClass(htmlResource) ));
+            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), SelendionClassFinder.findSelendionClass(htmlResource), evaluator));
 
         }  else if (f.isDirectory()) {
             for (String sub : f.list()) {
-                walk(htmlFilename.replaceFirst("/$", "") + "/" + sub, htmlResource.replaceFirst("/$", "") + "/" + sub);
+                walk(htmlFilename.replaceFirst("/$", "") + "/" + sub, htmlResource.replaceFirst("/$", "") + "/" + sub, evaluator);
             }
         }
     }
