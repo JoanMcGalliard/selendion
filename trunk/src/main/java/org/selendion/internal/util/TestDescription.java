@@ -1,13 +1,13 @@
 package org.selendion.internal.util;
 
-import org.concordion.integration.junit3.ConcordionTestCase;
+import org.selendion.integration.concordion.SelendionTestCase;
 
 public class TestDescription {
     private String htmlFile;
     private String title;
-    private Class<? extends ConcordionTestCase> clazz;
+    private Class<? extends SelendionTestCase> clazz;
 
-    public TestDescription(String htmlFile, String title, Class<? extends ConcordionTestCase> clazz) {
+    public TestDescription(String htmlFile, String title, Class<? extends SelendionTestCase> clazz) {
         this.htmlFile = htmlFile;
         this.title = title;
         this.clazz = clazz;
@@ -20,7 +20,7 @@ public class TestDescription {
     public String getFile() {
         return htmlFile;
     }
-    public Class<? extends ConcordionTestCase> getClazz() {
+    public Class<? extends SelendionTestCase> getClazz() {
         return clazz;
     }
 }

@@ -6,6 +6,7 @@ package org.selendion.internal;
 
 import org.concordion.internal.*;
 import org.concordion.api.SpecificationReader;
+import org.concordion.api.EvaluatorFactory;
 import org.concordion.internal.listener.*;
 import org.concordion.internal.util.IOUtil;
 import org.concordion.internal.command.*;
@@ -36,6 +37,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     private RunSuiteCommand runSuiteCommand = new RunSuiteCommand(suite);
     private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suite);
     private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
+    private RunSelendionCommand runSelendionCommand = new RunSelendionCommand();
     {
         withApprovedCommand("", "specification", specificationCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "run", runCommand);
@@ -54,6 +56,7 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "runSuite", runSuiteCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "clearSuite", clearSuiteCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "forEach", forEachCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "runConcordion", runSelendionCommand);
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
         runSeleniumCommand.addRunSeleniumListener(new RunSeleniumResultRenderer());
@@ -88,6 +91,10 @@ public class SelendionBuilder extends ConcordionBuilder {
         }
         return new File(outputPath);
     }
+    public SelendionBuilder withEvaluatorFactory(EvaluatorFactory evaluatorFactory) {
+        return (SelendionBuilder) super.withEvaluatorFactory(evaluatorFactory);
+    }
+
 
     
 

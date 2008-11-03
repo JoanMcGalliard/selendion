@@ -1,15 +1,19 @@
 package org.selendion;
 
 import org.concordion.Concordion;
-import org.concordion.api.SpecificationLocator;
-import org.concordion.api.SpecificationReader;
-import org.concordion.api.EvaluatorFactory;
+import org.concordion.internal.SummarizingResultRecorder;
+import org.concordion.api.*;
 import org.selendion.integration.concordion.SelendionTestCase;
 
+import java.io.IOException;
+
 public class Selendion extends Concordion {
-    public Selendion(SpecificationLocator specificationLocator, SpecificationReader specificationReader, EvaluatorFactory evaluatorFactory) {
-        super(specificationLocator, specificationReader, evaluatorFactory);
-    }
+    private final SpecificationLocator specificationLocator;
+       private final EvaluatorFactory evaluatorFactory;
+       private final SpecificationReader specificationReader;
+    private Evaluator evaluator;
+
+
 
     public static void main(String[] args) throws Exception {
         // parse parameters
@@ -46,5 +50,29 @@ public class Selendion extends Concordion {
 
             }
         }
+    }
+
+
+    public Selendion(SpecificationLocator specificationLocator, SpecificationReader specificationReader, EvaluatorFactory evaluatorFactory) {
+        super(specificationLocator, specificationReader,  evaluatorFactory);
+        this.specificationLocator = specificationLocator;
+        this.specificationReader = specificationReader;
+        this.evaluatorFactory = evaluatorFactory;    
+        this.evaluator = null;
+    }
+
+    public ResultSummary process(Object fixture) throws IOException {
+        return process(specificationLocator.locateSpecification(fixture), fixture);
+    }
+
+    public ResultSummary process(Resource resource, Object fixture) throws IOException {
+        Specification specification = specificationReader.readSpecification(resource);
+        SummarizingResultRecorder resultRecorder = new SummarizingResultRecorder();
+        evaluator = evaluatorFactory.createEvaluator(fixture);
+        specification.process(evaluator, resultRecorder);
+        return resultRecorder;
+    }
+    public Evaluator getEvaluator() {
+        return evaluator;
     }
 }

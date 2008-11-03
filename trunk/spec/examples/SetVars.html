@@ -4,20 +4,20 @@
 <body>
 
 <h1>Set variables Demo</h1>
+<div class="example">
+    <H2>Tests variable handed back between Concordion and Selenium</H2>
 
-<h2>Setup </h2>
+<h3>Setup </h3>
 
 <p concordion:startBrowser="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with:
     host <i concordion:set="#seleniumServerHost">localhost</i>;
     port <i concordion:set="#seleniumServerport">5555</i>;
     for <i concordion:set="#browser">*firefox</i>;
     and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
-
-<H2>The test</H2>
+<h3>The Test </h3>
 
 <p>First set var1 to be <i concordion:set="#var1">Variable 1</i> and var2 to be
     <i concordion:set="#var2">Variable 2</i>
-    <!--and var3 is an array of <i concordion:set="#var3]=['1','2', '3']">1,2,3</i>.-->
 </p>
 
 <p>Before running the script var1 should be <b concordion:assertEquals="#var1">Variable 1</b>, var 2
@@ -28,7 +28,28 @@
     this script</a> then var1 should be <b concordion:assertEquals="#var1">Variable 2</b> and var2 should still be
     <b concordion:assertEquals="#var2">Variable 2</b>. Var4 should now be <b concordion:assertEquals="#var4">new
     variable</b>.</p>
-<H2>Tear Down</H2>
+<H3>Tear Down</H3>
 <p>Finally <i concordion:stopBrowser="">close the browser</i></p>
+</div>
+<!--<div class="example">-->
+    <!--<H2>Tests variable handed back between Concordion and Concordion</H2>-->
+
+
+<!--<p>First set svar1 to be <i concordion:set="#svar1">Variable 1</i> and svar2 to be-->
+    <!--<i concordion:set="#svar2">Variable 2</i>-->
+<!--</p>-->
+
+   <!--<p> <a concordion:addToSuite="#HREF" href="SetValue.html">SetValue</a>  </p>-->
+    <!--<p> run in <a concordion:runSuite="#TEXT">1</a> thread</p>-->
+<!--<p>Before running the script svar1 should be <b concordion:assertEquals="#svar1">Variable 1</b>, svar 2-->
+    <!--should be <b concordion:assertEquals="#svar2">Variable 2</b> and svar 4-->
+    <!--should be <b concordion:assertEquals="#svar4">(null)</b></p>-->
+
+<!--<p>after running <a href="SetValue.html" concordion:runConcordion="#HREF">-->
+    <!--this script</a> then svar1 should be <b concordion:assertEquals="#svar1">Variable 2</b> and svar2 should still be-->
+    <!--<b concordion:assertEquals="#svar2">Variable 2</b>. svar4 should now be <b concordion:assertEquals="#svar4">new-->
+    <!--variable</b>.</p>-->
+<!--</div>-->
+
 </body>
 </html>
