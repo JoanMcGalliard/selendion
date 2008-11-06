@@ -5,7 +5,7 @@ import org.concordion.internal.CommandCall;
 import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
 import org.selendion.internal.util.TestDescription;
-import org.selendion.internal.util.SelendionClassFinder;
+import org.selendion.internal.util.SelendionClassLoader;
 
 
 import java.util.Vector;
@@ -21,6 +21,7 @@ import nu.xom.Builder;
 public class AddToSuiteCommand extends AbstractCommand {
     private Vector<TestDescription> suite;
     private static Hashtable classes = new Hashtable();
+    private SelendionClassLoader loader = new SelendionClassLoader();
 
 
     public AddToSuiteCommand(Vector<TestDescription> suite) {
@@ -36,19 +37,22 @@ public class AddToSuiteCommand extends AbstractCommand {
         if (url == null) {
             throw new RuntimeException(String.format("Can't add %s to suite: file does not exist.", htmlFilename));
         }
-        File f = new File(contextClassLoader.getResource(htmlResource).getPath());
+        File f = new File(contextClassLoader.getResource(htmlResource).getPath().replaceAll("%20", " "));
         if (f.isFile()) {
-            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), SelendionClassFinder.findSelendionClass(htmlResource),evaluator ));
+            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource),evaluator ));
         } else if (f.isDirectory()) {
             walk(htmlFilename, htmlResource, evaluator);
+        } else {
+            throw new RuntimeException(String.format("Can't add %s to suite: it is not a file or directory", htmlFilename));
+
         }
     }
 
     private void walk(String htmlFilename, String htmlResource, Evaluator evaluator) {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-        File f = new File(contextClassLoader.getResource(htmlResource).getPath());
+        File f = new File(contextClassLoader.getResource(htmlResource).getPath().replaceAll("%20", " "));
         if (f.isFile() && f.toString().matches(".*\\.html")) {
-            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), SelendionClassFinder.findSelendionClass(htmlResource), evaluator));
+            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource), evaluator));
 
         }  else if (f.isDirectory()) {
             for (String sub : f.list()) {

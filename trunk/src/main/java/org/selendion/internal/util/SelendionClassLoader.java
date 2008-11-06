@@ -6,12 +6,12 @@ import javassist.*;
 
 import java.util.Hashtable;
 
-public class SelendionClassFinder {
+public class SelendionClassLoader extends ClassLoader {
     private static Hashtable classes = new Hashtable();
 
 
     @SuppressWarnings("unchecked")
-    public static Class<? extends SelendionTestCase> findSelendionClass (String htmlResource) {
+    public  Class<? extends SelendionTestCase> findSelendionClass (String htmlResource) {
         String className = htmlResource;
 
         if (className.endsWith(".html")) {
@@ -22,13 +22,12 @@ public class SelendionClassFinder {
             return (Class<? extends SelendionTestCase>)classes.get(className);
         }
 
-        TestCaseClassLoader loader = new TestCaseClassLoader();
         Class testClass;
         try {
-            testClass = loader.loadClass(className + "Test");
+            testClass = loadClass(className + "Test");
         } catch (ClassNotFoundException e) {
             try {
-                testClass = loader.loadClass(className);
+                testClass = loadClass(className);
             } catch (ClassNotFoundException e1) {
                 ClassPool pool = ClassPool.getDefault();
                 CtClass parent;
@@ -38,7 +37,7 @@ public class SelendionClassFinder {
                     throw new RuntimeException("Can't find org.selendion.integration.concordion.SelendionTestCase",e);
                 }
                 try {
-                    testClass = pool.makeClass(className, parent).toClass();
+                    testClass = pool.makeClass(className, parent).toClass(this);
 
                 } catch (CannotCompileException e2) {
                     throw new RuntimeException(e);
@@ -56,7 +55,7 @@ public class SelendionClassFinder {
             try {
                 try {
                     CtClass clazz = pool.getCtClass(testClass.getName());
-                    if (subclassOfSelendionTestCase(clazz.toClass(loader, parent.toClass().getProtectionDomain()))) {
+                    if (subclassOfSelendionTestCase(clazz.toClass(this, parent.toClass().getProtectionDomain()))) {
 
                 }
                 } catch (Exception e) {
@@ -70,7 +69,7 @@ public class SelendionClassFinder {
                         "throw new Exception(this.getClass().toString() + \" is not a SelendionTestCase.\");",
                         newClass);
                 newClass.addMethod(method);
-                testClass = newClass.toClass();
+                testClass = newClass.toClass(this);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
