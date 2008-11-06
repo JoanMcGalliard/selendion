@@ -44,8 +44,8 @@ public class RunSeleniumCommand extends AbstractCommand {
         strategy.execute(commandCall, evaluator, resultRecorder);
     }
 
-    public void addRunSeleniumListener(RunSeleniumListener runSuiteListener) {
-        listeners.addListener(runSuiteListener);
+    public void addRunSeleniumListener(RunSeleniumListener runSelendionListener) {
+        listeners.addListener(runSelendionListener);
     }
 
     private interface Strategy {

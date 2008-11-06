@@ -335,7 +335,7 @@ public class FizmezWebServer extends ErrorHandler implements Runnable {
                     } else {
                         // not executable, serve up a file
                         String filename = conf.get("DocumentRoot") + "/" + requestUri;
-                        File file = new File(filename);
+                        File file = new File(filename.replaceAll("%20", " "));
 
                         // Does it exist?
                         if (file.exists()) {

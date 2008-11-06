@@ -25,10 +25,10 @@ import java.io.File;
 public class SelendionBuilder extends ConcordionBuilder {
     public static final String NAMESPACE_SELENDION = "http://www.selendion.org/2008";
     private static final String PROPERTY_OUTPUT_DIR = "selendion.output.dir";
-    private File baseOutputDir;
     private SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
     private Vector<TestDescription> suite = new Vector<TestDescription>();
     private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/selendion/internal/resource/embedded.css";
+    private Evaluator evaluator;
 
     private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
@@ -39,8 +39,6 @@ public class SelendionBuilder extends ConcordionBuilder {
     private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suite);
     private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
     private RunSelendionCommand runSelendionCommand = new RunSelendionCommand();
-    private Evaluator evaluator = null;
-
     {
         withApprovedCommand("", "specification", specificationCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "run", runCommand);
@@ -59,7 +57,7 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "runSuite", runSuiteCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "clearSuite", clearSuiteCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "forEach", forEachCommand);
-        withApprovedCommand(NAMESPACE_SELENDION, "runConcordion", runSelendionCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "runSelendion", runSelendionCommand);
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
         runSeleniumCommand.addRunSeleniumListener(new RunSeleniumResultRenderer());
@@ -82,16 +80,9 @@ public class SelendionBuilder extends ConcordionBuilder {
 
         SpecificationReader specificationReader = new XMLSpecificationReader(source, xmlParser, documentParser);
 
-        if (evaluator == null) {
-          return new Selendion (specificationLocator, specificationReader, evaluatorFactory);
-        } else {
-            return new Selendion (specificationLocator, specificationReader, evaluator);
-        }
+        return new Selendion (specificationLocator, specificationReader, evaluatorFactory, evaluator);
     }
     protected File getBaseOutputDir() {
-        if (baseOutputDir != null) {
-            return baseOutputDir;
-        }
         String outputPath = System.getProperty(PROPERTY_OUTPUT_DIR);
         if (outputPath == null) {
             return new File(System.getProperty("java.io.tmpdir"), "selendion");
@@ -103,7 +94,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     }
     public SelendionBuilder withEvaluator(Evaluator evaluator) {
         this.evaluator = evaluator;
-        return  this;
+        return this;
     }
 
 

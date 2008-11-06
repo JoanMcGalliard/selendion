@@ -1,0 +1,45 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<head>
+    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>Suite</title>
+</head>
+<body>
+<h1>RunSelendion</h1>
+
+<p>
+
+    blah
+</p>
+
+<div class="example">
+
+    <h3>Test runs and passes</h3>
+
+    <p>
+blah
+    </p>
+    <ol>
+        <li>missing file</li>
+        <li>directory</li>
+        <li>test with error</li>
+        <li>test with exception</li>
+        <li>test with passing test</li>
+    </ol>
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Simple.html"&gt;Simple Test&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Simple.html"&gt;Simple Test&lt;/a&gt;
+       and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Simple.html" class="success"&gt;Simple Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+
+</pre>
+</div>
+
+</body>
+</html>
