@@ -23,6 +23,7 @@ import java.util.List;
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import com.thoughtworks.selenium.SeleniumException;
 
@@ -321,6 +322,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                             return new CommandResult((Boolean) actualObject, "");
                 }
                 String actual = seleniumObjectToString(actualObject);
+                actual = replaceCharacterEntities(actual);
                 if (actual.equals(expected)) {
                     return new CommandResult(true, "");
                 } else {
@@ -597,7 +599,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         if (clazz == String.class) {
             selenium.getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", " ").replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")));
         } else if (clazz == Boolean.class) {
-            selenium.getEval(String.format("storedVars['%s']=%s", name, ((Boolean) value).booleanValue() ? "true" : "false"));
+            selenium.getEval(String.format("storedVars['%s']=%s", name, (Boolean) value ? "true" : "false"));
         } else if (clazz == String[].class) {
             String valueStr = "";
             for (String str : (String[]) value) {
@@ -782,16 +784,18 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         string = string.replaceAll("&gt;", ">");
         string = string.replaceAll("&amp;", "&");
         string = string.replaceAll("&quot;", "\"");
+        string = string.replaceAll("\\n", " ");
         string = string.replaceAll("&apos;", "'");
+        string = string.replaceAll("  *", " ");
         return string;
     }
 
-    Vector<String[]> readSelenium(String htmlFileName) {
+    Vector<String[]> readSelenium(String htmlFileName) throws UnsupportedEncodingException {
         InputStream stream = this.getClass().getResourceAsStream(htmlFileName);
         if (stream == null) {
             throw new RuntimeException(String.format("Could not read selenium file %s.", htmlFileName));
         }
-        Reader reader = new InputStreamReader(stream);
+        Reader reader = new InputStreamReader(stream, "UTF-8");
         nu.xom.Builder builder;
         nu.xom.Document doc;
         try {
