@@ -231,6 +231,25 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 }
                 return new CommandResult(true, "");
             }
+            if (command.matches("^storeIfVisible[A-Z].*")) {
+                String varName = arg2;
+
+                if (!varName.matches(VARIABLE_PATTERN)) {
+                    return new CommandResult(false, "Illegal variable name: " + varName);
+                }
+                try {
+                    Object value = seleniumGet(command.replaceFirst("^storeIfVisible", ""), arg1, arg2);
+                    if (selenium.isVisible(arg1)) {
+                        storeVar(varName, value);
+                    }
+                } catch (SeleniumException se) {
+                    //ignore
+                }
+                catch (SeleniumIdeException e) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                return new CommandResult(true, "");
+            }
             if (command.matches("^storeNot[A-Z].*")) {
                 String varName = arg2.length() > 0 ? arg2 : arg1;
 
