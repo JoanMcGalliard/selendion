@@ -69,7 +69,7 @@ public class RunSeleniumCommand extends AbstractCommand {
 
             if (evaluatedExpression.getClass().equals(String.class)) {
                 seleniumFileNames.add(commandCall.getResource().getRelativeResource((String) evaluatedExpression).getPath());
-                testName = ((String) evaluatedExpression).replaceAll(" *\\n *", " ").trim();
+                testName = ((String) evaluatedExpression).replaceAll(" *\\n *", " ").replaceFirst(".*/", "").replaceFirst(".html*$","").trim();
             } else {
                 Object[] files = (Object[]) evaluatedExpression;
                 for (Object obj : files) {
