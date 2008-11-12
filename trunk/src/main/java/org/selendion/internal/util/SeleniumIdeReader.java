@@ -129,7 +129,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 array = String.format("%s %s: '%s', ", array, keyString, evaluator.getVariable("#" + keyString).toString().replaceFirst("\\\\|$", "").replaceAll("'", "\\\\'").replaceAll("\\n", " "));
             }
         }
-        array = array.replaceFirst("[, ]$", "");
+        array = array.replaceFirst("[, ]*$", "");
         if (array.length() > 0) {
             selenium.getEval("storedVars = {" + array + "}");
         }
@@ -311,7 +311,29 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             }
             if (command.matches("^verifyNot[A-Z].*")) {
                 Object actualObject;
-                String expected = arg2.length() > 0 ? arg2 : arg1;
+                String seleniumCommand = command.replaceFirst("^verify", "");
+                              String expected;
+                              if (seleniumCommand.equals("Alert") ||
+                                      seleniumCommand.equals("AllButtons") ||
+                                      seleniumCommand.equals("AllFields") ||
+                                      seleniumCommand.equals("AllLinks") ||
+                                      seleniumCommand.equals("AllWindowIds") ||
+                                      seleniumCommand.equals("AllWindowNames") ||
+                                      seleniumCommand.equals("AllWindowTitles") ||
+                                      seleniumCommand.equals("BodyText") ||
+                                      seleniumCommand.equals("Confirmation") ||
+                                      seleniumCommand.equals("Cookie") ||
+                                      seleniumCommand.equals("HtmlSource") ||
+                                      seleniumCommand.equals("Location") ||
+                                      seleniumCommand.equals("MouseSpeed") ||
+                                      seleniumCommand.equals("Prompt") ||
+                                      seleniumCommand.equals("Speed") ||
+                                      seleniumCommand.equals("Title")) {
+                                  expected = arg1;
+                              } else {
+                                  expected = arg2;
+                              }
+              
                 try {
                     actualObject = seleniumGet(command.replaceFirst("^verifyNot", ""), arg1, arg2);
                 } catch (SeleniumIdeException e) {
@@ -331,14 +353,36 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             }
             if (command.matches("^verify[A-Z].*")) {
                 Object actualObject;
-                String expected = arg2.length() > 0 ? arg2 : arg1;
+                String seleniumCommand = command.replaceFirst("^verify", "");
+                String expected;
+                if (seleniumCommand.equals("Alert") ||
+                        seleniumCommand.equals("AllButtons") ||
+                        seleniumCommand.equals("AllFields") ||
+                        seleniumCommand.equals("AllLinks") ||
+                        seleniumCommand.equals("AllWindowIds") ||
+                        seleniumCommand.equals("AllWindowNames") ||
+                        seleniumCommand.equals("AllWindowTitles") ||
+                        seleniumCommand.equals("BodyText") ||
+                        seleniumCommand.equals("Confirmation") ||
+                        seleniumCommand.equals("Cookie") ||
+                        seleniumCommand.equals("HtmlSource") ||
+                        seleniumCommand.equals("Location") ||
+                        seleniumCommand.equals("MouseSpeed") ||
+                        seleniumCommand.equals("Prompt") ||
+                        seleniumCommand.equals("Speed") ||
+                        seleniumCommand.equals("Title")) {
+                    expected = arg1;
+                } else {
+                    expected = arg2;
+                }
+
                 try {
-                    actualObject = seleniumGet(command.replaceFirst("^verify", ""), arg1, arg2);
+                    actualObject = seleniumGet(seleniumCommand, arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
-                 if (actualObject.getClass().equals(Boolean.class))   {
-                            return new CommandResult((Boolean) actualObject, "");
+                if (actualObject.getClass().equals(Boolean.class)) {
+                    return new CommandResult((Boolean) actualObject, "");
                 }
                 String actual = seleniumObjectToString(actualObject);
                 actual = replaceCharacterEntities(actual);
