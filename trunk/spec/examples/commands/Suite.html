@@ -21,7 +21,7 @@
     <h3>Test runs and passes</h3>
 
     <p>
-        If we run a suite containing a simple test that has a test class and it passes passes:
+        If we run a suite containing a simple test that has a test class and it passes:
     </p>
 
         <pre concordion:set="#snippet">
@@ -33,7 +33,8 @@
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
     &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Simple.html"&gt;Simple Test&lt;/a&gt;
-       and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Simple.html" class="success"&gt;Simple Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+       and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt;
+    &lt;li&gt; &lt;a href="suite/Simple.html" class="success"&gt;Simple Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 
 </pre>
 </div>
@@ -56,7 +57,9 @@
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
 &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Concordion.html"&gt;Test using ConcordionTestCase&lt;/a&gt;
-       and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt; class examples.commands.suite.Concordion is not a SelendionTestCase.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+       and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt;
+    class examples.commands.suite.Concordion is not a SelendionTestCase.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 
 </pre>
 </div>
@@ -78,7 +81,8 @@
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
             &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Error.html"&gt;Test that throws an exception&lt;/a&gt;
-               and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt;
+               and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt;
     Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
         </pre>
 </div>
@@ -97,8 +101,11 @@
 
     <p>The result should be:</p>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/NotExpectedToPass.html"&gt;Not Expected To Pass Demo&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF"
+    href="suite/NotExpectedToPass.html"&gt;Not Expected To Pass Demo&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt;
+    &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;  &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 </pre>
 </div>
 <div class="example">
@@ -138,8 +145,10 @@
 
     <p>The result should be:</p>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of
+    &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
         </pre>
 </div>
 
@@ -178,8 +187,10 @@
 
     <p>The result should be:</p>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClassError.html" class="failure"&gt;Test without class that throws an exception&lt;/a&gt;
+<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of
+    &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a href="suite/WithoutClassError.html" class="failure"&gt;Test without class that throws an exception&lt;/a&gt;
     Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
   </pre>
 </div>
@@ -215,7 +226,7 @@ Adding this all together, if we run a suite where we add both individual files a
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt; class examples.commands.suite.Concordion is not a SelendionTestCase.&lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;/li&gt;
+        &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;  &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Simple.html" class="success"&gt;Simple Test&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/SimpleFail.html" class="failure"&gt;Simple Fail&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/subSuite/Simple.html" class="success"&gt;Simple test in sub-suite&lt;/a&gt; &lt;/li&gt;
@@ -264,7 +275,7 @@ If we run the same test in 2 threads, (remembering the time of the <i concordion
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt; class examples.commands.suite.Concordion is not a SelendionTestCase.&lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;/li&gt;
+        &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Simple.html" class="success"&gt;Simple Test&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/SimpleFail.html" class="failure"&gt;Simple Fail&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/subSuite/Simple.html" class="success"&gt;Simple test in sub-suite&lt;/a&gt; &lt;/li&gt;
@@ -313,7 +324,7 @@ If we run the same test in unlimited threads, , (remembering the time of the <i 
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt; class examples.commands.suite.Concordion is not a SelendionTestCase.&lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;/li&gt;
+        &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;  &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Simple.html" class="success"&gt;Simple Test&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/SimpleFail.html" class="failure"&gt;Simple Fail&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/subSuite/Simple.html" class="success"&gt;Simple test in sub-suite&lt;/a&gt; &lt;/li&gt;

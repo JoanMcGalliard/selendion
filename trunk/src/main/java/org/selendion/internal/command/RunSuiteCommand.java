@@ -8,18 +8,34 @@ import org.concordion.api.Element;
 import org.selendion.internal.RunSuiteListener;
 import org.selendion.internal.util.TestDescription;
 import org.selendion.internal.util.ActiveTestSuiteRestricted;
+import org.selendion.integration.concordion.SelendionTestCase;
 
 
 import java.util.Vector;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import junit.framework.TestSuite;
-import junit.framework.TestResult;
-import junit.framework.TestFailure;
+import junit.framework.*;
 
 
 public class RunSuiteCommand extends AbstractCommand {
+    private Hashtable expectedToPass = new Hashtable();
+
+    private class SuiteListener implements TestListener {
+
+        public void addError(Test test, Throwable throwable) {
+        }
+
+        public void addFailure(Test test, AssertionFailedError assertionFailedError) {
+        }
+
+        public void endTest(Test test) {
+            expectedToPass.put(test.getClass(), ((SelendionTestCase)test).isExpectedToPass());             
+        }
+
+        public void startTest(Test test) {
+        }
+    }
     private Announcer<RunSuiteListener> listeners = Announcer.to(RunSuiteListener.class);
     private Vector<TestDescription> suite;
 
@@ -34,6 +50,7 @@ public class RunSuiteCommand extends AbstractCommand {
 
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
         TestSuite testSuite;
+        expectedToPass = new Hashtable();
         int threads = Integer.parseInt(evaluator.evaluate(commandCall.getExpression()).toString());
 
         if (threads == 1 ) {
@@ -45,7 +62,9 @@ public class RunSuiteCommand extends AbstractCommand {
             testSuite.addTestSuite(test.getClazz());
         }
         TestResult testResult = new TestResult();
-        testSuite.run(testResult);
+        SuiteListener suiteListener=new SuiteListener();
+         testResult.addListener(suiteListener);
+         testSuite.run(testResult);
 
         Hashtable failures = new Hashtable();
         Enumeration<TestFailure> errors = testResult.errors();
@@ -67,6 +86,12 @@ public class RunSuiteCommand extends AbstractCommand {
             Element li = new Element("li");
             li.appendChild(anchor);
             list.appendChild(li);
+            if (!(Boolean)expectedToPass.get(test.getClazz())) {
+                Element b = new Element("b");
+                b.addAttribute("class", "attention");
+                b.appendText(" This test is not expected to pass. ");
+                li.appendChild(b);
+            }
             if (failures.containsKey(test.getClazz())) {
                 resultRecorder.record(Result.FAILURE);
                 announceFailure(anchor);
