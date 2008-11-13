@@ -3,29 +3,28 @@
 */
 package org.selendion.internal.util;
 
-import org.concordion.api.Evaluator;
+import com.thoughtworks.selenium.SeleniumException;
+import org.ccil.cowan.tagsoup.Parser;
 import org.concordion.api.Element;
+import org.concordion.api.Evaluator;
 import org.concordion.api.Result;
 import org.concordion.api.ResultRecorder;
 import org.concordion.internal.util.Announcer;
 import org.selendion.integration.selenium.SeleniumDriver;
-import org.selendion.internal.command.RunSeleniumSuccessEvent;
-import org.selendion.internal.command.RunSeleniumFailureEvent;
 import org.selendion.internal.RunSeleniumListener;
+import org.selendion.internal.command.RunSeleniumFailureEvent;
+import org.selendion.internal.command.RunSeleniumSuccessEvent;
 import org.xml.sax.helpers.XMLReaderFactory;
-import org.ccil.cowan.tagsoup.Parser;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
-import java.util.List;
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-
-import com.thoughtworks.selenium.SeleniumException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SeleniumIdeReader extends junit.framework.TestCase {
     private SeleniumDriver selenium;
@@ -192,6 +191,11 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
             }
             if (command.equals("waitForPageToLoad")) {
+                selenium.waitForPageToLoad();
+                return new CommandResult(true, "");
+
+            }
+            if (command.equals("waitForPageToLoadfLoading")) {
                 selenium.waitForPageToLoad();
                 return new CommandResult(true, "");
 

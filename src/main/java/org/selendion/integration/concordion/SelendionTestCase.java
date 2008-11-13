@@ -13,6 +13,10 @@ import org.selendion.Selendion;
 
 
 public abstract class SelendionTestCase extends ConcordionTestCase {
+    public boolean isExpectedToPass() {
+        return expectedToPass;
+    }
+
     private boolean expectedToPass = true;
 
     public void setExpectedToPass(boolean expectedToPass) {
