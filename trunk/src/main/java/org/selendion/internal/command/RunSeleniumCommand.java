@@ -87,7 +87,12 @@ public class RunSeleniumCommand extends AbstractCommand {
             Element resultElement;
             try {
                 if (!element.getParent().getLocalName().equals("table")) {
+                    if (element.getLocalName().equals("td")) {
+                        resultElement = new Element("td");
+
+                    } else {
                     resultElement = new Element("span");
+                    }
                     testName = element.getText().replaceAll(" *\\n *", " ").trim();
 
                     result = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);

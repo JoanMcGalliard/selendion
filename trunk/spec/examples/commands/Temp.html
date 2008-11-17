@@ -1,17 +1,40 @@
 <html xmlns:concordion="http://www.selendion.org/2008">
-
-<head>
-    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
-    <title>Suite</title>
-</head>
+<head><title>Selendion Demo</title></head>
+<link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
 <body>
 
-<p>Set #var1 to <i concordion:set="#var1">A</i>
-    then add <a href="support/ExpectsVar1ToEqualA.html" concordion:addToSuite="#HREF">This test will only pass if Var1 is "A"</a></p>
+<h1>Selendion Demo</h1>
 
-<p>Set #var1 to <i concordion:set="#var1">B</i>
-    then add <a href="support/ExpectsVar1ToEqualB.html" concordion:addToSuite="#HREF">This test will only pass if Var1 is "B"</a></p>
+<div class="example">
 
-<p>Then run the suite in <b concordion:runSuite="#TEXT">1</b> thread</p>
+    <h2>Setup </h2>
+
+    <p concordion:startBrowser="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with with:
+        host <i concordion:set="#seleniumServerHost">localhost</i>;
+        port <i concordion:set="#seleniumServerport">5555</i>;
+        for <i concordion:set="#browser">*firefox</i>;
+        and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
+
+
+  
+
+    <table concordion:runSelenium="'seleniumScripts/openIndex.html'">
+        <tr>
+            <th concordion:runSelenium="#HREF">Verify Text</th>
+        </tr>
+        <tr>
+            <td><a href="seleniumScripts/verifyText1.html">Verify text script</a> </td>
+        </tr>
+        <tr>
+            <td><a href="seleniumScripts/verifyText2.html">Verify text script</a> </td>
+        </tr>
+
+    </table>
+
+    <h2>Finally</h2>
+    <i concordion:stopBrowser="">Close the browser</i>
+
+</div>
+
 </body>
 </html>
