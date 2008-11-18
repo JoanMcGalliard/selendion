@@ -316,7 +316,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             }
             if (command.matches("^verifyNot[A-Z].*")) {
                 Object actualObject;
-                String seleniumCommand = command.replaceFirst("^verify", "");
+                String seleniumCommand = command.replaceFirst("^verifyNot", "") ;
                               String expected;
                               if (seleniumCommand.equals("Alert") ||
                                       seleniumCommand.equals("AllButtons") ||
@@ -340,7 +340,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                               }
               
                 try {
-                    actualObject = seleniumGet(command.replaceFirst("^verifyNot", ""), arg1, arg2);
+                    actualObject = seleniumGet(seleniumCommand, arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -356,6 +356,49 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
 
             }
+            if (command.matches("^verify[A-Z][a-z][a-z]*Not[A-Z].*")) {
+                Object actualObject;
+                String seleniumCommand = command.replaceFirst("^verify", "").replaceFirst("Not", "");
+                              String expected;
+                              if (seleniumCommand.equals("Alert") ||
+                                      seleniumCommand.equals("AllButtons") ||
+                                      seleniumCommand.equals("AllFields") ||
+                                      seleniumCommand.equals("AllLinks") ||
+                                      seleniumCommand.equals("AllWindowIds") ||
+                                      seleniumCommand.equals("AllWindowNames") ||
+                                      seleniumCommand.equals("AllWindowTitles") ||
+                                      seleniumCommand.equals("BodyText") ||
+                                      seleniumCommand.equals("Confirmation") ||
+                                      seleniumCommand.equals("Cookie") ||
+                                      seleniumCommand.equals("HtmlSource") ||
+                                      seleniumCommand.equals("Location") ||
+                                      seleniumCommand.equals("MouseSpeed") ||
+                                      seleniumCommand.equals("Prompt") ||
+                                      seleniumCommand.equals("Speed") ||
+                                      seleniumCommand.equals("Title")) {
+                                  expected = arg1;
+                              } else {
+                                  expected = arg2;
+                              }
+
+                try {
+                    actualObject = seleniumGet(seleniumCommand, arg1, arg2);
+                } catch (SeleniumIdeException e) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                if (actualObject.getClass().equals(Boolean.class))   {
+                           return new CommandResult(!(Boolean) actualObject, "");
+               }
+                String actual = seleniumObjectToString(actualObject);
+                if (!actual.equals(expected)) {
+                    return new CommandResult(true, "");
+                } else {
+                    return new CommandResult(false, "Failed");
+                }
+
+
+            }
+
             if (command.matches("^verify[A-Z].*")) {
                 Object actualObject;
                 String seleniumCommand = command.replaceFirst("^verify", "");
@@ -538,6 +581,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             selenium.controlKeyUp();
         } else if (command.equals("createCookie")) {
             selenium.createCookie(arg1, arg2);
+        } else if (command.equals("deleteAllVisibleCookies")) {
+            selenium.deleteAllVisibleCookies();
         } else if (command.equals("deleteCookie")) {
             selenium.deleteCookie(arg1, arg2);
         } else if (command.equals("doubleClick")) {
