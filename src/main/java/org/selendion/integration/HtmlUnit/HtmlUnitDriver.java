@@ -4,15 +4,18 @@ import org.selendion.integration.BrowserDriver;
 import org.concordion.api.Evaluator;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.UnexpectedPage;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.List;
 
 public class HtmlUnitDriver implements BrowserDriver {
-    private HtmlPage page = null;
+    Page page = null;
 
     public HtmlUnitDriver(String baseUrl) {
         webClient = new WebClient();
@@ -50,7 +53,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     private Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
 
     public void stop() {
-        
+
     }
 
     public String getEval(String s) {
@@ -123,13 +126,42 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException("Not yet implemented: " + "chooseOkOnNextConfirmation");
     }
 
-    public void click(String arg1) {
-        HtmlSubmitInput submit = (HtmlSubmitInput) page.getHtmlElementsByName(arg1).get(0);
-        try {
-            page=(HtmlPage)submit.click();
-        } catch (IOException e) {
-              throw new RuntimeException(e);
+    private HtmlElement getHtmlElement(String key) {
+
+        if (key.startsWith("xPath=")) {
+            return (HtmlElement)((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", "")).get(0);
         }
+        try {
+            return ((HtmlPage) page).getHtmlElementById(key);
+        }
+        catch (ElementNotFoundException e) {
+            //pass through
+        }
+        try {
+        return  ((HtmlPage) page).getHtmlElementsByName(key).get(0);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void click(String arg1) {
+        HtmlElement element = getHtmlElement(arg1);
+        try {
+
+        if (element.getClass().equals(HtmlSubmitInput.class )) {
+                page =  ((HtmlSubmitInput)element).click();
+
+        } else if (element.getClass().equals(HtmlCheckBoxInput.class )) {
+              page =  ((HtmlCheckBoxInput)element).click();
+        }  else if (element.getClass().equals(HtmlImage.class )) {
+              page =  ((HtmlImage)element).click();
+        }
+          } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
 
     }
 
@@ -253,13 +285,14 @@ public class HtmlUnitDriver implements BrowserDriver {
         try {
 
             if (arg1.startsWith("http://")) {
-                page = (HtmlPage) webClient.getPage(arg1);
+                page = webClient.getPage(arg1);
             } else {
-                page = (HtmlPage) webClient.getPage(baseUrl + arg1);
+                page = webClient.getPage(baseUrl + arg1);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public void openWindow(String arg1, String arg2) {
@@ -283,11 +316,11 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void select(String arg1, String arg2) {
-        HtmlSelect select = (HtmlSelect) page.getHtmlElementsByName(arg1).get(0);
+        HtmlSelect select = (HtmlSelect) ((HtmlPage) page).getHtmlElementsByName(arg1).get(0);
         try {
             select.click();
         } catch (IOException e) {
-            throw new RuntimeException (e);
+            throw new RuntimeException(e);
         }
 
 
@@ -335,7 +368,7 @@ public class HtmlUnitDriver implements BrowserDriver {
 
     public void type(String arg1, String arg2) {
         try {
-            HtmlTextInput textField = (HtmlTextInput) page.getHtmlElementsByName(arg1).get(0);
+            HtmlTextInput textField = (HtmlTextInput) ((HtmlPage) page).getHtmlElementsByName(arg1).get(0);
             textField.setValueAttribute(arg2);
             return;
         }
@@ -344,12 +377,12 @@ public class HtmlUnitDriver implements BrowserDriver {
 
         }
         try {
-            HtmlPasswordInput textField = (HtmlPasswordInput) page.getHtmlElementsByName(arg1).get(0);
+            HtmlPasswordInput textField = (HtmlPasswordInput) ((HtmlPage) page).getHtmlElementsByName(arg1).get(0);
             textField.setValueAttribute(arg2);
             return;
         }
         catch (Exception e) {
-            throw new RuntimeException ("Can't handle type("+arg1+", "+arg2+")");
+            throw new RuntimeException("Can't handle type(" + arg1 + ", " + arg2 + ")");
 
         }
 
@@ -520,19 +553,10 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public String getText(String arg1) {
-        String str="";
+        HtmlElement element = getHtmlElement(arg1);
+        return element.getTextContent();
 
-        if (arg1.startsWith("xPath=")) {
-            List<?> blah = page.getByXPath(arg1.replaceFirst("xPath=", ""));
-            for (Object item : blah) {
-                if (item.getClass().equals(HtmlTableDataCell.class)) {
-                str += ((HtmlTableDataCell) item).getTextContent();
-                } else {
-                    throw new RuntimeException("getText: element " + item.getClass() + "not implemented");
-                }
-            }
-        }
-        return str;
+
     }
 
     public Object getValue(String arg1) {
@@ -560,7 +584,28 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isTextPresent(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "isTextPresent");
+        try {
+            return ((HtmlPage) page).getBody().getTextContent().contains(arg1);
+        }
+        catch (ClassCastException cce) {
+            // pass through
+        }
+        try {
+            InputStream stream = ((UnexpectedPage) page).getInputStream();
+            return slurp(stream).contains(arg1);
+        } catch (IOException e) {
+        }
+        throw new RuntimeException("Can't handle isTextPresent " + arg1);
     }
+
+    private static String slurp(InputStream in) throws IOException {
+        StringBuffer out = new StringBuffer();
+        byte[] b = new byte[4096];
+        for (int n; (n = in.read(b)) != -1;) {
+            out.append(new String(b, 0, n));
+        }
+        return out.toString();
+    }
+
 
 }
