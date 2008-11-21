@@ -5,8 +5,9 @@
 package org.selendion.integration.selenium;
 
 import com.thoughtworks.selenium.DefaultSelenium;
+import org.selendion.integration.BrowserDriver;
 
-public class SeleniumDriver extends DefaultSelenium {
+public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
 
     private String timeout = "600000";
 
