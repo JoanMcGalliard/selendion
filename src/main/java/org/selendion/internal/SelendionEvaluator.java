@@ -13,15 +13,12 @@ public class SelendionEvaluator extends SimpleEvaluator {
     public Object evaluate(String expression) {
          String  VAR_PATTERN = "(#[a-z][a-zA-Z0-9_]*|#TEXT|#HREF|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
          String VAR_LIST = VAR_PATTERN + "(, *"+VAR_PATTERN+")++";
-         String SPECIAL_VALUES = "SELENIUM";
         if (expression.matches(VAR_LIST)) {
             List<Object> returnValue = new ArrayList<Object>();
             for (String subExpression : expression.split(",")) {
                 returnValue.add(super.evaluate(subExpression));
             }
             return returnValue.toArray();
-        } else if (expression.matches(SPECIAL_VALUES)) {
-            return expression;
         } else {
             return super.evaluate(expression);
         }
