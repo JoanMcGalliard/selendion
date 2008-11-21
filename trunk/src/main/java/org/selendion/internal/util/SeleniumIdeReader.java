@@ -56,7 +56,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         for (String filepath : filepaths) {
             seleniumCommands.addAll(readSelenium(filepath));
         }
-        turnConcordionVarsToSeleniumVars(evaluator);
+        browser.passVariablesIn(evaluator) ;
         boolean result = true;
         Element table = new Element("table");
         Element tr = new Element("tr");
@@ -71,9 +71,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         table.appendChild(tr);
         boolean exception = false;
         for (String[] command : seleniumCommands) {
-            command[0] = replaceVariables(replaceCharacterEntities(command[0]));
-            command[1] = replaceVariables(replaceCharacterEntities(command[1]));
-            command[2] = replaceVariables(replaceCharacterEntities(command[2]));
+            command[0] = browser.replaceVariables(replaceCharacterEntities(command[0]));
+            command[1] = browser.replaceVariables(replaceCharacterEntities(command[1]));
+            command[2] = browser.replaceVariables(replaceCharacterEntities(command[2]));
             if (command[1] != null && command[2] != null) {
                 tr = new Element("tr");
                 td = new Element("td").appendText(command[0]);
@@ -101,7 +101,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     catch (Throwable e) {
                         exception = true;
                         result = false;
-                        td.appendText(e.getMessage());
+                        td.appendText(e.toString());
                         listeners.announce().failureReported(new RunSeleniumFailureEvent(tr));
                         resultRecorder.record(Result.FAILURE);
                     }
@@ -121,37 +121,11 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         table.setId("seleniumTable" + buttonId);
         table.addAttribute("class", "seleniumTable");
         resultElement.appendChild(table);
-        turnSeleniumVarsToConcordionVars(evaluator);
+        browser.passVariablesOut(evaluator);
         return result;
     }
 
-    private void turnConcordionVarsToSeleniumVars(Evaluator evaluator) {
-        Set keys = evaluator.getKeys();
-        String array = "";
-        for (Object key : keys) {
-            if (!key.getClass().equals(String.class)) {
-                throw new RuntimeException("Unexpected key " + key);
-            }
-            String keyString = (String) key;
-            if (keyString.matches(VARIABLE_PATTERN)) {
-                array = String.format("%s %s: '%s', ", array, keyString, evaluator.getVariable("#" + keyString).toString().replaceFirst("\\\\|$", "").replaceAll("'", "\\\\'").replaceAll("\\n", " "));
-            }
-        }
-        array = array.replaceFirst("[, ]*$", "");
-        if (array.length() > 0) {
-            browser.getEval("storedVars = {" + array + "}");
-        }
-    }
 
-    private void turnSeleniumVarsToConcordionVars(Evaluator evaluator) {
-        String[] storedVars = browser.getEval("var arr = [];for (var name in storedVars) {arr.push('#'+name+' '+storedVars[name]);};arr").split(",");
-        for (String var : storedVars) {
-            String[] nvp = var.split(" ", 2);
-            if (nvp[0].matches("#" + VARIABLE_PATTERN)) {
-                evaluator.setVariable(nvp[0], nvp[1]);
-            }
-        }
-    }
 
     private String seleniumObjectToString(Object obj) throws Exception {
         if (obj.getClass() == String.class) {
@@ -184,7 +158,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 return new CommandResult(true, arg1);
             }
             if (command.equals("store")) {
-                storeVar(arg2, arg1);
+                browser.store(arg2, arg1);
                 return new CommandResult(true, "");
             }
             if (command.equals("waitForCondition")) {
@@ -222,7 +196,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(false, se.getMessage());
                 }
                 catch (Exception e) {
-                    return new CommandResult(false, "");
+                    throw new RuntimeException(e);
                 }
 
             }
@@ -233,7 +207,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(false, "Illegal variable name: " + varName);
                 }
                 try {
-                    storeVar(varName, seleniumGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
+                    browser.store(varName, seleniumGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
                 } catch (SeleniumException se) {
                     //ignore
                 }
@@ -250,7 +224,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 try {
                     Object value = seleniumGet(command.replaceFirst("^storeIfVisible", ""), arg1, arg2);
                     if (browser.isVisible(arg1)) {
-                        storeVar(arg2, value);
+                        browser.store(arg2, value);
                     }
                 } catch (SeleniumException se) {
                     //ignore
@@ -269,7 +243,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 try {
                     Object answer=seleniumGet(command.replaceFirst("^storeNot", ""), arg1, arg2);
                     if (answer.getClass().equals(Boolean.class)) {
-                    storeVar(varName, !(Boolean)answer);
+                    browser.store(varName, !(Boolean)answer);
                     }
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
@@ -283,7 +257,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(false, "Illegal variable name: " + varName);
                 }
                 try {
-                    storeVar(varName, seleniumGet(command.replaceFirst("^store", ""), arg1, arg2));
+                    browser.store(varName, seleniumGet(command.replaceFirst("^store", ""), arg1, arg2));
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -701,34 +675,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     }
 
     //selenium accessors
-    private Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
 
-    private String replaceVariables(String string) {
-        Matcher m = variablePattern.matcher(string);
-        while (m.matches()) {
-            string = m.group(1) + browser.getEval(String.format("storedVars['%s']", m.group(2))) + m.group(3);
-            m = variablePattern.matcher(string);
-        }
-        return string;
-    }
 
-    private void storeVar(String name, Object value) {
-        Class clazz = value.getClass();
-        if (clazz == String.class) {
-            browser.getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", " ").replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")));
-        } else if (clazz == Boolean.class) {
-            browser.getEval(String.format("storedVars['%s']=%s", name, (Boolean) value ? "true" : "false"));
-        } else if (clazz == String[].class) {
-            String valueStr = "";
-            for (String str : (String[]) value) {
-                valueStr = valueStr + "'" + str + "', ";
-            }
-            valueStr = valueStr.replaceFirst("[ ,]*$", "");
-            browser.getEval(String.format("storedVars['%s']=%s", name, "[" + valueStr + "]"));
-        } else if (clazz == Number.class) {
-            browser.getEval(String.format("storedVars['%s']=%s", name, value.toString()));
-        }
-    }
 
     private Object seleniumGet(String command, String arg1, String arg2) throws SeleniumIdeException {
         if (command.equals("Alert")) {
