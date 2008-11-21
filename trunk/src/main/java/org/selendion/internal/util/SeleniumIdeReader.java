@@ -4,8 +4,6 @@
 package org.selendion.internal.util;
 
 import com.thoughtworks.selenium.SeleniumException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.ccil.cowan.tagsoup.Parser;
 import org.concordion.api.Element;
 import org.concordion.api.Evaluator;
@@ -22,10 +20,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.*;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SeleniumIdeReader extends junit.framework.TestCase {
     private BrowserDriver browser;
@@ -210,6 +205,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     browser.store(varName, seleniumGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
                 } catch (SeleniumException se) {
                     //ignore
+                } catch (RuntimeException re) {
+                    // fall through
                 }
                 catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
