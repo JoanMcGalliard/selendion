@@ -1,5 +1,7 @@
 package org.selendion.integration;
 
+import org.concordion.api.Evaluator;
+
 /**
  * Created by IntelliJ IDEA.
  * User: jem
@@ -8,7 +10,13 @@ package org.selendion.integration;
  * To change this template use File | Settings | File Templates.
  */
 public interface BrowserDriver {
+    public abstract void passVariablesIn(Evaluator evaluator);
+    public abstract void passVariablesOut(Evaluator evaluator);
+    public abstract void store(String name, Object value);
     public abstract void start();
+
+    public String replaceVariables(String string);
+
 
     public abstract void stop();
 
