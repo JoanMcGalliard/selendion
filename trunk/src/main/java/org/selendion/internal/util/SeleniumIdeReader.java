@@ -66,6 +66,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         table.appendChild(tr);
         boolean exception = false;
         for (String[] command : seleniumCommands) {
+            command[0] = replaceVariables(replaceCharacterEntities(command[0]));
+            command[1] = replaceVariables(replaceCharacterEntities(command[1]));
+            command[2] = replaceVariables(replaceCharacterEntities(command[2]));
             if (command[1] != null && command[2] != null) {
                 tr = new Element("tr");
                 td = new Element("td").appendText(command[0]);
@@ -171,9 +174,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             throw new RuntimeException("Please start selenium before running scripts.");
         }
         try {
-            command = replaceVariables(replaceCharacterEntities(command));
-            arg1 = replaceVariables(replaceCharacterEntities(arg1));
-            arg2 = replaceVariables(replaceCharacterEntities(arg2));
+
             if (command.equals("echo")) {
                 return new CommandResult(true, arg1);
             }
