@@ -12,12 +12,6 @@
 
 </p>
 
-<p concordion:startBrowser="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with with:
-             host <i concordion:set="#seleniumServerHost">localhost</i>;
-             port <i concordion:set="#seleniumServerport">5555</i>;
-             for <i concordion:set="#browser">*firefox</i>;
-             and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
-
 
 <div class="example">
 
@@ -39,7 +33,7 @@
 
         <pre concordion:set="#snippet">
 
-            &lt;p concordion:startBrowser="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
+            &lt;p concordion:startBrowser="SELENIUM,#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
              host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
              port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
              for &lt;i concordion:set="#browser"&gt;*firefox&lt;/i&gt;;
@@ -56,12 +50,15 @@
         &lt;/tr&gt;
 
     &lt;/table&gt;
+
+&lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p concordion:startBrowser="#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
+&lt;p concordion:startBrowser="SELENIUM,#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
              host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
              port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
              for &lt;i concordion:set="#browser"&gt;*firefox&lt;/i&gt;;
@@ -104,12 +101,12 @@
     &lt;/tr&gt;
 
        &lt;/table&gt;
-
+    &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+ 
 </pre>
 </div>
 
-<i concordion:stopBrowser="">Close the browser</i>
- 
+
 
 
 

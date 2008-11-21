@@ -7,7 +7,7 @@ import org.concordion.api.EvaluatorFactory;
 import org.concordion.api.Resource;
 import org.concordion.api.ResultSummary;
 import org.selendion.internal.SelendionBuilder;
-import org.concordion.internal.SimpleEvaluatorFactory;
+import org.selendion.internal.SelendionEvaluatorFactory;
 import nu.xom.Document;
 import nu.xom.Nodes;
 
@@ -15,7 +15,7 @@ import nu.xom.Nodes;
 public class TestRig {
 
     private Object fixture = null;
-    private EvaluatorFactory evaluatorFactory = new SimpleEvaluatorFactory();
+    private EvaluatorFactory evaluatorFactory = new SelendionEvaluatorFactory();
     private StubSource stubSource = new StubSource();
     private String resourceName="/testrig";
 

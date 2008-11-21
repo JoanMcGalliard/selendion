@@ -30,7 +30,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/selendion/internal/resource/embedded.css";
     private Evaluator evaluator;
 
-    private StartSeleniumCommand startSeleniumCommand = new StartSeleniumCommand(seleniumIdeReader);
+    private StartBrowserCommand startBrowserCommand = new StartBrowserCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
     private SpecificationCommand specificationCommand = new SpecificationCommand();    
@@ -39,6 +39,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suite);
     private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
     private RunSelendionCommand runSelendionCommand = new RunSelendionCommand();
+
     {
         withApprovedCommand("", "specification", specificationCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "run", runCommand);
@@ -50,7 +51,7 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "verifyRows", verifyRowsCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "echo", echoCommand);
        
-        withApprovedCommand(NAMESPACE_SELENDION, "startBrowser", startSeleniumCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "startBrowser", startBrowserCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "runSelenium", runSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "stopBrowser", stopSeleniumCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "addToSuite", addToSuiteCommand);

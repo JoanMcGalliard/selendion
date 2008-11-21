@@ -4,6 +4,8 @@
 package org.selendion.internal.util;
 
 import com.thoughtworks.selenium.SeleniumException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.ccil.cowan.tagsoup.Parser;
 import org.concordion.api.Element;
 import org.concordion.api.Evaluator;
@@ -11,15 +13,14 @@ import org.concordion.api.Result;
 import org.concordion.api.ResultRecorder;
 import org.concordion.internal.util.Announcer;
 import org.selendion.integration.selenium.SeleniumDriver;
+import org.selendion.integration.BrowserDriver;
+import org.selendion.integration.HtmlUnit.HtmlUnitDriver;
 import org.selendion.internal.RunSeleniumListener;
 import org.selendion.internal.command.RunSeleniumFailureEvent;
 import org.selendion.internal.command.RunSeleniumSuccessEvent;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -27,21 +28,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SeleniumIdeReader extends junit.framework.TestCase {
-    private SeleniumDriver selenium;
+    private BrowserDriver browser;
     private boolean started = false;
     private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
 
     public void start(String seleniumHost, int seleniumPort, String browser, String baseUrl) {
-        selenium = new SeleniumDriver(
+        this.browser = new SeleniumDriver(
                 seleniumHost, seleniumPort, browser,
                 baseUrl);
-        selenium.start();
+        this.browser.start();
+        started = true;
+    }
+    public void start(String baseUrl) {
+        browser = new HtmlUnitDriver(baseUrl);
         started = true;
     }
 
     public void stop() {
         if (started) {
-            selenium.stop();
+            browser.stop();
         }
     }
 
@@ -134,12 +139,12 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         }
         array = array.replaceFirst("[, ]*$", "");
         if (array.length() > 0) {
-            selenium.getEval("storedVars = {" + array + "}");
+            browser.getEval("storedVars = {" + array + "}");
         }
     }
 
     private void turnSeleniumVarsToConcordionVars(Evaluator evaluator) {
-        String[] storedVars = selenium.getEval("var arr = [];for (var name in storedVars) {arr.push('#'+name+' '+storedVars[name]);};arr").split(",");
+        String[] storedVars = browser.getEval("var arr = [];for (var name in storedVars) {arr.push('#'+name+' '+storedVars[name]);};arr").split(",");
         for (String var : storedVars) {
             String[] nvp = var.split(" ", 2);
             if (nvp[0].matches("#" + VARIABLE_PATTERN)) {
@@ -183,27 +188,27 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 return new CommandResult(true, "");
             }
             if (command.equals("waitForCondition")) {
-                selenium.waitForCondition(arg1, arg2);
+                browser.waitForCondition(arg1, arg2);
                 return new CommandResult(true, "");
 
             }
             if (command.equals("waitForFrameToLoad")) {
-                selenium.waitForFrameToLoad(arg1, arg2);
+                browser.waitForFrameToLoad(arg1, arg2);
                 return new CommandResult(true, "");
 
             }
             if (command.equals("waitForPageToLoad")) {
-                selenium.waitForPageToLoad();
+                browser.waitForPageToLoad();
                 return new CommandResult(true, "");
 
             }
             if (command.equals("waitForPageToLoadfLoading")) {
-                selenium.waitForPageToLoad();
+                browser.waitForPageToLoad();
                 return new CommandResult(true, "");
 
             }
             if (command.equals("waitForPopUp")) {
-                selenium.waitForPopUp(arg1, arg2);
+                browser.waitForPopUp(arg1, arg2);
                 return new CommandResult(true, "");
             }
 
@@ -211,7 +216,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             if (command.matches(".*AndWait$")) {
                 try {
                     seleniumAction(command.replaceFirst("AndWait$", ""), arg1, arg2);
-                    selenium.waitForPageToLoad();
+                    browser.waitForPageToLoad();
                     return new CommandResult(true, "");
                 } catch (SeleniumException se) {
                     return new CommandResult(false, se.getMessage());
@@ -238,15 +243,14 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 return new CommandResult(true, "");
             }
             if (command.matches("^storeIfVisible[A-Z].*")) {
-                String varName = arg2;
 
-                if (!varName.matches(VARIABLE_PATTERN)) {
-                    return new CommandResult(false, "Illegal variable name: " + varName);
+                if (!arg2.matches(VARIABLE_PATTERN)) {
+                    return new CommandResult(false, "Illegal variable name: " + arg2);
                 }
                 try {
                     Object value = seleniumGet(command.replaceFirst("^storeIfVisible", ""), arg1, arg2);
-                    if (selenium.isVisible(arg1)) {
-                        storeVar(varName, value);
+                    if (browser.isVisible(arg1)) {
+                        storeVar(arg2, value);
                     }
                 } catch (SeleniumException se) {
                     //ignore
@@ -457,7 +461,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     condition = actual.equals(expected);
                 }
                 if (!condition) {
-                    selenium.waitForPageToLoad();
+                    browser.waitForPageToLoad();
                 }
                 return new CommandResult(true, "");
             }
@@ -477,7 +481,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     condition = actual.equals(expected);
                 }
                 if (condition) {
-                    selenium.waitForPageToLoad();
+                    browser.waitForPageToLoad();
                 }
                 return new CommandResult(true, "");
             }
@@ -499,10 +503,10 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     catch (Exception e) {
                         // try again
                     }
-                    if (System.currentTimeMillis() - start > Integer.parseInt(selenium.getTimeout())) {
+                    if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
                         throw new Exception("Timeout");
                     }
-                    selenium.pause(200);
+                    browser.pause(200);
 
                 }
 
@@ -528,10 +532,10 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     catch (Exception e) {
                         //try again
                     }
-                    if (System.currentTimeMillis() - start > Integer.parseInt(selenium.getTimeout())) {
+                    if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
                         throw new Exception("Timeout");
                     }
-                    selenium.pause(200);
+                    browser.pause(200);
 
                 }
 
@@ -551,140 +555,140 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
     private void seleniumAction(String command, String arg1, String arg2) throws SeleniumIdeException {
         if (command.equals("addSelection")) {
-            selenium.addSelection(arg1, arg2);
+            browser.addSelection(arg1, arg2);
         } else if (command.equals("allowNativeXpath")) {
-            selenium.allowNativeXpath(arg1);
+            browser.allowNativeXpath(arg1);
         } else if (command.equals("altKeyDown")) {
-            selenium.altKeyDown();
+            browser.altKeyDown();
         } else if (command.equals("altKeyUp")) {
-            selenium.altKeyUp();
+            browser.altKeyUp();
         } else if (command.equals("answerOnNextPrompt")) {
-            selenium.answerOnNextPrompt(arg1);
+            browser.answerOnNextPrompt(arg1);
         } else if (command.equals("assignId")) {
-            selenium.assignId(arg1, arg2);
+            browser.assignId(arg1, arg2);
         } else if (command.equals("break")) {
             //ignore breaks in automated tests
         } else if (command.equals("check")) {
-            selenium.check(arg1);
+            browser.check(arg1);
         } else if (command.equals("chooseCancelOnNextConfirmation")) {
-            selenium.chooseCancelOnNextConfirmation();
+            browser.chooseCancelOnNextConfirmation();
         } else if (command.equals("chooseOkOnNextConfirmation")) {
-            selenium.chooseOkOnNextConfirmation();
+            browser.chooseOkOnNextConfirmation();
         } else if (command.equals("click")) {
-            selenium.click(arg1);
+            browser.click(arg1);
         } else if (command.equals("clickAt")) {
-            selenium.clickAt(arg1, arg2);
+            browser.clickAt(arg1, arg2);
         } else if (command.equals("close")) {
-            selenium.close();
+            browser.close();
         } else if (command.equals("controlKeyDown")) {
-            selenium.controlKeyDown();
+            browser.controlKeyDown();
         } else if (command.equals("controlKeyUp")) {
-            selenium.controlKeyUp();
+            browser.controlKeyUp();
         } else if (command.equals("createCookie")) {
-            selenium.createCookie(arg1, arg2);
+            browser.createCookie(arg1, arg2);
         } else if (command.equals("deleteAllVisibleCookies")) {
-            selenium.deleteAllVisibleCookies();
+            browser.deleteAllVisibleCookies();
         } else if (command.equals("deleteCookie")) {
-            selenium.deleteCookie(arg1, arg2);
+            browser.deleteCookie(arg1, arg2);
         } else if (command.equals("doubleClick")) {
-            selenium.doubleClick(arg1);
+            browser.doubleClick(arg1);
         } else if (command.equals("doubleClickAt")) {
-            selenium.doubleClickAt(arg1, arg2);
+            browser.doubleClickAt(arg1, arg2);
         } else if (command.equals("dragAndDrop")) {
-            selenium.dragAndDrop(arg1, arg2);
+            browser.dragAndDrop(arg1, arg2);
         } else if (command.equals("dragAndDropToObject")) {
-            selenium.dragAndDropToObject(arg1, arg2);
+            browser.dragAndDropToObject(arg1, arg2);
         } else if (command.equals("dragdrop")) {
-            selenium.dragdrop(arg1, arg2);
+            browser.dragdrop(arg1, arg2);
         } else if (command.equals("fireEvent")) {
-            selenium.fireEvent(arg1, arg2);
+            browser.fireEvent(arg1, arg2);
         } else if (command.equals("getSpeed")) {
-            selenium.getSpeed();
+            browser.getSpeed();
         } else if (command.equals("goBack")) {
-            selenium.goBack();
+            browser.goBack();
         } else if (command.equals("highlight")) {
-            selenium.highlight(arg1);
+            browser.highlight(arg1);
         } else if (command.equals("keyDown")) {
-            selenium.keyDown(arg1, arg2);
+            browser.keyDown(arg1, arg2);
         } else if (command.equals("keyPress")) {
-            selenium.keyPress(arg1, arg2);
+            browser.keyPress(arg1, arg2);
         } else if (command.equals("keyUp")) {
-            selenium.keyUp(arg1, arg2);
+            browser.keyUp(arg1, arg2);
         } else if (command.equals("metaKeyDown")) {
-            selenium.metaKeyDown();
+            browser.metaKeyDown();
         } else if (command.equals("metaKeyUp")) {
-            selenium.metaKeyUp();
+            browser.metaKeyUp();
         } else if (command.equals("mouseDown")) {
-            selenium.mouseDown(arg1);
+            browser.mouseDown(arg1);
         } else if (command.equals("mouseDownAt")) {
-            selenium.mouseDownAt(arg1, arg2);
+            browser.mouseDownAt(arg1, arg2);
         } else if (command.equals("mouseMove")) {
-            selenium.mouseMove(arg1);
+            browser.mouseMove(arg1);
         } else if (command.equals("mouseMoveAt")) {
-            selenium.mouseMoveAt(arg1, arg2);
+            browser.mouseMoveAt(arg1, arg2);
         } else if (command.equals("mouseOut")) {
-            selenium.mouseOut(arg1);
+            browser.mouseOut(arg1);
         } else if (command.equals("mouseOver")) {
-            selenium.mouseOver(arg1);
+            browser.mouseOver(arg1);
         } else if (command.equals("mouseUp")) {
-            selenium.mouseUp(arg1);
+            browser.mouseUp(arg1);
         } else if (command.equals("mouseUpAt")) {
-            selenium.mouseUpAt(arg1, arg2);
+            browser.mouseUpAt(arg1, arg2);
         } else if (command.equals("open")) {
-            selenium.open(arg1);
+            browser.open(arg1);
         } else if (command.equals("openWindow")) {
-            selenium.openWindow(arg1, arg2);
+            browser.openWindow(arg1, arg2);
         } else if (command.equals("pause")) {
             try {
-                selenium.pause(new Integer(arg1));
+                browser.pause(new Integer(arg1));
             } catch (InterruptedException e1) {
                 //ignore
             }
         } else if (command.equals("refresh")) {
-            selenium.refresh();
+            browser.refresh();
         } else if (command.equals("removeAllSelections")) {
-            selenium.removeAllSelections(arg1);
+            browser.removeAllSelections(arg1);
         } else if (command.equals("removeSelection")) {
-            selenium.removeSelection(arg1, arg2);
+            browser.removeSelection(arg1, arg2);
         } else if (command.equals("runScript")) {
-            selenium.runScript(arg1);
+            browser.runScript(arg1);
         } else if (command.equals("select")) {
-            selenium.select(arg1, arg2);
+            browser.select(arg1, arg2);
         } else if (command.equals("selectFrame")) {
-            selenium.selectFrame(arg1);
+            browser.selectFrame(arg1);
         } else if (command.equals("selectWindow")) {
-            selenium.selectWindow(arg1);
+            browser.selectWindow(arg1);
         } else if (command.equals("setBrowserLogLevel")) {
-            selenium.setBrowserLogLevel(arg1);
+            browser.setBrowserLogLevel(arg1);
         } else if (command.equals("setCursorPosition")) {
-            selenium.setCursorPosition(arg1, arg2);
+            browser.setCursorPosition(arg1, arg2);
         } else if (command.equals("setMouseSpeed")) {
-            selenium.setMouseSpeed(arg1);
+            browser.setMouseSpeed(arg1);
         } else if (command.equals("setSpeed")) {
-            selenium.setSpeed(arg1);
+            browser.setSpeed(arg1);
         } else if (command.equals("setTimeout")) {
-            selenium.setTimeout(arg1);
+            browser.setTimeout(arg1);
         } else if (command.equals("shiftKeyDown")) {
-            selenium.shiftKeyDown();
+            browser.shiftKeyDown();
         } else if (command.equals("shiftKeyUp")) {
-            selenium.shiftKeyUp();
+            browser.shiftKeyUp();
         } else if (command.equals("submit")) {
-            selenium.submit(arg1);
+            browser.submit(arg1);
         } else if (command.equals("type")) {
-            selenium.type(arg1, arg2);
+            browser.type(arg1, arg2);
         } else if (command.equals("typeKeys")) {
-            selenium.typeKeys(arg1, arg2);
+            browser.typeKeys(arg1, arg2);
         } else if (command.equals("uncheck")) {
-            selenium.uncheck(arg1);
+            browser.uncheck(arg1);
         } else if (command.equals("windowFocus")) {
-            selenium.windowFocus();
+            browser.windowFocus();
         } else if (command.equals("windowMaximize")) {
-            selenium.windowMaximize();
+            browser.windowMaximize();
         } else {
             // maybe it's a js extension
             String js = "Selenium.prototype.do" + command.substring(0, 1).toUpperCase() + command.substring(1);
             try {
-                selenium.getEval(String.format("%s('%s','%s')", js, arg1, arg2));
+                browser.getEval(String.format("%s('%s','%s')", js, arg1, arg2));
             } catch (SeleniumException se) {
                 if (se.getMessage().contains(js + " is not a function")) {
                     throw new SeleniumIdeException("Command " + command + " not found.");
@@ -702,7 +706,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     private String replaceVariables(String string) {
         Matcher m = variablePattern.matcher(string);
         while (m.matches()) {
-            string = m.group(1) + selenium.getEval(String.format("storedVars['%s']", m.group(2))) + m.group(3);
+            string = m.group(1) + browser.getEval(String.format("storedVars['%s']", m.group(2))) + m.group(3);
             m = variablePattern.matcher(string);
         }
         return string;
@@ -711,172 +715,172 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     private void storeVar(String name, Object value) {
         Class clazz = value.getClass();
         if (clazz == String.class) {
-            selenium.getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", " ").replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")));
+            browser.getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", " ").replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")));
         } else if (clazz == Boolean.class) {
-            selenium.getEval(String.format("storedVars['%s']=%s", name, (Boolean) value ? "true" : "false"));
+            browser.getEval(String.format("storedVars['%s']=%s", name, (Boolean) value ? "true" : "false"));
         } else if (clazz == String[].class) {
             String valueStr = "";
             for (String str : (String[]) value) {
                 valueStr = valueStr + "'" + str + "', ";
             }
             valueStr = valueStr.replaceFirst("[ ,]*$", "");
-            selenium.getEval(String.format("storedVars['%s']=%s", name, "[" + valueStr + "]"));
+            browser.getEval(String.format("storedVars['%s']=%s", name, "[" + valueStr + "]"));
         } else if (clazz == Number.class) {
-            selenium.getEval(String.format("storedVars['%s']=%s", name, value.toString()));
+            browser.getEval(String.format("storedVars['%s']=%s", name, value.toString()));
         }
     }
 
     private Object seleniumGet(String command, String arg1, String arg2) throws SeleniumIdeException {
         if (command.equals("Alert")) {
-            return selenium.getAlert();
+            return browser.getAlert();
         }
         if (command.equals("AllButtons")) {
-            return selenium.getAllButtons();
+            return browser.getAllButtons();
         }
         if (command.equals("AllFields")) {
-            return selenium.getAllFields();
+            return browser.getAllFields();
         }
         if (command.equals("AllLinks")) {
-            return selenium.getAllLinks();
+            return browser.getAllLinks();
         }
         if (command.equals("AllWindowIds")) {
-            return selenium.getAllWindowIds();
+            return browser.getAllWindowIds();
         }
         if (command.equals("AllWindowNames")) {
-            return selenium.getAllWindowNames();
+            return browser.getAllWindowNames();
         }
         if (command.equals("AllWindowTitles")) {
-            return selenium.getAllWindowTitles();
+            return browser.getAllWindowTitles();
         }
         if (command.equals("BodyText")) {
-            return selenium.getBodyText();
+            return browser.getBodyText();
         }
         if (command.equals("Confirmation")) {
-            return selenium.getConfirmation();
+            return browser.getConfirmation();
         }
         if (command.equals("Cookie")) {
-            return selenium.getCookie();
+            return browser.getCookie();
         }
         if (command.equals("HtmlSource")) {
-            return selenium.getHtmlSource();
+            return browser.getHtmlSource();
         }
         if (command.equals("Location")) {
-            return selenium.getLocation();
+            return browser.getLocation();
         }
         if (command.equals("MouseSpeed")) {
-            return selenium.getMouseSpeed();
+            return browser.getMouseSpeed();
         }
         if (command.equals("Prompt")) {
-            return selenium.getPrompt();
+            return browser.getPrompt();
         }
         if (command.equals("AlertPresent")) {
-            return selenium.isAlertPresent();
+            return browser.isAlertPresent();
         }
         if (command.equals("Title")) {
-            return selenium.getTitle();
+            return browser.getTitle();
         }
         if (command.equals("ConfirmationPresent")) {
-            return selenium.isConfirmationPresent();
+            return browser.isConfirmationPresent();
         }
         if (command.equals("PromptPresent")) {
-            return selenium.isPromptPresent();
+            return browser.isPromptPresent();
         }
         if (command.equals("Attribute")) {
-            return selenium.getAttribute(arg1);
+            return browser.getAttribute(arg1);
         }
         if (command.equals("AttributeFromAllWindows")) {
-            return selenium.getAttributeFromAllWindows(arg1);
+            return browser.getAttributeFromAllWindows(arg1);
         }
         if (command.equals("CursorPosition")) {
-            return selenium.getCursorPosition(arg1);
+            return browser.getCursorPosition(arg1);
         }
         if (command.equals("ElementHeight")) {
-            return selenium.getElementHeight(arg1);
+            return browser.getElementHeight(arg1);
         }
         if (command.equals("ElementIndex")) {
-            return selenium.getElementIndex(arg1);
+            return browser.getElementIndex(arg1);
         }
         if (command.equals("ElementPositionLeft")) {
-            return selenium.getElementPositionLeft(arg1);
+            return browser.getElementPositionLeft(arg1);
         }
         if (command.equals("ElementPositionTop")) {
-            return selenium.getElementPositionTop(arg1);
+            return browser.getElementPositionTop(arg1);
         }
         if (command.equals("ElementWidth")) {
-            return selenium.getElementWidth(arg1);
+            return browser.getElementWidth(arg1);
         }
         if (command.equals("Eval")) {
-            return selenium.getEval(arg1);
+            return browser.getEval(arg1);
         }
         if (command.equals("Expression")) {
-            return selenium.getExpression(arg1);
+            return browser.getExpression(arg1);
         }
         if (command.equals("SelectedId")) {
-            return selenium.getSelectedId(arg1);
+            return browser.getSelectedId(arg1);
         }
         if (command.equals("SelectedIds")) {
-            return selenium.getSelectedIds(arg1);
+            return browser.getSelectedIds(arg1);
         }
         if (command.equals("SelectedIndex")) {
-            return selenium.getSelectedIndex(arg1);
+            return browser.getSelectedIndex(arg1);
         }
         if (command.equals("SelectedIndexes")) {
-            return selenium.getSelectedIndexes(arg1);
+            return browser.getSelectedIndexes(arg1);
         }
         if (command.equals("SelectedLabel")) {
-            return selenium.getSelectedLabel(arg1);
+            return browser.getSelectedLabel(arg1);
         }
         if (command.equals("SelectedLabels")) {
-            return selenium.getSelectedLabels(arg1);
+            return browser.getSelectedLabels(arg1);
         }
         if (command.equals("SelectedValue")) {
-            return selenium.getSelectedValue(arg1);
+            return browser.getSelectedValue(arg1);
         }
         if (command.equals("SelectedValues")) {
-            return selenium.getSelectedValues(arg1);
+            return browser.getSelectedValues(arg1);
         }
         if (command.equals("SelectOptions")) {
-            return selenium.getSelectOptions(arg1);
+            return browser.getSelectOptions(arg1);
         }
         if (command.equals("Table")) {
-            return selenium.getTable(arg1);
+            return browser.getTable(arg1);
         }
         if (command.equals("Text")) {
-            return selenium.getText(arg1);
+            return browser.getText(arg1);
         }
         if (command.equals("Value")) {
-            return selenium.getValue(arg1);
+            return browser.getValue(arg1);
         }
         if (command.equals("XpathCount")) {
-            return selenium.getXpathCount(arg1);
+            return browser.getXpathCount(arg1);
         }
         if (command.equals("Checked")) {
-            return selenium.isChecked(arg1);
+            return browser.isChecked(arg1);
         }
         if (command.equals("Editable")) {
-            return selenium.isEditable(arg1);
+            return browser.isEditable(arg1);
         }
         if (command.equals("ElementPresent")) {
-            return selenium.isElementPresent(arg1);
+            return browser.isElementPresent(arg1);
         }
         if (command.equals("SomethingSelected")) {
-            return selenium.isSomethingSelected(arg1);
+            return browser.isSomethingSelected(arg1);
         }
         if (command.equals("TextPresent")) {
-            return selenium.isTextPresent(arg1);
+            return browser.isTextPresent(arg1);
         }
         if (command.equals("Visible")) {
-            return selenium.isVisible(arg1);
+            return browser.isVisible(arg1);
         }
         // maybe it's a js extension
         String js = "Selenium.prototype.is" + command.substring(0, 1).toUpperCase() + command.substring(1);
         try {
-            return selenium.getEval(String.format("%s('%s', '%s')", js, arg1, arg2));
+            return browser.getEval(String.format("%s('%s', '%s')", js, arg1, arg2));
         } catch (SeleniumException se) {
             if (se.getMessage().contains(js + " is not a function")) {
                 js = "Selenium.prototype.get" + command.substring(0, 1).toUpperCase() + command.substring(1);
                 try {
-                    return selenium.getEval(String.format("%s('%s', '%s')", js, arg1, arg2));
+                    return browser.getEval(String.format("%s('%s', '%s')", js, arg1, arg2));
                 } catch (SeleniumException se1) {
                     if (se1.getMessage().contains(js + " is not a function")) {
                         throw new SeleniumIdeException("Command " + command + " not found.");
