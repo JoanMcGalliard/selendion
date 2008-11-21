@@ -33,7 +33,7 @@
 
         <pre concordion:set="#snippet">
 
-            &lt;p concordion:startBrowser="SELENIUM,#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
+            &lt;p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
              host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
              port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
              for &lt;i concordion:set="#browser"&gt;*firefox&lt;/i&gt;;
@@ -58,7 +58,7 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p concordion:startBrowser="SELENIUM,#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
+&lt;p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
              host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
              port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
              for &lt;i concordion:set="#browser"&gt;*firefox&lt;/i&gt;;

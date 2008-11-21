@@ -30,25 +30,18 @@ public class StartBrowserCommand extends AbstractCommand {
         int seleniumServerPort;
         String browser;
         String baseUrl;
-        ognl.Node params;
-        try {
-            params = ((ognl.Node) Ognl.parseExpression(commandCall.getExpression()));
-        }
-        catch (OgnlException e) {
-            throw new RuntimeException(e);
-        }
 
-        String simulator = evaluator.evaluate(params.jjtGetChild(0).toString()).toString();
-        if (simulator.equals("SELENIUM")) {
+        Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
+        Object[] params = (Object[]) evaluatedExpression;
+        if (params[0].equals("SELENIUM")) {
 
-            seleniumServerHost = evaluator.evaluate(params.jjtGetChild(1).toString()).toString();
-            seleniumServerPort = Integer.parseInt(evaluator.evaluate(params.jjtGetChild(2).toString()).toString());
-
-            browser = evaluator.evaluate(params.jjtGetChild(3).toString()).toString();
-            baseUrl = evaluator.evaluate(params.jjtGetChild(4).toString()).toString();
+            seleniumServerHost = (String)params[1];
+            seleniumServerPort = Integer.parseInt((String)params[2]);
+            browser = (String)params[3];
+            baseUrl = (String)params[4];
             seleniumIdeReader.start(seleniumServerHost, seleniumServerPort, browser, baseUrl);
         } else {
-            throw new RuntimeException("Unknown simulator type " + simulator);
+            throw new RuntimeException("Unknown simulator type " + "blah");
         }
     }
 }
