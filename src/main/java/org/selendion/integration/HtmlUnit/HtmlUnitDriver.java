@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.List;
 
 public class HtmlUnitDriver implements BrowserDriver {
     Page page = null;
@@ -70,7 +69,6 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void waitForPageToLoad() {
-        System.out.println("wating to load");
         //nothing to do
     }
 
@@ -141,7 +139,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         return  ((HtmlPage) page).getHtmlElementsByName(key).get(0);
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new HtmlUnitException(e);
         }
     }
 
@@ -158,7 +156,7 @@ public class HtmlUnitDriver implements BrowserDriver {
               page =  ((HtmlImage)element).click();
         }
           } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new HtmlUnitException(e);
             }
 
 
@@ -290,7 +288,7 @@ public class HtmlUnitDriver implements BrowserDriver {
                 page = webClient.getPage(baseUrl + arg1);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new HtmlUnitException(e);
         }
 
     }
@@ -320,7 +318,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         try {
             select.click();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new HtmlUnitException(e);
         }
 
 
