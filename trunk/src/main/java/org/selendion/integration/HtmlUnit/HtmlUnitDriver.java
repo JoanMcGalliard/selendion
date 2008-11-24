@@ -127,7 +127,16 @@ public class HtmlUnitDriver implements BrowserDriver {
     private HtmlElement getHtmlElement(String key) {
 
         if (key.startsWith("xPath=")) {
-            return (HtmlElement)((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", "")).get(0);
+            return (HtmlElement) ((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", "")).get(0);
+        } else if (key.startsWith("identifier=") || key.startsWith("id=")) {
+            return ((HtmlPage) page).getHtmlElementById(key.replaceFirst("id=", ""));
+        } else if (key.startsWith("name=")) {
+            return ((HtmlPage) page).getHtmlElementsByName(key.replaceFirst("name=", "")).get(0);
+        } else if (key.startsWith("dom=") || key.startsWith("link=") || key.startsWith("css=")
+                || key.startsWith("document")) {
+            throw new RuntimeException("Not yet implemented: " + "chooseOkOnNextConfirmation");
+        } else if (key.startsWith("//")) {
+            return (HtmlElement) ((HtmlPage) page).getByXPath(key).get(0);
         }
         try {
             return ((HtmlPage) page).getHtmlElementById(key);
@@ -136,7 +145,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             //pass through
         }
         try {
-        return  ((HtmlPage) page).getHtmlElementsByName(key).get(0);
+            return ((HtmlPage) page).getHtmlElementsByName(key).get(0);
         }
         catch (Exception e) {
             throw new HtmlUnitException(e);
@@ -147,18 +156,17 @@ public class HtmlUnitDriver implements BrowserDriver {
         HtmlElement element = getHtmlElement(arg1);
         try {
 
-        if (element.getClass().equals(HtmlSubmitInput.class )) {
-                page =  ((HtmlSubmitInput)element).click();
+            if (element.getClass().equals(HtmlSubmitInput.class)) {
+                page = ((HtmlSubmitInput) element).click();
 
-        } else if (element.getClass().equals(HtmlCheckBoxInput.class )) {
-              page =  ((HtmlCheckBoxInput)element).click();
-        }  else if (element.getClass().equals(HtmlImage.class )) {
-              page =  ((HtmlImage)element).click();
-        }
-          } catch (IOException e) {
-                throw new HtmlUnitException(e);
+            } else if (element.getClass().equals(HtmlCheckBoxInput.class)) {
+                page = ((HtmlCheckBoxInput) element).click();
+            } else if (element.getClass().equals(HtmlImage.class)) {
+                page = ((HtmlImage) element).click();
             }
-
+        } catch (IOException e) {
+            throw new HtmlUnitException(e);
+        }
 
 
     }
