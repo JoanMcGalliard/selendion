@@ -28,6 +28,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
 
     public void start(String seleniumHost, int seleniumPort, String browser, String baseUrl) {
+        if (started) {
+            stop();
+        }
         this.browser = new SeleniumDriver(
                 seleniumHost, seleniumPort, browser,
                 baseUrl);
@@ -35,6 +38,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         started = true;
     }
     public void start(String baseUrl) {
+        if (started) {
+            stop();
+        }
         browser = new HtmlUnitDriver(baseUrl);
         started = true;
     }
@@ -42,6 +48,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     public void stop() {
         if (started) {
             browser.stop();
+            started=false;
         }
     }
 
@@ -143,9 +150,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         }
     }
 
-    private CommandResult execute(String command, String arg1, String arg2) {
+    protected CommandResult execute(String command, String arg1, String arg2) {
         if (!started) {
-            throw new RuntimeException("Please start selenium before running scripts.");
+            throw new RuntimeException("Please start browser before running scripts.");
         }
         try {
 
@@ -896,7 +903,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         return return_val;
     }
 
-    private class CommandResult {
+    protected class CommandResult {
         private boolean success;
         private String message;
 
