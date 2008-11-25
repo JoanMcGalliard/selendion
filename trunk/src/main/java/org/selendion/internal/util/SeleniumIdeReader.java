@@ -13,6 +13,7 @@ import org.concordion.internal.util.Announcer;
 import org.selendion.integration.selenium.SeleniumDriver;
 import org.selendion.integration.BrowserDriver;
 import org.selendion.integration.HtmlUnit.HtmlUnitDriver;
+import org.selendion.integration.HtmlUnit.HtmlUnitException;
 import org.selendion.internal.RunSeleniumListener;
 import org.selendion.internal.command.RunSeleniumFailureEvent;
 import org.selendion.internal.command.RunSeleniumSuccessEvent;
@@ -196,6 +197,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(true, "");
                 } catch (SeleniumException se) {
                     return new CommandResult(false, se.getMessage());
+                } catch (HtmlUnitException se) {
+                    return new CommandResult(false, se.getMessage());
                 }
                 catch (Exception e) {
                     throw new RuntimeException(e);
@@ -212,7 +215,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     browser.store(varName, seleniumGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
                 } catch (SeleniumException se) {
                     //ignore
-                } catch (RuntimeException re) {
+                } catch (HtmlUnitException re) {
                     // fall through
                 }
                 catch (SeleniumIdeException e) {
@@ -231,6 +234,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                         browser.store(arg2, value);
                     }
                 } catch (SeleniumException se) {
+                    //ignore
+                } catch (HtmlUnitException se) {
                     //ignore
                 }
                 catch (SeleniumIdeException e) {
@@ -524,6 +529,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         } catch (SeleniumIdeException e) {
             return new CommandResult(false, e.getMessage());
         } catch (SeleniumException e) {
+            return new CommandResult(false, e.getMessage());
+        } catch (HtmlUnitException e) {
             return new CommandResult(false, e.getMessage());
         } catch (Exception e) {
             return new CommandResult(false, e.toString());

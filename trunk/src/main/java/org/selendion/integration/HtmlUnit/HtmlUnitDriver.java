@@ -12,9 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.List;
 
 public class HtmlUnitDriver implements BrowserDriver {
     Page page = null;
+    private Page old_page;
 
     public HtmlUnitDriver(String baseUrl) {
         webClient = new WebClient();
@@ -127,7 +129,11 @@ public class HtmlUnitDriver implements BrowserDriver {
     private HtmlElement getHtmlElement(String key) {
 
         if (key.startsWith("xPath=")) {
-            return (HtmlElement) ((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", "")).get(0);
+            List<?> list = ((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", ""));
+            if (list.size() == 0) {
+                throw new HtmlUnitException("ERROR: Element " + key + " not found");
+            }
+            return (HtmlElement) list.get(0);
         } else if (key.startsWith("identifier=") || key.startsWith("id=")) {
             return ((HtmlPage) page).getHtmlElementById(key.replaceFirst("id=", ""));
         } else if (key.startsWith("name=")) {
@@ -136,7 +142,12 @@ public class HtmlUnitDriver implements BrowserDriver {
                 || key.startsWith("document")) {
             throw new RuntimeException("Not yet implemented: " + "chooseOkOnNextConfirmation");
         } else if (key.startsWith("//")) {
-            return (HtmlElement) ((HtmlPage) page).getByXPath(key).get(0);
+
+            List<?> list = ((HtmlPage) page).getByXPath(key);
+            if (list.size() == 0) {
+                throw new HtmlUnitException("ERROR: Element " + key + " not found");
+            }
+            return (HtmlElement) list.get(0);
         }
         try {
             return ((HtmlPage) page).getHtmlElementById(key);
@@ -156,6 +167,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         HtmlElement element = getHtmlElement(arg1);
         try {
 
+            old_page=page;
             if (element.getClass().equals(HtmlSubmitInput.class)) {
                 page = ((HtmlSubmitInput) element).click();
 
@@ -228,7 +240,8 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void goBack() {
-        throw new RuntimeException("Not yet implemented: " + "goBack");
+        page=old_page;
+
     }
 
     public void highlight(String arg1) {
