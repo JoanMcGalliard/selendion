@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
 
-    private String timeout = "600000";
+    private String timeout = "30000";
 
     public void setTimeout(String timeout) {
         Integer.parseInt(timeout);

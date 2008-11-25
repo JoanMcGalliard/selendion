@@ -7,9 +7,14 @@ public class HtmlUnitCommandsTest extends SelendionTestCase {
     private boolean exception=false;
     private SeleniumIdeReader.CommandResult result;
 
-    public void setUp(String baseUrl, String page)  {
+    public void setUpHtmlUnit(String baseUrl, String page)  {
         seleniumIdeReader= new SeleniumIdeReader();
         seleniumIdeReader.start(baseUrl );
+        seleniumIdeReader.execute("open", page, "");
+    }
+    public void setUpSelenium(String baseUrl, String page)  {
+        seleniumIdeReader= new SeleniumIdeReader();
+        seleniumIdeReader.start( "localhost", 5555, "*firefox", baseUrl);
         seleniumIdeReader.execute("open", page, "");
     }
     public void runSeleniumIde(String command, String arg1, String arg2)  {
@@ -38,5 +43,12 @@ public class HtmlUnitCommandsTest extends SelendionTestCase {
             return result.getSuccess();
         }
 
+    }
+    public void action(String action) {
+        if (action.equals("go back")) {
+            seleniumIdeReader.execute("waitForPageToLoad", "", "");
+             seleniumIdeReader.execute("goBack", "", "");
+             seleniumIdeReader.execute("waitForPageToLoad", "", "");
+        }
     }
 }
