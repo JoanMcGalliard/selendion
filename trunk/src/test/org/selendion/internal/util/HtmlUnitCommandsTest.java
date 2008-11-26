@@ -45,7 +45,7 @@ public class HtmlUnitCommandsTest extends SelendionTestCase {
 
     }
     public void action(String action) {
-        if (action.equals("go back")) {
+        if (action.equals("wait then go back")) {
             seleniumIdeReader.execute("waitForPageToLoad", "", "");
              seleniumIdeReader.execute("goBack", "", "");
              seleniumIdeReader.execute("waitForPageToLoad", "", "");

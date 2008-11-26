@@ -6,7 +6,8 @@
 </head>
 <body>
 <h1>HtmlUnit Commands Test</h1>
-
+ <p>This is a test for new functionality that hasn't yet been implemented, and
+    this is thus <i class="attention" concordion:execute="setExpectedToPass(false)">not expected to pass</i>. </p>
 <div class="example">
 <p>If we are using htmlunit and visiting <i concordion:set="#page">index.html</i> on
     <a concordion:execute="setUpHtmlUnit(#HREF, #page)" href="http://localhost:55555/">
@@ -61,7 +62,8 @@
     <td>false</td>
     <td></td>
     <td>Click non-existant element</td>
-</tr><tr>
+</tr>
+<tr>
     <td>click</td>
     <td>xPath=/html/body/form/table/tbody/tr[10]/td[2]/input</td>
     <td></td>
@@ -78,7 +80,7 @@
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td>go back</td>
+    <td>wait then go back</td>
     <td>button</td>
 </tr>
 <tr>
@@ -283,13 +285,137 @@
 
 </div>
 
-  <!--<div class="example">-->
-<!--<p>If we are using selenium and visiting <i concordion:set="#page">index.html</i> on-->
-    <!--<a concordion:execute="setUpSelenium(#HREF, #page)" href="http://localhost:55555/">-->
-        <!--http://localhost:55555/</a> we expect the following results: </p>-->
+<div class="example">
+    <p>If we are using selenium and visiting <i concordion:set="#page">index.html</i> on
+        <a concordion:execute="setUpSelenium(#HREF, #page)" href="http://localhost:55555/">
+            http://localhost:55555/</a> we expect the following results: </p>
+    <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+        <tr>
+            <th concordion:set="#command">Command</th>
+            <th concordion:set="#arg1">arg1</th>
+            <th concordion:set="#arg2">arg2</th>
+            <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+            <th concordion:assertEquals="getMessage()">Message</th>
+            <th concordion:assertEquals="getException()">Exception</th>
+            <th concordion:execute="action(#TEXT)">Subsequent action</th>
+            <th>Remarks</th>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>name='name1'</td>
+            <td>name tagged paragraph</td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>explicit name</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>name1</td>
+            <td>name tagged paragraph</td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>implicit name</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>name='name2'</td>
+            <td>name tagged paragraph</td>
+            <td>false</td>
+            <td></td>
+            <td>true</td>
+            <td></td>
+            <td>name that isn't in the document</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>id='id1'</td>
+            <td>Id tagged paragraph</td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>explicit id</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>identifier='id1'</td>
+            <td>Id tagged paragraph</td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>explicit identifier</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>id1</td>
+            <td>Id tagged paragraph</td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>implicit id</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>id='id2'</td>
+            <td>Id tagged paragraph</td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>id that isn't in the document</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>id='name1'</td>
+            <td>Id tagged paragraph</td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>id that is really a name</td>
+        </tr>
+
+        <tr>
+            <td>storeText</td>
+            <td>xxxx</td>
+            <td></td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>explicit xPath</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>xxxx</td>
+            <td></td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>implicit xPath</td>
+        </tr>
+        <tr>
+            <td>storeText</td>
+            <td>xxxx</td>
+            <td></td>
+            <td>true</td>
+            <td></td>
+            <td>false</td>
+            <td></td>
+            <td>link</td>
+        </tr>
+
+    </table>
 
 
-<!--</div>-->
+</div>
 </body>
 </html>
 
