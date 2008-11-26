@@ -8,4 +8,8 @@ public class HtmlUnitException extends RuntimeException {
     public HtmlUnitException(Exception e) {
         super(e);
     }
+
+    public HtmlUnitException(Throwable e) {
+        super(e);
+    }
 }

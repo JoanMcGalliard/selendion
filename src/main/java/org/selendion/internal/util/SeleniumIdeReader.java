@@ -158,7 +158,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         try {
 
             if (command.equals("echo")) {
-                return new CommandResult(true, arg1);
+                return new CommandResult(true, browser.echo(arg1));
             }
             if (command.equals("store")) {
                 browser.store(arg2, arg1);
@@ -212,7 +212,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(false, "Illegal variable name: " + varName);
                 }
                 try {
-                    browser.store(varName, seleniumGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
+                    browser.store(varName, browserGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
                 } catch (SeleniumException se) {
                     //ignore
                 } catch (HtmlUnitException re) {
@@ -229,7 +229,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(false, "Illegal variable name: " + arg2);
                 }
                 try {
-                    Object value = seleniumGet(command.replaceFirst("^storeIfVisible", ""), arg1, arg2);
+                    Object value = browserGet(command.replaceFirst("^storeIfVisible", ""), arg1, arg2);
                     if (browser.isVisible(arg1)) {
                         browser.store(arg2, value);
                     }
@@ -250,7 +250,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(false, "Illegal variable name: " + varName);
                 }
                 try {
-                    Object answer=seleniumGet(command.replaceFirst("^storeNot", ""), arg1, arg2);
+                    Object answer= browserGet(command.replaceFirst("^storeNot", ""), arg1, arg2);
                     if (answer.getClass().equals(Boolean.class)) {
                     browser.store(varName, !(Boolean)answer);
                     }
@@ -266,7 +266,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     return new CommandResult(false, "Illegal variable name: " + varName);
                 }
                 try {
-                    browser.store(varName, seleniumGet(command.replaceFirst("^store", ""), arg1, arg2));
+                    browser.store(varName, browserGet(command.replaceFirst("^store", ""), arg1, arg2));
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -276,7 +276,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 Object actualObject;
                 String expected = arg2.length() > 0 ? arg2 : arg1;
                 try {
-                    actualObject = seleniumGet(command.replaceFirst("^assertNot", ""), arg1, arg2);
+                    actualObject = browserGet(command.replaceFirst("^assertNot", ""), arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -291,7 +291,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 Object actualObject;
                 String expected = arg2.length() > 0 ? arg2 : arg1;
                 try {
-                    actualObject = seleniumGet(command.replaceFirst("^assert", ""), arg1, arg2);
+                    actualObject = browserGet(command.replaceFirst("^assert", ""), arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -328,7 +328,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                               }
               
                 try {
-                    actualObject = seleniumGet(seleniumCommand, arg1, arg2);
+                    actualObject = browserGet(seleniumCommand, arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -370,7 +370,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                               }
 
                 try {
-                    actualObject = seleniumGet(seleniumCommand, arg1, arg2);
+                    actualObject = browserGet(seleniumCommand, arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -413,7 +413,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 }
 
                 try {
-                    actualObject = seleniumGet(seleniumCommand, arg1, arg2);
+                    actualObject = browserGet(seleniumCommand, arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -432,7 +432,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 Object actualObject;
                 String expected = arg2.length() > 0 ? arg2 : arg1;
                 try {
-                    actualObject = seleniumGet(command.replaceFirst("^waitForPageToLoadIfNot", ""), arg1, arg2);
+                    actualObject = browserGet(command.replaceFirst("^waitForPageToLoadIfNot", ""), arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -452,7 +452,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 Object actualObject;
                 String expected = arg2.length() > 0 ? arg2 : arg1;
                 try {
-                    actualObject = seleniumGet(command.replaceFirst("^waitForPageToLoadIf", ""), arg1, arg2);
+                    actualObject = browserGet(command.replaceFirst("^waitForPageToLoadIf", ""), arg1, arg2);
                 } catch (SeleniumIdeException e) {
                     return new CommandResult(false, "Unimplemented command " + command);
                 }
@@ -474,7 +474,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 long start = System.currentTimeMillis();
                 while (true) {
                     try {
-                        actualObject = seleniumGet(command.replaceFirst("^waitForNot", ""), arg1, arg2);
+                        actualObject = browserGet(command.replaceFirst("^waitForNot", ""), arg1, arg2);
 
                         String actual = seleniumObjectToString(actualObject);
                         if (!actual.equals(expected)) {
@@ -500,7 +500,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 long start = System.currentTimeMillis();
                 while (true) {
                     try {
-                        actualObject = seleniumGet(command.replaceFirst("^waitFor", ""), arg1, arg2);
+                        actualObject = browserGet(command.replaceFirst("^waitFor", ""), arg1, arg2);
                         if (actualObject.getClass().equals(Boolean.class) &&
                                 (Boolean) actualObject)   {
                             return new CommandResult(true, "");
@@ -689,7 +689,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
 
 
-    private Object seleniumGet(String command, String arg1, String arg2) throws SeleniumIdeException {
+    private Object browserGet(String command, String arg1, String arg2) throws SeleniumIdeException {
         if (command.equals("Alert")) {
             return browser.getAlert();
         }
@@ -908,6 +908,10 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             }
         }
         return return_val;
+    }
+
+    protected BrowserDriver getBrowser() {
+        return browser;
     }
 
     protected class CommandResult {
