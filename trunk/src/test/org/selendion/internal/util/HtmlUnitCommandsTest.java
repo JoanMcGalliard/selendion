@@ -1,21 +1,18 @@
 package org.selendion.internal.util;
 
 import org.selendion.integration.concordion.SelendionTestCase;
+import org.selendion.internal.SelendionEvaluator;
 
 public class HtmlUnitCommandsTest extends SelendionTestCase {
-    private SeleniumIdeReader seleniumIdeReader;
+    protected SeleniumIdeReader seleniumIdeReader;
     private boolean exception=false;
     private SeleniumIdeReader.CommandResult result;
 
-    public void setUpHtmlUnit(String baseUrl, String page)  {
+    public void setUp(String baseUrl, String page)  {
         seleniumIdeReader= new SeleniumIdeReader();
         seleniumIdeReader.start(baseUrl );
         seleniumIdeReader.execute("open", page, "");
-    }
-    public void setUpSelenium(String baseUrl, String page)  {
-        seleniumIdeReader= new SeleniumIdeReader();
-        seleniumIdeReader.start( "localhost", 5555, "*firefox", baseUrl);
-        seleniumIdeReader.execute("open", page, "");
+        seleniumIdeReader.getBrowser().passVariablesIn(new SelendionEvaluator(this));
     }
     public void runSeleniumIde(String command, String arg1, String arg2)  {
         exception=false;

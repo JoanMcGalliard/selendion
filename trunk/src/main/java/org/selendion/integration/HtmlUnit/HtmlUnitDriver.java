@@ -91,7 +91,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void addSelection(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "addSelection");
+       select(arg1,arg2);
     }
 
     public void allowNativeXpath(String arg1) {
@@ -135,12 +135,32 @@ public class HtmlUnitDriver implements BrowserDriver {
             }
             return (HtmlElement) list.get(0);
         } else if (key.startsWith("identifier=") || key.startsWith("id=")) {
-            return ((HtmlPage) page).getHtmlElementById(key.replaceFirst("id=", ""));
+            try {
+                return ((HtmlPage) page).getHtmlElementById(key.replaceFirst("^id=", "").replaceFirst("^identifier=", ""));
+            }
+            catch (ElementNotFoundException e) {
+                throw new HtmlUnitException("ERROR: Element " + key + " not found");
+            }
         } else if (key.startsWith("name=")) {
-            return ((HtmlPage) page).getHtmlElementsByName(key.replaceFirst("name=", "")).get(0);
-        } else if (key.startsWith("dom=") || key.startsWith("link=") || key.startsWith("css=")
+            List<HtmlElement> list = ((HtmlPage) page).getHtmlElementsByName(key.replaceFirst("name=", ""));
+            if (list.size() == 0) {
+                throw new HtmlUnitException("ERROR: Element " + key + " not found");
+            }
+
+            return list.get(0);
+        } else if (key.startsWith("link=")) {
+            List<HtmlAnchor> anchors = ((HtmlPage) page).getAnchors();
+            int i = 0;
+            while (i < anchors.size()) {
+                if (anchors.get(i).getTextContent().equals(key.replaceFirst("link=", ""))) {
+                    return anchors.get(i);
+                }
+                i++;
+            }
+            throw new HtmlUnitException("ERROR: Element " + key + " not found");
+        } else if (key.startsWith("dom=") || key.startsWith("css=")
                 || key.startsWith("document")) {
-            throw new RuntimeException("Not yet implemented: " + "chooseOkOnNextConfirmation");
+            throw new RuntimeException("Not yet implemented: " + key);
         } else if (key.startsWith("//")) {
 
             List<?> list = ((HtmlPage) page).getByXPath(key);
@@ -158,7 +178,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         try {
             return ((HtmlPage) page).getHtmlElementsByName(key).get(0);
         }
-        catch (Exception e) {
+        catch (Throwable e) {
             throw new HtmlUnitException(e);
         }
     }
@@ -167,7 +187,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         HtmlElement element = getHtmlElement(arg1);
         try {
 
-            old_page=page;
+            old_page = page;
             if (element.getClass().equals(HtmlSubmitInput.class)) {
                 page = ((HtmlSubmitInput) element).click();
 
@@ -175,6 +195,14 @@ public class HtmlUnitDriver implements BrowserDriver {
                 page = ((HtmlCheckBoxInput) element).click();
             } else if (element.getClass().equals(HtmlImage.class)) {
                 page = ((HtmlImage) element).click();
+            } else if (element.getClass().equals(HtmlAnchor.class)) {
+                page = ((HtmlAnchor) element).click();
+            } else if (element.getClass().equals(HtmlTextInput.class)) {
+                page = ((HtmlTextInput) element).click();
+            } else if (element.getClass().equals(HtmlRadioButtonInput.class)) {
+                page = ((HtmlRadioButtonInput) element).click();
+            } else {
+                throw new RuntimeException("Not yet implemented: click " + element.getClass().getSimpleName());
             }
         } catch (IOException e) {
             throw new HtmlUnitException(e);
@@ -231,6 +259,10 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException("Not yet implemented: " + "dragdrop");
     }
 
+    public String echo(String arg1) {
+        return replaceVariables(arg1);
+    }
+
     public void fireEvent(String arg1, String arg2) {
         throw new RuntimeException("Not yet implemented: " + "fireEvent");
     }
@@ -240,7 +272,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void goBack() {
-        page=old_page;
+        page = old_page;
 
     }
 
@@ -335,14 +367,22 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void select(String arg1, String arg2) {
-        HtmlSelect select = (HtmlSelect) ((HtmlPage) page).getHtmlElementsByName(arg1).get(0);
-        try {
-            select.click();
-        } catch (IOException e) {
-            throw new HtmlUnitException(e);
+        if (!arg2.startsWith("label=") ) {
+            throw new HtmlUnitException ("Unsupported selection type " + arg2);
         }
+        String label = arg2.replaceFirst("label=", "");
+        HtmlSelect select = (HtmlSelect) getHtmlElement(arg1);
+        for (HtmlElement htmlElement : select.getAllHtmlChildElements()) {
+            HtmlOption option = (HtmlOption) htmlElement;
+            if (option.getTextContent().equals(label)) {
+                old_page = page;
 
+                page = select.setSelectedAttribute(option.getValueAttribute(), true);
+                return;
+            }
 
+        }
+        throw new HtmlUnitException("ERROR: Option with label '" + label + "' not found");
     }
 
     public void selectFrame(String arg1) {
@@ -370,7 +410,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void setTimeout(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "setTimeout");
+        // not needed?
     }
 
     public void shiftKeyDown() {
@@ -398,7 +438,6 @@ public class HtmlUnitDriver implements BrowserDriver {
         try {
             HtmlPasswordInput textField = (HtmlPasswordInput) ((HtmlPage) page).getHtmlElementsByName(arg1).get(0);
             textField.setValueAttribute(arg2);
-            return;
         }
         catch (Exception e) {
             throw new RuntimeException("Can't handle type(" + arg1 + ", " + arg2 + ")");
@@ -495,8 +534,32 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException("Not yet implemented: " + "isPromptPresent");
     }
 
+    private String getAttribute(HtmlElement element, String attribute) {
+        String result = element.getAttribute(attribute);
+        if (result.length() > 0) {
+            return result;
+        } else {
+            throw new HtmlUnitException("ERROR: Could not find element attribute: "
+                    + element + attribute);
+
+        }
+
+    }
+
     public Object getAttribute(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getAttribute");
+        Matcher m = Pattern.compile("(.*)@([^@]*)$").matcher(arg1);
+        if (!m.matches()) {
+            throw new HtmlUnitException("ERROR: Attribute " + arg1 + " not found");
+        }
+        HtmlElement element = getHtmlElement(m.group(1));
+        try {
+            return getAttribute(element, m.group(2));
+        }
+        catch (HtmlUnitException e) {
+            throw new HtmlUnitException("ERROR: Could not find element attribute: "
+                    + arg1);
+
+        }
     }
 
     public Object getAttributeFromAllWindows(String arg1) {
@@ -556,7 +619,15 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getSelectedValue(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectedValue");
+        HtmlElement element = getHtmlElement(arg1);
+        List<HtmlOption> options = ((HtmlSelect) element).getSelectedOptions();
+        if (options.size() == 1) {
+            return options.get(0).getAttribute("value");
+        } else if (options.size() == 0) {
+            throw new HtmlUnitException("ERROR: No option selected");
+        } else {
+            throw new HtmlUnitException("ERROR: More than one selected option!");
+        }
     }
 
     public Object getSelectedValues(String arg1) {
@@ -579,7 +650,8 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getValue(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getValue");
+        HtmlElement element = getHtmlElement(arg1);
+        return getAttribute(element, "value");
     }
 
     public Object getXpathCount(String arg1) {
@@ -595,7 +667,12 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isElementPresent(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "isElementPresent");
+        try {
+            getHtmlElement(arg1);
+            return true;
+        } catch (HtmlUnitException e) {
+            return false;
+        }
     }
 
     public boolean isSomethingSelected(String arg1) {
@@ -613,6 +690,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             InputStream stream = ((UnexpectedPage) page).getInputStream();
             return slurp(stream).contains(arg1);
         } catch (IOException e) {
+            // pass thru
         }
         throw new RuntimeException("Can't handle isTextPresent " + arg1);
     }

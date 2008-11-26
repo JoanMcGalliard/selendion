@@ -43,6 +43,11 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
     public void pause(int milliseconds) throws InterruptedException {
             Thread.sleep(milliseconds);
     }
+
+    public String echo(String arg1) {
+        return replaceVariables(arg1) ; 
+    }
+
     private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
 
     public void passVariablesIn(Evaluator evaluator) {
