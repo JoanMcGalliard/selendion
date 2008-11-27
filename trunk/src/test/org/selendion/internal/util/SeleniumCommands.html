@@ -6,22 +6,134 @@
 </head>
 <body>
 <h1>Selenium Commands Test</h1>
- <div class="example">
-    <p>If we are using selenium and visiting <i concordion:set="#page">index.html</i> on
-        <a concordion:execute="setUp(#HREF, #page)" href="http://localhost:55555/">
-            http://localhost:55555/</a> we expect the following results: </p>
-    <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
-        <tr>
-            <th concordion:set="#command">Command</th>
-            <th concordion:set="#arg1">arg1</th>
-            <th concordion:set="#arg2">arg2</th>
-            <th concordion:assertEquals="getSuccess()">Succeeds?</th>
-            <th concordion:assertEquals="getMessage()">Message</th>
-            <th concordion:assertEquals="getException()">Exception</th>
-            <th concordion:execute="action(#TEXT)">Subsequent action</th>
-            <th>Remarks</th>
-        </tr>
 
+<div class="example">
+<p>If we are using selenium and visiting <i concordion:set="#page">index.html</i> on
+    <a concordion:execute="setUp(#HREF, #page)" href="http://localhost:55555/">
+        http://localhost:55555/</a> we expect the following results: </p>
+<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+<tr>
+    <th concordion:set="#command">Command</th>
+    <th concordion:set="#arg1">arg1</th>
+    <th concordion:set="#arg2">arg2</th>
+    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+    <th concordion:assertEquals="getMessage()">Message</th>
+    <th concordion:assertEquals="getException()">Exception</th>
+    <th concordion:execute="action(#TEXT)">Subsequent action</th>
+    <th>Remarks</th>
+</tr>
+<tr>
+    <td>verifyNotChecked</td>
+    <td>heavyweight</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>check box</td>
+</tr>
+<tr>
+    <td>verifyChecked</td>
+    <td>heavyweight</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>check box</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>heavyweight</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>set up for next row</td>
+</tr>
+<tr>
+    <td>verifyChecked</td>
+    <td>heavyweight</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>check box</td>
+</tr>
+<tr>
+    <td>verifyValue</td>
+    <td>height</td>
+    <td>off</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>radio button values</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>height</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>setup for next two rows</td>
+</tr>
+<tr>
+    <td>verifyValue</td>
+    <td>height</td>
+    <td>off</td>
+    <td>false</td>
+    <td>Expected: off; Actual: on</td>
+    <td>false</td>
+    <td></td>
+    <td>radio button values</td>
+</tr>
+<tr>
+    <td>verifyValue</td>
+    <td>height</td>
+    <td>on</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>radio button values</td>
+</tr>
+
+
+<tr>
+    <td>clickAndWait</td>
+    <td>imagesubmit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>Click on Celine!</td>
+</tr>
+<tr>
+    <td>storeTitle</td>
+    <td>title</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>Testing above click worked</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${title}</td>
+    <td></td>
+    <td>true</td>
+    <td>result</td>
+    <td>false</td>
+    <td></td>
+    <td>still testing above click worked</td>
+</tr>
 
 <tr>
     <td>open</td>
@@ -521,7 +633,6 @@
 </div>
 
 <p><i concordion:execute="stop()">Close the browser.</i></p>
-
 
 
 </body>

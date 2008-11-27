@@ -16,6 +16,12 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
 
     private String timeout = "30000";
 
+    public void start() {
+        System.out.println("INFO: Starting Selenium.");
+        super.start();
+    }
+
+
     public void setTimeout(String timeout) {
         Integer.parseInt(timeout);
         super.setTimeout(timeout);

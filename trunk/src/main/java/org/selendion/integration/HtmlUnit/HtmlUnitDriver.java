@@ -39,6 +39,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void start() {
+        System.out.println("INFO: Starting HtmlUnit.");
     }
 
 
@@ -91,7 +92,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void addSelection(String arg1, String arg2) {
-       select(arg1,arg2);
+        select(arg1, arg2);
     }
 
     public void allowNativeXpath(String arg1) {
@@ -201,6 +202,8 @@ public class HtmlUnitDriver implements BrowserDriver {
                 page = ((HtmlTextInput) element).click();
             } else if (element.getClass().equals(HtmlRadioButtonInput.class)) {
                 page = ((HtmlRadioButtonInput) element).click();
+            } else if (element.getClass().equals(HtmlImageInput.class)) {
+                page = ((HtmlImageInput) element).click();
             } else {
                 throw new RuntimeException("Not yet implemented: click " + element.getClass().getSimpleName());
             }
@@ -367,8 +370,8 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void select(String arg1, String arg2) {
-        if (!arg2.startsWith("label=") ) {
-            throw new HtmlUnitException ("Unsupported selection type " + arg2);
+        if (!arg2.startsWith("label=")) {
+            throw new HtmlUnitException("Unsupported selection type " + arg2);
         }
         String label = arg2.replaceFirst("label=", "");
         HtmlSelect select = (HtmlSelect) getHtmlElement(arg1);
@@ -523,7 +526,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getTitle() {
-        throw new RuntimeException("Not yet implemented: " + "getTitle");
+        return ((HtmlPage) page).getTitleText();
     }
 
     public boolean isConfirmationPresent() {
@@ -644,13 +647,22 @@ public class HtmlUnitDriver implements BrowserDriver {
 
     public String getText(String arg1) {
         HtmlElement element = getHtmlElement(arg1);
-        return element.getTextContent();
+        return element.getTextContent().trim().replaceAll("[    \\n\\t]+", " ");
 
 
     }
 
     public Object getValue(String arg1) {
         HtmlElement element = getHtmlElement(arg1);
+        if (element.getClass().equals(HtmlRadioButtonInput.class)) {
+            HtmlRadioButtonInput button = (HtmlRadioButtonInput) element;
+            if (button.getCheckedAttribute().length() == 0) {
+                return "off";
+            } else {
+                return "on";
+            }
+
+        }
         return getAttribute(element, "value");
     }
 
@@ -659,7 +671,14 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isChecked(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "isChecked");
+        HtmlElement element = getHtmlElement(arg1);
+        if (element.getClass().equals(HtmlCheckBoxInput.class)) {
+            HtmlCheckBoxInput checkbox = (HtmlCheckBoxInput) element;
+            return checkbox.isChecked();
+
+        }
+
+        throw new RuntimeException("Not yet implemented: isChecked for " + element.getClass());
     }
 
     public boolean isEditable(String arg1) {
