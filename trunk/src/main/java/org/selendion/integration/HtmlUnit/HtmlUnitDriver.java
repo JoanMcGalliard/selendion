@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.List;
+import java.util.Iterator;
 
 public class HtmlUnitDriver implements BrowserDriver {
     Page page = null;
@@ -647,7 +648,18 @@ public class HtmlUnitDriver implements BrowserDriver {
 
     public String getText(String arg1) {
         HtmlElement element = getHtmlElement(arg1);
-        return element.getTextContent().trim().replaceAll("[    \\n\\t]+", " ");
+        Iterator<DomNode> it = element.getChildren().iterator();
+        String str="";
+        while (it.hasNext()) {
+            DomNode node=it.next();
+            if (node.getClass().equals(HtmlBreak.class)) {
+                str += "\n";
+            } else {
+                str += node.getTextContent();
+            }
+        }
+        return str.replaceAll("[    \\t]+", " ").trim();
+//        return element.getTextContent().trim().replaceAll("[    \\t]+", " ");
 
 
     }
@@ -700,7 +712,7 @@ public class HtmlUnitDriver implements BrowserDriver {
 
     public boolean isTextPresent(String arg1) {
         try {
-            return ((HtmlPage) page).getBody().getTextContent().contains(arg1);
+            return ((HtmlPage) page).getBody().getTextContent().contains(arg1.replaceAll("\\n", ""));
         }
         catch (ClassCastException cce) {
             // pass through

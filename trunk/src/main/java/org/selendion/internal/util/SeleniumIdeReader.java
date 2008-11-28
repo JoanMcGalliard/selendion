@@ -425,7 +425,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 if (actual.equals(expected)) {
                     return new CommandResult(true, "");
                 } else {
-                    return new CommandResult(false, "Expected: " + expected + "; Actual: " + actual);
+                    return new CommandResult(false, "Expected: " + expected.replaceAll("\\n", "") + "; Actual: " + actual.replaceAll("\\n", ""));
                 }
             }
             if (command.matches("^waitForPageToLoadIfNot[A-Z].*")) {
@@ -861,7 +861,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         string = string.replaceAll("&gt;", ">");
         string = string.replaceAll("&amp;", "&");
         string = string.replaceAll("&quot;", "\"");
-        string = string.replaceAll("\\n", " ");
+//        string = string.replaceAll("\\n", "");
         string = string.replaceAll("&apos;", "'");
         string = string.replaceAll("  *", " ");
         return string;
@@ -896,7 +896,11 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             for (int i = 0; i < rowNode.getChildCount(); i++) {
                 nu.xom.Node colNode = rowNode.getChild(i);
                 if (colNode.getClass().equals(nu.xom.Element.class)) {
-                    row[col] = colNode.getValue().trim();
+                    String str="";
+                    for (int j = 0; j < colNode.getChildCount(); j++) {
+                        str+=colNode.getChild(j).toXML();
+                    }
+                    row[col] = str.replaceAll("<br clear=\"none\" />", "\\\n").trim();
                     col++;
                     if (col > 3) {
                         break;
