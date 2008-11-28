@@ -67,6 +67,69 @@
     <th concordion:execute="action(#TEXT)">Subsequent action</th>
     <th>Remarks</th>
 </tr>
+
+
+<tr>
+    <td>deleteAllVisibleCookies</td>
+    <td></td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>Just see if it throws an exception</td>
+</tr><tr>
+    <td>storeValue</td>
+    <td>totalsum</td>
+    <td>totalsum</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>basic storeValue for empty value</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${totalsum}</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>testing row above</td>
+</tr>
+
+<tr>
+    <td>type</td>
+    <td>new_username</td>
+    <td>jem</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>set up for next row</td>
+</tr>
+<tr>
+    <td>storeValue</td>
+    <td>new_username</td>
+    <td>typed_value</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>basic storeValue</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${typed_value}</td>
+    <td></td>
+    <td>true</td>
+    <td>jem</td>
+    <td>false</td>
+    <td></td>
+    <td>testing row above</td>
+</tr>
+
 <tr>
     <td>verifyTextPresent</td>
     <td>ARA Points:

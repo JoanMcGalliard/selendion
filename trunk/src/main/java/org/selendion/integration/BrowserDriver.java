@@ -10,6 +10,7 @@ import org.concordion.api.Evaluator;
  * To change this template use File | Settings | File Templates.
  */
 public interface BrowserDriver {
+    
     public abstract void passVariablesIn(Evaluator evaluator);
     public abstract void passVariablesOut(Evaluator evaluator);
     public abstract void store(String name, Object value);
