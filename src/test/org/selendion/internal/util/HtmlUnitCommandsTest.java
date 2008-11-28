@@ -42,11 +42,16 @@ public class HtmlUnitCommandsTest extends SelendionTestCase {
         }
 
     }
-    public void action(String action) {
+    public void action(String action) throws Exception {
+        if (action.length() == 0 ) {
+            return;
+        }
         if (action.equals("wait then go back")) {
             seleniumIdeReader.execute("waitForPageToLoad", "", "");
              seleniumIdeReader.execute("goBack", "", "");
              seleniumIdeReader.execute("waitForPageToLoad", "", "");
+        } else {
+            throw new Exception ("Unknown action: " + action);
         }
     }
 }

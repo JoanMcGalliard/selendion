@@ -2,10 +2,8 @@ package org.selendion.integration.HtmlUnit;
 
 import org.selendion.integration.BrowserDriver;
 import org.concordion.api.Evaluator;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.UnexpectedPage;
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+import org.apache.commons.httpclient.Cookie;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.*;
 
 import java.io.IOException;
@@ -14,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Set;
 
 public class HtmlUnitDriver implements BrowserDriver {
     Page page = null;
@@ -88,8 +87,8 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException("Not yet implemented: " + "waitForPopUp");
     }
 
-    public void pause(int i) throws InterruptedException {
-        throw new RuntimeException("Not yet implemented: " + "pause");
+    public void pause(int milliseconds) throws InterruptedException {
+            Thread.sleep(milliseconds);
     }
 
     public void addSelection(String arg1, String arg2) {
@@ -236,7 +235,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void deleteAllVisibleCookies() {
-        throw new RuntimeException("Not yet implemented: " + "deleteAllVisibleCookies");
+        webClient.getCookieManager().clearCookies();
     }
 
     public void deleteCookie(String arg1, String arg2) {
@@ -675,7 +674,12 @@ public class HtmlUnitDriver implements BrowserDriver {
             }
 
         }
-        return getAttribute(element, "value");
+        try {
+            return getAttribute(element, "value");
+        }
+        catch (HtmlUnitException e) {
+            return "";
+        }
     }
 
     public Object getXpathCount(String arg1) {
