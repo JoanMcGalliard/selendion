@@ -8,10 +8,10 @@
 <h1>HtmlUnit Commands Test</h1>
 
 <div class="example">
-    <p>If we are using htmlunit and visiting <i concordion:set="#page">index.html</i> on
+<p>If we are using htmlunit and visiting <i concordion:set="#page">index.html</i> on
     <a concordion:execute="setUp(#HREF, #page)" href="http://localhost:55555/">
         http://localhost:55555/</a> we expect the following results: </p>
-    <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
 <tr>
     <th concordion:set="#command">Command</th>
     <th concordion:set="#arg1">arg1</th>
@@ -21,6 +21,106 @@
     <th concordion:assertEquals="getException()">Exception</th>
     <th concordion:execute="action(#TEXT)">Subsequent action</th>
     <th>Remarks</th>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>ARA Points:
+        (use -1 for novice)
+    </td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td>verifyTextNotPresent</td>
+    <td>ARA Points:
+        (use -1 for novice)
+    </td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>simple fail</td>
+</tr>
+
+<tr>
+    <td>verifyTextPresent</td>
+    <td>random text</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>simple fail</td>
+</tr>
+<tr>
+    <td>verifyTextNotPresent</td>
+    <td>random text</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>vanilla test</td>
+</tr>
+
+<tr>
+    <td>verifyText</td>
+    <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
+    <td>ARA Points:
+        (use -1 for novice)
+    </td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td>verifyText</td>
+    <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
+    <td>random text</td>
+    <td>false</td>
+    <td>Expected: random text; Actual: ARA Points:(use -1 for novice)</td>
+    <td>false</td>
+    <td></td>
+    <td>fails because of miss-match</td>
+</tr>
+<tr>
+    <td>verifyText</td>
+    <td>//*[@id="madeupid"]</td>
+    <td>ARA Points:
+        (use -1 for novice)
+    </td>
+    <td>false</td>
+    <td>ERROR: Element //*[@id="madeupid"] not found</td>
+    <td>false</td>
+    <td></td>
+    <td>fails because element not present</td>
+</tr>
+<tr>
+    <td>verifyElementPresent</td>
+    <td>//*[@id="imagesubmit"]</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td>verifyElementPresent</td>
+    <td>//*[@id="madeupid"]</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>should fail</td>
 </tr>
 <tr>
     <td>verifyNotChecked</td>

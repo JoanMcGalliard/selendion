@@ -17,7 +17,8 @@ public class HtmlUnitCommandsTest extends SelendionTestCase {
     public void runSeleniumIde(String command, String arg1, String arg2)  {
         exception=false;
         try {
-        result = seleniumIdeReader.execute(command, arg1,arg2); }
+        result = seleniumIdeReader.execute(command, arg1.replaceAll("\\\n *", "\\\n").trim(),
+                arg2.replaceAll("\\\n *", "\\\n").trim()); }
         catch (Throwable e) {
             exception=true;
         }

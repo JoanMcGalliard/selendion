@@ -5,7 +5,7 @@ package examples;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 
-public class SeleniumCoverage extends SelendionTestCase {
+public class SeleniumCoverageTest extends SelendionTestCase {
 
 
 }

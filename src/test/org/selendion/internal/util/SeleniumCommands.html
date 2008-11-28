@@ -7,6 +7,51 @@
 <body>
 <h1>Selenium Commands Test</h1>
 
+<ol>
+
+    <li>
+        <del>assertTextPresent</del>
+    </li>
+    <li>
+        <del>click</del>
+    </li>
+    <li>
+        <del>clickAndWait</del>
+    </li>
+    <li>deleteAllVisibleCookies</li>
+    <li>
+        <del>echo</del>
+    </li>
+    <li>
+        <del>open</del>
+    </li>
+    <li>pause</li>
+    <li>setTimeout</li>
+    <li>store</li>
+    <li>
+        <del>storeElementPresent</del>
+    </li>
+    <li>storeIfAvailableText</li>
+    <li>storeIfVisibleText</li>
+    <li>storeText</li>
+    <li>storeTextPresent</li>
+    <li>storeValue</li>
+    <li>verifyChecked</li>
+    <li>
+        <del>verifyElementPresent</del>
+    </li>
+    <li>
+        <del>verifyNotChecked</del>
+    </li>
+    <li><del>verifyText</del></li>
+    <li><del>verifyTextNotPresent</del></li>
+    <li>verifyTextPresent</li>
+    <li>verifyTitle</li>
+    <li>verifyValue</li>
+    <li>waitForPageToLoadIfNotElementPresent</li>
+
+</ol>
+
 <div class="example">
 <p>If we are using selenium and visiting <i concordion:set="#page">index.html</i> on
     <a concordion:execute="setUp(#HREF, #page)" href="http://localhost:55555/">
@@ -21,6 +66,102 @@
     <th concordion:assertEquals="getException()">Exception</th>
     <th concordion:execute="action(#TEXT)">Subsequent action</th>
     <th>Remarks</th>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td>ARA Points:
+        (use -1 for novice)</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td>verifyTextNotPresent</td>
+    <td>ARA Points:
+        (use -1 for novice)</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>simple fail</td>
+</tr>
+
+<tr>
+    <td>verifyTextPresent</td>
+    <td>random text</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>simple fail</td>
+</tr>
+<tr>
+    <td>verifyTextNotPresent</td>
+    <td>random text</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>vanilla test</td>
+</tr>
+
+<tr>
+    <td>verifyText</td>
+    <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
+    <td>ARA Points:
+        (use -1 for novice)</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td>verifyText</td>
+    <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
+    <td>random text</td>
+    <td>false</td>
+    <td>Expected: random text; Actual: ARA Points:(use -1 for novice)</td>
+    <td>false</td>
+    <td></td>
+    <td>fails because of miss-match</td>
+</tr>
+<tr>
+    <td>verifyText</td>
+    <td>//*[@id="madeupid"]</td>
+    <td>ARA Points:
+        (use -1 for novice)</td>
+    <td>false</td>
+    <td>ERROR: Element //*[@id="madeupid"] not found</td>
+    <td>false</td>
+    <td></td>
+    <td>fails because element not present</td>
+</tr>
+<tr>
+    <td>verifyElementPresent</td>
+    <td>//*[@id="imagesubmit"]</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td>verifyElementPresent</td>
+    <td>//*[@id="madeupid"]</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>should fail</td>
 </tr>
 <tr>
     <td>verifyNotChecked</td>
