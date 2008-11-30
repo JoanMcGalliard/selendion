@@ -2,44 +2,156 @@
 
 <head>
     <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
-    <title>Suite</title>
+    <title>RunSelendion</title>
 </head>
 <body>
 <h1>RunSelendion</h1>
 
 <p>
 
-    blah
+    Run Selendion runs a selendion script when it is called. If the script has errors or exceptions, it will appear
+    as a failed test. If it pass, hooray!. If it doesn't exist, an error message will be shown. If it exists but has
+    no matching java file, it will be run as a basic selendion test.
 </p>
+
+
 
 <div class="example">
 
     <h3>Test runs and passes</h3>
 
-    <p>
-blah
-    </p>
-    <ol>
-        <li>missing file</li>
-        <li>directory</li>
-        <li>test with error</li>
-        <li>test with exception</li>
-        <li>test with passing test</li>
-    </ol>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Simple.html"&gt;Simple Test&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;
+            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html"&gt;Passing Selendion test&lt;/a&gt;.
+&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Simple.html"&gt;Simple Test&lt;/a&gt;
-       and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Simple.html" class="success"&gt;Simple Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+&lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="success"&gt;Passing Selendion test&lt;/a&gt;.
+&lt;/p&gt;
 
 </pre>
 </div>
+<div class="example">
+
+    <h3>Test runs and fails</h3>
+
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html"&gt;Failing Selendion test&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+&lt;p&gt;
+            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html" class="failure"&gt;Failing Selendion test&lt;/a&gt;.
+&lt;/p&gt;
+
+</pre>
+</div>
+
+<div class="example">
+
+    <h3>Test throws an exception</h3>
+
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html"&gt;Exception Throwing Selendion test&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+&lt;p&gt;
+            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html" class="failure"&gt;Exception Throwing Selendion test&lt;/a&gt;.
+&lt;/p&gt;
+
+</pre>
+</div>
+<div class="example">
+
+    <h3>Try to "run" a directory</h3>
+                                <p>runSelendion is for single files only.</p>
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/"&gt;Directory&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+&lt;p&gt;
+
+            Let's run this little &lt;a concordion:runSelendion="#HREF"
+                href="runSelendionScripts/"&gt; &lt;span class="failure"&gt;
+                    &lt;del class="expected"&gt;Directory&lt;/del&gt; &lt;/span&gt;
+                    &lt;span class="exceptionMessage"&gt;Can't open runSelendionScripts/&lt;/span&gt; &lt;/a&gt;
+                    &lt;span&gt; &lt;input class="stackTraceButton" ...    
+
+&lt;/p&gt;
+
+</pre>
+</div>
+
+<div class="example">
+
+    <h3>Try to non-existant file</h3>
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/nonExistant.html"&gt;Non-existant file&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+&lt;p&gt;
+
+                Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/nonExistant.html"&gt; &lt;span class="failure"&gt; &lt;del
+    class="expected"&gt;Non-existant file&lt;/del&gt; &lt;/span&gt; &lt;span
+    class="exceptionMessage"&gt;Can't run runSelendionScripts/nonExistant.html:
+    file does not exist.&lt;/span&gt; &lt;/a&gt; &lt;span&gt; &lt;input
+    class="stackTraceButton" ...     
+
+&lt;/p&gt;
+
+</pre>
+</div>
+
+<div class="example">
+
+    <h3>Html file does not have matching java class</h3>
+
+    <p>If there is no java class file, it should be run as a simple Selendion test.</p>
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html"&gt;Selendion Test Without Java File&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+&lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html" class="success"&gt;Selendion Test Without Java File&lt;/a&gt;.
+&lt;/p&gt;
+
+</pre>
+</div>
+
 
 </body>
 </html>

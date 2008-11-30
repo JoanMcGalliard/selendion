@@ -33,7 +33,7 @@
     &lt;/p&gt;
 &lt;/span&gt;
 &lt;p&gt; When user &lt;i concordion:set="#firstName"&gt;Susan&lt;/i&gt; logs in, the
-greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)"&gt;Hello Madam!&lt;/b&gt;&lt;/p&gt;
+greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)"&gt;Hello Madam!&lt;/b&gt; &lt;/p&gt;
         </pre>
 
     <p>Looks like this:</p>
@@ -49,25 +49,25 @@ greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)"&gt;Hel
         greeting will be:
             &lt;b concordion:assertEquals="greetingFor(#firstName)"&gt;Hello Sir!&lt;/b&gt;
     &lt;/p&gt;
-&lt;/span&gt;&lt;span&gt;&lt;span concordion:forEach="#firstName : #men"&gt;
+&lt;/span&gt; &lt;span&gt; &lt;span concordion:forEach="#firstName : #men"&gt;
     &lt;p&gt; When user &lt;i concordion:echo="#firstName"&gt;Bob&lt;/i&gt; logs in, the
         greeting will be:
             &lt;b concordion:assertEquals="greetingFor(#firstName)" class="success"&gt;Hello Sir!&lt;/b&gt;
     &lt;/p&gt;
-&lt;/span&gt;&lt;span concordion:forEach="#firstName : #men"&gt;
+&lt;/span&gt; &lt;span concordion:forEach="#firstName : #men"&gt;
     &lt;p&gt; When user &lt;i concordion:echo="#firstName"&gt;James&lt;/i&gt; logs in, the
         greeting will be:
             &lt;b concordion:assertEquals="greetingFor(#firstName)" class="success"&gt;Hello Sir!&lt;/b&gt;
     &lt;/p&gt;
-&lt;/span&gt;&lt;span concordion:forEach="#firstName : #men"&gt;
+&lt;/span&gt; &lt;span concordion:forEach="#firstName : #men"&gt;
     &lt;p&gt; When user &lt;i concordion:echo="#firstName"&gt;Mary&lt;/i&gt; logs in, the
         greeting will be:
-            &lt;b concordion:assertEquals="greetingFor(#firstName)" class="failure"&gt;&lt;del class="expected"&gt;Hello Sir!&lt;/del&gt;
-&lt;ins class="actual"&gt;Hello Madam!&lt;/ins&gt;&lt;/b&gt;
+            &lt;b concordion:assertEquals="greetingFor(#firstName)" class="failure"&gt; &lt;del class="expected"&gt;Hello Sir!&lt;/del&gt;
+&lt;ins class="actual"&gt;Hello Madam!&lt;/ins&gt; &lt;/b&gt;
     &lt;/p&gt;
-&lt;/span&gt;&lt;/span&gt;
+&lt;/span&gt; &lt;/span&gt;
 &lt;p&gt; When user &lt;i concordion:set="#firstName"&gt;Susan&lt;/i&gt; logs in, the
-greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)" class="success"&gt;Hello Madam!&lt;/b&gt;&lt;/p&gt;
+greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)" class="success"&gt;Hello Madam!&lt;/b&gt; &lt;/p&gt;
 
 </pre>
 
