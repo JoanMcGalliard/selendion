@@ -9,10 +9,10 @@
 
     <h2>Setup </h2>
 
-    <p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with with:
+    <p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with:
         host <i concordion:set="#seleniumServerHost">localhost</i>;
         port <i concordion:set="#seleniumServerport">5555</i>;
-        for <i concordion:set="#browser">*firefox</i>;
+        for <i concordion:echo="#browser"/>;
         and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
 
 
@@ -97,7 +97,7 @@
 
     <h2>Setup </h2>
 
-    <p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with with:
+    <p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with:
         host <i concordion:set="#seleniumServerHost">localhost</i>;
         port <i concordion:set="#seleniumServerport">5555</i>;
         for <i concordion:set="#browser">*safari</i>;
