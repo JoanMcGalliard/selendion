@@ -33,7 +33,7 @@
 
         <pre concordion:set="#snippet">
 
-            &lt;p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
+  &lt;p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
              host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
              port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
              for &lt;i concordion:set="#browser"&gt;*firefox&lt;/i&gt;;
@@ -51,20 +51,20 @@
 
     &lt;/table&gt;
 
-&lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+  &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
 
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
+  &lt;p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with with:
              host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
              port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
              for &lt;i concordion:set="#browser"&gt;*firefox&lt;/i&gt;;
              and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
 
-    &lt;table concordion:runSelenium="'seleniumScripts/openIndex.html'"&gt;
+  &lt;table concordion:runSelenium="'seleniumScripts/openIndex.html'"&gt;
            &lt;tr&gt;
                &lt;th concordion:runSelenium="#HREF"&gt;Verify Text&lt;/th&gt;
            &lt;td&gt;Selenium&lt;/td&gt; &lt;/tr&gt;

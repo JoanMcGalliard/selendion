@@ -16,6 +16,7 @@ import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.util.TestDescription;
 import org.selendion.internal.listener.RunSuiteResultRenderer;
 import org.selendion.internal.listener.RunSeleniumResultRenderer;
+import org.selendion.internal.listener.RunSelendionResultRenderer;
 import org.selendion.Selendion;
 
 import java.util.Vector;
@@ -62,6 +63,7 @@ public class SelendionBuilder extends ConcordionBuilder {
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
         runSeleniumCommand.addRunSeleniumListener(new RunSeleniumResultRenderer());
+        runSelendionCommand.addRunSelendionListener(new RunSelendionResultRenderer());
         documentParser = new DocumentParser(commandRegistry);
         documentParser.addDocumentParsingListener(new DocumentStructureImprover());
         String stylesheetContent = IOUtil.readResourceAsString(EMBEDDED_STYLESHEET_RESOURCE);

@@ -1,5 +1,5 @@
 package examples.commands;
 
 
-public class SeleniumTest extends SuiteTest {
+public class SeleniumTest extends AbstractTestSupport {
 }

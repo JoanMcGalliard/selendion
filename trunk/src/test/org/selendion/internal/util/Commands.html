@@ -18,7 +18,7 @@
     <li>
         <del>clickAndWait</del>
     </li>
-    <li>deleteAllVisibleCookies</li>
+    <li><del>deleteAllVisibleCookies</del></li>
     <li>
         <del>echo</del>
     </li>
@@ -52,9 +52,16 @@
 
 </ol>
 
-<div class="example">
-<p>If we are using selenium and visiting <i concordion:set="#page">index.html</i> on
-    <a concordion:execute="setUp(#HREF, #page)" href="http://localhost:55555/">
+ <p>For these men:</p>
+    <ul concordion:execute="#browserTypes =getList()">
+        <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
+        <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
+    </ul>
+
+<div class="example" concordion:forEach="#browser : #browserTypes">
+
+<p>If we are using <i concordion:echo="#browser" /> and visiting <i concordion:set="#page">index.html</i> on
+    <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
         http://localhost:55555/</a> we expect the following results: </p>
 <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
 <tr>
