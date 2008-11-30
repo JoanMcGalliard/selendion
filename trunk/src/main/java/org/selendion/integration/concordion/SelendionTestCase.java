@@ -22,11 +22,13 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
     public void setExpectedToPass(boolean expectedToPass) {
         this.expectedToPass = expectedToPass;
     }
+
     public void testProcessSpecification() throws Throwable {
         testProcessSpecification(null);
     }
-public void testProcessSpecification(Evaluator evaluator) throws Throwable {
-        Selendion selendion= new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory()).withEvaluator(evaluator).build();
+
+    public void testProcessSpecification(Evaluator evaluator) throws Throwable {
+        Selendion selendion = new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory()).withEvaluator(evaluator).build();
         ResultSummary resultSummary = selendion.process(this);
         resultSummary.print(System.out);
         if (expectedToPass) {

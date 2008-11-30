@@ -33,5 +33,17 @@ public class SelendionEvaluatorTest extends TestCase {
 
         }
     }
+    public void testPropertyValuesIncludedInEvaluator()  {
+        System.setProperty("blah", "value");
+        System.setProperty("selendion.property", "value 1");
+        System.setProperty("selendion.property2", "value 2");
+        SelendionEvaluator evaluator = new SelendionEvaluator(this);
+        assertEquals(null, evaluator.getVariable("#selendion.property"));
+        assertEquals(null, evaluator.getVariable("#blah"));
+        assertEquals("value 1", evaluator.getVariable("#property"));
+        assertEquals("value 2", evaluator.getVariable("#property2"));
+
+    }
+
 
 }
