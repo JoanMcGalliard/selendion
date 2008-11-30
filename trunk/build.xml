@@ -9,6 +9,9 @@
     <property name="dir.test.output" value="${dir.build}/test-output"/>
     <property name="dir.selendion.output" value="${dir.test.output}/selendion"/>
     <property name="dir.dist" value="${basedir}/dist"/>
+    <property name="selendion.browser" value="*firefox"/>
+
+
 
     <path id="compile.classpath">
         <fileset dir="lib" includes="*.jar" excludes="*-src.jar"/>
@@ -73,6 +76,7 @@
 
         <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="yes" showoutput="yes">
             <jvmarg value="-Dselendion.output.dir=${dir.selendion.output}"/>
+            <jvmarg value="-Dselendion.browser=${selendion.browser}"/>
 
             <classpath>
                 <path refid="compile.classpath"/>
