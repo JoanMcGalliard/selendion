@@ -110,6 +110,34 @@
 </div>
 <div class="example">
 
+    <h3>Test that passes but is not expected to pass</h3>
+
+    <p>
+        If we run a suite containing a test that passes, but is marked as not expected to pass,
+        then we should see failure:
+    </p>
+
+        <pre concordion:set="#snippet">
+
+            &lt;p&gt;Add &lt;a href="support/NotExpectedToPassButPassing.html" concordion:addToSuite="#HREF"&gt;Not expected to pass but passing&lt;/a&gt; to suite then run in &lt;b concordion:runSuite="#TEXT"&gt;1&lt;/b&gt; thread&lt;/p&gt;
+
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+
+    &lt;p&gt;Add &lt;a href="support/NotExpectedToPassButPassing.html"
+    concordion:addToSuite="#HREF"&gt;Not expected to pass but passing&lt;/a&gt;
+    to suite then run in &lt;b concordion:runSuite="#TEXT"&gt;1&lt;/b&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a href="support/NotExpectedToPassButPassing.html" class="failure"&gt;Not Expected To Pass But Passing&lt;/a&gt;
+    &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;
+    Test is not expected to pass, yet is passing&lt;/li&gt; &lt;/ol&gt; thread&lt;/p&gt;
+
+</pre>
+</div>
+<div class="example">
+
     <h3>Test that fails and is expected to pass</h3>
 
     <p>

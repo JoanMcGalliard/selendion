@@ -72,6 +72,11 @@ public class RunSuiteCommand extends AbstractCommand {
             TestFailure nextError = errors.nextElement();
             failures.put(nextError.failedTest().getClass(), nextError.exceptionMessage());
         }
+        errors = testResult.failures();
+        while (errors.hasMoreElements()) {
+            TestFailure nextError = errors.nextElement();
+            failures.put(nextError.failedTest().getClass(), nextError.exceptionMessage());
+        }
         Element element = commandCall.getElement();
         Element list;
         if (threads != 1) {
