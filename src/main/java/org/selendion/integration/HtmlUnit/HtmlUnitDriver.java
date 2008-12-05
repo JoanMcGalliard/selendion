@@ -494,7 +494,12 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getBodyText() {
-        throw new RuntimeException("Not yet implemented: " + "getBodyText");
+        if (page.getClass().equals(UnexpectedPage.class)) {
+             return page.getWebResponse().getContentAsString();
+        }  else if (page.getClass().equals(HtmlPage.class)) {
+            return ((HtmlPage)page).getBody().getTextContent().replaceAll("\\n", " ").replaceAll("  *", " ").trim();
+        }
+        throw new RuntimeException("Not yet implemented: getBodyText for " + page.getClass());
     }
 
     public Object getConfirmation() {

@@ -18,7 +18,9 @@
     <li>
         <del>clickAndWait</del>
     </li>
-    <li><del>deleteAllVisibleCookies</del></li>
+    <li>
+        <del>deleteAllVisibleCookies</del>
+    </li>
     <li>
         <del>echo</del>
     </li>
@@ -43,8 +45,12 @@
     <li>
         <del>verifyNotChecked</del>
     </li>
-    <li><del>verifyText</del></li>
-    <li><del>verifyTextNotPresent</del></li>
+    <li>
+        <del>verifyText</del>
+    </li>
+    <li>
+        <del>verifyTextNotPresent</del>
+    </li>
     <li>verifyTextPresent</li>
     <li>verifyTitle</li>
     <li>verifyValue</li>
@@ -52,15 +58,15 @@
 
 </ol>
 
- <p>For these men:</p>
-    <ul concordion:execute="#browserTypes =getList()">
-        <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
-        <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
-    </ul>
+<p>For these men:</p>
+<ul concordion:execute="#browserTypes =getList()">
+    <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
+    <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
+</ul>
 
 <div class="example" concordion:forEach="#browser : #browserTypes">
 
-<p>If we are using <i concordion:echo="#browser" /> and visiting <i concordion:set="#page">index.html</i> on
+<p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
     <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
         http://localhost:55555/</a> we expect the following results: </p>
 <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
@@ -85,7 +91,21 @@
     <td>false</td>
     <td></td>
     <td>Just see if it throws an exception</td>
-</tr><tr>
+</tr>
+
+
+
+<tr>
+<td>storeBodyText</td>
+	<td>body</td>
+	<td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>basic storeValue for empty value</td>
+</tr>
+<tr>
     <td>storeValue</td>
     <td>totalsum</td>
     <td>totalsum</td>
@@ -140,7 +160,8 @@
 <tr>
     <td>verifyTextPresent</td>
     <td>ARA Points:
-        (use -1 for novice)</td>
+        (use -1 for novice)
+    </td>
     <td></td>
     <td>true</td>
     <td></td>
@@ -151,7 +172,8 @@
 <tr>
     <td>verifyTextNotPresent</td>
     <td>ARA Points:
-        (use -1 for novice)</td>
+        (use -1 for novice)
+    </td>
     <td></td>
     <td>false</td>
     <td></td>
@@ -185,7 +207,8 @@
     <td>verifyText</td>
     <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
     <td>ARA Points:
-        (use -1 for novice)</td>
+        (use -1 for novice)
+    </td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -206,7 +229,8 @@
     <td>verifyText</td>
     <td>//*[@id="madeupid"]</td>
     <td>ARA Points:
-        (use -1 for novice)</td>
+        (use -1 for novice)
+    </td>
     <td>false</td>
     <td>ERROR: Element //*[@id="madeupid"] not found</td>
     <td>false</td>
@@ -356,7 +380,7 @@
     <td></td>
     <td>make sure nothing is selected for next test</td>
 </tr>
-<tr>
+  <tr>
     <td>storeSelectedValue</td>
     <td>colours</td>
     <td>blah</td>
@@ -838,6 +862,38 @@
     <td></td>
     <td>empty (illegal!) element</td>
 </tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>button</td>
+</tr>
+
+<tr>
+<td>storeBodyText</td>
+	<td>body</td>
+	<td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>store body for a standard page</td>
+    </tr><tr>
+<td>echo</td>
+	<td>${body}</td>
+	<td></td>
+    <td>true</td>
+    <td>Name Value New Username brian New Password Password1 Name Joan McGalliard Email joan@example.com Phone 02088888888 Mobile 07777777777 Sex F Weight L Ara 44444444 Points -1</td>
+    <td>false</td>
+    <td></td>
+    <td>test row above</td>
+    </tr>
+
+
 
 </table>
 
