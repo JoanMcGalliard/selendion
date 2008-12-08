@@ -1,0 +1,30 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<link href="../../../../css/selendion.css" rel="stylesheet" type="text/css" />
+<head><title>Not Expected To Pass Demo</title></head>
+<body>
+
+    <h1>Not Expected To Pass Demo</h1>
+    <p>This is a test for new functionality that hasn't yet been implemented, and
+    this is thus <i class="attention" concordion:execute="setExpectedToPass(false)">not expected to pass</i>. </p>
+
+    <p>
+    	After a user logs into the system, a greeting is
+    	displayed saying "Hello [user's first name]!, and underneath his full name is dislayed."
+    </p>
+
+    <div class="example">
+
+		<h3>Example</h3>
+		
+        <p>
+            When user <i concordion:set="#firstName">Bob</i> <i concordion:set="#surname">Smith</i>
+            logs in, the greeting will be:
+            <b concordion:assertEquals="greetingFor(#firstName)">Hello Bob!</b>
+            and his full name will display as <b concordion:assertEquals="fullName(#firstName, #surname)">Bob Smith</b>
+        </p>
+        
+  
+    </div>
+
+</body>
+</html>

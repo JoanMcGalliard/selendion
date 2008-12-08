@@ -44,17 +44,34 @@ public class RunSelendionCommand extends AbstractCommand {
                 Class clazz = loader.findSelendionClass(htmlResource);
                 SelendionTestCase test = (SelendionTestCase) clazz.newInstance();
                 clazz.getMethod("testProcessSpecification", Evaluator.class).invoke(test, evaluator);
-                announceSuccess(element);
                 resultRecorder.record(Result.SUCCESS);
+                announceSuccess(element);
+                if (!(Boolean) clazz.getMethod("isExpectedToPass").invoke(test)) {
+                    Element b = new Element("b");
+                    b.addAttribute("class", "attention");
+                    b.appendText(" (This test is not expected to pass) ");
+                    element.appendChild(b);
+                }
             } catch (Exception e) {
                 announceFailure(element);
                 resultRecorder.record(Result.FAILURE);
+                   Element b = new Element("b");
+                    b.addAttribute("class", "attention");
+                    b.appendText(String.format(" (%s) ", e.getCause().getMessage()) );
+                    element.appendChild(b);
             }
         } else {
             throw new RuntimeException(String.format("Can't open %s", htmlFilename));
         }
     }
 
+
+//         if (!(Boolean)expectedToPass.get(test.getClazz())) {
+//
+//
+//
+//
+//            }
     private void announceSuccess(Element element) {
         listeners.announce().successReported(new RunSelendionSuccessEvent(element));
     }
