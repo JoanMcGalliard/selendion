@@ -23,7 +23,8 @@
 
         <pre concordion:set="#snippet">
 &lt;p&gt;
-            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html"&gt;Passing Selendion test&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html"&gt;Passing
+            Selendion test&lt;/a&gt;.
 &lt;/p&gt;
         </pre>
 
@@ -31,7 +32,8 @@
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
 &lt;p&gt;
-        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="success"&gt;Passing Selendion test&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="success"&gt;Passing
+    Selendion test&lt;/a&gt;.
 &lt;/p&gt;
 
 </pre>
@@ -43,7 +45,8 @@
 
         <pre concordion:set="#snippet">
 &lt;p&gt;
-            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html"&gt;Failing Selendion test&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html"&gt;Failing
+            Selendion test&lt;/a&gt;.
 &lt;/p&gt;
         </pre>
 
@@ -51,7 +54,8 @@
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
 &lt;p&gt;
-            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html" class="failure"&gt;Failing Selendion test&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html" class="failure"&gt;Failing
+    Selendion test&lt;b class="attention"&gt; (Specification has failure(s). See output HTML for details.) &lt;/b&gt; &lt;/a&gt;.
 &lt;/p&gt;
 
 </pre>
@@ -64,7 +68,8 @@
 
         <pre concordion:set="#snippet">
 &lt;p&gt;
-            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html"&gt;Exception Throwing Selendion test&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html"&gt;Exception
+            Throwing Selendion test&lt;/a&gt;.
 &lt;/p&gt;
         </pre>
 
@@ -72,7 +77,9 @@
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
 &lt;p&gt;
-            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html" class="failure"&gt;Exception Throwing Selendion test&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html"
+    class="failure"&gt;Exception Throwing Selendion test&lt;b class="attention"&gt; (Specification has exception(s).
+    See output HTML for details.) &lt;/b&gt; &lt;/a&gt;.
 &lt;/p&gt;
 
 </pre>
@@ -84,7 +91,7 @@
 
         <pre concordion:set="#snippet">
 &lt;p&gt;
-            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/"&gt;Directory&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/"&gt;Directory&lt;/a&gt;.
 &lt;/p&gt;
         </pre>
 
@@ -93,11 +100,11 @@
 <pre class="html" concordion:assertEquals="render(#snippet)">
 &lt;p&gt;
 
-            Let's run this little &lt;a concordion:runSelendion="#HREF"
-                href="runSelendionScripts/"&gt; &lt;span class="failure"&gt;
-                    &lt;del class="expected"&gt;Directory&lt;/del&gt; &lt;/span&gt;
-                    &lt;span class="exceptionMessage"&gt;Can't open runSelendionScripts/&lt;/span&gt; &lt;/a&gt;
-                    &lt;span&gt; &lt;input class="stackTraceButton" ...    
+    Let's run this little &lt;a concordion:runSelendion="#HREF"
+       href="runSelendionScripts/"&gt; &lt;span class="failure"&gt;
+         &lt;del class="expected"&gt;Directory&lt;/del&gt; &lt;/span&gt;
+         &lt;span class="exceptionMessage"&gt;Can't open runSelendionScripts/&lt;/span&gt; &lt;/a&gt;
+         &lt;span&gt; &lt;input class="stackTraceButton" ...
 
 &lt;/p&gt;
 
@@ -110,7 +117,8 @@
 
         <pre concordion:set="#snippet">
 &lt;p&gt;
-            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/nonExistant.html"&gt;Non-existant file&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/nonExistant.html"&gt;Non-existant
+            file&lt;/a&gt;.
 &lt;/p&gt;
         </pre>
 
@@ -119,7 +127,8 @@
 <pre class="html" concordion:assertEquals="render(#snippet)">
 &lt;p&gt;
 
-                Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/nonExistant.html"&gt; &lt;span class="failure"&gt; &lt;del
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/nonExistant.html"&gt;
+    &lt;span class="failure"&gt; &lt;del
     class="expected"&gt;Non-existant file&lt;/del&gt; &lt;/span&gt; &lt;span
     class="exceptionMessage"&gt;Can't run runSelendionScripts/nonExistant.html:
     file does not exist.&lt;/span&gt; &lt;/a&gt; &lt;span&gt; &lt;input
@@ -138,7 +147,8 @@
 
         <pre concordion:set="#snippet">
 &lt;p&gt;
-            Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html"&gt;Selendion Test Without Java File&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html"&gt;Selendion
+            Test Without Java File&lt;/a&gt;.
 &lt;/p&gt;
         </pre>
 
@@ -146,7 +156,8 @@
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
 &lt;p&gt;
-        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html" class="success"&gt;Selendion Test Without Java File&lt;/a&gt;.
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html" class="success"&gt;Selendion
+    Test Without Java File&lt;/a&gt;.
 &lt;/p&gt;
 
 </pre>

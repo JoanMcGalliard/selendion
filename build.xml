@@ -1,6 +1,6 @@
 <project name="selendion" default="build" basedir=".">
 
-    <property name="version" value="0.4.3"/>
+    <property name="version" value="0.4.4"/>
     <property name="productName" value="selendion"/>
     <property name="ProductName" value="Selendion"/>
 
