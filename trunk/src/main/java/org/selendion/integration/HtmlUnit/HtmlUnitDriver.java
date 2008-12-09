@@ -17,6 +17,7 @@ import java.util.Set;
 public class HtmlUnitDriver implements BrowserDriver {
     Page page = null;
     private Page old_page;
+    private String timeout;
 
     public HtmlUnitDriver(String baseUrl) {
         webClient = new WebClient();
@@ -79,8 +80,12 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException("Not yet implemented: " + "isVisible");
     }
 
+    public void setTimeout(String timeout) {
+        Integer.parseInt(timeout);
+        this.timeout=timeout;
+    }
     public String getTimeout() {
-        throw new RuntimeException("Not yet implemented: " + "getTimeout");
+        return timeout;
     }
 
     public void waitForPopUp(String arg1, String arg2) {
@@ -412,9 +417,6 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException("Not yet implemented: " + "setSpeed");
     }
 
-    public void setTimeout(String arg1) {
-        // not needed?
-    }
 
     public void shiftKeyDown() {
         throw new RuntimeException("Not yet implemented: " + "shiftKeyDown");

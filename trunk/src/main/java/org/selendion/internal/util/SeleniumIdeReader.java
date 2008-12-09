@@ -35,6 +35,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         this.browser = new SeleniumDriver(
                 seleniumHost, seleniumPort, browser,
                 baseUrl);
+        this.browser.setTimeout("30000");
         this.browser.start();
         started = true;
     }
@@ -489,7 +490,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                         // try again
                     }
                     if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
-                        throw new Exception("Timeout");
+                        return new CommandResult(false, String.format("ERROR: Timed out after %sms", browser.getTimeout()));
                     }
                     browser.pause(200);
 
@@ -518,7 +519,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                         //try again
                     }
                     if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
-                        throw new Exception("Timeout");
+                        return new CommandResult(false, String.format("ERROR: Timed out after %sms", browser.getTimeout()));
                     }
                     browser.pause(200);
 
