@@ -83,6 +83,87 @@
 
 
 <tr>
+    <td>storeText</td>
+    <td>//table[@id='input_table']/tbody/tr[10]/td[1]</td>
+    <td>ara_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>basic store text</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${ara_label}</td>
+    <td></td>
+    <td>true</td>
+    <td>ARA number:</td>
+    <td>false</td>
+    <td></td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td>store</td>
+    <td>(blank)</td>
+    <td>ara_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>clear variable</td>
+</tr>
+<tr>
+    <td>storeIfAvailableText</td>
+    <td>//table[@id='input_table']/tbody/tr[10]/td[1]</td>
+    <td>ara_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>Store if available, and it is available</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${ara_label}</td>
+    <td></td>
+    <td>true</td>
+    <td>ARA number:</td>
+    <td>false</td>
+    <td></td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td>store</td>
+    <td>(blank)</td>
+    <td>ara_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>clear variable</td>
+</tr>
+<tr>
+    <td>storeIfAvailableText</td>
+    <td>//table[@id='input_table']/tbody/tr[10]/td[44]</td>
+    <td>ara_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>Store if available, but it is not available</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${ara_label}</td>
+    <td></td>
+    <td>true</td>
+    <td>(blank)</td>
+    <td>false</td>
+    <td></td>
+    <td>testing row above</td>
+</tr>
+
+<tr>
     <td>deleteAllVisibleCookies</td>
     <td></td>
     <td></td>
@@ -94,17 +175,6 @@
 </tr>
 
 
-
-<tr>
-<td>storeBodyText</td>
-	<td>body</td>
-	<td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>basic storeValue for empty value</td>
-</tr>
 <tr>
     <td>storeValue</td>
     <td>totalsum</td>
@@ -146,6 +216,47 @@
     <td></td>
     <td>basic storeValue</td>
 </tr>
+<tr>
+    <td>waitForValue</td>
+    <td>new_username</td>
+    <td>jem</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>basic waitFor...</td>
+</tr>
+<tr>
+    <td>setTimeout</td>
+    <td>1000</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>setup for next test</td>
+</tr>
+<tr>
+    <td>waitForValue</td>
+    <td>new_username</td>
+    <td>bob</td>
+    <td>false</td>
+    <td>ERROR: Timed out after 1000ms</td>
+    <td>false</td>
+    <td></td>
+    <td>waitFor... something that isn't there</td>
+</tr>
+<tr>
+    <td>setTimeout</td>
+    <td>30000</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>cleanup for previous test</td>
+</tr>
+
 <tr>
     <td>echo</td>
     <td>${typed_value}</td>
@@ -380,7 +491,7 @@
     <td></td>
     <td>make sure nothing is selected for next test</td>
 </tr>
-  <tr>
+<tr>
     <td>storeSelectedValue</td>
     <td>colours</td>
     <td>blah</td>
@@ -874,26 +985,27 @@
 </tr>
 
 <tr>
-<td>storeBodyText</td>
-	<td>body</td>
-	<td></td>
+    <td>storeBodyText</td>
+    <td>body</td>
+    <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
     <td>store body for a standard page</td>
-    </tr><tr>
-<td>echo</td>
-	<td>${body}</td>
-	<td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${body}</td>
+    <td></td>
     <td>true</td>
-    <td>Name Value New Username brian New Password Password1 Name Joan McGalliard Email joan@example.com Phone 02088888888 Mobile 07777777777 Sex F Weight L Ara 44444444 Points -1</td>
+    <td>Name Value New Username brian New Password Password1 Name Joan McGalliard Email joan@example.com Phone
+        02088888888 Mobile 07777777777 Sex F Weight L Ara 44444444 Points -1
+    </td>
     <td>false</td>
     <td></td>
     <td>test row above</td>
-    </tr>
-
-
+</tr>
 
 </table>
 
