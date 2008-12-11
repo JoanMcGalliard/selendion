@@ -1,23 +1,24 @@
 package org.selendion.integration.HtmlUnit;
 
-import org.selendion.integration.BrowserDriver;
-import org.concordion.api.Evaluator;
-import org.apache.commons.httpclient.Cookie;
-import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.UnexpectedPage;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
+import org.concordion.api.Evaluator;
+import org.selendion.integration.BrowserDriver;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Set;
 
 public class HtmlUnitDriver implements BrowserDriver {
     Page page = null;
     private Page old_page;
-    private String timeout;
+    private String timeout="30000";
 
     public HtmlUnitDriver(String baseUrl) {
         webClient = new WebClient();
@@ -375,9 +376,6 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void select(String arg1, String arg2) {
-        if (!arg2.startsWith("label=")) {
-            throw new HtmlUnitException("Unsupported selection type " + arg2);
-        }
         String label = arg2.replaceFirst("label=", "");
         HtmlSelect select = (HtmlSelect) getHtmlElement(arg1);
         for (HtmlElement htmlElement : select.getAllHtmlChildElements()) {
