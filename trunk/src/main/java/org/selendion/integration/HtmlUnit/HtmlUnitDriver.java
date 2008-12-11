@@ -75,11 +75,6 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void waitForPageToLoad() {
-        try {
-            ((HtmlPage)page).refresh();
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
     }
 
     public boolean isVisible(String arg1) {
