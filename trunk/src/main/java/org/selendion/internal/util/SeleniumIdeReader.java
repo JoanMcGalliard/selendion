@@ -35,7 +35,6 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         this.browser = new SeleniumDriver(
                 seleniumHost, seleniumPort, browser,
                 baseUrl);
-        this.browser.setTimeout("30000");
         this.browser.start();
         started = true;
     }
