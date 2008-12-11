@@ -19,6 +19,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     Page page = null;
     private Page old_page;
     private String timeout="30000";
+    static final String nbsp = String.format("%c", 160);
 
     public HtmlUnitDriver(String baseUrl) {
         webClient = new WebClient();
@@ -74,7 +75,11 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void waitForPageToLoad() {
-        //nothing to do
+        try {
+            ((HtmlPage)page).refresh();
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     public boolean isVisible(String arg1) {
@@ -643,9 +648,19 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getSelectOptions(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectOptions");
-    }
+                  HtmlElement element = getHtmlElement(arg1);
+                  if (element.getClass().equals(HtmlSelect.class)) {
+                      Iterator it =  getHtmlElement(arg1).getAllHtmlChildElements().iterator();
+                      String str="";
+                      while (it.hasNext()) {
+                          str += ((HtmlElement) it.next()).getTextContent() + ",";
+                      }
+                      return str.replaceFirst(",$", "");
+                  }
+                      throw new RuntimeException("Not yet implemented: getSelectOptions for " +
+                                               element.getClass());
 
+              }
     public Object getTable(String arg1) {
         throw new RuntimeException("Not yet implemented: " + "getTable");
     }
@@ -662,8 +677,7 @@ public class HtmlUnitDriver implements BrowserDriver {
                 str += node.getTextContent();
             }
         }
-        return str.replaceAll("[    \\t]+", " ").trim();
-//        return element.getTextContent().trim().replaceAll("[    \\t]+", " ");
+        return str.replaceAll(nbsp," ").replaceAll("[    \\t]+", " ").trim();
 
 
     }
@@ -672,6 +686,15 @@ public class HtmlUnitDriver implements BrowserDriver {
         HtmlElement element = getHtmlElement(arg1);
         if (element.getClass().equals(HtmlRadioButtonInput.class)) {
             HtmlRadioButtonInput button = (HtmlRadioButtonInput) element;
+            if (button.getCheckedAttribute().length() == 0) {
+                return "off";
+            } else {
+                return "on";
+            }
+
+        }
+        if (element.getClass().equals(HtmlCheckBoxInput.class)) {
+            HtmlCheckBoxInput button = (HtmlCheckBoxInput) element;
             if (button.getCheckedAttribute().length() == 0) {
                 return "off";
             } else {
@@ -696,8 +719,10 @@ public class HtmlUnitDriver implements BrowserDriver {
         if (element.getClass().equals(HtmlCheckBoxInput.class)) {
             HtmlCheckBoxInput checkbox = (HtmlCheckBoxInput) element;
             return checkbox.isChecked();
-
-        }
+        } else if (element.getClass().equals(HtmlRadioButtonInput.class)) {
+            HtmlRadioButtonInput checkbox = (HtmlRadioButtonInput) element;
+            return checkbox.isChecked();
+        } 
 
         throw new RuntimeException("Not yet implemented: isChecked for " + element.getClass());
     }

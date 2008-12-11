@@ -43,6 +43,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             stop();
         }
         browser = new HtmlUnitDriver(baseUrl);
+        this.browser.start();        
         started = true;
     }
 
