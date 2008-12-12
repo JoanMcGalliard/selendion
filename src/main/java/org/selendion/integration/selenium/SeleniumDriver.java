@@ -75,9 +75,10 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
        }
 
        public void passVariablesOut(Evaluator evaluator) {
-           String[] storedVars = getEval("var arr = [];for (var name in storedVars) {arr.push('#'+name+' '+storedVars[name]);};arr").split(",");
+           String COMMA = "###COMMA###";
+           String[] storedVars = getEval("var arr = [];for (var name in storedVars) {arr.push('#'+name+' '+storedVars[name]);};arr").replaceAll("\\\\,", COMMA).split(",");
            for (String var : storedVars) {
-               String[] nvp = var.split(" ", 2);
+               String[] nvp = var.replaceAll(COMMA, ",").split(" ", 2);
                if (nvp[0].matches("#" + VARIABLE_PATTERN)) {
                    evaluator.setVariable(nvp[0], nvp[1]);
                }
