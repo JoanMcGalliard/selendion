@@ -65,7 +65,14 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
                }
                String keyString = (String) key;
                if (keyString.matches(VARIABLE_PATTERN)) {
-                   array = String.format("%s %s: '%s', ", array, keyString, evaluator.getVariable("#" + keyString).toString().replaceFirst("\\\\|$", "").replaceAll("'", "\\\\'").replaceAll("\\n", " "));
+                   Object value = evaluator.getVariable("#" + keyString);
+                   String valueString;
+                   if (value == null) {
+                       valueString = "";
+                   } else {
+                       valueString = value.toString();
+                   }
+                   array = String.format("%s %s: '%s', ", array, keyString, valueString.replaceFirst("\\\\|$", "").replaceAll("'", "\\\\'").replaceAll("\\n", " "));
                }
            }
            array = array.replaceFirst("[, ]*$", "");
