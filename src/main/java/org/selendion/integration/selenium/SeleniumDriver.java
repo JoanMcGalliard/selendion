@@ -50,6 +50,10 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
             Thread.sleep(milliseconds);
     }
 
+    public void pauseInWaitFor(int i) throws InterruptedException {
+        pause(i) ;
+    }
+
     public String echo(String arg1) {
         return replaceVariables(arg1) ; 
     }

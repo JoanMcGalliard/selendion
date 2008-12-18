@@ -2,13 +2,6 @@ package org.selendion.integration;
 
 import org.concordion.api.Evaluator;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jem
- * Date: Nov 21, 2008
- * Time: 7:43:44 AM
- * To change this template use File | Settings | File Templates.
- */
 public interface BrowserDriver {
     
     public abstract void passVariablesIn(Evaluator evaluator);
@@ -37,6 +30,7 @@ public interface BrowserDriver {
     public abstract void waitForPopUp(String arg1, String arg2);
 
     public abstract void pause(int i) throws InterruptedException;
+    public abstract void pauseInWaitFor(int i) throws InterruptedException;
     public abstract void addSelection(String arg1, String arg2);
     public abstract void allowNativeXpath(String arg1);
     public abstract void altKeyDown();
