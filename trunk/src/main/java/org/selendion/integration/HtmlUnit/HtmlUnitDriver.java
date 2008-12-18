@@ -92,6 +92,15 @@ public class HtmlUnitDriver implements BrowserDriver {
     public void waitForPopUp(String arg1, String arg2) {
         throw new RuntimeException("Not yet implemented: " + "waitForPopUp");
     }
+    public void pauseInWaitFor (int milliseconds) throws InterruptedException {
+        long start = System.currentTimeMillis();
+        try {
+            page = ((HtmlPage)page).refresh();
+        } catch (IOException e) {
+            throw new HtmlUnitException(e);
+        }
+            Thread.sleep(System.currentTimeMillis()-start+milliseconds);
+    }
 
     public void pause(int milliseconds) throws InterruptedException {
             Thread.sleep(milliseconds);

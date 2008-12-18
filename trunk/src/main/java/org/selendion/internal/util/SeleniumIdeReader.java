@@ -492,7 +492,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
                         return new CommandResult(false, String.format("ERROR: Timed out after %sms", browser.getTimeout()));
                     }
-                    browser.pause(200);
+                    browser.pauseInWaitFor(200);
 
                 }
 
@@ -521,7 +521,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
                         return new CommandResult(false, String.format("ERROR: Timed out after %sms", browser.getTimeout()));
                     }
-                    browser.pause(200);
+                    browser.pauseInWaitFor(200);
 
                 }
 
