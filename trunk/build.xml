@@ -1,6 +1,6 @@
 <project name="selendion" default="build" basedir=".">
 
-    <property name="version" value="0.4.9"/>
+    <property name="version" value="0.4.10"/>
     <property name="productName" value="selendion"/>
     <property name="ProductName" value="Selendion"/>
 
@@ -70,7 +70,7 @@
         </copy>
     </target>
 
-    <target name="run.tests" depends="compile, start.webserver, start.selenium">
+    <target name="run.tests" depends="start.webserver, start.selenium">
         <mkdir dir="${dir.test.output}"/>
         <mkdir dir="${dir.selendion.output}"/>
 
