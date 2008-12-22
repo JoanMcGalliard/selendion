@@ -438,22 +438,13 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void type(String arg1, String arg2) {
-        try {
-            HtmlTextInput textField = (HtmlTextInput) ((HtmlPage) page).getHtmlElementsByName(arg1).get(0);
-            textField.setValueAttribute(arg2);
-            return;
-        }
-        catch (Exception e) {
-            // passthru
-
-        }
-        try {
-            HtmlPasswordInput textField = (HtmlPasswordInput) ((HtmlPage) page).getHtmlElementsByName(arg1).get(0);
-            textField.setValueAttribute(arg2);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Can't handle type(" + arg1 + ", " + arg2 + ")");
-
+        HtmlElement element = getHtmlElement(arg1);
+        if (element.getClass().equals(HtmlTextInput.class)) {
+            ((HtmlTextInput)element).setValueAttribute(arg2);
+        } else if (element.getClass().equals(HtmlPasswordInput.class)) {
+            ((HtmlPasswordInput)element).setValueAttribute(arg2);
+        } else {
+            throw new RuntimeException("Not yet implemented: type for " + element.getClass());
         }
 
     }
