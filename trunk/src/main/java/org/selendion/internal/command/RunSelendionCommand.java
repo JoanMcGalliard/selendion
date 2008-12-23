@@ -28,6 +28,8 @@ public class RunSelendionCommand extends AbstractCommand {
 
 
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
+        CommandCallList childCommands = commandCall.getChildren();
+        childCommands.setUp(evaluator, resultRecorder);
         String htmlFilename = evaluator.evaluate(commandCall.getExpression()).toString();
         String htmlResource = commandCall.getResource().getRelativeResource(htmlFilename)
                 .getPath().replaceFirst("^/", "");
