@@ -741,7 +741,9 @@ public class HtmlUnitDriver implements BrowserDriver {
 
     public boolean isTextPresent(String arg1) {
         try {
-            return ((HtmlPage) page).getBody().getTextContent().contains(arg1.replaceAll("\\n", ""));
+            String body = ((HtmlPage) page).getBody().getTextContent().replaceAll("\\n\\n*", " ").
+                    replaceAll("\\t\\t*", " ").replaceAll("  *", " ").trim();
+            return body.contains(arg1.replaceAll("\\n", ""));
         }
         catch (ClassCastException cce) {
             // pass through
