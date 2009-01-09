@@ -219,6 +219,8 @@ public class HtmlUnitDriver implements BrowserDriver {
                 page = ((HtmlRadioButtonInput) element).click();
             } else if (element.getClass().equals(HtmlImageInput.class)) {
                 page = ((HtmlImageInput) element).click();
+            } else if (element.getClass().equals(HtmlOption.class)) {
+                page = ((HtmlOption) element).click();
             } else {
                 throw new RuntimeException("Not yet implemented: click " + element.getClass().getSimpleName());
             }
