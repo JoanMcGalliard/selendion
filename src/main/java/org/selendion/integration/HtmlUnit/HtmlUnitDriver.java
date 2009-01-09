@@ -599,7 +599,11 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getExpression(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getExpression");
+        Matcher m = Pattern.compile("javascript\\{(.*)\\}").matcher(arg1);
+        if (!m.matches()) {
+            throw new RuntimeException("Can't handle getExpression(\""+arg1+"\")");
+        }
+        return ((HtmlPage) page).executeJavaScript(m.group(1)).getJavaScriptResult();
     }
 
     public Object getSelectedId(String arg1) {
