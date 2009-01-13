@@ -78,7 +78,8 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isVisible(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "isVisible");
+        StyledElement element = (StyledElement) getHtmlElement(arg1);
+        return ! element.getStyleAttribute().contains("display: none;");
     }
 
     public void setTimeout(String timeout) {
@@ -445,6 +446,8 @@ public class HtmlUnitDriver implements BrowserDriver {
             ((HtmlTextInput)element).setValueAttribute(arg2);
         } else if (element.getClass().equals(HtmlPasswordInput.class)) {
             ((HtmlPasswordInput)element).setValueAttribute(arg2);
+        } else if (element.getClass().equals(HtmlTextArea.class)) {
+            ((HtmlTextArea)element).setText(arg2);
         } else {
             throw new RuntimeException("Not yet implemented: type for " + element.getClass());
         }
