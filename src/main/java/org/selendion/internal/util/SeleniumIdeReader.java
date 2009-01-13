@@ -478,7 +478,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 while (true) {
                     try {
                         actualObject = browserGet(command.replaceFirst("^waitForNot", ""), arg1, arg2);
-
+                        if (actualObject.getClass().equals(Boolean.class) && !(Boolean)actualObject) {
+                            return new CommandResult(true, "");
+                        }
                         String actual = seleniumObjectToString(actualObject);
                         if (!actual.equals(expected)) {
                             return new CommandResult(true, "");
