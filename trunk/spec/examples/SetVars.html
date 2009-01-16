@@ -43,6 +43,21 @@
                   concordion:assertEquals="#var3">new variable with, comma</b>.</p>
     
 
+    <H3>Passing variables with carriage returns,  line feed and backslashes betwen selenium and concordion</H3>
+
+      <p>First set var2 to be <pre concordion:set="#var2">String with \ line feed &#x000A; and carriage return &#x000D; in it</pre>.</p>
+
+
+      <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
+          this script</a> then var1 should be stripped of problem characters and be
+          <b concordion:assertEquals="#var1">String with line feed  and carriage return in it</b> and var2
+          should be the same
+          <b concordion:assertEquals="#var2">String with line feed  and carriage return in it</b>. Var3 should now be <b
+                  concordion:assertEquals="#var3">new variable with \\ line feed and carriage return in it</b>.
+      Run a selenium script <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
+          again</a> without any errors.</p>
+
+
     <H3>Tear Down</H3>
 
     <p>Finally <i concordion:stopBrowser="">close the browser</i></p>

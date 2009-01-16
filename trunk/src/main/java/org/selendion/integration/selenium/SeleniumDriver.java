@@ -76,14 +76,19 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
                    } else {
                        valueString = value.toString();
                    }
-                   array = String.format("%s %s: '%s', ", array, keyString, valueString.replaceFirst("\\\\|$", "").replaceAll("'", "\\\\'").replaceAll("\\n", " "));
+                   array = String.format("%s %s: '%s', ", array, keyString, valueString.replaceFirst("\\\\|$", "").replaceAll("'", "\\\\'").replaceAll("\\n", " ").replaceAll("\\r", " "));
                }
            }
            array = array.replaceFirst("[, ]*$", "");
-           if (array.length() > 0) {
-               getEval("storedVars = {" + array + "}");
-           }
-       }
+        if (array.length() > 0) {
+            String evalString = "storedVars = {" + array + "}";
+            try {
+                getEval(evalString);
+            } catch (Throwable e) {
+                throw new RuntimeException("Failed trying to eval: " + evalString, e);
+            }
+        }
+    }
 
        public void passVariablesOut(Evaluator evaluator) {
            String COMMA = "###COMMA###";
