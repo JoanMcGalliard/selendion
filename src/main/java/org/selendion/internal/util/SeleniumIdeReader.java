@@ -678,7 +678,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             // maybe it's a js extension
             String js = "Selenium.prototype.do" + command.substring(0, 1).toUpperCase() + command.substring(1);
             try {
-                browser.getEval(String.format("%s('%s','%s')", js, arg1, arg2));
+                browser.getEval(String.format("%s('%s','%s')", js, arg1.replaceAll("'", "\\\\'"), arg2.replaceAll("'", "\\\\'")));
             } catch (SeleniumException se) {
                 if (se.getMessage().contains(js + " is not a function")) {
                     throw new SeleniumIdeException("Command " + command + " not found.");
