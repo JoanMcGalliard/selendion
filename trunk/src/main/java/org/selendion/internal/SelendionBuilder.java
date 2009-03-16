@@ -40,6 +40,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suite);
     private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
     private RunSelendionCommand runSelendionCommand = new RunSelendionCommand();
+    private SwitchJavaScriptCommand switchJavaScriptCommand = new SwitchJavaScriptCommand(seleniumIdeReader);
 
     {
         withApprovedCommand("", "specification", specificationCommand);
@@ -60,6 +61,7 @@ public class SelendionBuilder extends ConcordionBuilder {
         withApprovedCommand(NAMESPACE_SELENDION, "clearSuite", clearSuiteCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "forEach", forEachCommand);
         withApprovedCommand(NAMESPACE_SELENDION, "runSelendion", runSelendionCommand);
+        withApprovedCommand(NAMESPACE_SELENDION, "switchJavaScript", switchJavaScriptCommand);
 
         runSuiteCommand.addRunSuiteListener(new RunSuiteResultRenderer());
         runSeleniumCommand.addRunSeleniumListener(new RunSeleniumResultRenderer());
