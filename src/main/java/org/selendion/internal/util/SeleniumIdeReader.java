@@ -288,6 +288,14 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 }
                 return new CommandResult(true, "");
             }
+            if (command.matches("^assertTextNotPresent")) {
+                try {
+                    assertFalse((Boolean) browserGet("TextPresent", arg1, arg2));
+                } catch (SeleniumIdeException e) {
+                    return new CommandResult(false, "Unimplemented command " + command);
+                }
+                return new CommandResult(true, "");
+            }
             if (command.matches("^assert[A-Z].*")) {
                 Object actualObject;
                 String expected = arg2.length() > 0 ? arg2 : arg1;
@@ -944,6 +952,13 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     private class SeleniumIdeException extends Exception {
         public SeleniumIdeException(String s) {
             super(s);
+        }
+    }
+    public void setJavaScriptEnabled(boolean bool) {
+        if (browser.getClass().equals(HtmlUnitDriver.class)) {
+                   ((HtmlUnitDriver)browser).setJavaScriptEnabled(bool);
+        } else {
+            throw new RuntimeException("Can only set JavaScript for HtmlUnit tests.");
         }
     }
 }
