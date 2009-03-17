@@ -241,15 +241,21 @@ Index: src/test/java/spec/examples/NewFeaturesTest.java
 +}
 Index: src/test/resources/spec/examples/NewFeatures.html
 ===================================================================
---- src/test/resources/spec/examples/NewFeatures.html	Tue Dec 02 19:07:26 GMT 2008
-+++ src/test/resources/spec/examples/NewFeatures.html	Tue Dec 02 19:07:26 GMT 2008
-@@ -0,0 +1,61 @@
+--- src/test/resources/spec/examples/NewFeatures.html	Tue Mar 17 10:19:20 GMT 2009
++++ src/test/resources/spec/examples/NewFeatures.html	Tue Mar 17 10:19:20 GMT 2009
+@@ -0,0 +1,69 @@
 +<html xmlns:concordion="http://www.concordion.org/2007/concordion">
 +<link href="../../concordion.css" rel="stylesheet" type="text/css"/>
 +<body>
 +
 +<h1>New Features</h1>
++<h2>Nesting inside assertEquals</h2>
 +
++<div class="example">
++    <p>Set the variable #blah to <i concordion:set="#blah">Hooray!</i> and then
++        assert it equals <b concordion:assertEquals="#blah"><i concordion:echo="#blah"></i></b> itself.
++    </p>
++</div>
 +
 +<h2>Literal values in set</h2>
 +
@@ -302,6 +308,8 @@ Index: src/test/resources/spec/examples/NewFeatures.html
 +<div class="example">
 +    <p>Run the test in <a href="Demo.html" concordion:run="concordion">this link</a>. </p>
 +</div>
++
++
 +
 +</body>
 +</html>
@@ -434,6 +442,38 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
          if (baseOutputDir != null) {
              return baseOutputDir;
          }
+Index: src/main/java/org/concordion/internal/command/AssertEqualsCommand.java
+===================================================================
+--- src/main/java/org/concordion/internal/command/AssertEqualsCommand.java	(revision 42)
++++ src/main/java/org/concordion/internal/command/AssertEqualsCommand.java	Tue Mar 17 10:32:00 GMT 2009
+@@ -8,6 +8,7 @@
+ import org.concordion.api.ResultRecorder;
+ import org.concordion.internal.BrowserStyleWhitespaceComparator;
+ import org.concordion.internal.CommandCall;
++import org.concordion.internal.CommandCallList;
+ import org.concordion.internal.util.Announcer;
+ import org.concordion.internal.util.Check;
+ 
+@@ -34,13 +35,16 @@
+     
+     @Override
+     public void verify(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
+-        Check.isFalse(commandCall.hasChildCommands(), "Nesting commands inside an 'assertEquals' is not supported");
++   CommandCallList childCommands = commandCall.getChildren();
+-        
++
++            childCommands.setUp(evaluator, resultRecorder);
++        childCommands.execute(evaluator, resultRecorder);
++        childCommands.verify(evaluator, resultRecorder);
+         Element element = commandCall.getElement();
+         
+         Object actual = evaluator.evaluate(commandCall.getExpression());
+         String expected = element.getText();
+-        
++
+         if (comparator.compare(actual, expected) == 0) {
+             resultRecorder.record(Result.SUCCESS);
+             announceSuccess(element);
 Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
 ===================================================================
 --- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 42)
