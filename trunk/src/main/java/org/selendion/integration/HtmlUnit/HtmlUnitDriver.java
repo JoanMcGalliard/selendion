@@ -388,7 +388,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void select(String arg1, String arg2) {
-        String label = arg2.replaceFirst("label=", "");
+        String label = arg2.replaceFirst("label=", "").replaceFirst("value=", "");
         HtmlSelect select = (HtmlSelect) getHtmlElement(arg1);
         for (HtmlElement htmlElement : select.getAllHtmlChildElements()) {
             HtmlOption option = (HtmlOption) htmlElement;
