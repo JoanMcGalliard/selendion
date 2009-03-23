@@ -81,6 +81,149 @@
     <th>Remarks</th>
 </tr>
 
+<tr>
+    <td>open</td>
+    <td>/iframe.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>set up for next few rows</td>
+</tr>
+<tr>
+    <td>verifyElementPresent</td>
+    <td>Password</td>
+    <td>1</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>verifyElementPresent within a frame</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>Password</td>
+    <td>1</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>type within a frame</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>//input[@value='Submit']</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>submit within a frame</td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/iframe.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>set up for next few browsing into and out of frames</td>
+</tr>
+<tr>
+    <td>selectFrame</td>
+    <td>index=0</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeAttribute</td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+    <td>viewName</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${viewName}</td>
+    <td></td>
+    <td>true</td>
+    <td>passwordpage</td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>selectFrame</td>
+    <td>relative=top</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeAttribute</td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+    <td>viewName</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${viewName}</td>
+    <td></td>
+    <td>true</td>
+    <td>vbv</td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>open</td>
+    <td>/frames.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>set up for next row</td>
+</tr>
+ <tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>submit within a frame</td>
+</tr>
+
+<tr>
+   <td>open</td>
+   <td>/index.html</td>
+   <td></td>
+   <td>true</td>
+   <td></td>
+   <td>false</td>
+   <td></td>
+   <td>Back to original page</td>
+   </tr>
+
  <tr>
     <td>select</td>
     <td>parkingAvailabilitySelect</td>
@@ -1140,7 +1283,6 @@
     <td></td>
     <td>test row above</td>
 </tr>
-
 </table>
 
 </div>

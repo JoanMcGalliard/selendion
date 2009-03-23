@@ -1,0 +1,56 @@
+<tr>
+    <td>open</td>
+    <td>/iframe.html</td>
+    <td></td>
+</tr>
+<tr>
+    <td>selectFrame</td>
+    <td>index=0</td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeAttribute</td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+
+    <td>viewName</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${viewName}</td>
+    <td></td>
+</tr>
+<tr>
+    <td>selectFrame</td>
+
+    <td>relative=top</td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeAttribute</td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+    <td>viewHiddenName</td>
+</tr>
+
+<tr>
+    <td>echo</td>
+    <td>${viewHiddenName}</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>selectFrame</td>
+
+    <td>relative=top</td>
+    <td></td>
+</tr>
+        <tr>
+    <td>storeAttribute</td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+    <td>viewHiddenName</td>
+</tr>
+
+<tr>
+    <td>echo</td>
+    <td>${viewHiddenName}</td>
+    <td></td>
+</tr>
