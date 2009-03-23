@@ -144,24 +144,40 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     private HtmlElement getHtmlElement(String key) {
+        HtmlElement element =  getHtmlElement((HtmlPage) page, key);
+        if (element != null) {
+            return element;
+        }
+        else {
+             List<FrameWindow> window = ((HtmlPage) page).getFrames();
+             for (int i =0; i < window.size(); i++) {
+                 element = getHtmlElement((HtmlPage) window.get(i).getEnclosedPage(), key);
+                 if (element != null) {
+                     return element;
+                 }
+             }
+        }
+        throw new HtmlUnitException("ERROR: Element " + key + " not found");
+    }
+    private HtmlElement getHtmlElement(HtmlPage page, String key) {
 
         if (key.startsWith("xPath=")) {
             List<?> list = ((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", ""));
             if (list.size() == 0) {
-                throw new HtmlUnitException("ERROR: Element " + key + " not found");
+                return null;
             }
             return (HtmlElement) list.get(0);
         } else if (key.startsWith("identifier=") || key.startsWith("id=")) {
             try {
-                return ((HtmlPage) page).getHtmlElementById(key.replaceFirst("^id=", "").replaceFirst("^identifier=", ""));
+                return page.getHtmlElementById(key.replaceFirst("^id=", "").replaceFirst("^identifier=", ""));
             }
             catch (ElementNotFoundException e) {
-                throw new HtmlUnitException("ERROR: Element " + key + " not found");
+                return null;
             }
         } else if (key.startsWith("name=")) {
             List<HtmlElement> list = ((HtmlPage) page).getHtmlElementsByName(key.replaceFirst("name=", ""));
             if (list.size() == 0) {
-                throw new HtmlUnitException("ERROR: Element " + key + " not found");
+                return null;
             }
 
             return list.get(0);
@@ -174,7 +190,7 @@ public class HtmlUnitDriver implements BrowserDriver {
                 }
                 i++;
             }
-            throw new HtmlUnitException("ERROR: Element " + key + " not found");
+            return null;
         } else if (key.startsWith("dom=") || key.startsWith("css=")
                 || key.startsWith("document")) {
             throw new RuntimeException("Not yet implemented: " + key);
@@ -182,12 +198,12 @@ public class HtmlUnitDriver implements BrowserDriver {
 
             List<?> list = ((HtmlPage) page).getByXPath(key);
             if (list.size() == 0) {
-                throw new HtmlUnitException("ERROR: Element " + key + " not found");
+                return null;
             }
             return (HtmlElement) list.get(0);
         }
         try {
-            return ((HtmlPage) page).getHtmlElementById(key);
+            return page.getHtmlElementById(key);
         }
         catch (ElementNotFoundException e) {
             //pass through
@@ -196,7 +212,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             return ((HtmlPage) page).getHtmlElementsByName(key).get(0);
         }
         catch (Throwable e) {
-            throw new HtmlUnitException(e);
+            return null;
         }
     }
 
@@ -404,7 +420,17 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void selectFrame(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "selectFrame");
+        if (arg1.startsWith("index=")) {
+            List<FrameWindow> window = ((HtmlPage) page).getFrames();
+            page = window.get(Integer.parseInt(arg1.replaceFirst("^index=", ""))).getEnclosedPage();
+        } else if (arg1.equals("relative=top")) {
+            System.out.println(page.getEnclosingWindow().getTopWindow().toString());
+            page = page.getEnclosingWindow().getTopWindow().getEnclosedPage();
+        } else {
+            throw new RuntimeException("Not yet implemented: selectFrame with parameter " + arg1);
+        }
+
+
     }
 
     public void selectWindow(String arg1) {
