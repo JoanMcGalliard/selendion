@@ -1,12 +1,12 @@
 package spec.concordion.command.execute;
 
-import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.runner.RunWith;
+import org.selendion.integration.concordion.SelendionRunner;
 
 import test.concordion.ProcessingResult;
 import test.concordion.TestRig;
 
-@RunWith(ConcordionRunner.class)
+@RunWith(SelendionRunner.class)
 public class AccessToLinkHrefTest  {
 
     public boolean fragmentSucceeds(String fragment) {

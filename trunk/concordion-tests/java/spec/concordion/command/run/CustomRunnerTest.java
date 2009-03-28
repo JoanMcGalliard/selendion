@@ -1,13 +1,13 @@
 package spec.concordion.command.run;
 
-import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
+import org.selendion.integration.concordion.SelendionRunner;
 
 import test.concordion.TestRig;
 
-@RunWith(ConcordionRunner.class)
+@RunWith(SelendionRunner.class)
 public class CustomRunnerTest {
     
     @BeforeClass
