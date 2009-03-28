@@ -2,8 +2,9 @@ package spec.examples;
 
 import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.runner.RunWith;
+import org.selendion.integration.concordion.SelendionRunner;
 
-@RunWith(ConcordionRunner.class)
+@RunWith(SelendionRunner.class)
 public class Demo {
     
     public String greetingFor(String firstName) {
