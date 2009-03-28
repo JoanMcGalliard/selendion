@@ -1,8 +1,8 @@
-<html xmlns:concordion="http://www.selendion.org/2008">
-
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
 <head>
-<link href="../../../../../selendion.css" rel="stylesheet" type="text/css" />
-
+<link href="../../../../../concordion.css" rel="stylesheet" type="text/css" />
+<style>
+</style>
 </head>
 <body>
 
@@ -28,7 +28,7 @@
 
         <p>If we process this document:</p>
 <pre concordion:execute="processDocument(#TEXT)">
-&lt;html xmlns:concordion="http://www.selendion.org/2008"&gt;
+&lt;html xmlns:concordion="http://www.concordion.org/2007/concordion"&gt;
 &lt;head&gt;
     &lt;title&gt;Example&lt;/title&gt;
 &lt;/head&gt;
@@ -42,7 +42,7 @@
             We expect the output document to have a
             &lt;<b concordion:set="#target">style</b>&gt;
             element inserted into the
-            &lt;<b concordion:set="#outer">head</b>&gt; section
+            &lt;<b concordion:set="#outer">head</b>&gt; section 
             <b concordion:assertEquals="#relativePos">before</b>
             the &lt;<b concordion:set="#sibling">title</b>&gt; element.
         </p>            
