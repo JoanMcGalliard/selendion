@@ -69,6 +69,7 @@ public class SimpleEvaluatorTest extends TestCase {
     public void testAccessInnerVariable() {
         evaluator.setVariable("#result", this);
         assertEquals(1, evaluator.evaluate("#result.outer.inner.value"));
+        assertEquals(new Integer(1), evaluator.evaluate("#value=#result.outer.inner.value"));
     }
 
     public void testEvaluationsCanCreateVariables() throws Exception {

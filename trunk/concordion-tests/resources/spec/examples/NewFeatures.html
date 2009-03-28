@@ -1,35 +1,69 @@
-<html xmlns:concordion="http://www.selendion.org/2008">
-
-<link href="../../selendion.css" rel="stylesheet" type="text/css" />
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<link href="../../concordion.css" rel="stylesheet" type="text/css"/>
 <body>
 
-    <h1>New Features</h1>
+<h1>New Features</h1>
+<h2>Nesting inside assertEquals</h2>
 
+<div class="example">
+    <p>Set the variable #blah to <i concordion:set="#blah">Hooray!</i> and then
+        assert it equals <b concordion:assertEquals="#blah"><i concordion:echo="#blah"></i></b> itself.
+    </p>
+</div>
 
-    <h2>Literal values in set</h2>
-    <div class="example">
-        <p>In this case we just want to assert that <i concordion:set="#value='bob'">explicitly setting
+<h2>Literal values in set</h2>
+
+<div class="example">
+    <p>In this case we just want to assert that <i concordion:set="#value='bob'">explicitly setting
         the value to 'bob'</i> actually results in the value being set to
         <b concordion:assertEquals="#value">bob</b>.</p>
-    </div>
-    <div class="example">
+</div>
+<div class="example">
 
     <p>
-        And that we can testing that the greeting for explitly passing 'Bob' as a parameter is still
+        And that explicitly passing 'Bob' as a parameter still gives a greeting of
         <b concordion:assertEquals="greetingFor('Bob')">Hello Bob!</b>
     </p>
-    </div>
+</div>
 
 
-    <div class="example">
-        <p>In this case we just want to assert that <a href="Demo.html" concordion:set="#link=#HREF">this link</a> is
+<div class="example">
+    <p>In this case we just want to assert that <a href="Demo.html" concordion:set="#link=#HREF">this link</a> is
         <b concordion:assertEquals="#link">Demo.html</b></p>
-    </div>
+
+    <p>and similarly in a table:</p>
+    <table concordion:execute="greetingFor(#val1)">
+        <tr>
+            <th concordion:set="#val1">Set val1</th>
+            <th concordion:assertEquals="#val1">So val1 should equal this</th>
+            <th concordion:set="#val2=#TEXT">Set val2 to #TEXT</th>
+            <th concordion:assertEquals="#val2">So val2 should equal this</th>
+            <th concordion:set="#val3=#HREF">Set val3 to #HREF</th>
+            <th concordion:assertEquals="#val3">So val3 should equal this</th>
+            <th concordion:set="#val4">Set val4</th>
+            <th concordion:assertEquals="#val4">So val4 should equal this</th>
+
+        </tr>
+        <tr>
+            <td>text1</td>
+            <td>text1</td>
+            <td><a href="href2.html">text2</a></td>
+            <td>text2</td>
+            <td><a href="href3.html">text3</a></td>
+            <td>href3.html</td>
+            <td><a href="href4.html">text4</a></td>
+            <td><a href="href4.html">text4</a></td>
+
+        </tr>
+    </table>
+</div>
 
 
-    <div class="example">
-        <p>Run the test in  <a href="Demo.html" concordion:run="concordion">this link</a>. </p>
-    </div>
+<div class="example">
+    <p>Run the test in <a href="Demo.html" concordion:run="concordion">this link</a>. </p>
+</div>
+
+
 
 </body>
 </html>

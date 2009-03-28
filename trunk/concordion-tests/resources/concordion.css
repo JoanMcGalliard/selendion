@@ -2,18 +2,18 @@
   font-family: Arial;
 }
 body {
-  padding: 32px;
+  padding: 32px;  
 }
 pre {
   padding: 6px 28px 6px 28px;
   background-color: #E8EEF7;
 }
-pre, pre *, code, kbd {
+pre, pre *, code, code *, kbd {
   font-family: Courier New, Courier;
   font-size: 10pt;
 }
 h1, h1 * {
-  font-size: 24pt;
+  font-size: 24pt;	
 }
 p, td, th, li, .breadcrumbs {
   font-size: 10pt;
@@ -39,7 +39,7 @@ th {
 }
 li {
   margin-top: 6px;
-  margin-bottom: 6px;
+  margin-bottom: 6px; 
 }
 
 
@@ -62,23 +62,20 @@ li {
 .idea {
   font-size: 9pt;
   color: #888;
-  font-style: italic;
+  font-style: italic;	
 }
 .tight li {
   margin-top: 1px;
-  margin-bottom: 1px;
+  margin-bottom: 1px; 
 }
 .commentary {
   float: right;
   width: 200px;
   background-color: #ffffd0;
   padding:8px;
-  border: 3px solid #eeeeb0;
-  margin: 10px 0px 10px 10px;
+  border: 3px solid #eeeeb0;	 
+  margin: 10px 0px 10px 10px;	 
 }
 .commentary, .commentary * {
   font-size: 8pt;
-}
-.attention {
-    color: #ff0000
 }

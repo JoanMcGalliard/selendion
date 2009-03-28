@@ -1,248 +1,35 @@
-Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
+Index: src/test/java/test/concordion/TestRig.java
 ===================================================================
---- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -8,6 +8,8 @@
- import org.concordion.api.Evaluator;
- import org.concordion.internal.util.Check;
- 
-+import java.util.Set;
-+
- public class OgnlEvaluator implements Evaluator {
- 
-     private Object rootObject;
-@@ -35,6 +37,10 @@
-         }
-     }
- 
-+    public Set getKeys() {
-+        return ognlContext.keySet();
-+    }
-+
-     private InvalidExpressionException invalidExpressionException(OgnlException e) {
-         Throwable cause = e;
-         
-Index: src/test/java/test/concordion/StubEvaluator.java
-===================================================================
---- src/test/java/test/concordion/StubEvaluator.java	(revision 42)
-+++ src/test/java/test/concordion/StubEvaluator.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -3,6 +3,8 @@
- import org.concordion.api.Evaluator;
+--- src/test/java/test/concordion/TestRig.java	(revision 226)
++++ src/test/java/test/concordion/TestRig.java	Fri Mar 27 19:14:53 GMT 2009
+@@ -6,8 +6,11 @@
  import org.concordion.api.EvaluatorFactory;
- 
-+import java.util.Set;
-+
- public class StubEvaluator implements Evaluator, EvaluatorFactory {
- 
-     private Object evaluationResult = null;
-@@ -18,6 +20,10 @@
-         return evaluationResult;
-     }
- 
-+    public Set getKeys() {
-+        return null;
-+    }
-+
-     public Object getVariable(String variableName) {
-         return null;
-     }
-Index: src/test/resources/spec/concordion/results/exception/Exception.html
-===================================================================
---- src/test/resources/spec/concordion/results/exception/Exception.html	(revision 42)
-+++ src/test/resources/spec/concordion/results/exception/Exception.html	Fri Nov 21 11:19:47 GMT 2008
-@@ -66,6 +66,8 @@
- &lt;del class="expected"&gt;some text&lt;/del&gt; _
- &lt;/span&gt; _
- &lt;span class="exceptionMessage"&gt;My error message&lt;/span&gt; _
-+&lt;/p&gt; _
-+&lt;span&gt; _
- &lt;input class="stackTraceButton" id="stackTraceButton1" type="button" _
-  onclick="javascript:toggleStackTrace('1')" value="View Stack" /&gt; _
- &lt;span class="stackTrace" id="stackTrace1"&gt; _
-@@ -75,7 +77,7 @@
- &lt;span class="stackTraceEntry"&gt;at sun.reflect.NativeMethodAccessorImpl.invoke0 (Unknown Source)&lt;/span&gt; _
- &lt;span class="stackTraceEntry"&gt;at junit.framework.TestCase.runTest (TestCase.java:164)&lt;/span&gt; _
- &lt;/span&gt; _
--&lt;/p&gt;
-+&lt;/span&gt;
- </pre>
- 
- 
-@@ -95,4 +97,4 @@
-     </ul>        
- 
- </body>
--</html>
-\ No newline at end of file
-+</html>
-Index: src/main/java/org/concordion/internal/command/LocalTextDecorator.java
-===================================================================
---- src/main/java/org/concordion/internal/command/LocalTextDecorator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/command/LocalTextDecorator.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -3,11 +3,13 @@
- import org.concordion.api.Command;
- import org.concordion.api.Evaluator;
- import org.concordion.api.ResultRecorder;
+ import org.concordion.api.Resource;
+ import org.concordion.api.ResultSummary;
 +import org.concordion.api.Element;
- import org.concordion.internal.CommandCall;
+ import org.concordion.internal.ConcordionBuilder;
+ import org.concordion.internal.SimpleEvaluatorFactory;
++import nu.xom.Document;
++import nu.xom.Nodes;
  
- public class LocalTextDecorator extends AbstractCommandDecorator {
  
-     private static final String TEXT_VARIABLE = "#TEXT";
-+    private static final String HREF_VARIABLE = "#HREF";
- 
-     public LocalTextDecorator(Command command) {
-         super(command);
-@@ -15,12 +17,23 @@
- 
-     @Override
-     protected void process(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder, Runnable runnable) {
--        Object savedValue = evaluator.getVariable(TEXT_VARIABLE);
-+        Object savedTextValue = evaluator.getVariable(TEXT_VARIABLE);
-+        Object savedHrefValue = evaluator.getVariable(HREF_VARIABLE);
-         try {
-             evaluator.setVariable(TEXT_VARIABLE, commandCall.getElement().getText());
-+            String href=commandCall.getElement().getAttributeValue("href");
-+            if (href == null) {
-+                Element a= commandCall.getElement().getFirstChildElement("a");
-+                if (a != null)  {
-+                    href = a.getAttributeValue("href");
-+                }
-+            }
-+            evaluator.setVariable(HREF_VARIABLE, href);
-             runnable.run();
-         } finally {
--            evaluator.setVariable(TEXT_VARIABLE, savedValue);
-+            evaluator.setVariable(TEXT_VARIABLE, savedTextValue);
-+            evaluator.setVariable(HREF_VARIABLE, savedHrefValue);
-+
--        }        
-+        }
+ public class TestRig {
+@@ -44,7 +47,11 @@
+             throw new RuntimeException("Test rig failed to process specification", e);
+         } 
      }
- }
-Index: src/main/java/org/concordion/api/Element.java
-===================================================================
---- src/main/java/org/concordion/api/Element.java	(revision 42)
-+++ src/main/java/org/concordion/api/Element.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -3,10 +3,7 @@
- import java.util.ArrayList;
- import java.util.List;
++    public Nodes unwrapFragment(Document document) {
++        return document.query("/html/body/fragment/*");
  
--import nu.xom.Attribute;
--import nu.xom.Elements;
--import nu.xom.Node;
--import nu.xom.Nodes;
-+import nu.xom.*;
- 
- public final class Element {
- 
-@@ -23,10 +20,24 @@
-         this.xomElement = xomElement;
-     }
- 
-+    public nu.xom.Element getXomElement () {
-+        return this.xomElement;
 +    }
 +
-     public String getText() {
-         return xomElement.getValue();
-     }
- 
-+    public void insertAfter(Element insert) {
-+        ParentNode parent = xomElement.getParent();
-+        for (int i=0; i < parent.getChildCount() ; i++) {
-+            if (parent.getChild(i).equals(xomElement)) {
-+                parent.insertChild(insert.xomElement, i+1) ;
-+                break;
-+            }
-+        }
-+    }
-+
-     public Element addStyleClass(String styleClass) {
-         String currentClass = getAttributeValue("class");
-         if (currentClass != null) {
-@@ -106,6 +117,9 @@
-     public Element getRootElement() {
-         return new Element(xomElement.getDocument().getRootElement());
-     }
-+    public Element getParent() {
-+        return new Element((nu.xom.Element) xomElement.getParent());
-+    }
- 
-     public Element getFirstChildElement(String name) {
-         nu.xom.Element body = xomElement.getFirstChildElement(name);
-@@ -185,4 +199,7 @@
-         Element[] descendantElements = getDescendantElements(name);
-         return descendantElements.length == 0 ? null : descendantElements[0];
-     }
-+     public Element copy() {
-+        return new Element((nu.xom.Element) xomElement.copy());
--}
-+    }
-+}
-Index: src/test/java/test/concordion/internal/SimpleEvaluatorTest.java
-===================================================================
---- src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	(revision 42)
-+++ src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	Mon Dec 08 11:56:13 GMT 2008
-@@ -69,6 +69,7 @@
-     public void testAccessInnerVariable() {
-         evaluator.setVariable("#result", this);
-         assertEquals(1, evaluator.evaluate("#result.outer.inner.value"));
-+        assertEquals(new Integer(1), evaluator.evaluate("#value=#result.outer.inner.value"));
-     }
- 
-     public void testEvaluationsCanCreateVariables() throws Exception {
-Index: src/test/java/test/concordion/internal/ExpressionTest.java
-===================================================================
---- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 42)
-+++ src/test/java/test/concordion/internal/ExpressionTest.java	Tue Dec 02 19:07:26 GMT 2008
-@@ -25,7 +25,18 @@
-         , "myMethod(#var1, #var2) ? 's1' : 's2'"
-         , "#var.myMethod()"
-         , "#var.myMethod(#var1)"
--        , "#var.myMethod(#var1, #var2)"};
-+        , "#var.myMethod(#var1, #var2)"
-+        , "'string value'"
-+        , "100"
-+        , "0"
-+        , "10.00"
-+        , "-.6"
-+        , "-0.6"
-+        , "true"
-+        , "false"
-+        , "myMethod(false)"
-+        , "myMethod(10)"
-+        , "myMethod('strng value')" };
-     
-     public void testWhitespaceIsIgnoredInEvaluationExpressions() throws Exception {
-         assertValidEvaluationExpression("myMethod(#var1,   #var2)");
-@@ -38,6 +49,7 @@
-         assertValidSetVariableExpression("  #var   =    myProp");
-         assertValidSetVariableExpression("#var=myProp");
-         assertValidSetVariableExpression("#var=myMethod(#var1,#var2)");
-+        assertValidSetVariableExpression("#var='bob'");
-     }
-     
-     public void testAllEvaluationExpressions() throws Exception {
-Index: src/test/java/spec/examples/NewFeaturesTest.java
-===================================================================
---- src/test/java/spec/examples/NewFeaturesTest.java	Fri Nov 21 11:19:47 GMT 2008
-+++ src/test/java/spec/examples/NewFeaturesTest.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -0,0 +1,10 @@
-+package spec.examples;
-+
-+import org.concordion.integration.junit3.ConcordionTestCase;
-+
-+public class NewFeaturesTest extends ConcordionTestCase {
-+    public String greetingFor(String firstName) {
-+        return String.format("Hello %s!", firstName);
-+    }
-+
-+}
+     public ProcessingResult process(String html) {
+         Resource resource = new Resource("/testrig");
+         withResource(resource, html);
 Index: src/test/resources/spec/examples/NewFeatures.html
 ===================================================================
---- src/test/resources/spec/examples/NewFeatures.html	Tue Mar 17 10:19:20 GMT 2009
-+++ src/test/resources/spec/examples/NewFeatures.html	Tue Mar 17 10:19:20 GMT 2009
+--- src/test/resources/spec/examples/NewFeatures.html	Fri Mar 27 19:13:23 GMT 2009
++++ src/test/resources/spec/examples/NewFeatures.html	Fri Mar 27 19:13:23 GMT 2009
 @@ -0,0 +1,69 @@
 +<html xmlns:concordion="http://www.concordion.org/2007/concordion">
 +<link href="../../concordion.css" rel="stylesheet" type="text/css"/>
@@ -313,75 +100,11 @@ Index: src/test/resources/spec/examples/NewFeatures.html
 +
 +</body>
 +</html>
-Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
-===================================================================
---- src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	(revision 42)
-+++ src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -16,16 +16,18 @@
-     private static final String TOGGLING_SCRIPT_RESOURCE_PATH = "/org/concordion/internal/resource/visibility-toggler.js";
-     private long buttonId = 0;
-     private Set<Element> rootElementsWithScript = new HashSet<Element>();
--    
-+
-     public void throwableCaught(ThrowableCaughtEvent event) {
-         buttonId++;
--        
-+
-         Element element = event.getElement();
-         element.appendChild(expectedSpan(element));
-         element.appendChild(exceptionMessage(event.getThrowable().getMessage()));
--        element.appendChild(stackTraceTogglingButton());
--        element.appendChild(stackTrace(event.getThrowable(), event.getExpression()));
-+        Element span = new Element("span");
-+        span.appendChild(stackTraceTogglingButton());
-+        span.appendChild(stackTrace(event.getThrowable(), event.getExpression()));
-+        element.insertAfter(span);
--        
-+
-         ensureDocumentHasTogglingScript(element);
-     }
- 
-Index: src/test/java/test/concordion/TestRig.java
-===================================================================
---- src/test/java/test/concordion/TestRig.java	(revision 42)
-+++ src/test/java/test/concordion/TestRig.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -6,8 +6,11 @@
- import org.concordion.api.EvaluatorFactory;
- import org.concordion.api.Resource;
- import org.concordion.api.ResultSummary;
-+import org.concordion.api.Element;
- import org.concordion.internal.ConcordionBuilder;
- import org.concordion.internal.SimpleEvaluatorFactory;
-+import nu.xom.Document;
-+import nu.xom.Nodes;
- 
- 
- public class TestRig {
-@@ -44,7 +47,11 @@
-             throw new RuntimeException("Test rig failed to process specification", e);
-         } 
-     }
-+    public Nodes unwrapFragment(Document document) {
-+        return document.query("/html/body/fragment/*");
- 
-+    }
-+
-     public ProcessingResult process(String html) {
-         Resource resource = new Resource("/testrig");
-         withResource(resource, html);
 Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 ===================================================================
---- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 42)
-+++ src/main/java/org/concordion/internal/ConcordionBuilder.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -27,6 +27,7 @@
- import org.concordion.internal.listener.BreadcrumbRenderer;
- import org.concordion.internal.listener.DocumentStructureImprover;
- import org.concordion.internal.listener.PageFooterRenderer;
-+import org.concordion.internal.listener.RunResultRenderer;
- import org.concordion.internal.listener.SpecificationExporter;
- import org.concordion.internal.listener.StylesheetEmbedder;
- import org.concordion.internal.listener.ThrowableRenderer;
-@@ -40,21 +41,21 @@
+--- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 226)
++++ src/main/java/org/concordion/internal/ConcordionBuilder.java	Fri Mar 27 19:14:53 GMT 2009
+@@ -41,21 +41,21 @@
      private static final String PROPERTY_OUTPUT_DIR = "concordion.output.dir";
      private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/concordion/internal/resource/embedded.css";
      
@@ -416,15 +139,7 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
      private File baseOutputDir;
      private ThrowableCaughtPublisher throwableListenerPublisher = new ThrowableCaughtPublisher();
      
-@@ -75,6 +76,7 @@
-         assertTrueCommand.addAssertEqualsListener(new AssertEqualsResultRenderer());
-         assertFalseCommand.addAssertEqualsListener(new AssertEqualsResultRenderer());
-         verifyRowsCommand.addVerifyRowsListener(new VerifyRowsResultRenderer());
-+        runCommand.addRunListener(new RunResultRenderer());
-         documentParser.addDocumentParsingListener(new DocumentStructureImprover());
-         String stylesheetContent = IOUtil.readResourceAsString(EMBEDDED_STYLESHEET_RESOURCE);
-         documentParser.addDocumentParsingListener(new StylesheetEmbedder(stylesheetContent));
-@@ -105,7 +107,7 @@
+@@ -107,7 +107,7 @@
          return this;
      }
      
@@ -433,7 +148,7 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
          ThrowableCatchingDecorator throwableCatchingDecorator = new ThrowableCatchingDecorator(new LocalTextDecorator(command));
          throwableCatchingDecorator.addThrowableListener(throwableListenerPublisher);
          Command decoratedCommand = throwableCatchingDecorator;
-@@ -138,7 +140,7 @@
+@@ -140,7 +140,7 @@
          return new Concordion(specificationLocator, specificationReader, evaluatorFactory);
      }
  
@@ -442,92 +157,10 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
          if (baseOutputDir != null) {
              return baseOutputDir;
          }
-Index: src/main/java/org/concordion/internal/command/AssertEqualsCommand.java
-===================================================================
---- src/main/java/org/concordion/internal/command/AssertEqualsCommand.java	(revision 42)
-+++ src/main/java/org/concordion/internal/command/AssertEqualsCommand.java	Tue Mar 17 10:32:00 GMT 2009
-@@ -8,6 +8,7 @@
- import org.concordion.api.ResultRecorder;
- import org.concordion.internal.BrowserStyleWhitespaceComparator;
- import org.concordion.internal.CommandCall;
-+import org.concordion.internal.CommandCallList;
- import org.concordion.internal.util.Announcer;
- import org.concordion.internal.util.Check;
- 
-@@ -34,13 +35,16 @@
-     
-     @Override
-     public void verify(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
--        Check.isFalse(commandCall.hasChildCommands(), "Nesting commands inside an 'assertEquals' is not supported");
-+   CommandCallList childCommands = commandCall.getChildren();
--        
-+
-+            childCommands.setUp(evaluator, resultRecorder);
-+        childCommands.execute(evaluator, resultRecorder);
-+        childCommands.verify(evaluator, resultRecorder);
-         Element element = commandCall.getElement();
-         
-         Object actual = evaluator.evaluate(commandCall.getExpression());
-         String expected = element.getText();
--        
-+
-         if (comparator.compare(actual, expected) == 0) {
-             resultRecorder.record(Result.SUCCESS);
-             announceSuccess(element);
-Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
-===================================================================
---- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 42)
-+++ src/main/java/org/concordion/internal/SimpleEvaluator.java	Mon Dec 08 11:53:39 GMT 2008
-@@ -25,22 +25,23 @@
-     private static String PROPERTY_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";
-     private static String STRING_PATTERN = "'[^']+'";
-     private static String LHS_VARIABLE_PATTERN = "#" + METHOD_NAME_PATTERN;
--    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT)";
-+    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#HREF|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
--    
-+
-     public static void validateEvaluationExpression(String expression) {
-         
-         // Examples of possible expressions in test.concordion.internal.ExpressionTest
--        
-+
-         String METHOD_CALL_PARAMS = METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)";
-         String METHOD_CALL_NO_PARAMS = METHOD_NAME_PATTERN + " *\\( *\\)";
-         String TERNARY_STRING_RESULT = " \\? " + STRING_PATTERN + " : " + STRING_PATTERN;
--        
-+
-         List<String> regexs = new ArrayList<String>();
-         regexs.add(PROPERTY_NAME_PATTERN);
-         regexs.add(METHOD_CALL_NO_PARAMS);
-         regexs.add(METHOD_CALL_PARAMS);
-         regexs.add(RHS_VARIABLE_PATTERN);
-         regexs.add(LHS_VARIABLE_PATTERN + "(\\." + PROPERTY_NAME_PATTERN +  ")+");
-+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + LHS_VARIABLE_PATTERN + "(\\." + PROPERTY_NAME_PATTERN +  ")+");
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + PROPERTY_NAME_PATTERN);
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_CALL_NO_PARAMS);
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_CALL_PARAMS);
-@@ -50,7 +51,9 @@
-         regexs.add(METHOD_CALL_PARAMS + TERNARY_STRING_RESULT);
-         regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_NO_PARAMS);
-         regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_PARAMS);
-+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
-         
-+        
-         expression = expression.trim();
-         for (String regex : regexs) {
-             if (expression.matches(regex)) {
-@@ -71,6 +74,7 @@
-         regexs.add(RHS_VARIABLE_PATTERN);
-         regexs.add(LHS_VARIABLE_PATTERN + "\\." + PROPERTY_NAME_PATTERN);
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + PROPERTY_NAME_PATTERN);
-+        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *\\)");
-         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)");
-         
 Index: src/main/java/org/concordion/internal/Table.java
 ===================================================================
---- src/main/java/org/concordion/internal/Table.java	(revision 42)
-+++ src/main/java/org/concordion/internal/Table.java	Fri Nov 21 11:19:47 GMT 2008
+--- src/main/java/org/concordion/internal/Table.java	(revision 226)
++++ src/main/java/org/concordion/internal/Table.java	Fri Mar 27 19:15:52 GMT 2009
 @@ -41,15 +41,23 @@
          }
          return detailRows.toArray(new Row[detailRows.size()]);
@@ -557,32 +190,114 @@ Index: src/main/java/org/concordion/internal/Table.java
      public Row addDetailRow() {
          Element rowElement = new Element("tr");
          
-Index: src/main/java/org/concordion/internal/DocumentParser.java
+Index: src/main/java/org/concordion/api/Evaluator.java
 ===================================================================
---- src/main/java/org/concordion/internal/DocumentParser.java	(revision 42)
-+++ src/main/java/org/concordion/internal/DocumentParser.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -41,7 +41,7 @@
-         return new XMLSpecification(rootCommandCall);
+--- src/main/java/org/concordion/api/Evaluator.java	(revision 226)
++++ src/main/java/org/concordion/api/Evaluator.java	Fri Mar 27 19:15:52 GMT 2009
+@@ -1,5 +1,7 @@
+ package org.concordion.api;
+ 
++import java.util.Set;
++
+ public interface Evaluator {
+ 
+     Object getVariable(String variableName);
+@@ -7,4 +9,6 @@
+     void setVariable(String variableName, Object value);
+ 
+     Object evaluate(String expression);
++
++    Set getKeys();
+ }
+Index: src/test/java/test/concordion/StubEvaluator.java
+===================================================================
+--- src/test/java/test/concordion/StubEvaluator.java	(revision 226)
++++ src/test/java/test/concordion/StubEvaluator.java	Fri Mar 27 19:10:19 GMT 2009
+@@ -3,6 +3,8 @@
+ import org.concordion.api.Evaluator;
+ import org.concordion.api.EvaluatorFactory;
+ 
++import java.util.Set;
++
+ public class StubEvaluator implements Evaluator, EvaluatorFactory {
+ 
+     private Object evaluationResult = null;
+@@ -18,6 +20,10 @@
+         return evaluationResult;
      }
  
--    private void generateCommandCallTree(nu.xom.Element xomElement, CommandCall parentCommandCall, Resource resource) {
-+    public void generateCommandCallTree(nu.xom.Element xomElement, CommandCall parentCommandCall, Resource resource) {
-         boolean commandIsAssigned = false;
-         for (int i = 0; i < xomElement.getAttributeCount(); i++) {
-             Attribute attribute = xomElement.getAttribute(i);
-@@ -57,6 +57,8 @@
-                     CommandCall commandCall = new CommandCall(command, new Element(xomElement), expression, resource);
-                     parentCommandCall.appendChild(commandCall);
-                     parentCommandCall = commandCall;
-+                } else {
-+                    throw new RuntimeException("Unknown command " + commandName + " in namespace " + namespaceURI + ".");
-                 }
-             }
++    public Set getKeys() {
++        return null;
++    }
++
+     public Object getVariable(String variableName) {
+         return null;
+     }
+Index: src/main/java/org/concordion/internal/command/AssertEqualsCommand.java
+===================================================================
+--- src/main/java/org/concordion/internal/command/AssertEqualsCommand.java	(revision 226)
++++ src/main/java/org/concordion/internal/command/AssertEqualsCommand.java	Fri Mar 27 19:14:53 GMT 2009
+@@ -8,6 +8,7 @@
+ import org.concordion.api.ResultRecorder;
+ import org.concordion.internal.BrowserStyleWhitespaceComparator;
+ import org.concordion.internal.CommandCall;
++import org.concordion.internal.CommandCallList;
+ import org.concordion.internal.util.Announcer;
+ import org.concordion.internal.util.Check;
+ 
+@@ -34,13 +35,16 @@
+     
+     @Override
+     public void verify(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
+-        Check.isFalse(commandCall.hasChildCommands(), "Nesting commands inside an 'assertEquals' is not supported");
++   CommandCallList childCommands = commandCall.getChildren();
+-        
++
++            childCommands.setUp(evaluator, resultRecorder);
++        childCommands.execute(evaluator, resultRecorder);
++        childCommands.verify(evaluator, resultRecorder);
+         Element element = commandCall.getElement();
+         
+         Object actual = evaluator.evaluate(commandCall.getExpression());
+         String expected = element.getText();
+-        
++
+         if (comparator.compare(actual, expected) == 0) {
+             resultRecorder.record(Result.SUCCESS);
+             announceSuccess(element);
+Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
+===================================================================
+--- src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	(revision 226)
++++ src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	Fri Mar 27 19:14:52 GMT 2009
+@@ -22,17 +22,19 @@
+         
+         Element element = event.getElement();
+         element.appendChild(expectedSpan(element));
+-        
++
+         // Special handling for <a> tags to avoid the stack-trace being inside the link text
+         if (element.getLocalName().equals("a")) {
+-            Element div = new Element("div"); 
++            Element div = new Element("div");
+             element.appendSister(div);
+             element = div;
          }
+         element.appendChild(exceptionMessage(event.getThrowable().getMessage()));
+-        element.appendChild(stackTraceTogglingButton());
+-        element.appendChild(stackTrace(event.getThrowable(), event.getExpression()));
++        Element span = new Element("span");
++        span.appendChild(stackTraceTogglingButton());
++        span.appendChild(stackTrace(event.getThrowable(), event.getExpression()));
++        element.insertAfter(span);
+-        
++
+         ensureDocumentHasTogglingScript(element);
+     }
+ 
 Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 ===================================================================
---- src/test/java/spec/concordion/results/exception/ExceptionTest.java	(revision 42)
-+++ src/test/java/spec/concordion/results/exception/ExceptionTest.java	Fri Nov 21 11:19:47 GMT 2008
+--- src/test/java/spec/concordion/results/exception/ExceptionTest.java	(revision 226)
++++ src/test/java/spec/concordion/results/exception/ExceptionTest.java	Fri Mar 27 19:15:52 GMT 2009
 @@ -9,6 +9,8 @@
  import org.concordion.internal.listener.ThrowableRenderer;
  
@@ -621,29 +336,22 @@ Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 -}
 +    }
 +}
-Index: src/main/java/org/concordion/api/Evaluator.java
+Index: src/test/java/test/concordion/internal/SimpleEvaluatorTest.java
 ===================================================================
---- src/main/java/org/concordion/api/Evaluator.java	(revision 42)
-+++ src/main/java/org/concordion/api/Evaluator.java	Fri Nov 21 11:19:47 GMT 2008
-@@ -1,5 +1,7 @@
- package org.concordion.api;
+--- src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	(revision 226)
++++ src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	Fri Mar 27 19:13:23 GMT 2009
+@@ -69,6 +69,7 @@
+     public void testAccessInnerVariable() {
+         evaluator.setVariable("#result", this);
+         assertEquals(1, evaluator.evaluate("#result.outer.inner.value"));
++        assertEquals(new Integer(1), evaluator.evaluate("#value=#result.outer.inner.value"));
+     }
  
-+import java.util.Set;
-+
- public interface Evaluator {
- 
-     Object getVariable(String variableName);
-@@ -7,4 +9,6 @@
-     void setVariable(String variableName, Object value);
- 
-     Object evaluate(String expression);
-+
-+    Set getKeys();
- }
+     public void testEvaluationsCanCreateVariables() throws Exception {
 Index: src/test/java/test/concordion/internal/TableTest.java
 ===================================================================
---- src/test/java/test/concordion/internal/TableTest.java	Fri Nov 21 11:19:47 GMT 2008
-+++ src/test/java/test/concordion/internal/TableTest.java	Fri Nov 21 11:19:47 GMT 2008
+--- src/test/java/test/concordion/internal/TableTest.java	Fri Mar 27 19:15:52 GMT 2009
++++ src/test/java/test/concordion/internal/TableTest.java	Fri Mar 27 19:15:52 GMT 2009
 @@ -0,0 +1,72 @@
 +package test.concordion.internal;
 +
@@ -714,6 +422,231 @@ Index: src/test/java/test/concordion/internal/TableTest.java
 +        row.appendChild(new Element("td").appendText("Col 1"));
 +        tableElement.appendChild(row);
 +        return tableElement;
++    }
++
++}
+Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
+===================================================================
+--- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 226)
++++ src/main/java/org/concordion/internal/SimpleEvaluator.java	Fri Mar 27 19:15:52 GMT 2009
+@@ -25,8 +25,8 @@
+     private static String PROPERTY_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";
+     private static String STRING_PATTERN = "'[^']+'";
+     private static String LHS_VARIABLE_PATTERN = "#" + METHOD_NAME_PATTERN;
+-    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#HREF)";
++    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#HREF|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
+-    
++
+     public static void validateEvaluationExpression(String expression) {
+         
+         // Examples of possible expressions in test.concordion.internal.ExpressionTest
+@@ -41,6 +41,7 @@
+         regexs.add(METHOD_CALL_PARAMS);
+         regexs.add(RHS_VARIABLE_PATTERN);
+         regexs.add(LHS_VARIABLE_PATTERN + "(\\." + PROPERTY_NAME_PATTERN +  ")+");
++        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + LHS_VARIABLE_PATTERN + "(\\." + PROPERTY_NAME_PATTERN +  ")+");
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + PROPERTY_NAME_PATTERN);
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_CALL_NO_PARAMS);
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_CALL_PARAMS);
+@@ -50,7 +51,9 @@
+         regexs.add(METHOD_CALL_PARAMS + TERNARY_STRING_RESULT);
+         regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_NO_PARAMS);
+         regexs.add(LHS_VARIABLE_PATTERN + "\\." + METHOD_CALL_PARAMS);
++        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
+-        
++
++
+         expression = expression.trim();
+         for (String regex : regexs) {
+             if (expression.matches(regex)) {
+@@ -71,6 +74,7 @@
+         regexs.add(RHS_VARIABLE_PATTERN);
+         regexs.add(LHS_VARIABLE_PATTERN + "\\." + PROPERTY_NAME_PATTERN);
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + PROPERTY_NAME_PATTERN);
++        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *\\)");
+         regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)");
+         
+Index: src/test/resources/spec/concordion/results/exception/Exception.html
+===================================================================
+--- src/test/resources/spec/concordion/results/exception/Exception.html	(revision 226)
++++ src/test/resources/spec/concordion/results/exception/Exception.html	Fri Mar 27 19:10:19 GMT 2009
+@@ -66,6 +66,8 @@
+ &lt;del class="expected"&gt;some text&lt;/del&gt; _
+ &lt;/span&gt; _
+ &lt;span class="exceptionMessage"&gt;My error message&lt;/span&gt; _
++&lt;/p&gt; _
++&lt;span&gt; _
+ &lt;input class="stackTraceButton" id="stackTraceButton1" type="button" _
+  onclick="javascript:toggleStackTrace('1')" value="View Stack" /&gt; _
+ &lt;span class="stackTrace" id="stackTrace1"&gt; _
+@@ -75,7 +77,7 @@
+ &lt;span class="stackTraceEntry"&gt;at sun.reflect.NativeMethodAccessorImpl.invoke0 (Unknown Source)&lt;/span&gt; _
+ &lt;span class="stackTraceEntry"&gt;at junit.framework.TestCase.runTest (TestCase.java:164)&lt;/span&gt; _
+ &lt;/span&gt; _
+-&lt;/p&gt;
++&lt;/span&gt;
+ </pre>
+ 
+ 
+@@ -95,4 +97,4 @@
+     </ul>        
+ 
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
+===================================================================
+--- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 226)
++++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Fri Mar 27 19:10:19 GMT 2009
+@@ -8,6 +8,8 @@
+ import org.concordion.api.Evaluator;
+ import org.concordion.internal.util.Check;
+ 
++import java.util.Set;
++
+ public class OgnlEvaluator implements Evaluator {
+ 
+     private Object rootObject;
+@@ -35,6 +37,10 @@
+         }
+     }
+ 
++    public Set getKeys() {
++        return ognlContext.keySet();
++    }
++
+     private InvalidExpressionException invalidExpressionException(OgnlException e) {
+         Throwable cause = e;
+         
+Index: src/test/java/test/concordion/internal/ExpressionTest.java
+===================================================================
+--- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 226)
++++ src/test/java/test/concordion/internal/ExpressionTest.java	Fri Mar 27 19:13:23 GMT 2009
+@@ -25,7 +25,18 @@
+         , "myMethod(#var1, #var2) ? 's1' : 's2'"
+         , "#var.myMethod()"
+         , "#var.myMethod(#var1)"
+-        , "#var.myMethod(#var1, #var2)"};
++        , "#var.myMethod(#var1, #var2)"
++        , "'string value'"
++        , "100"
++        , "0"
++        , "10.00"
++        , "-.6"
++        , "-0.6"
++        , "true"
++        , "false"
++        , "myMethod(false)"
++        , "myMethod(10)"
++        , "myMethod('strng value')" };
+     
+     public void testWhitespaceIsIgnoredInEvaluationExpressions() throws Exception {
+         assertValidEvaluationExpression("myMethod(#var1,   #var2)");
+@@ -38,6 +49,7 @@
+         assertValidSetVariableExpression("  #var   =    myProp");
+         assertValidSetVariableExpression("#var=myProp");
+         assertValidSetVariableExpression("#var=myMethod(#var1,#var2)");
++        assertValidSetVariableExpression("#var='bob'");
+     }
+     
+     public void testAllEvaluationExpressions() throws Exception {
+Index: src/main/java/org/concordion/internal/DocumentParser.java
+===================================================================
+--- src/main/java/org/concordion/internal/DocumentParser.java	(revision 226)
++++ src/main/java/org/concordion/internal/DocumentParser.java	Fri Mar 27 19:15:52 GMT 2009
+@@ -41,7 +41,7 @@
+         return new XMLSpecification(rootCommandCall);
+     }
+ 
+-    private void generateCommandCallTree(nu.xom.Element xomElement, CommandCall parentCommandCall, Resource resource) {
++    public void generateCommandCallTree(nu.xom.Element xomElement, CommandCall parentCommandCall, Resource resource) {
+         boolean commandIsAssigned = false;
+         for (int i = 0; i < xomElement.getAttributeCount(); i++) {
+             Attribute attribute = xomElement.getAttribute(i);
+@@ -57,6 +57,8 @@
+                     CommandCall commandCall = new CommandCall(command, new Element(xomElement), expression, resource);
+                     parentCommandCall.appendChild(commandCall);
+                     parentCommandCall = commandCall;
++                } else {
++                    throw new RuntimeException("Unknown command " + commandName + " in namespace " + namespaceURI + ".");
+                 }
+             }
+         }
+Index: src/main/java/org/concordion/api/Element.java
+===================================================================
+--- src/main/java/org/concordion/api/Element.java	(revision 226)
++++ src/main/java/org/concordion/api/Element.java	Fri Mar 27 19:37:31 GMT 2009
+@@ -3,10 +3,7 @@
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+-import nu.xom.Attribute;
+-import nu.xom.Elements;
+-import nu.xom.Node;
+-import nu.xom.Nodes;
++import nu.xom.*;
+ 
+ public final class Element {
+ 
+@@ -23,10 +20,24 @@
+         this.xomElement = xomElement;
+     }
+ 
++    public nu.xom.Element getXomElement () {
++        return this.xomElement;
++    }
++
+     public String getText() {
+         return xomElement.getValue();
+     }
+ 
++    public void insertAfter(Element insert) {
++        ParentNode parent = xomElement.getParent();
++        for (int i=0; i < parent.getChildCount() ; i++) {
++            if (parent.getChild(i).equals(xomElement)) {
++                parent.insertChild(insert.xomElement, i+1) ;
++                break;
++            }
++        }
++    }
++
+     public Element addStyleClass(String styleClass) {
+         String currentClass = getAttributeValue("class");
+         if (currentClass != null) {
+@@ -106,6 +117,9 @@
+     public Element getRootElement() {
+         return new Element(xomElement.getDocument().getRootElement());
+     }
++    public Element getParent() {
++        return new Element((nu.xom.Element) xomElement.getParent());
++    }
+ 
+     public Element getFirstChildElement(String name) {
+         nu.xom.Element body = xomElement.getFirstChildElement(name);
+@@ -185,6 +199,9 @@
+         Element[] descendantElements = getDescendantElements(name);
+         return descendantElements.length == 0 ? null : descendantElements[0];
+     }
++     public Element copy() {
++        return new Element((nu.xom.Element) xomElement.copy());
++    }
+ 
+     public void appendSister(Element element) {
+         nu.xom.Element xomParentElement = (nu.xom.Element) xomElement.getParent();
+Index: src/test/java/spec/examples/NewFeaturesTest.java
+===================================================================
+--- src/test/java/spec/examples/NewFeaturesTest.java	Fri Mar 27 19:13:23 GMT 2009
++++ src/test/java/spec/examples/NewFeaturesTest.java	Fri Mar 27 19:13:23 GMT 2009
+@@ -0,0 +1,10 @@
++package spec.examples;
++
++import org.concordion.integration.junit3.ConcordionTestCase;
++
++public class NewFeaturesTest extends ConcordionTestCase {
++    public String greetingFor(String firstName) {
++        return String.format("Hello %s!", firstName);
 +    }
 +
 +}

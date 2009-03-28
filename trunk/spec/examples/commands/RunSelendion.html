@@ -98,16 +98,9 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p&gt;
-
-    Let's run this little &lt;a concordion:runSelendion="#HREF"
-       href="runSelendionScripts/"&gt; &lt;span class="failure"&gt;
-         &lt;del class="expected"&gt;Directory&lt;/del&gt; &lt;/span&gt;
-         &lt;span class="exceptionMessage"&gt;Can't open runSelendionScripts/&lt;/span&gt; &lt;/a&gt;
-         &lt;span&gt; &lt;input class="stackTraceButton" ...
-
-&lt;/p&gt;
-
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/"&gt; &lt;span class="failure"&gt; &lt;del class="expected"&gt;Directory&lt;/del&gt; &lt;/span&gt; &lt;/a&gt; &lt;div&gt; &lt;span class="exceptionMessage"&gt;Can't open runSelendionScripts/&lt;/span&gt; &lt;/div&gt; &lt;span&gt; &lt;input class="stackTraceButton" ...
+    &lt;/p&gt;
 </pre>
 </div>
 
@@ -125,16 +118,10 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p&gt;
-
-    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/nonExistant.html"&gt;
-    &lt;span class="failure"&gt; &lt;del
-    class="expected"&gt;Non-existant file&lt;/del&gt; &lt;/span&gt; &lt;span
-    class="exceptionMessage"&gt;Can't run runSelendionScripts/nonExistant.html:
-    file does not exist.&lt;/span&gt; &lt;/a&gt; &lt;span&gt; &lt;input
-    class="stackTraceButton" ...     
-
-&lt;/p&gt;
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/nonExistant.html"&gt; &lt;span class="failure"&gt; &lt;del class="expected"&gt;Non-existant
+                file&lt;/del&gt; &lt;/span&gt; &lt;/a&gt; &lt;div&gt; &lt;span class="exceptionMessage"&gt;Can't run runSelendionScripts/nonExistant.html: file does not exist.&lt;/span&gt; &lt;/div&gt; &lt;span&gt; &lt;input class="stackTraceButton" ...
+    &lt;/p&gt;
 
 </pre>
 </div>

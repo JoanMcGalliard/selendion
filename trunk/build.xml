@@ -1,6 +1,6 @@
 <project name="selendion" default="build" basedir=".">
 
-    <property name="version" value="0.4.21"/>
+    <property name="version" value="0.4.22"/>
     <property name="productName" value="selendion"/>
     <property name="ProductName" value="Selendion"/>
 
@@ -113,7 +113,7 @@
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
             <exclude name="spec/**"/>
-            <zipfileset src="lib/concordion-r42-patched.jar">
+            <zipfileset src="lib/concordion-r226-patched.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <zipfileset src="lib/selenium-java-client-driver.jar">
@@ -136,7 +136,7 @@
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
             <exclude name="spec/**"/>
-            <zipfileset src="lib/concordion-r42-patched.jar">
+            <zipfileset src="lib/concordion-r226-patched.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <zipfileset src="lib/selenium-java-client-driver.jar">
