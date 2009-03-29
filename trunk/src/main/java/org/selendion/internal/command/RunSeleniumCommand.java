@@ -83,7 +83,6 @@ public class RunSeleniumCommand extends AbstractCommand {
                 }
             }
             evaluator.evaluate(commandCall.getExpression());
-            boolean result;
             Element resultElement;
             try {
                 if (!element.getParent().getLocalName().equals("table")) {
@@ -95,22 +94,18 @@ public class RunSeleniumCommand extends AbstractCommand {
                     }
                     testName = element.getText().replaceAll(" *\\n *", " ").trim();
 
-                    result = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
+                    seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
                     element.insertAfter(resultElement);
                     element.addAttribute("class", "invisible");
                 } else {
                     resultElement = new Element("td");
                     element.appendChild(resultElement);
-                    result = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
+                    seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            if (result) {
-                announceSuccess(resultElement);
-            } else {
-                announceFailure(resultElement);
-            }
+
             childCommands.execute(evaluator, resultRecorder);
             childCommands.verify(evaluator, resultRecorder);
         }
@@ -155,14 +150,6 @@ public class RunSeleniumCommand extends AbstractCommand {
         }
 
 
-    }
-
-    private void announceSuccess(Element element) {
-        listeners.announce().successReported(new RunSeleniumSuccessEvent(element));
-    }
-
-    private void announceFailure(Element element) {
-        listeners.announce().failureReported(new RunSeleniumFailureEvent(element));
     }
 
 }

@@ -55,7 +55,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     }
 
 
-    public boolean runSeleniumScript(List<String> filepaths, Evaluator evaluator, String title, Element resultElement, Announcer<RunSeleniumListener> listeners, int buttonId, ResultRecorder resultRecorder) throws Exception {
+    public void runSeleniumScript(List<String> filepaths, Evaluator evaluator, String title, Element resultElement, Announcer<RunSeleniumListener> listeners, int buttonId, ResultRecorder resultRecorder) throws Exception {
         Vector<String[]> seleniumCommands = new Vector<String[]>();
         for (String filepath : filepaths) {
             seleniumCommands.addAll(readSelenium(filepath));
@@ -115,18 +115,19 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             }
         }
         String label = title.replaceFirst("\\|.*", "...");
-        resultElement.appendChild(new Element("input")
+        Element input = new Element("input")
                 .addStyleClass("seleniumTableButton")
                 .setId("seleniumTableButton" + buttonId)
                 .addAttribute("type", "button")
                 .addAttribute("class", result ? "success" : "failure")
                 .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + label + "')")
-                .addAttribute("value", label));
+                .addAttribute("value", label);
+
+        resultElement.appendChild(input);
         table.setId("seleniumTable" + buttonId);
         table.addAttribute("class", "seleniumTable");
         resultElement.appendChild(table);
         browser.passVariablesOut(evaluator);
-        return result;
     }
 
 
@@ -961,4 +962,6 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             throw new RuntimeException("Can only set JavaScript for HtmlUnit tests.");
         }
     }
+
+
 }
