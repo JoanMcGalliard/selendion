@@ -1,3 +1,7 @@
+/*
+	Copyright Joan McGalliard, 2008-9
+*/
+
 package org.selendion.integration;
 
 import org.concordion.api.Evaluator;
