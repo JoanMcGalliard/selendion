@@ -1,3 +1,7 @@
+/*
+	Copyright Joan McGalliard, 2008-9
+*/
+
 package examples.suite;
 
 import org.concordion.integration.junit3.ConcordionTestCase;

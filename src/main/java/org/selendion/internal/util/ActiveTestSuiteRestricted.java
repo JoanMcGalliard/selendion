@@ -1,3 +1,7 @@
+/*
+	Copyright Joan McGalliard, 2008-9
+*/
+
 package org.selendion.internal.util;
 
 import junit.framework.Test;
