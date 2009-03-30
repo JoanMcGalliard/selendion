@@ -67,13 +67,6 @@ public class RunSelendionCommand extends AbstractCommand {
         }
     }
 
-
-//         if (!(Boolean)expectedToPass.get(test.getClazz())) {
-//
-//
-//
-//
-//            }
     private void announceSuccess(Element element) {
         listeners.announce().successReported(new RunSelendionSuccessEvent(element));
     }
