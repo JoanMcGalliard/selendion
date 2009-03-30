@@ -30,9 +30,9 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
     public void testProcessSpecification(Evaluator evaluator) throws Throwable {
         Selendion selendion = new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory()).withEvaluator(evaluator).build();
         ResultSummary resultSummary = selendion.process(this);
-        resultSummary.print(System.out);
+        resultSummary.print(System.out, this);
         if (expectedToPass) {
-            resultSummary.assertIsSatisfied();
+            resultSummary.assertIsSatisfied(this);
         } else {
             assertTrue("Test is not expected to pass, yet is passing", resultSummary.getExceptionCount() + resultSummary.getFailureCount() > 0);
         }
