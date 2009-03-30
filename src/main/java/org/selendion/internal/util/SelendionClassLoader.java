@@ -5,7 +5,6 @@
 package org.selendion.internal.util;
 
 import org.selendion.integration.concordion.SelendionTestCase;
-import junit.runner.TestCaseClassLoader;
 import javassist.*;
 
 import java.util.Hashtable;
