@@ -25,6 +25,7 @@ import java.util.Vector;
 
 public class SeleniumIdeReader extends junit.framework.TestCase {
     private BrowserDriver browser;
+    private boolean lastTestResult=true;
     private boolean started = false;
     private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
 
@@ -55,13 +56,13 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     }
 
 
-    public void runSeleniumScript(List<String> filepaths, Evaluator evaluator, String title, Element resultElement, Announcer<RunSeleniumListener> listeners, int buttonId, ResultRecorder resultRecorder) throws Exception {
+    public Element runSeleniumScript(List<String> filepaths, Evaluator evaluator, String title, Announcer<RunSeleniumListener> listeners, ResultRecorder resultRecorder) throws Exception {
         Vector<String[]> seleniumCommands = new Vector<String[]>();
         for (String filepath : filepaths) {
             seleniumCommands.addAll(readSelenium(filepath));
         }
         browser.passVariablesIn(evaluator) ;
-        boolean result = true;
+        lastTestResult = true;
         Element table = new Element("table");
         Element tr = new Element("tr");
         Element td = new Element("th");
@@ -97,14 +98,14 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                             listeners.announce().successReported(new RunSeleniumSuccessEvent(tr));
                             resultRecorder.record(Result.SUCCESS);
                         } else {
-                            result = false;
+                            lastTestResult = false;
                             listeners.announce().failureReported(new RunSeleniumFailureEvent(tr));
                             resultRecorder.record(Result.FAILURE);
                         }
                     }
                     catch (Throwable e) {
                         exception = true;
-                        result = false;
+                        lastTestResult = false;
                         td.appendText(e.toString());
                         listeners.announce().failureReported(new RunSeleniumFailureEvent(tr));
                         resultRecorder.record(Result.FAILURE);
@@ -114,20 +115,12 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 table.appendChild(tr);
             }
         }
-        String label = title.replaceFirst("\\|.*", "...");
-        Element input = new Element("input")
-                .addStyleClass("selendionHideViewButton")
-                .setId("selendionHideViewButton" + buttonId)
-                .addAttribute("type", "button")
-                .addAttribute("class", result ? "success" : "failure")
-                .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + label + "')")
-                .addAttribute("value", label);
 
-        resultElement.appendChild(input);
-        table.setId("selendionHideViewElement" + buttonId);
-        table.addAttribute("class", "selendionHideViewElement");
-        resultElement.appendChild(table);
         browser.passVariablesOut(evaluator);
+        return table;
+    }
+    public boolean getLastTestResult() {
+        return lastTestResult;
     }
 
 

@@ -23,7 +23,6 @@ public class RunSeleniumCommand extends AbstractTogglingCommand {
 
     private SeleniumIdeReader seleniumIdeReader;
     private Announcer<RunSeleniumListener> listeners = Announcer.to(RunSeleniumListener.class);
-    private int buttonId = 1;
     private Set<Element> rootElementsWithScript = new HashSet<Element>();
 
 
@@ -93,13 +92,18 @@ public class RunSeleniumCommand extends AbstractTogglingCommand {
                     }
                     testName = element.getText().replaceAll(" *\\n *", " ").trim();
 
-                    seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
+
+                    Element seleniumResult = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, listeners, resultRecorder);
+
+                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastTestResult());
                     element.insertAfter(resultElement);
                     element.addAttribute("class", "invisible");
                 } else {
                     resultElement = new Element("td");
                     element.appendChild(resultElement);
-                    seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
+                    Element seleniumResult = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, listeners, resultRecorder);
+                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastTestResult());
+
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
