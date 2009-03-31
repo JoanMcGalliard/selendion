@@ -5,6 +5,7 @@
 package examples.commands;
 
 import org.selendion.integration.concordion.SelendionTestCase;
+import org.selendion.internal.command.AbstractTogglingCommand;
 import test.concordion.TestRig;
 
 public abstract class AbstractTestSupport extends SelendionTestCase {
@@ -18,6 +19,9 @@ public abstract class AbstractTestSupport extends SelendionTestCase {
     private String trimException(String message)  {
         return message.replaceFirst("<input class=\"stackTraceButton\".*",
                 "<input class=\"stackTraceButton\" ...");
+    }
+    public void resetButtonCount() {
+        AbstractTogglingCommand.resetButtonCount();
     }
 
 }
