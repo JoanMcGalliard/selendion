@@ -116,10 +116,10 @@ ins {
   font-family: Arial,sans-serif;
 }
 
-.seleniumTable, .seleniumTable * {
+.selendionHideViewElement, .selendionHideViewElement * {
   font-weight: normal;
 }
-.seleniumTable {
+.selendionHideViewElement {
   display: none;
   padding: 1px 4px 4px 4px;
   background-color: #C0C0C0;
@@ -171,4 +171,26 @@ ins {
 }
 .attention {
     color: #ff0000
+}
+
+.includedPassingTest {
+    padding: 2px 12px 6px 12px;
+    border: 1px solid #C3D9FF;
+    margin: 6px 0 28px 0;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: none;
+    background-color: #E0FFDD;
+
+}
+
+.includedFailingTest {
+    padding: 2px 12px 6px 12px;
+    border: 1px solid #C3D9FF;
+    margin: 6px 0 28px 0;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: none;
+    background-color: #FFDDFF;
+
 }

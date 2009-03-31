@@ -116,16 +116,16 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         }
         String label = title.replaceFirst("\\|.*", "...");
         Element input = new Element("input")
-                .addStyleClass("seleniumTableButton")
-                .setId("seleniumTableButton" + buttonId)
+                .addStyleClass("selendionHideViewButton")
+                .setId("selendionHideViewButton" + buttonId)
                 .addAttribute("type", "button")
                 .addAttribute("class", result ? "success" : "failure")
                 .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + label + "')")
                 .addAttribute("value", label);
 
         resultElement.appendChild(input);
-        table.setId("seleniumTable" + buttonId);
-        table.addAttribute("class", "seleniumTable");
+        table.setId("selendionHideViewElement" + buttonId);
+        table.addAttribute("class", "selendionHideViewElement");
         resultElement.appendChild(table);
         browser.passVariablesOut(evaluator);
     }

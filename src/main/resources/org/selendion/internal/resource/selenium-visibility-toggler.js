@@ -24,14 +24,14 @@ function makeInvisible(element) {
   element.style.display = "";
 }
 
-function toggleSeleniumTable(seleniumTableNumber, seleniumTableName) {
-  var seleniumTable = getElementById("seleniumTable" + seleniumTableNumber);
-  var seleniumTableButton = getElementById("seleniumTableButton" + seleniumTableNumber);
-  if (isVisible(seleniumTable)) {
-    makeInvisible(seleniumTable);
-    seleniumTableButton.value = seleniumTableName.replace(/\|/g,"\n");
+function toggleSeleniumTable(selendionHideViewElementNumber, selendionHideViewButtonTitle) {
+  var selendionHideViewElement = getElementById("selendionHideViewElement" + selendionHideViewElementNumber);
+  var selendionHideViewButton = getElementById("selendionHideViewButton" + selendionHideViewElementNumber);
+  if (isVisible(selendionHideViewElement)) {
+    makeInvisible(selendionHideViewElement);
+    selendionHideViewButton.value = selendionHideViewButtonTitle.replace(/\|/g,"\n");
   } else {
-    makeVisible(seleniumTable);
-    seleniumTableButton.value = "hide";
+    makeVisible(selendionHideViewElement);
+    selendionHideViewButton.value = "hide";
   }
 }

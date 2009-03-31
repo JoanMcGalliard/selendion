@@ -5,9 +5,9 @@
 package org.selendion;
 
 import org.concordion.Concordion;
-import org.concordion.internal.SummarizingResultRecorder;
 import org.concordion.api.*;
 import org.selendion.integration.concordion.SelendionTestCase;
+import org.selendion.internal.SelendionResultRecorder;
 
 import java.io.IOException;
 import java.util.Set;
@@ -68,18 +68,19 @@ public class Selendion extends Concordion {
         this.parentEvaluator = parentEvaluator;
     }
 
-    public ResultSummary process(Object fixture) throws IOException {
+    public SelendionResultRecorder process(Object fixture) throws IOException {
         return process(specificationLocator.locateSpecification(fixture), fixture);
     }
 
-    public ResultSummary process(Resource resource, Object fixture) throws IOException {
+    public SelendionResultRecorder process(Resource resource, Object fixture) throws IOException {
         Specification specification = specificationReader.readSpecification(resource);
-        SummarizingResultRecorder resultRecorder = new SummarizingResultRecorder();
+        SelendionResultRecorder resultRecorder = new SelendionResultRecorder();
         Evaluator evaluator = evaluatorFactory.createEvaluator(fixture);
         if (this.parentEvaluator != null) {
             transferValues(this.parentEvaluator, evaluator);
         }
         specification.process(evaluator, resultRecorder);
+        resultRecorder.setResultSpecification(specification);
         if (this.parentEvaluator != null) {
             transferValues(evaluator, this.parentEvaluator);           
         }

@@ -11,7 +11,6 @@ import org.concordion.internal.*;
 import org.concordion.internal.util.Announcer;
 import org.concordion.internal.util.IOUtil;
 import org.concordion.internal.util.Check;
-import org.concordion.internal.command.AbstractCommand;
 import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.RunSeleniumListener;
 
@@ -20,7 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 
-public class RunSeleniumCommand extends AbstractCommand {
+public class RunSeleniumCommand extends AbstractTogglingCommand {
 
     private SeleniumIdeReader seleniumIdeReader;
     private Announcer<RunSeleniumListener> listeners = Announcer.to(RunSeleniumListener.class);
@@ -53,7 +52,7 @@ public class RunSeleniumCommand extends AbstractCommand {
     }
 
     private class DefaultStrategy implements Strategy {
-        private static final String TOGGLING_SCRIPT_RESOURCE_PATH = "/org/selendion/internal/resource/selenium-visibility-toggler.js";
+
 
 
         public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
@@ -110,20 +109,6 @@ public class RunSeleniumCommand extends AbstractCommand {
             childCommands.verify(evaluator, resultRecorder);
         }
 
-        private void ensureDocumentHasSeleniumTogglingScript(Element element) {
-            Element rootElement = element.getRootElement();
-            if (!rootElementsWithScript.contains(rootElement)) {
-                rootElementsWithScript.add(rootElement);
-                Element head = rootElement.getFirstDescendantNamed("head");
-                Check.notNull(head, "Document <head> section is missing");
-                Element script = new Element("script").addAttribute("type", "text/javascript");
-                if (head != null) {
-                    head.prependChild(script);
-                }
-                script.appendText(IOUtil.readResourceAsString(TOGGLING_SCRIPT_RESOURCE_PATH, "UTF-8"));
-            }
-
-        }
     }
 
     private class TableStrategy implements Strategy {
