@@ -3,9 +3,9 @@
 */
 package examples;
 
-import org.selendion.integration.concordion.SelendionTestCase;
+import examples.commands.AbstractTestSupport;
 
-public class RunSelendionDemoTest extends SelendionTestCase {
+public class RunSelendionDemoTest extends AbstractTestSupport {
 
 
 }

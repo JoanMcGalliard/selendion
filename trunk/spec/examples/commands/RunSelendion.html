@@ -6,6 +6,8 @@
 </head>
 <body>
 <h1>RunSelendion</h1>
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
 
 <p>
 
@@ -13,6 +15,8 @@
     as a failed test. If it pass, hooray!. If it doesn't exist, an error message will be shown. If it exists but has
     no matching java file, it will be run as a basic selendion test.
 </p>
+
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
 
 
 
@@ -31,10 +35,10 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p&gt;
-    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="success"&gt;Passing
-    Selendion test&lt;/a&gt;.
-&lt;/p&gt;
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="invisible success"&gt;Passing
+                Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton1" type="button" class="success" onclick="javascript:toggleSelendionElement('1', 'Passing Selendion test')" value="Passing Selendion test" /&gt; &lt;div id="selendionHideViewElement1" class="includedPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'" class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
+    &lt;/p&gt;
 
 </pre>
 </div>
@@ -53,10 +57,12 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p&gt;
-    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html" class="failure"&gt;Failing
-    Selendion test&lt;b class="attention"&gt; (Specification has failure(s). See output HTML for details.) &lt;/b&gt; &lt;/a&gt;.
-&lt;/p&gt;
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html" class="invisible failure"&gt;Failing
+                Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton2" type="button" class="failure" onclick="javascript:toggleSelendionElement('2', 'Failing Selendion test')" value="Failing Selendion test" /&gt; &lt;div id="selendionHideViewElement2" class="includedFailingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'" class="failure"&gt; &lt;del class="expected"&gt;different value&lt;/del&gt;
+&lt;ins class="actual"&gt;value&lt;/ins&gt; &lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;b class="attention"&gt; (Specification has failure(s). See output HTML for details.) &lt;/b&gt; &lt;/span&gt;.
+    &lt;/p&gt;
+
 
 </pre>
 </div>
@@ -76,11 +82,11 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p&gt;
-    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html"
-    class="failure"&gt;Exception Throwing Selendion test&lt;b class="attention"&gt; (Specification has exception(s).
-    See output HTML for details.) &lt;/b&gt; &lt;/a&gt;.
-&lt;/p&gt;
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html" class="invisible failure"&gt;Exception
+                Throwing Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton3" type="button" class="failure" onclick="javascript:toggleSelendionElement('3', 'Exception Throwing Selendion test')" value="Exception Throwing Selendion test" /&gt; &lt;div id="selendionHideViewElement3" class="includedFailingTest"&gt; &lt;p&gt;Throw an exception that says &lt;b concordion:execute="throwException(#TEXT)"&gt; &lt;span class="failure"&gt; &lt;del class="expected"&gt;OH NOES&lt;/del&gt; &lt;/span&gt; &lt;span class="exceptionMessage"&gt;Exception: OH NOES&lt;/span&gt; &lt;/b&gt; &lt;span&gt; &lt;input class="stackTraceButton" ...
+    &lt;/p&gt;
+
 
 </pre>
 </div>
@@ -142,10 +148,10 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p&gt;
-    Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html" class="success"&gt;Selendion
-    Test Without Java File&lt;/a&gt;.
-&lt;/p&gt;
+    &lt;p&gt;
+         Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html" class="invisible success"&gt;Selendion
+                 Test Without Java File&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton4" type="button" class="success" onclick="javascript:toggleSelendionElement('4', 'Selendion Test Without Java File')" value="Selendion Test Without Java File" /&gt; &lt;div id="selendionHideViewElement4" class="includedPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'" class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
+     &lt;/p&gt;
 
 </pre>
 </div>
