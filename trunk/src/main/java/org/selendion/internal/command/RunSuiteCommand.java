@@ -41,11 +41,11 @@ public class RunSuiteCommand extends AbstractCommand {
         }
     }
     private Announcer<RunSuiteListener> listeners = Announcer.to(RunSuiteListener.class);
-    private Vector<TestDescription> suite;
+    private Hashtable suites;
 
 
-    public RunSuiteCommand(Vector<TestDescription> suite) {
-        this.suite = suite;
+    public RunSuiteCommand(Hashtable suites) {
+        this.suites = suites;
     }
 
     public void addRunSuiteListener(RunSuiteListener runSuiteListener) {
@@ -53,16 +53,21 @@ public class RunSuiteCommand extends AbstractCommand {
     }
 
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
+        Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
+        Object[] params = (Object[]) evaluatedExpression;
+        String suiteName = (String) params [0];
+        String numOfThreads = (String) params[1];
         TestSuite testSuite;
         expectedToPass = new Hashtable();
-        int threads = Integer.parseInt(evaluator.evaluate(commandCall.getExpression()).toString());
+        int threads = Integer.parseInt(numOfThreads);
+        
 
         if (threads == 1 ) {
             testSuite = new TestSuite();
         } else {
             testSuite = new ActiveTestSuiteRestricted(threads);
         }
-        for (TestDescription test : suite) {
+        for (TestDescription test : (Vector<TestDescription>)suites.get(suiteName)) {
             testSuite.addTestSuite(test.getClazz());
         }
         TestResult testResult = new TestResult();
@@ -88,7 +93,7 @@ public class RunSuiteCommand extends AbstractCommand {
         } else {
             list = new Element("ol");
         }
-        for (TestDescription test : suite) {
+        for (TestDescription test : (Vector<TestDescription>)suites.get(suiteName)) {
             Element anchor = new Element("a");
             anchor.addAttribute("href", test.getFile());
             anchor.appendText(test.getTitle());

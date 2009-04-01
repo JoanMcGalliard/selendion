@@ -19,7 +19,7 @@ import org.selendion.internal.listener.RunSeleniumResultRenderer;
 import org.selendion.internal.listener.RunSelendionResultRenderer;
 import org.selendion.Selendion;
 
-import java.util.Vector;
+import java.util.Hashtable;
 import java.io.File;
 
 
@@ -27,7 +27,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     public static final String NAMESPACE_SELENDION = "http://www.selendion.org/2008";
     private static final String PROPERTY_OUTPUT_DIR = "selendion.output.dir";
     private SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
-    private Vector<TestDescription> suite = new Vector<TestDescription>();
+    private Hashtable suites = new Hashtable();
     private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/selendion/internal/resource/embedded.css";
     private Evaluator evaluator;
 
@@ -35,9 +35,9 @@ public class SelendionBuilder extends ConcordionBuilder {
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
     private SpecificationCommand specificationCommand = new SpecificationCommand();    
-    private AddToSuiteCommand addToSuiteCommand = new AddToSuiteCommand(suite);
-    private RunSuiteCommand runSuiteCommand = new RunSuiteCommand(suite);
-    private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suite);
+    private AddToSuiteCommand addToSuiteCommand = new AddToSuiteCommand(suites);
+    private RunSuiteCommand runSuiteCommand = new RunSuiteCommand(suites);
+    private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suites);
     private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
     private RunSelendionCommand runSelendionCommand = new RunSelendionCommand();
     private SwitchJavaScriptCommand switchJavaScriptCommand = new SwitchJavaScriptCommand(seleniumIdeReader);
