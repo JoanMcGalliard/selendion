@@ -18,6 +18,29 @@
 
 <div class="example">
 
+    <h3>Test runs and passes with literal number of threads</h3>
+
+    <p>
+        If we run a suite containing a simple test that has a test class and it passes:
+    </p>
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',1"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
+       and run it in &lt;i concordion:runSuite="'suite',1"&gt;1&lt;/i&gt; &lt;ol&gt;
+    &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+
+</pre>
+</div>
+
+<div class="example">
+
     <h3>Test runs and passes</h3>
 
     <p>
@@ -38,7 +61,6 @@
 
 </pre>
 </div>
-
 <div class="example">
 
     <h3>Test is not a Selendion test</h3>
@@ -446,7 +468,6 @@ If we clear the suite, all previous tests should be removed     </p>
     
 </pre>
 </div>
-
 
 </body>
 </html>

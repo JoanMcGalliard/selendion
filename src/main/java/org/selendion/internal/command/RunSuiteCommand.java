@@ -34,12 +34,13 @@ public class RunSuiteCommand extends AbstractCommand {
         }
 
         public void endTest(Test test) {
-            expectedToPass.put(test.getClass(), ((SelendionTestCase)test).isExpectedToPass());             
+            expectedToPass.put(test.getClass(), ((SelendionTestCase) test).isExpectedToPass());
         }
 
         public void startTest(Test test) {
         }
     }
+
     private Announcer<RunSuiteListener> listeners = Announcer.to(RunSuiteListener.class);
     private Hashtable suites;
 
@@ -55,25 +56,31 @@ public class RunSuiteCommand extends AbstractCommand {
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
         Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
         Object[] params = (Object[]) evaluatedExpression;
-        String suiteName = (String) params [0];
-        String numOfThreads = (String) params[1];
+        String suiteName = (String) params[0];
+        int threads;
+
+        if (params[1].getClass().equals(Integer.class)) {
+            threads = (Integer) params[1];
+        } else {
+            threads = Integer.parseInt((String) params[1]);
+        }
+
         TestSuite testSuite;
         expectedToPass = new Hashtable();
-        int threads = Integer.parseInt(numOfThreads);
-        
 
-        if (threads == 1 ) {
+
+        if (threads == 1) {
             testSuite = new TestSuite();
         } else {
             testSuite = new ActiveTestSuiteRestricted(threads);
         }
-        for (TestDescription test : (Vector<TestDescription>)suites.get(suiteName)) {
+        for (TestDescription test : (Vector<TestDescription>) suites.get(suiteName)) {
             testSuite.addTestSuite(test.getClazz());
         }
         TestResult testResult = new TestResult();
-        SuiteListener suiteListener=new SuiteListener();
-         testResult.addListener(suiteListener);
-         testSuite.run(testResult);
+        SuiteListener suiteListener = new SuiteListener();
+        testResult.addListener(suiteListener);
+        testSuite.run(testResult);
 
         Hashtable failures = new Hashtable();
         Enumeration<TestFailure> errors = testResult.errors();
@@ -93,14 +100,14 @@ public class RunSuiteCommand extends AbstractCommand {
         } else {
             list = new Element("ol");
         }
-        for (TestDescription test : (Vector<TestDescription>)suites.get(suiteName)) {
+        for (TestDescription test : (Vector<TestDescription>) suites.get(suiteName)) {
             Element anchor = new Element("a");
             anchor.addAttribute("href", test.getFile());
             anchor.appendText(test.getTitle());
             Element li = new Element("li");
             li.appendChild(anchor);
             list.appendChild(li);
-            if (!(Boolean)expectedToPass.get(test.getClazz())) {
+            if (!(Boolean) expectedToPass.get(test.getClazz())) {
                 Element b = new Element("b");
                 b.addAttribute("class", "attention");
                 b.appendText(" This test is not expected to pass. ");
