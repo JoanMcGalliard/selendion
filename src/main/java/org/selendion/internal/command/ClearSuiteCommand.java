@@ -24,15 +24,17 @@ import junit.framework.TestFailure;
 
 
 public class ClearSuiteCommand extends AbstractCommand {
-    private Vector<TestDescription> suite;
+    private Hashtable suites;
 
 
-    public ClearSuiteCommand(Vector<TestDescription> suite) {
-        this.suite = suite;
+    public ClearSuiteCommand(Hashtable suites) {
+        this.suites = suites;
     }
 
     public void setUp(org.concordion.internal.CommandCall commandCall, org.concordion.api.Evaluator evaluator, org.concordion.api.ResultRecorder resultRecorder) {
-        this.suite.clear();
+        String suiteName = evaluator.evaluate(commandCall.getExpression()).toString();
+
+        ((Vector<TestDescription>)this.suites.get(suiteName)).clear();
     }
 
 }

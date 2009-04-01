@@ -25,15 +25,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
-       and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt;
+    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
+       and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt;
     &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 
 </pre>
@@ -49,15 +49,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Concordion.html"&gt;Test using ConcordionTestCase&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/Concordion.html"&gt;Test using ConcordionTestCase&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Concordion.html"&gt;Test using ConcordionTestCase&lt;/a&gt;
-       and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/Concordion.html"&gt;Test using ConcordionTestCase&lt;/a&gt;
+       and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt;
     class examples.commands.suite.Concordion is not a SelendionTestCase.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 
@@ -73,15 +73,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Error.html"&gt;Test that throws an exception&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/Error.html"&gt;Test that throws an exception&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-            &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/Error.html"&gt;Test that throws an exception&lt;/a&gt;
-               and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+            &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/Error.html"&gt;Test that throws an exception&lt;/a&gt;
+               and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt;
     Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
         </pre>
@@ -95,15 +95,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/NotExpectedToPass.html"&gt;Not Expected To Pass Demo&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/NotExpectedToPass.html"&gt;Not Expected To Pass Demo&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF"
+<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF"
     href="suite/NotExpectedToPass.html"&gt;Not Expected To Pass Demo&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt;
     &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;  &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 </pre>
@@ -119,7 +119,7 @@
 
         <pre concordion:set="#snippet">
 
-            &lt;p&gt;Add &lt;a href="support/NotExpectedToPassButPassing.html" concordion:addToSuite="#HREF"&gt;Not expected to pass but passing&lt;/a&gt; to suite then run in &lt;b concordion:runSuite="#TEXT"&gt;1&lt;/b&gt; thread&lt;/p&gt;
+            &lt;p&gt;Add &lt;a href="support/NotExpectedToPassButPassing.html" concordion:addToSuite="'suite',#HREF"&gt;Not expected to pass but passing&lt;/a&gt; to suite then run in &lt;b concordion:runSuite="'suite',#TEXT"&gt;1&lt;/b&gt; thread&lt;/p&gt;
 
         </pre>
 
@@ -128,8 +128,8 @@
 <pre class="html" concordion:assertEquals="render(#snippet)">
 
     &lt;p&gt;Add &lt;a href="support/NotExpectedToPassButPassing.html"
-    concordion:addToSuite="#HREF"&gt;Not expected to pass but passing&lt;/a&gt;
-    to suite then run in &lt;b concordion:runSuite="#TEXT"&gt;1&lt;/b&gt; &lt;ol&gt; &lt;li&gt;
+    concordion:addToSuite="'suite',#HREF"&gt;Not expected to pass but passing&lt;/a&gt;
+    to suite then run in &lt;b concordion:runSuite="'suite',#TEXT"&gt;1&lt;/b&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="support/NotExpectedToPassButPassing.html" class="failure"&gt;Not Expected To Pass But Passing&lt;/a&gt;
     &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;
     Test is not expected to pass, yet is passing&lt;/li&gt; &lt;/ol&gt; thread&lt;/p&gt;
@@ -145,15 +145,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/SimpleFail.html"&gt;Simple Fail&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/SimpleFail.html"&gt;Simple Fail&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/SimpleFail.html"&gt;Simple Fail&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/SimpleFail.html" class="failure"&gt;Simple Fail&lt;/a&gt;
+    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/SimpleFail.html"&gt;Simple Fail&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/SimpleFail.html" class="failure"&gt;Simple Fail&lt;/a&gt;
     Specification has failure(s). See output HTML for details.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 </pre>
 </div>
@@ -167,15 +167,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of
-    &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
         </pre>
 </div>
@@ -189,14 +189,14 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClassFail.html"&gt;Test without class that fails&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClassFail.html"&gt;Test without class that fails&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClassFail.html"&gt;Test without class that fails&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClassFail.html" class="failure"&gt;Test that fails&lt;/a&gt;
+<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClassFail.html"&gt;Test without class that fails&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClassFail.html" class="failure"&gt;Test that fails&lt;/a&gt;
     Specification has failure(s). See output HTML for details.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
         </pre>
 </div>
@@ -209,15 +209,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of
-    &lt;a concordion:addToSuite="#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/WithoutClassError.html" class="failure"&gt;Test without class that throws an exception&lt;/a&gt;
     Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
   </pre>
@@ -231,24 +231,24 @@ Adding this all together, if we run a suite where we add both individual files a
     </p>
 
         <pre concordion:set="#snippet">
-            &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
-              &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
+            &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
+              &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
+              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
 
-            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>Looks like this:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
 
-    &lt;a concordion:addToSuite="#HREF" href="support/Simple.html" /&gt; to the test suite and then add
-                &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
+    &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html" /&gt; to the test suite and then add
+                &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
+                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
 
 
 
-&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt;
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt;
     &lt;ol&gt;
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
@@ -277,11 +277,11 @@ If we run the same test in 2 threads, (remembering the time of the <i concordion
 
         <pre concordion:set="#snippet">
 
-              &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
-              &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
+              &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
+              &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
+              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
 
-            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;2&lt;/i&gt; thread.&lt;/p&gt;
+            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;2&lt;/i&gt; thread.&lt;/p&gt;
 
         </pre>
 
@@ -291,13 +291,13 @@ If we run the same test in 2 threads, (remembering the time of the <i concordion
 
 
 
-    &lt;a concordion:addToSuite="#HREF" href="support/Simple.html" /&gt; to the test suite and then add
-                &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
+    &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html" /&gt; to the test suite and then add
+                &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
+                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
 
 
 
-&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;2&lt;/i&gt;
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;2&lt;/i&gt;
     &lt;ul&gt;
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
@@ -329,24 +329,24 @@ If we run the same test in unlimited threads, , (remembering the time of the <i 
 
         <pre concordion:set="#snippet">
 
-              &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
-              &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
+              &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
+              &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
+              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
 
-            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;0&lt;/i&gt; thread.&lt;/p&gt;
+            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;0&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>Looks like this:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
 
-    &lt;a concordion:addToSuite="#HREF" href="support/Simple.html" /&gt; to the test suite and then add
-                &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
+    &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html" /&gt; to the test suite and then add
+                &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
+                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
 
 
 
-&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;0&lt;/i&gt;
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;0&lt;/i&gt;
     &lt;ul&gt;
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
@@ -379,16 +379,16 @@ thread.&lt;/p&gt;
 If we clear the suite, all previous tests should be removed     </p>
         <pre concordion:set="#snippet">
 &lt;p&gt;Add the file
-    &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
+    &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
 
-&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
 
 
-&lt;p&gt; Then &lt;i concordion:clearSuite=""&gt;clear the suite&lt;/i&gt;.&lt;/p&gt;
+&lt;p&gt; Then &lt;i concordion:clearSuite="'suite'"&gt;clear the suite&lt;/i&gt;.&lt;/p&gt;
 &lt;p&gt;Add the file
-    &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
+    &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
 
-&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
 </pre>
 
     <p>Looks like this:</p>
@@ -396,16 +396,16 @@ If we clear the suite, all previous tests should be removed     </p>
 <pre class="html" concordion:assertEquals="render(#snippet)">
 
     &lt;p&gt;Add the file
-        &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
+        &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
 
-    &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+    &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 
 
-    &lt;p&gt; Then &lt;i concordion:clearSuite=""&gt;clear the suite&lt;/i&gt;.&lt;/p&gt;
+    &lt;p&gt; Then &lt;i concordion:clearSuite="'suite'"&gt;clear the suite&lt;/i&gt;.&lt;/p&gt;
     &lt;p&gt;Add the file
-        &lt;a concordion:addToSuite="#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
+        &lt;a concordion:addToSuite="'suite',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
 
-    &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+    &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
 
 
 
@@ -415,6 +415,38 @@ If we clear the suite, all previous tests should be removed     </p>
 
 
 </div>
+
+
+<div class="example">
+
+    <h3>Two suites</h3>
+
+    <p>
+        If we run a suite containing a simple test that has a test class and it passes:
+    </p>
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;Build  &lt;i concordion:set="#suiteName"&gt;suite1&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF"
+            href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; and
+            &lt;i concordion:set="#suiteName"&gt;suite2&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF"
+            href="suite/WithoutClass.html"&gt;Simple Test&lt;/a&gt; &lt;/p&gt;
+   &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suite1&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+   &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suite2&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;Build  &lt;i concordion:set="#suiteName"&gt;suite1&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; and
+                &lt;i concordion:set="#suiteName"&gt;suite2&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF" href="suite/WithoutClass.html"&gt;Simple Test&lt;/a&gt; &lt;/p&gt;
+       &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suite1&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+       &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suite2&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+
+
+    
+</pre>
+</div>
+
 
 </body>
 </html>

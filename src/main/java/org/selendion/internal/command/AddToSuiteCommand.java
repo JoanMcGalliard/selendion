@@ -23,17 +23,28 @@ import nu.xom.Builder;
 
 
 public class AddToSuiteCommand extends AbstractCommand {
-    private Vector<TestDescription> suite;
-    private static Hashtable classes = new Hashtable();
+    private Hashtable suites;
     private SelendionClassLoader loader = new SelendionClassLoader();
 
 
-    public AddToSuiteCommand(Vector<TestDescription> suite) {
-        this.suite = suite;
+    public AddToSuiteCommand(Hashtable suites) {
+        this.suites=suites;
+    }
+    private void add(String suiteName, TestDescription testDescription) {
+        if (!suites.containsKey(suiteName)) {
+            suites.put(suiteName, new Vector<TestDescription>());
+        }
+        ((Vector<TestDescription>)suites.get(suiteName)).add(testDescription);
+
+
     }
 
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
-        String htmlFilename = evaluator.evaluate(commandCall.getExpression()).toString();
+        Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
+        Object[] params = (Object[]) evaluatedExpression;
+        String suiteName = (String) params [0];
+        String htmlFilename = (String) params[1];
+        
         String htmlResource=commandCall.getResource().getRelativeResource(htmlFilename)
                 .getPath().replaceFirst("^/", "");
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -43,24 +54,25 @@ public class AddToSuiteCommand extends AbstractCommand {
         }
         File f = new File(contextClassLoader.getResource(htmlResource).getPath().replaceAll("%20", " "));
         if (f.isFile()) {
-            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource),evaluator ));
+            add(suiteName, new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource),evaluator ));
+
         } else if (f.isDirectory()) {
-            walk(htmlFilename, htmlResource, evaluator);
+            walk(htmlFilename, htmlResource, evaluator, suiteName);
         } else {
             throw new RuntimeException(String.format("Can't add %s to suite: it is not a file or directory", htmlFilename));
 
         }
     }
 
-    private void walk(String htmlFilename, String htmlResource, Evaluator evaluator) {
+    private void walk(String htmlFilename, String htmlResource, Evaluator evaluator, String suiteName) {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         File f = new File(contextClassLoader.getResource(htmlResource).getPath().replaceAll("%20", " "));
         if (f.isFile() && f.toString().matches(".*\\.html")) {
-            suite.add(new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource), evaluator));
+            add(suiteName, new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource), evaluator));
 
         }  else if (f.isDirectory()) {
             for (String sub : f.list()) {
-                walk(htmlFilename.replaceFirst("/$", "") + "/" + sub, htmlResource.replaceFirst("/$", "") + "/" + sub, evaluator);
+                walk(htmlFilename.replaceFirst("/$", "") + "/" + sub, htmlResource.replaceFirst("/$", "") + "/" + sub, evaluator, suiteName);
             }
         }
     }

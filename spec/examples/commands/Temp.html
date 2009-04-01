@@ -7,11 +7,11 @@
 <body>
 
 <p>Set #var1 to <i concordion:set="#var1">A</i>
-    then add <a href="support/ExpectsVar1ToEqualA.html" concordion:addToSuite="#HREF">This test will only pass if Var1 is "A"</a></p>
+    then add <a href="support/ExpectsVar1ToEqualA.html" concordion:addToSuite="'suite',#HREF">This test will only pass if Var1 is "A"</a></p>
 
 <p>Set #var1 to <i concordion:set="#var1">B</i>
-    then add <a href="support/ExpectsVar1ToEqualB.html" concordion:addToSuite="#HREF">This test will only pass if Var1 is "B"</a></p>
+    then add <a href="support/ExpectsVar1ToEqualB.html" concordion:addToSuite="'suite',#HREF">This test will only pass if Var1 is "B"</a></p>
 
-<p>Then run the suite in <b concordion:runSuite="#TEXT">1</b> thread</p>
+<p>Then run the suite in <b concordion:runSuite="'suite',#TEXT">1</b> thread</p>
 </body>
 </html>
