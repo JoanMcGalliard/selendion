@@ -23,6 +23,9 @@ public abstract class AbstractTogglingCommand extends AbstractCommand {
         if (!rootElementsWithScript.contains(rootElement)) {
             rootElementsWithScript.add(rootElement);
             Element head = rootElement.getFirstDescendantNamed("head");
+            if (head == null) {
+                System.out.println(rootElement.toXML());
+            }
             Check.notNull(head, "Document <head> section is missing");
             Element script = new Element("script").addAttribute("type", "text/javascript");
             if (head != null) {
@@ -32,6 +35,7 @@ public abstract class AbstractTogglingCommand extends AbstractCommand {
         }
 
     }
+
     String getTitle(Element element) {
         return element.getText().replaceAll(" *\\n *", " ").trim();
     }

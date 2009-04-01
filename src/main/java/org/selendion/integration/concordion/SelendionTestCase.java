@@ -6,6 +6,7 @@ package org.selendion.integration.concordion;
 
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.concordion.api.Evaluator;
+import org.concordion.api.Element;
 import org.selendion.internal.SelendionBuilder;
 import org.selendion.internal.SelendionEvaluatorFactory;
 import org.selendion.internal.SelendionResultRecorder;
@@ -18,6 +19,17 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
     }
 
     private boolean expectedToPass = true;
+    private SelendionResultRecorder resultSummary;
+
+    public void lastExecutionResult() {
+        if (expectedToPass) {
+            resultSummary.assertIsSatisfied(this);
+        } else {
+            assertTrue("Test is not expected to pass, yet is passing", resultSummary.getExceptionCount() + resultSummary.getFailureCount() > 0);
+        }
+
+    }
+
 
     public void setExpectedToPass(boolean expectedToPass) {
         this.expectedToPass = expectedToPass;
@@ -25,18 +37,14 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
 
     public void testProcessSpecification() throws Throwable {
         testProcessSpecification(null);
+        lastExecutionResult();
     }
 
-    public SelendionResultRecorder testProcessSpecification(Evaluator evaluator) throws Throwable {
+    public Element[] testProcessSpecification(Evaluator evaluator) throws Throwable {
         Selendion selendion = new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory()).withEvaluator(evaluator).build();
-        SelendionResultRecorder resultSummary = selendion.process(this);
+        resultSummary = selendion.process(this);
         resultSummary.print(System.out, this);
-        if (expectedToPass) {
-            resultSummary.assertIsSatisfied(this);
-        } else {
-            assertTrue("Test is not expected to pass, yet is passing", resultSummary.getExceptionCount() + resultSummary.getFailureCount() > 0);
-        }
-        return resultSummary;
+        return resultSummary.getResultSpecification().getCommandCall().getElement().getChildElements("body")[0].getChildElements();
     }
 
 

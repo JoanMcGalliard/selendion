@@ -29,48 +29,6 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
         listeners.removeListener(runSelendionListener);
     }
 
-
-    public void x(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
-
-//
-//        Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
-//        String testName = "";
-//
-//        if (evaluatedExpression.getClass().equals(String.class)) {
-//            testName = ((String) evaluatedExpression).replaceAll(" *\\n *", " ").replaceFirst(".*/", "").replaceFirst(".html*$","").trim();
-//        } else {
-//            testName = "run script";
-//        }
-//        evaluator.evaluate(commandCall.getExpression());
-//        Element resultElement;
-//        try {
-//            if (!element.getParent().getLocalName().equals("table")) {
-//                if (element.getLocalName().equals("td")) {
-//                    resultElement = new Element("td");
-//
-//                } else {
-//                resultElement = new Element("span");
-//                }
-//                testName = element.getText().replaceAll(" *\\n *", " ").trim();
-//
-//                seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
-//                element.insertAfter(resultElement);
-//                element.addAttribute("class", "invisible");
-//            } else {
-//                resultElement = new Element("td");
-//                element.appendChild(resultElement);
-//                seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, resultElement, listeners, buttonId++, resultRecorder);
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        childCommands.execute(evaluator, resultRecorder);
-//        childCommands.verify(evaluator, resultRecorder);
-
-
-    }
-
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
 
         CommandCallList childCommands = commandCall.getChildren();
@@ -85,43 +43,59 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
             throw new RuntimeException(String.format("Can't run %s: file does not exist.", htmlFilename));
         }
         File f = new File(contextClassLoader.getResource(htmlResource).getPath().replaceAll("%20", " "));
-        Element element = commandCall.getElement();
+        Element element = commandCall.getElement();                                                               
         ensureDocumentHasSeleniumTogglingScript(element);
-        
+
         if (f.isFile()) {
+            Element div = new Element("div");
+
             try {
                 Class clazz = loader.findSelendionClass(htmlResource);
                 SelendionTestCase test = (SelendionTestCase) clazz.newInstance();
 
 
-                Element[] body = ((SelendionResultRecorder) clazz.getMethod("testProcessSpecification",
-                        Evaluator.class).invoke(test, evaluator)).getResultSpecification().getCommandCall().getElement().getChildElements();
+                Element[] body = (Element[]) clazz.getMethod("testProcessSpecification",
+                        Evaluator.class).invoke(test, evaluator);
 
-                Element div = new Element("div");
                 for (int x = 0; x < body.length; x++) {
-                    div.appendChild(body[x].copy());
+                    Element e = body[x];
+                    if (e.getAttributeValue("class") == null || !e.getAttributeValue("class").equals("footer")) {
+                        div.appendChild(e.copy());
+                    }
                 }
-                div.addAttribute("class", "includedPassingTest");
                 Element resultElement = new Element("span");
 
-                wrapElementInTogglingButton(div, resultElement, getTitle(element), true);
-//                element.insertAfter(resultElement);
-//                element.addAttribute("class", "invisible");
-                resultRecorder.record(Result.SUCCESS);
-                announceSuccess(element);
-                if (!(Boolean) clazz.getMethod("isExpectedToPass").invoke(test)) {
+                element.insertAfter(resultElement);
+                element.addAttribute("class", "invisible");
+                try {
+                    clazz.getMethod("lastExecutionResult").invoke(test);     //throws exception if failed
+                    wrapElementInTogglingButton(div, resultElement, getTitle(element), true);
+                    resultRecorder.record(Result.SUCCESS);
+                    div.addAttribute("class", "includedPassingTest");
+
+                    announceSuccess(element);
+                    if (!(Boolean) clazz.getMethod("isExpectedToPass").invoke(test)) {
+                        Element b = new Element("b");
+                        b.addAttribute("class", "attention");
+                        b.appendText(" (This test is not expected to pass) ");
+                        element.appendChild(b);
+                    }
+
+                } catch (Exception e) {
+                    wrapElementInTogglingButton(div, resultElement, getTitle(element), false);
+
+                    resultRecorder.record(Result.FAILURE);
+                    announceFailure(element);
+                    div.addAttribute("class", "includedFailingTest");
                     Element b = new Element("b");
                     b.addAttribute("class", "attention");
-                    b.appendText(" (This test is not expected to pass) ");
-                    element.appendChild(b);
+                    b.appendText(String.format(" (%s) ", e.getCause().getMessage()));
+                    resultElement.appendChild(b);
                 }
-            } catch (Exception e) {
-                announceFailure(element);
-                resultRecorder.record(Result.FAILURE);
-                Element b = new Element("b");
-                b.addAttribute("class", "attention");
-                b.appendText(String.format(" (%s) ", e.getCause().getMessage()));
-                element.appendChild(b);
+            }
+            catch (Exception e) {
+                throw new RuntimeException(e);
+
             }
         } else {
             throw new RuntimeException(String.format("Can't open %s", htmlFilename));
@@ -135,4 +109,8 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
     private void announceFailure(Element element) {
         listeners.announce().failureReported(new RunSelendionFailureEvent(element));
     }
+    private void announceFailure(Throwable throwable, Element element, String expression) {
+        listeners.announce().throwableCaught(new ThrowableCaughtEvent(throwable, element, expression));
+    }
+
 }

@@ -1,18 +1,26 @@
 <html xmlns:concordion="http://www.selendion.org/2008">
-<head><title>Set variables Demo</title></head>
+<head><title>runSelendion Demo</title></head>
 <link href="../../css/selendion.css" rel="stylesheet" type="text/css"/>
 <body>
 
-<h1>Set variables Demo</h1>
+<h1>runSelendion Demo</h1>
+
 
 
 <div class="example">
-    <H2>runSelendion</H2>
+    <p>Because of the failing script, this test is <i class="attention" concordion:execute="setExpectedToPass(false)">
+        not expected to pass</i>.
+    </p>
 
-
-    <p>Run <a href="Demo.html" concordion:runSelendion="#HREF">
-        this script</a>.</p>
+    <p>Run this <a href="commands/runSelendionScripts/Simple.html" concordion:runSelendion="#HREF">
+        passing script</a>, this <a href="commands/runSelendionScripts/NotExpectedToPass.html" concordion:runSelendion="#HREF">
+        not expected to pass script</a>,
+        this <a href="commands/runSelendionScripts/NotExpectedToPassButPassing.html" concordion:runSelendion="#HREF">
+            passing not expected to pass script</a>and this
+        <a href="commands/runSelendionScripts/SimpleFail.html" concordion:runSelendion="#HREF">
+            failing script</a>.</p>
 </div>
+
 
 
 </body>
