@@ -32,20 +32,22 @@ public abstract class AbstractTogglingCommand extends AbstractCommand {
         }
 
     }
+    String getTitle(Element element) {
+        return element.getText().replaceAll(" *\\n *", " ").trim();
+    }
 
-    void wrapElementInTogglingButton(Element elementToAdd, Element resultElement, String title, boolean result) {
+    void wrapElementInTogglingButton(Element elementToAdd, Element element, String title, boolean result) {
         String label = title.replaceFirst("\\|.*", "...");
         Element input = new Element("input")
                 .addStyleClass("selendionHideViewButton")
                 .setId("selendionHideViewButton" + buttonId)
                 .addAttribute("type", "button")
                 .addAttribute("class", result ? "success" : "failure")
-                .addAttribute("onclick", "javascript:toggleSeleniumTable('" + buttonId + "', '" + label + "')")
+                .addAttribute("onclick", "javascript:toggleSelendionElement('" + buttonId + "', '" + label + "')")
                 .addAttribute("value", label);
 
-        resultElement.appendChild(input);
+        element.appendChild(input);
         elementToAdd.setId("selendionHideViewElement" + buttonId++);
-        elementToAdd.addAttribute("class", "selendionHideViewElement");
-        resultElement.appendChild(elementToAdd);
+        element.appendChild(elementToAdd);
     }
 }

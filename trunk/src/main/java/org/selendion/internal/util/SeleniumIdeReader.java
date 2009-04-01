@@ -119,7 +119,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         browser.passVariablesOut(evaluator);
         return table;
     }
-    public boolean getLastTestResult() {
+    public boolean getLastRunResult() {
         return lastTestResult;
     }
 

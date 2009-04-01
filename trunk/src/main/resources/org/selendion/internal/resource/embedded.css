@@ -116,10 +116,10 @@ ins {
   font-family: Arial,sans-serif;
 }
 
-.selendionHideViewElement, .selendionHideViewElement * {
+.seleniumTable, .seleniumTable * {
   font-weight: normal;
 }
-.selendionHideViewElement {
+.seleniumTable {
   display: none;
   padding: 1px 4px 4px 4px;
   background-color: #C0C0C0;

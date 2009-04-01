@@ -24,7 +24,7 @@ function makeInvisible(element) {
   element.style.display = "";
 }
 
-function toggleSeleniumTable(selendionHideViewElementNumber, selendionHideViewButtonTitle) {
+function toggleSelendionElement(selendionHideViewElementNumber, selendionHideViewButtonTitle) {
   var selendionHideViewElement = getElementById("selendionHideViewElement" + selendionHideViewElementNumber);
   var selendionHideViewButton = getElementById("selendionHideViewButton" + selendionHideViewElementNumber);
   if (isVisible(selendionHideViewElement)) {

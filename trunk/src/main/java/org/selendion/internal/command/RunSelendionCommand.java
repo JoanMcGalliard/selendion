@@ -92,19 +92,21 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
             try {
                 Class clazz = loader.findSelendionClass(htmlResource);
                 SelendionTestCase test = (SelendionTestCase) clazz.newInstance();
-                SelendionResultRecorder childResultRecorder = (SelendionResultRecorder)clazz.getMethod("testProcessSpecification", Evaluator.class).invoke(test, evaluator);
 
 
-//                Specification specification = childResultRecorder.getResultSpecification();
-//                Element[] body = specification.getCommandCall().getElement().getChildElements()[1].getChildElements();
-//                Element resultElement = new Element("div");
-//                for (int x = 0; x < body.length; x++) {
-//                    resultElement.appendChild(body[x].copy());
-//                }
-//                resultElement.addAttribute("class", "includedPassingTest");
-//                  element.insertAfter(resultElement);
-//                    element.addAttribute("class", "invisible");
+                Element[] body = ((SelendionResultRecorder) clazz.getMethod("testProcessSpecification",
+                        Evaluator.class).invoke(test, evaluator)).getResultSpecification().getCommandCall().getElement().getChildElements();
 
+                Element div = new Element("div");
+                for (int x = 0; x < body.length; x++) {
+                    div.appendChild(body[x].copy());
+                }
+                div.addAttribute("class", "includedPassingTest");
+                Element resultElement = new Element("span");
+
+                wrapElementInTogglingButton(div, resultElement, getTitle(element), true);
+//                element.insertAfter(resultElement);
+//                element.addAttribute("class", "invisible");
                 resultRecorder.record(Result.SUCCESS);
                 announceSuccess(element);
                 if (!(Boolean) clazz.getMethod("isExpectedToPass").invoke(test)) {
@@ -116,10 +118,10 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
             } catch (Exception e) {
                 announceFailure(element);
                 resultRecorder.record(Result.FAILURE);
-                   Element b = new Element("b");
-                    b.addAttribute("class", "attention");
-                    b.appendText(String.format(" (%s) ", e.getCause().getMessage()) );
-                    element.appendChild(b);
+                Element b = new Element("b");
+                b.addAttribute("class", "attention");
+                b.appendText(String.format(" (%s) ", e.getCause().getMessage()));
+                element.appendChild(b);
             }
         } else {
             throw new RuntimeException(String.format("Can't open %s", htmlFilename));
