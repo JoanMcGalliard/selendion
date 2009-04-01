@@ -9,8 +9,6 @@ import org.concordion.api.ResultRecorder;
 import org.concordion.api.Element;
 import org.concordion.internal.*;
 import org.concordion.internal.util.Announcer;
-import org.concordion.internal.util.IOUtil;
-import org.concordion.internal.util.Check;
 import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.RunSeleniumListener;
 
@@ -88,21 +86,24 @@ public class RunSeleniumCommand extends AbstractTogglingCommand {
                         resultElement = new Element("td");
 
                     } else {
-                    resultElement = new Element("span");
+                        resultElement = new Element("span");
                     }
-                    testName = element.getText().replaceAll(" *\\n *", " ").trim();
+                    testName = getTitle(element);
 
 
                     Element seleniumResult = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, listeners, resultRecorder);
+                    seleniumResult.addAttribute("class", "seleniumTable");
 
-                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastTestResult());
+
+                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastRunResult());
                     element.insertAfter(resultElement);
                     element.addAttribute("class", "invisible");
                 } else {
                     resultElement = new Element("td");
                     element.appendChild(resultElement);
                     Element seleniumResult = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, listeners, resultRecorder);
-                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastTestResult());
+                    seleniumResult.addAttribute("class", "seleniumTable");                    
+                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastRunResult());
 
                 }
             } catch (Exception e) {
