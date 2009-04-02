@@ -12,6 +12,7 @@ public interface BrowserDriver {
     public abstract void passVariablesOut(Evaluator evaluator);
     public abstract void store(String name, Object value);
     public abstract void start();
+    public abstract boolean isStarted();
 
     public String replaceVariables(String string);
 
@@ -142,6 +143,6 @@ public interface BrowserDriver {
     public abstract boolean isElementPresent(String arg1);
     public abstract boolean isSomethingSelected(String arg1);
     public abstract boolean isTextPresent(String arg1);
-    
-    
+
+
 }

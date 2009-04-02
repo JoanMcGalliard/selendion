@@ -9,9 +9,11 @@ import org.concordion.internal.*;
 import org.concordion.internal.util.Announcer;
 import org.concordion.api.*;
 import org.selendion.internal.util.SelendionClassLoader;
+import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.RunSelendionListener;
 import org.selendion.internal.SelendionResultRecorder;
 import org.selendion.integration.concordion.SelendionTestCase;
+import org.selendion.integration.BrowserDriver;
 
 import java.net.URL;
 import java.io.File;
@@ -20,6 +22,11 @@ import java.util.ArrayList;
 
 public class RunSelendionCommand extends AbstractTogglingCommand {
     private Announcer<RunSelendionListener> listeners = Announcer.to(RunSelendionListener.class);
+    private SeleniumIdeReader seleniumIdeReader;
+    public RunSelendionCommand(SeleniumIdeReader seleniumIdeReader) {
+        super();
+        this.seleniumIdeReader = seleniumIdeReader ;
+    }
 
     public void addRunSelendionListener(RunSelendionListener runSelendionListener) {
         listeners.addListener(runSelendionListener);
@@ -34,8 +41,13 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
         CommandCallList childCommands = commandCall.getChildren();
         childCommands.setUp(evaluator, resultRecorder);
         String htmlFilename = evaluator.evaluate(commandCall.getExpression()).toString();
-        String htmlResource = commandCall.getResource().getRelativeResource(htmlFilename)
+        String htmlResource;
+        if (htmlFilename.startsWith("/") ) {
+            htmlResource = htmlFilename.replaceFirst("^/", "");;
+        } else {
+            htmlResource = commandCall.getResource().getRelativeResource(htmlFilename)
                 .getPath().replaceFirst("^/", "");
+        }
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         SelendionClassLoader loader = new SelendionClassLoader();
         URL url = contextClassLoader.getResource(htmlResource);
@@ -55,7 +67,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
 
 
                 Element[] body = (Element[]) clazz.getMethod("testProcessSpecification",
-                        Evaluator.class).invoke(test, evaluator);
+                        Evaluator.class, BrowserDriver.class).invoke(test, evaluator, seleniumIdeReader.getBrowser());
 
                 for (int x = 0; x < body.length; x++) {
                     Element e = body[x];

@@ -18,6 +18,7 @@ import org.selendion.internal.listener.RunSuiteResultRenderer;
 import org.selendion.internal.listener.RunSeleniumResultRenderer;
 import org.selendion.internal.listener.RunSelendionResultRenderer;
 import org.selendion.Selendion;
+import org.selendion.integration.BrowserDriver;
 
 import java.util.Hashtable;
 import java.io.File;
@@ -27,6 +28,7 @@ public class SelendionBuilder extends ConcordionBuilder {
     public static final String NAMESPACE_SELENDION = "http://www.selendion.org/2008";
     private static final String PROPERTY_OUTPUT_DIR = "selendion.output.dir";
     private SeleniumIdeReader seleniumIdeReader = new SeleniumIdeReader();
+;
     private Hashtable suites = new Hashtable();
     private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/selendion/internal/resource/embedded.css";
     private Evaluator evaluator;
@@ -39,8 +41,11 @@ public class SelendionBuilder extends ConcordionBuilder {
     private RunSuiteCommand runSuiteCommand = new RunSuiteCommand(suites);
     private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suites);
     private ForEachCommand forEachCommand = new ForEachCommand(documentParser);
-    private RunSelendionCommand runSelendionCommand = new RunSelendionCommand();
+    private RunSelendionCommand runSelendionCommand = new RunSelendionCommand(seleniumIdeReader);
     private SwitchJavaScriptCommand switchJavaScriptCommand = new SwitchJavaScriptCommand(seleniumIdeReader);
+
+    public SelendionBuilder() {
+    }
 
     {
         withApprovedCommand("", "specification", specificationCommand);
@@ -99,6 +104,10 @@ public class SelendionBuilder extends ConcordionBuilder {
     }
     public SelendionBuilder withEvaluator(Evaluator evaluator) {
         this.evaluator = evaluator;
+        return this;
+    }
+    public SelendionBuilder withBrowser(BrowserDriver browser) {
+        this.seleniumIdeReader.setBrowser(browser);
         return this;
     }
 

@@ -26,33 +26,21 @@ import java.util.Vector;
 public class SeleniumIdeReader extends junit.framework.TestCase {
     private BrowserDriver browser;
     private boolean lastTestResult=true;
-    private boolean started = false;
     private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
 
     public void start(String seleniumHost, int seleniumPort, String browser, String baseUrl) {
-        if (started) {
-            stop();
-        }
         this.browser = new SeleniumDriver(
                 seleniumHost, seleniumPort, browser,
                 baseUrl);
         this.browser.start();
-        started = true;
     }
     public void start(String baseUrl) {
-        if (started) {
-            stop();
-        }
         browser = new HtmlUnitDriver(baseUrl);
         this.browser.start();        
-        started = true;
     }
 
     public void stop() {
-        if (started) {
             browser.stop();
-            started=false;
-        }
     }
 
 
@@ -147,7 +135,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     }
 
     protected CommandResult execute(String command, String arg1, String arg2) {
-        if (!started) {
+        if (!browser.isStarted()) {
             throw new RuntimeException("Please start browser before running scripts.");
         }
         try {
@@ -921,8 +909,12 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         return return_val;
     }
 
-    protected BrowserDriver getBrowser() {
+    public BrowserDriver getBrowser() {
         return browser;
+    }
+
+    public void setBrowser(BrowserDriver browser) {
+        this.browser = browser;
     }
 
     protected class CommandResult {

@@ -11,6 +11,7 @@ import org.selendion.internal.SelendionBuilder;
 import org.selendion.internal.SelendionEvaluatorFactory;
 import org.selendion.internal.SelendionResultRecorder;
 import org.selendion.Selendion;
+import org.selendion.integration.BrowserDriver;
 
 
 public abstract class SelendionTestCase extends ConcordionTestCase {
@@ -36,12 +37,12 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
     }
 
     public void testProcessSpecification() throws Throwable {
-        testProcessSpecification(null);
+        testProcessSpecification(null,null);
         lastExecutionResult();
     }
 
-    public Element[] testProcessSpecification(Evaluator evaluator) throws Throwable {
-        Selendion selendion = new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory()).withEvaluator(evaluator).build();
+    public Element[] testProcessSpecification(Evaluator evaluator, BrowserDriver browser) throws Throwable {
+        Selendion selendion = new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory()).withEvaluator(evaluator).withBrowser(browser).build();
         resultSummary = selendion.process(this);
         resultSummary.print(System.out, this);
         return resultSummary.getResultSpecification().getCommandCall().getElement().getChildElements("body")[0].getChildElements();
