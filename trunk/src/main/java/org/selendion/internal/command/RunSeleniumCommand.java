@@ -62,15 +62,30 @@ public class RunSeleniumCommand extends AbstractTogglingCommand {
             Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
             List<String> seleniumFileNames = new ArrayList<String>();
             String testName = "";
+            String htmlFilename;
+            String htmlResource;
 
             if (evaluatedExpression.getClass().equals(String.class)) {
-                seleniumFileNames.add(commandCall.getResource().getRelativeResource((String) evaluatedExpression).getPath());
+               htmlFilename=(String) evaluatedExpression;
+                if (htmlFilename.startsWith("/")) {
+                    htmlResource=htmlFilename;
+                } else {
+                    htmlResource=commandCall.getResource().getRelativeResource(htmlFilename).getPath();
+                }
+
+                seleniumFileNames.add(htmlResource);
                 testName = ((String) evaluatedExpression).replaceAll(" *\\n *", " ").replaceFirst(".*/", "").replaceFirst(".html*$","").trim();
             } else {
                 Object[] files = (Object[]) evaluatedExpression;
                 for (Object obj : files) {
                     if (obj != null && ((String) obj).length() > 0) {
-                        seleniumFileNames.add(commandCall.getResource().getRelativeResource((String) obj).getPath());
+                        htmlFilename = (String) obj;
+                        if (htmlFilename.startsWith("/")) {
+                            htmlResource=htmlFilename;
+                        } else {
+                            htmlResource=commandCall.getResource().getRelativeResource(htmlFilename).getPath();
+                        }
+                        seleniumFileNames.add(htmlResource);
                         if (testName.length() > 0) {
                             testName = testName + "|";
                         }

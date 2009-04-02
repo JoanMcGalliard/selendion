@@ -24,9 +24,9 @@
     </p>
 
     <p>then we expect to see <a concordion:set="#rowNameScript=#HREF"
-                                href="test_data/getRowName.html">these
+                                href="/examples/test_data/getRowName.html">these
         names</a> and <a concordion:set="#rowValueScript=#HREF"
-                         href="test_data/getRowValue.html">these values</a> :</p>
+                         href="/examples/test_data/getRowValue.html">these values</a> :</p>
 
 
     <table concordion:runSelenium="#rowNameScript,#rowValueScript">
@@ -87,6 +87,9 @@
             <td>-1</td>
         </tr>
     </table>
+
+    <p>Then call the same table but in a <a href="commands/runSelendionScripts/TableToInsert.html"
+    concordion:runSelendion="#HREF">different file</a>.</p>
 
     <h2>Finally</h2>
     <i concordion:stopBrowser="">Close the browser</i>

@@ -15,10 +15,20 @@ import java.util.regex.Pattern;
 public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
 
     private String timeout = "30000";
+    private boolean started = false;
 
     public void start() {
         System.out.println("INFO: Starting Selenium.");
+        started=true;
         super.start();
+    }
+     public void stop(){
+         started=false;
+         super.stop();
+     }
+
+    public boolean isStarted() {
+        return started;
     }
 
 

@@ -156,6 +156,30 @@
 </pre>
 </div>
 
+<div class="example">
+
+    <h3>Test runs and passes using absolute URL</h3>
+
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+    Let's run this little &lt;a concordion:runSelendion="#HREF" href="/examples/commands/runSelendionScripts/Simple.html"&gt;Passing
+            Selendion test&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF" href="/examples/commands/runSelendionScripts/Simple.html" class="invisible success"&gt;Passing
+                Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton5" type="button" class="success" onclick="javascript:toggleSelendionElement('5', 'Passing Selendion test')" value="Passing Selendion test" /&gt; &lt;div id="selendionHideViewElement5" class="includedPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'" class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
+    &lt;/p&gt;
+
+</pre>
+</div>
+
+
 
 </body>
 </html>

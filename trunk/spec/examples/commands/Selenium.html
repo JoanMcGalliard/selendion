@@ -12,9 +12,10 @@
 
 </p>
 
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
 
 <div class="example">
-    <p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
 
     <h3>Running selenium within columns of table </h3>
 
@@ -34,7 +35,7 @@
 
         <pre concordion:set="#snippet">
 
-  &lt;p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+  &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
              host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
              port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
              for &lt;i concordion:echo="#browser"/&gt;
@@ -59,7 +60,7 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-  &lt;p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+  &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
              host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
              port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
              for  &lt;i concordion:echo="#browser"&gt;*firefox&lt;/i&gt;
@@ -105,7 +106,84 @@
 
        &lt;/table&gt;
     &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
- 
+
+</pre>
+</div>
+
+<div class="example">
+
+    <h3>Running selenium</h3>
+
+    <p>
+        runSelenium in a ANCHOR should execute.
+    </p>
+
+
+        <pre concordion:set="#snippet">
+
+  &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+             host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+             port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+             for &lt;i concordion:echo="#browser"/&gt;
+             and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+  &lt;p&gt; Run this &lt;a concordion:runSelenium="#HREF" href="seleniumScripts/openIndex.html"&gt;script&lt;/a&gt; &lt;/p&gt;
+
+  &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+   &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+                 host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+                 port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+                 for &lt;i concordion:echo="#browser"&gt;*firefox&lt;/i&gt;
+
+                 and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+      &lt;p&gt; Run this &lt;a concordion:runSelenium="#HREF" href="seleniumScripts/openIndex.html" class="invisible"&gt;script&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton5" type="button" class="success" onclick="javascript:toggleSelendionElement('5', 'script')" value="script" /&gt; &lt;table class="seleniumTable" id="selendionHideViewElement5"&gt; &lt;tr&gt; &lt;th colspan="4"&gt;script&lt;br /&gt; &lt;/th&gt; &lt;/tr&gt; &lt;tr class="success"&gt; &lt;td&gt;open&lt;/td&gt; &lt;td&gt;/index.html&lt;/td&gt; &lt;td /&gt; &lt;td /&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/span&gt; &lt;/p&gt;
+
+      &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+
+</pre>
+</div>
+<div class="example">
+
+    <h3>Running selenium with absolute path</h3>
+
+    <p>
+        runSelenium in a ANCHOR should execute.
+    </p>
+
+
+        <pre concordion:set="#snippet">
+
+  &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+             host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+             port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+             for &lt;i concordion:echo="#browser"/&gt;
+             and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+  &lt;p&gt; Run this &lt;a concordion:runSelenium="#HREF" href="/examples/commands/seleniumScripts/openIndex.html"&gt;script&lt;/a&gt; &lt;/p&gt;
+
+  &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+   &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+                 host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+                 port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+                 for &lt;i concordion:echo="#browser"&gt;*firefox&lt;/i&gt;
+
+                 and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+      &lt;p&gt; Run this &lt;a concordion:runSelenium="#HREF" href="/examples/commands/seleniumScripts/openIndex.html" class="invisible"&gt;script&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton6" type="button" class="success" onclick="javascript:toggleSelendionElement('6', 'script')" value="script" /&gt; &lt;table class="seleniumTable" id="selendionHideViewElement6"&gt; &lt;tr&gt; &lt;th colspan="4"&gt;script&lt;br /&gt; &lt;/th&gt; &lt;/tr&gt; &lt;tr class="success"&gt; &lt;td&gt;open&lt;/td&gt; &lt;td&gt;/index.html&lt;/td&gt; &lt;td /&gt; &lt;td /&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/span&gt; &lt;/p&gt;
+
+      &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+
 </pre>
 </div>
 

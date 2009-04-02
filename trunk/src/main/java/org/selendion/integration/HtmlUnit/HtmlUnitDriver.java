@@ -49,6 +49,10 @@ public class HtmlUnitDriver implements BrowserDriver {
         System.out.println("INFO: Starting HtmlUnit.");
     }
 
+    public boolean isStarted() {
+        return true;
+    }
+
 
     public String replaceVariables(String string) {
         Matcher m = variablePattern.matcher(string);
