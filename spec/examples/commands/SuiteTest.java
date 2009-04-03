@@ -2,7 +2,7 @@
 	Copyright Joan McGalliard, 2008-9
 */
 
-package examples.commands;
+package commands;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 import org.concordion.api.Resource;
@@ -18,7 +18,7 @@ public class SuiteTest extends SelendionTestCase {
         Date start = new Date();
         String result= new TestRig()
             .withFixture(this)
-            .withResourceName("/examples/commands/")
+            .withResourceName("/commands/")
             .processFragment(fragment)
             .getOutputFragmentXML();
         runningTime=(new Date()).getTime() - start.getTime();
