@@ -40,18 +40,20 @@ public abstract class AbstractTogglingCommand extends AbstractCommand {
         return element.getText().replaceAll(" *\\n *", " ").trim();
     }
 
-    void wrapElementInTogglingButton(Element elementToAdd, Element element, String title, boolean result) {
-        String label = title.replaceFirst("\\|.*", "...");
-        Element input = new Element("input")
-                .addStyleClass("selendionHideViewButton")
-                .setId("selendionHideViewButton" + buttonId)
-                .addAttribute("type", "button")
-                .addAttribute("class", result ? "success" : "failure")
-                .addAttribute("onclick", "javascript:toggleSelendionElement('" + buttonId + "', '" + label + "')")
-                .addAttribute("value", label);
+    void wrapElementInTogglingButton(Element elementToAdd, Element element, String title, boolean result, boolean hide) {
+        if (hide) {
+            String label = title.replaceFirst("\\|.*", "...");
+            Element input = new Element("input")
+                    .addStyleClass("selendionHideViewButton")
+                    .setId("selendionHideViewButton" + buttonId)
+                    .addAttribute("type", "button")
+                    .addAttribute("class", result ? "success" : "failure")
+                    .addAttribute("onclick", "javascript:toggleSelendionElement('" + buttonId + "', '" + label + "')")
+                    .addAttribute("value", label);
 
-        element.appendChild(input);
-        elementToAdd.setId("selendionHideViewElement" + buttonId++);
+            element.appendChild(input);
+            elementToAdd.setId("selendionHideViewElement" + buttonId++);
+        }
         element.appendChild(elementToAdd);
     }
 }

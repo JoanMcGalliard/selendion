@@ -11,14 +11,11 @@ import org.concordion.api.*;
 import org.selendion.internal.util.SelendionClassLoader;
 import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.RunSelendionListener;
-import org.selendion.internal.SelendionResultRecorder;
 import org.selendion.integration.concordion.SelendionTestCase;
 import org.selendion.integration.BrowserDriver;
 
 import java.net.URL;
 import java.io.File;
-import java.util.List;
-import java.util.ArrayList;
 
 public class RunSelendionCommand extends AbstractTogglingCommand {
     private Announcer<RunSelendionListener> listeners = Announcer.to(RunSelendionListener.class);
@@ -35,18 +32,29 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
     public void removeRunSelendionListener(RunSelendionListener runSelendionListener) {
         listeners.removeListener(runSelendionListener);
     }
-
+    private boolean hide = true;
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
 
         CommandCallList childCommands = commandCall.getChildren();
         childCommands.setUp(evaluator, resultRecorder);
-        String htmlFilename = evaluator.evaluate(commandCall.getExpression()).toString();
+        String htmlFilename;
+        Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
+        if (evaluatedExpression.getClass().equals(String.class)) {
+            htmlFilename = (String) evaluatedExpression;
+        } else {
+            Object[] params = (Object[]) evaluatedExpression;
+            if (params.length > 2) {
+                throw new RuntimeException("Too many params");
+            }
+            htmlFilename = (String) params[0];
+            hide = (Boolean) params[1];
+        }
         String htmlResource;
-        if (htmlFilename.startsWith("/") ) {
-            htmlResource = htmlFilename.replaceFirst("^/", "");;
+        if (htmlFilename.startsWith("/")) {
+            htmlResource = htmlFilename.replaceFirst("^/", "");
         } else {
             htmlResource = commandCall.getResource().getRelativeResource(htmlFilename)
-                .getPath().replaceFirst("^/", "");
+                    .getPath().replaceFirst("^/", "");
         }
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         SelendionClassLoader loader = new SelendionClassLoader();
@@ -55,7 +63,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
             throw new RuntimeException(String.format("Can't run %s: file does not exist.", htmlFilename));
         }
         File f = new File(contextClassLoader.getResource(htmlResource).getPath().replaceAll("%20", " "));
-        Element element = commandCall.getElement();                                                               
+        Element element = commandCall.getElement();
         ensureDocumentHasSeleniumTogglingScript(element);
 
         if (f.isFile()) {
@@ -81,9 +89,13 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
                 element.addAttribute("class", "invisible");
                 try {
                     clazz.getMethod("lastExecutionResult").invoke(test);     //throws exception if failed
-                    wrapElementInTogglingButton(div, resultElement, getTitle(element), true);
+                        wrapElementInTogglingButton(div, resultElement, getTitle(element), true, hide);
                     resultRecorder.record(Result.SUCCESS);
-                    div.addAttribute("class", "includedPassingTest");
+                    if (hide) {
+                        div.addAttribute("class", "includedHiddenPassingTest");
+                    } else {
+                        div.addAttribute("class", "includedPassingTest");
+                    }
 
                     announceSuccess(element);
                     if (!(Boolean) clazz.getMethod("isExpectedToPass").invoke(test)) {
@@ -94,11 +106,16 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
                     }
 
                 } catch (Exception e) {
-                    wrapElementInTogglingButton(div, resultElement, getTitle(element), false);
+
+                    wrapElementInTogglingButton(div, resultElement, getTitle(element), false, hide);
 
                     resultRecorder.record(Result.FAILURE);
                     announceFailure(element);
-                    div.addAttribute("class", "includedFailingTest");
+                    if (hide) {
+                        div.addAttribute("class", "includedHiddenFailingTest");
+                    } else {
+                        div.addAttribute("class", "includedFailingTest");
+                    }
                     Element b = new Element("b");
                     b.addAttribute("class", "attention");
                     b.appendText(String.format(" (%s) ", e.getCause().getMessage()));
@@ -120,9 +137,6 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
 
     private void announceFailure(Element element) {
         listeners.announce().failureReported(new RunSelendionFailureEvent(element));
-    }
-    private void announceFailure(Throwable throwable, Element element, String expression) {
-        listeners.announce().throwableCaught(new ThrowableCaughtEvent(throwable, element, expression));
     }
 
 }
