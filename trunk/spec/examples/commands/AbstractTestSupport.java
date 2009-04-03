@@ -2,7 +2,7 @@
 	Copyright Joan McGalliard, 2008-9
 */
 
-package examples.commands;
+package commands;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 import org.selendion.internal.command.AbstractTogglingCommand;
@@ -12,7 +12,7 @@ public abstract class AbstractTestSupport extends SelendionTestCase {
     public String render(String fragment) throws Exception {
         return trimException( new TestRig()
                 .withFixture(this)
-                .withResourceName("/examples/commands/")
+                .withResourceName("/commands/")
                 .processFragment(fragment)
                 .getOutputFragmentXML().replaceAll("><", "> <"));
     }

@@ -9,7 +9,7 @@
 
     <h2>Setup </h2>
 
-    <p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with:
+    <p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser with:
         host <i concordion:set="#seleniumServerHost">localhost</i>;
         port <i concordion:set="#seleniumServerport">5555</i>;
         for <i concordion:echo="#browser"/>;
@@ -24,9 +24,9 @@
     </p>
 
     <p>then we expect to see <a concordion:set="#rowNameScript=#HREF"
-                                href="/examples/test_data/getRowName.html">these
+                                href="/test_data/getRowName.html">these
         names</a> and <a concordion:set="#rowValueScript=#HREF"
-                         href="/examples/test_data/getRowValue.html">these values</a> :</p>
+                         href="/test_data/getRowValue.html">these values</a> :</p>
 
 
     <table concordion:runSelenium="#rowNameScript,#rowValueScript">

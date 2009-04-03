@@ -2,7 +2,7 @@
 	Copyright Joan McGalliard, 2008-9
 */
 
-package examples.commands;
+package commands;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 
