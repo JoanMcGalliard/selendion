@@ -173,7 +173,7 @@ ins {
     color: #ff0000
 }
 
-.includedPassingTest {
+.includedHiddenPassingTest {
     padding: 2px 12px 6px 12px;
     border: 1px solid #C3D9FF;
     margin: 6px 0 28px 0;
@@ -183,14 +183,33 @@ ins {
     background-color: #E0FFDD;
 
 }
+.includedPassingTest {
+    padding: 2px 12px 6px 12px;
+    border: 1px solid #C3D9FF;
+    margin: 6px 0 28px 0;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: block;
+    background-color: #E0FFDD;
 
-.includedFailingTest {
+}
+
+.includedHiddenFailingTest {
     padding: 2px 12px 6px 12px;
     border: 1px solid #C3D9FF;
     margin: 6px 0 28px 0;
     margin-left: 10%;
     margin-right: 10%;
     display: none;
+    background-color: #FFDDFF;
+
+}.includedFailingTest {
+    padding: 2px 12px 6px 12px;
+    border: 1px solid #C3D9FF;
+    margin: 6px 0 28px 0;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: block;
     background-color: #FFDDFF;
 
 }

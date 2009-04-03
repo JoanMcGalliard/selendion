@@ -110,7 +110,7 @@ public class RunSeleniumCommand extends AbstractTogglingCommand {
                     seleniumResult.addAttribute("class", "seleniumTable");
 
 
-                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastRunResult());
+                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastRunResult(), true);
                     element.insertAfter(resultElement);
                     element.addAttribute("class", "invisible");
                 } else {
@@ -118,7 +118,7 @@ public class RunSeleniumCommand extends AbstractTogglingCommand {
                     element.appendChild(resultElement);
                     Element seleniumResult = seleniumIdeReader.runSeleniumScript(seleniumFileNames, evaluator, testName, listeners, resultRecorder);
                     seleniumResult.addAttribute("class", "seleniumTable");                    
-                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastRunResult());
+                    wrapElementInTogglingButton(seleniumResult, resultElement, testName, seleniumIdeReader.getLastRunResult(), true);
 
                 }
             } catch (Exception e) {

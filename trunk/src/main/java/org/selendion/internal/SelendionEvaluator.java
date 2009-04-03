@@ -25,7 +25,7 @@ public class SelendionEvaluator extends SimpleEvaluator {
     }
 
     public Object evaluate(String expression) {
-         String  VAR_PATTERN = "(#[a-z][a-zA-Z0-9_]*|#TEXT|#HREF|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
+         String  VAR_PATTERN = "(#[a-z][a-zA-Z0-9_]*|#TEXT|#HREF|true|false|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*)";
          String VAR_LIST = VAR_PATTERN + "(, *"+VAR_PATTERN+")++";
         if (expression.matches(VAR_LIST)) {
             List<Object> returnValue = new ArrayList<Object>();
