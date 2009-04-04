@@ -255,11 +255,16 @@
 
 <div class="example">
 
-    <h3>Run again without switch: should be shown</h3>
+    <h3>Run shown and hidden</h3>
 
 
         <pre concordion:set="#snippet">
-&lt;p&gt;
+            &lt;p&gt;
+                Let's run this little &lt;a concordion:runSelendion="#HREF, false" href="runSelendionScripts/Simple.html"&gt;Passing
+                        Selendion test&lt;/a&gt;.
+            &lt;/p&gt;
+
+            &lt;p&gt;
     Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html"&gt;Passing
             Selendion test&lt;/a&gt;.
 &lt;/p&gt;
@@ -268,6 +273,12 @@
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF, false" href="runSelendionScripts/Simple.html" class="invisible success"&gt;Passing
+                Selendion test&lt;/a&gt; &lt;span&gt; &lt;div class="includedPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'"
+    class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
+    &lt;/p&gt;
+
     &lt;p&gt;
         Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="invisible success"&gt;Passing
                 Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton7" type="button" class="success"

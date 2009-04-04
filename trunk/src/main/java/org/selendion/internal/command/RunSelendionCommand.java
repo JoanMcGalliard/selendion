@@ -41,6 +41,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
         Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
         if (evaluatedExpression.getClass().equals(String.class)) {
             htmlFilename = (String) evaluatedExpression;
+            hide=true;
         } else {
             Object[] params = (Object[]) evaluatedExpression;
             if (params.length > 2) {
