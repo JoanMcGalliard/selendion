@@ -2,12 +2,14 @@ package test.concordion;
 
 import java.io.IOException;
 
-import org.concordion.Concordion;
+
+import org.selendion.internal.SelendionBuilder;
+import org.selendion.internal.SelendionEvaluatorFactory;
+import org.selendion.internal.SelendionResultRecorder;
+import org.selendion.Selendion;
 import org.concordion.api.EvaluatorFactory;
 import org.concordion.api.Resource;
 import org.concordion.api.ResultSummary;
-import org.selendion.internal.SelendionBuilder;
-import org.selendion.internal.SelendionEvaluatorFactory;
 import nu.xom.Document;
 import nu.xom.Nodes;
 
@@ -23,6 +25,10 @@ public class TestRig {
         this.fixture = fixture;
         return this;
     }
+    public TestRig withResourceName(String resourceName) {
+        this.resourceName=resourceName;
+        return this;
+    }
 
     public ProcessingResult processFragment(String fragment) {
         return process(wrapFragment(fragment));
@@ -31,7 +37,7 @@ public class TestRig {
     public ProcessingResult process(Resource resource) {
         EventRecorder eventRecorder = new EventRecorder();
         StubTarget stubTarget = new StubTarget();
-        Concordion concordion = new SelendionBuilder()
+        Selendion selendion = new SelendionBuilder()
             .withAssertEqualsListener(eventRecorder)
             .withThrowableListener(eventRecorder)
             .withSource(stubSource)
@@ -40,7 +46,7 @@ public class TestRig {
             .build();
 
         try {
-            ResultSummary resultSummary = concordion.process(resource, fixture);
+            SelendionResultRecorder resultSummary = selendion.process(resource, fixture);
             String xml = stubTarget.getWrittenString(resource);
             return new ProcessingResult(resultSummary, eventRecorder, xml);
         } catch (IOException e) {
@@ -52,10 +58,6 @@ public class TestRig {
 
     }
 
-    public TestRig withResourceName(String resourceName) {
-        this.resourceName=resourceName;
-        return this;
-    }
     public ProcessingResult process(String html) {
         Resource resource = new Resource(resourceName);
         withResource(resource, html);
