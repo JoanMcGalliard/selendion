@@ -135,402 +135,397 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     }
 
     protected CommandResult execute(String command, String arg1, String arg2) {
-        if (!browser.isStarted()) {
-            throw new RuntimeException("Please start browser before running scripts.");
-        }
         try {
-
-            if (command.equals("echo")) {
-                return new CommandResult(true, browser.echo(arg1));
-            }
-            if (command.equals("store")) {
-                browser.store(arg2, arg1);
-                return new CommandResult(true, "");
-            }
-            if (command.equals("waitForCondition")) {
-                browser.waitForCondition(arg1, arg2);
-                return new CommandResult(true, "");
-
-            }
-            if (command.equals("waitForFrameToLoad")) {
-                browser.waitForFrameToLoad(arg1, arg2);
-                return new CommandResult(true, "");
-
-            }
-            if (command.equals("waitForPageToLoad")) {
-                browser.waitForPageToLoad();
-                return new CommandResult(true, "");
-
-            }
-            if (command.equals("waitForPageToLoadfLoading")) {
-                browser.waitForPageToLoad();
-                return new CommandResult(true, "");
-
-            }
-            if (command.equals("waitForPopUp")) {
-                browser.waitForPopUp(arg1, arg2);
-                return new CommandResult(true, "");
-            }
-
-
-            if (command.matches(".*AndWait$")) {
-                try {
-                    seleniumAction(command.replaceFirst("AndWait$", ""), arg1, arg2);
-                    browser.waitForPageToLoad();
-                    return new CommandResult(true, "");
-                } catch (SeleniumException se) {
-                    return new CommandResult(false, se.getMessage());
-                } catch (HtmlUnitException se) {
-                    return new CommandResult(false, se.getMessage());
-                }
-                catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
-            if (command.matches("^storeIfAvailable[A-Z].*")) {
-                String varName = arg2.length() > 0 ? arg2 : arg1;
-
-                if (!varName.matches(VARIABLE_PATTERN)) {
-                    return new CommandResult(false, "Illegal variable name: " + varName);
-                }
-                try {
-                    browser.store(varName, browserGet(command.replaceFirst("^storeIfAvailable", ""), arg1, arg2));
-                } catch (SeleniumException se) {
-                    //ignore
-                } catch (HtmlUnitException re) {
-                    // fall through
-                }
-                catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^storeIfVisible[A-Z].*")) {
-
-                if (!arg2.matches(VARIABLE_PATTERN)) {
-                    return new CommandResult(false, "Illegal variable name: " + arg2);
-                }
-                try {
-                    Object value = browserGet(command.replaceFirst("^storeIfVisible", ""), arg1, arg2);
-                    if (browser.isVisible(arg1)) {
-                        browser.store(arg2, value);
-                    }
-                } catch (SeleniumException se) {
-                    //ignore
-                } catch (HtmlUnitException se) {
-                    //ignore
-                }
-                catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^storeNot[A-Z].*")) {
-                String varName = arg2.length() > 0 ? arg2 : arg1;
-
-                if (!varName.matches(VARIABLE_PATTERN)) {
-                    return new CommandResult(false, "Illegal variable name: " + varName);
-                }
-                try {
-                    Object answer= browserGet(command.replaceFirst("^storeNot", ""), arg1, arg2);
-                    if (answer.getClass().equals(Boolean.class)) {
-                    browser.store(varName, !(Boolean)answer);
-                    }
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^store[A-Z].*")) {
-                String varName = arg2.length() > 0 ? arg2 : arg1;
-
-                if (!varName.matches(VARIABLE_PATTERN)) {
-                    return new CommandResult(false, "Illegal variable name: " + varName);
-                }
-                try {
-                    browser.store(varName, browserGet(command.replaceFirst("^store", ""), arg1, arg2));
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^assertNot[A-Z].*")) {
-                Object actualObject;
-                String expected = arg2.length() > 0 ? arg2 : arg1;
-                try {
-                    actualObject = browserGet(command.replaceFirst("^assertNot", ""), arg1, arg2);
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                if (actualObject.getClass().equals(Boolean.class)) {
-                    assertTrue((Boolean) actualObject);
-                } else {
-                     assertFalse(seleniumObjectToString(actualObject).equals(expected));
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^assertTextNotPresent")) {
-                try {
-                    assertFalse((Boolean) browserGet("TextPresent", arg1, arg2));
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^assert[A-Z].*")) {
-                Object actualObject;
-                String expected = arg2.length() > 0 ? arg2 : arg1;
-                try {
-                    actualObject = browserGet(command.replaceFirst("^assert", ""), arg1, arg2);
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                if (actualObject.getClass().equals(Boolean.class)) {
-                    assertTrue((Boolean) actualObject);
-                } else {
-                     assertEquals(expected, seleniumObjectToString(actualObject));
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^verifyNot[A-Z].*")) {
-                Object actualObject;
-                String seleniumCommand = command.replaceFirst("^verifyNot", "") ;
-                              String expected;
-                              if (seleniumCommand.equals("Alert") ||
-                                      seleniumCommand.equals("AllButtons") ||
-                                      seleniumCommand.equals("AllFields") ||
-                                      seleniumCommand.equals("AllLinks") ||
-                                      seleniumCommand.equals("AllWindowIds") ||
-                                      seleniumCommand.equals("AllWindowNames") ||
-                                      seleniumCommand.equals("AllWindowTitles") ||
-                                      seleniumCommand.equals("BodyText") ||
-                                      seleniumCommand.equals("Confirmation") ||
-                                      seleniumCommand.equals("Cookie") ||
-                                      seleniumCommand.equals("HtmlSource") ||
-                                      seleniumCommand.equals("Location") ||
-                                      seleniumCommand.equals("MouseSpeed") ||
-                                      seleniumCommand.equals("Prompt") ||
-                                      seleniumCommand.equals("Speed") ||
-                                      seleniumCommand.equals("Title")) {
-                                  expected = arg1;
-                              } else {
-                                  expected = arg2;
-                              }
-              
-                try {
-                    actualObject = browserGet(seleniumCommand, arg1, arg2);
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                if (actualObject.getClass().equals(Boolean.class))   {
-                           return new CommandResult(!(Boolean) actualObject, "");
-               }
-                String actual = seleniumObjectToString(actualObject);
-                if (!actual.equals(expected)) {
-                    return new CommandResult(true, "");
-                } else {
-                    return new CommandResult(false, "Failed");
-                }
-
-
-            }
-            if (command.matches("^verify[A-Z][a-z][a-z]*Not[A-Z].*")) {
-                Object actualObject;
-                String seleniumCommand = command.replaceFirst("^verify", "").replaceFirst("Not", "");
-                              String expected;
-                              if (seleniumCommand.equals("Alert") ||
-                                      seleniumCommand.equals("AllButtons") ||
-                                      seleniumCommand.equals("AllFields") ||
-                                      seleniumCommand.equals("AllLinks") ||
-                                      seleniumCommand.equals("AllWindowIds") ||
-                                      seleniumCommand.equals("AllWindowNames") ||
-                                      seleniumCommand.equals("AllWindowTitles") ||
-                                      seleniumCommand.equals("BodyText") ||
-                                      seleniumCommand.equals("Confirmation") ||
-                                      seleniumCommand.equals("Cookie") ||
-                                      seleniumCommand.equals("HtmlSource") ||
-                                      seleniumCommand.equals("Location") ||
-                                      seleniumCommand.equals("MouseSpeed") ||
-                                      seleniumCommand.equals("Prompt") ||
-                                      seleniumCommand.equals("Speed") ||
-                                      seleniumCommand.equals("Title")) {
-                                  expected = arg1;
-                              } else {
-                                  expected = arg2;
-                              }
-
-                try {
-                    actualObject = browserGet(seleniumCommand, arg1, arg2);
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                if (actualObject.getClass().equals(Boolean.class))   {
-                           return new CommandResult(!(Boolean) actualObject, "");
-               }
-                String actual = seleniumObjectToString(actualObject);
-                if (!actual.equals(expected)) {
-                    return new CommandResult(true, "");
-                } else {
-                    return new CommandResult(false, "Failed");
-                }
-
-
-            }
-
-            if (command.matches("^verify[A-Z].*")) {
-                Object actualObject;
-                String seleniumCommand = command.replaceFirst("^verify", "");
-                String expected;
-                if (seleniumCommand.equals("Alert") ||
-                        seleniumCommand.equals("AllButtons") ||
-                        seleniumCommand.equals("AllFields") ||
-                        seleniumCommand.equals("AllLinks") ||
-                        seleniumCommand.equals("AllWindowIds") ||
-                        seleniumCommand.equals("AllWindowNames") ||
-                        seleniumCommand.equals("AllWindowTitles") ||
-                        seleniumCommand.equals("BodyText") ||
-                        seleniumCommand.equals("Confirmation") ||
-                        seleniumCommand.equals("Cookie") ||
-                        seleniumCommand.equals("HtmlSource") ||
-                        seleniumCommand.equals("Location") ||
-                        seleniumCommand.equals("MouseSpeed") ||
-                        seleniumCommand.equals("Prompt") ||
-                        seleniumCommand.equals("Speed") ||
-                        seleniumCommand.equals("Title")) {
-                    expected = arg1;
-                } else {
-                    expected = arg2;
-                }
-
-                expected = expected.replaceAll("([A-Za-z])\\n+([A-Za-z])","$1 $2").replaceAll("\\n", "");
-                try {
-                    actualObject = browserGet(seleniumCommand, arg1, arg2);
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                if (actualObject.getClass().equals(Boolean.class)) {
-                    return new CommandResult((Boolean) actualObject, "");
-                }
-                String actual = seleniumObjectToString(actualObject);
-                actual = replaceCharacterEntities(actual)
-                        .replaceAll("([A-Za-z])\\n+([A-Za-z])","$1 $2").replaceAll("\\n", "");
-                if (actual.equals(expected)) {
-                    return new CommandResult(true, "");
-                } else {
-                    return new CommandResult(false, "Expected: " + expected + "; Actual: " + actual.replaceAll("\\n", ""));
-                }
-            }
-            if (command.matches("^waitForPageToLoadIfNot[A-Z].*")) {
-                Object actualObject;
-                String expected = arg2.length() > 0 ? arg2 : arg1;
-                try {
-                    actualObject = browserGet(command.replaceFirst("^waitForPageToLoadIfNot", ""), arg1, arg2);
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                boolean condition;
-                if (actualObject.getClass().equals(Boolean.class)) {
-                    condition = (Boolean) actualObject;
-                } else {
-                    String actual = seleniumObjectToString(actualObject);
-                    condition = actual.equals(expected);
-                }
-                if (!condition) {
-                    browser.waitForPageToLoad();
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^waitForPageToLoadIf[A-Z].*")) {
-                Object actualObject;
-                String expected = arg2.length() > 0 ? arg2 : arg1;
-                try {
-                    actualObject = browserGet(command.replaceFirst("^waitForPageToLoadIf", ""), arg1, arg2);
-                } catch (SeleniumIdeException e) {
-                    return new CommandResult(false, "Unimplemented command " + command);
-                }
-                boolean condition;
-                if (actualObject.getClass().equals(Boolean.class)) {
-                    condition = (Boolean) actualObject;
-                } else {
-                    String actual = seleniumObjectToString(actualObject);
-                    condition = actual.equals(expected);
-                }
-                if (condition) {
-                    browser.waitForPageToLoad();
-                }
-                return new CommandResult(true, "");
-            }
-            if (command.matches("^waitForNot[A-Z].*")) {
-                Object actualObject;
-                String expected = arg2.length() > 0 ? arg2 : arg1;
-                long start = System.currentTimeMillis();
-                while (true) {
-                    try {
-                        actualObject = browserGet(command.replaceFirst("^waitForNot", ""), arg1, arg2);
-                        if (actualObject.getClass().equals(Boolean.class) && !(Boolean)actualObject) {
-                            return new CommandResult(true, "");
-                        }
-                        String actual = seleniumObjectToString(actualObject);
-                        if (!actual.equals(expected)) {
-                            return new CommandResult(true, "");
-                        }
-                    } catch (SeleniumIdeException se) {
-                        throw se;
-                    }
-                    catch (Exception e) {
-                        // try again
-                    }
-                    if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
-                        return new CommandResult(false, String.format("ERROR: Timed out after %sms", browser.getTimeout()));
-                    }
-                    browser.pauseInWaitFor(200);
-
-                }
-
-            }
-            if (command.matches("^waitFor[A-Z].*")) {
-                Object actualObject;
-                String expected = arg2.length() > 0 ? arg2 : arg1;
-                long start = System.currentTimeMillis();
-                while (true) {
-                    try {
-                        actualObject = browserGet(command.replaceFirst("^waitFor", ""), arg1, arg2);
-                        if (actualObject.getClass().equals(Boolean.class) &&
-                                (Boolean) actualObject)   {
-                            return new CommandResult(true, "");
-                        }
-                        String actual = seleniumObjectToString(actualObject);
-                        if (actual.equals(expected)) {
-                            return new CommandResult(true, "");
-                        }
-                    } catch (SeleniumIdeException se) {
-                        throw se;
-                    }
-                    catch (Exception e) {
-                        //try again
-                    }
-                    if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
-                        return new CommandResult(false, String.format("ERROR: Timed out after %sms", browser.getTimeout()));
-                    }
-                    browser.pauseInWaitFor(200);
-
-                }
-
-            }
-            seleniumAction(command, arg1, arg2);
-
-            return new CommandResult(true, "");
-        } catch (SeleniumIdeException e) {
+            return executeCommand(command, arg1, arg2);
+        }
+        catch (SeleniumIdeException e) {
             return new CommandResult(false, e.getMessage());
         } catch (SeleniumException e) {
-            return new CommandResult(false, e.getMessage());
-        } catch (HtmlUnitException e) {
             return new CommandResult(false, e.getMessage());
         } catch (Exception e) {
             return new CommandResult(false, e.toString());
 
         }
+    }
+
+
+    private CommandResult executeCommand(String command, String arg1, String arg2) throws Exception {
+        if (!browser.isStarted()) {
+            throw new RuntimeException("Please start browser before running scripts.");
+        }
+
+        if (command.equals("echo")) {
+            return new CommandResult(true, browser.echo(arg1));
+        }
+        if (command.equals("store")) {
+            browser.store(arg2, arg1);
+            return new CommandResult(true, "");
+        }
+        if (command.equals("waitForCondition")) {
+            browser.waitForCondition(arg1, arg2);
+            return new CommandResult(true, "");
+
+        }
+        if (command.equals("waitForFrameToLoad")) {
+            browser.waitForFrameToLoad(arg1, arg2);
+            return new CommandResult(true, "");
+
+        }
+        if (command.equals("waitForPageToLoad")) {
+            browser.waitForPageToLoad();
+            return new CommandResult(true, "");
+
+        }
+        if (command.equals("waitForPageToLoadfLoading")) {
+            browser.waitForPageToLoad();
+            return new CommandResult(true, "");
+
+        }
+        if (command.equals("waitForPopUp")) {
+            browser.waitForPopUp(arg1, arg2);
+            return new CommandResult(true, "");
+        }
+
+
+        if (command.matches(".*AndWait$")) {
+            try {
+                seleniumAction(command.replaceFirst("AndWait$", ""), arg1, arg2);
+                browser.waitForPageToLoad();
+                return new CommandResult(true, "");
+            } catch (SeleniumException se) {
+                return new CommandResult(false, se.getMessage());
+            }
+            catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        if (command.matches(".*IfAvailable$")) {
+            String varName = arg2.length() > 0 ? arg2 : arg1;
+
+            if (!varName.matches(VARIABLE_PATTERN)) {
+                return new CommandResult(false, "Illegal variable name: " + varName);
+            }
+            String trimmedCommand = command.replaceFirst("IfAvailable$", "");
+            try {
+                return executeCommand(trimmedCommand, arg1, arg2);
+            } catch (SeleniumException se) {
+                return new CommandResult(true, "");
+            }
+        }
+        if (command.matches("^store[A-Z].*IfVisible$")) {
+
+            if (!arg2.matches(VARIABLE_PATTERN)) {
+                return new CommandResult(false, "Illegal variable name: " + arg2);
+            }
+            try {
+                Object value = browserGet(command.replaceFirst("^store", "").replaceFirst("IfVisible$", ""), arg1, arg2);
+                if (browser.isVisible(arg1)) {
+                    browser.store(arg2, value);
+                }
+            } catch (SeleniumException se) {
+                //ignore
+            }
+            catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            return new CommandResult(true, "");
+        }
+        if (command.matches("^storeNot[A-Z].*")) {
+            String varName = arg2.length() > 0 ? arg2 : arg1;
+
+            if (!varName.matches(VARIABLE_PATTERN)) {
+                return new CommandResult(false, "Illegal variable name: " + varName);
+            }
+            try {
+                Object answer = browserGet(command.replaceFirst("^storeNot", ""), arg1, arg2);
+                if (answer.getClass().equals(Boolean.class)) {
+                    browser.store(varName, !(Boolean) answer);
+                }
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            return new CommandResult(true, "");
+        }
+        if (command.matches("^store[A-Z].*")) {
+            String varName = arg2.length() > 0 ? arg2 : arg1;
+
+            if (!varName.matches(VARIABLE_PATTERN)) {
+                return new CommandResult(false, "Illegal variable name: " + varName);
+            }
+            try {
+                browser.store(varName, browserGet(command.replaceFirst("^store", ""), arg1, arg2));
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            return new CommandResult(true, "");
+        }
+        if (command.matches("^assertNot[A-Z].*")) {
+            Object actualObject;
+            String expected = arg2.length() > 0 ? arg2 : arg1;
+            try {
+                actualObject = browserGet(command.replaceFirst("^assertNot", ""), arg1, arg2);
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            if (actualObject.getClass().equals(Boolean.class)) {
+                assertTrue((Boolean) actualObject);
+            } else {
+                assertFalse(seleniumObjectToString(actualObject).equals(expected));
+            }
+            return new CommandResult(true, "");
+        }
+        if (command.matches("^assertTextNotPresent")) {
+            try {
+                assertFalse((Boolean) browserGet("TextPresent", arg1, arg2));
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            return new CommandResult(true, "");
+        }
+        if (command.matches("^assert[A-Z].*")) {
+            Object actualObject;
+            String expected = arg2.length() > 0 ? arg2 : arg1;
+            try {
+                actualObject = browserGet(command.replaceFirst("^assert", ""), arg1, arg2);
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            if (actualObject.getClass().equals(Boolean.class)) {
+                assertTrue((Boolean) actualObject);
+            } else {
+                assertEquals(expected, seleniumObjectToString(actualObject));
+            }
+            return new CommandResult(true, "");
+        }
+        if (command.matches("^verifyNot[A-Z].*")) {
+            Object actualObject;
+            String seleniumCommand = command.replaceFirst("^verifyNot", "");
+            String expected;
+            if (seleniumCommand.equals("Alert") ||
+                    seleniumCommand.equals("AllButtons") ||
+                    seleniumCommand.equals("AllFields") ||
+                    seleniumCommand.equals("AllLinks") ||
+                    seleniumCommand.equals("AllWindowIds") ||
+                    seleniumCommand.equals("AllWindowNames") ||
+                    seleniumCommand.equals("AllWindowTitles") ||
+                    seleniumCommand.equals("BodyText") ||
+                    seleniumCommand.equals("Confirmation") ||
+                    seleniumCommand.equals("Cookie") ||
+                    seleniumCommand.equals("HtmlSource") ||
+                    seleniumCommand.equals("Location") ||
+                    seleniumCommand.equals("MouseSpeed") ||
+                    seleniumCommand.equals("Prompt") ||
+                    seleniumCommand.equals("Speed") ||
+                    seleniumCommand.equals("Title")) {
+                expected = arg1;
+            } else {
+                expected = arg2;
+            }
+
+            try {
+                actualObject = browserGet(seleniumCommand, arg1, arg2);
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            if (actualObject.getClass().equals(Boolean.class)) {
+                return new CommandResult(!(Boolean) actualObject, "");
+            }
+            String actual = seleniumObjectToString(actualObject);
+            if (!actual.equals(expected)) {
+                return new CommandResult(true, "");
+            } else {
+                return new CommandResult(false, "Failed");
+            }
+
+
+        }
+        if (command.matches("^verify[A-Z][a-z][a-z]*Not[A-Z].*")) {
+            Object actualObject;
+            String seleniumCommand = command.replaceFirst("^verify", "").replaceFirst("Not", "");
+            String expected;
+            if (seleniumCommand.equals("Alert") ||
+                    seleniumCommand.equals("AllButtons") ||
+                    seleniumCommand.equals("AllFields") ||
+                    seleniumCommand.equals("AllLinks") ||
+                    seleniumCommand.equals("AllWindowIds") ||
+                    seleniumCommand.equals("AllWindowNames") ||
+                    seleniumCommand.equals("AllWindowTitles") ||
+                    seleniumCommand.equals("BodyText") ||
+                    seleniumCommand.equals("Confirmation") ||
+                    seleniumCommand.equals("Cookie") ||
+                    seleniumCommand.equals("HtmlSource") ||
+                    seleniumCommand.equals("Location") ||
+                    seleniumCommand.equals("MouseSpeed") ||
+                    seleniumCommand.equals("Prompt") ||
+                    seleniumCommand.equals("Speed") ||
+                    seleniumCommand.equals("Title")) {
+                expected = arg1;
+            } else {
+                expected = arg2;
+            }
+
+            try {
+                actualObject = browserGet(seleniumCommand, arg1, arg2);
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            if (actualObject.getClass().equals(Boolean.class)) {
+                return new CommandResult(!(Boolean) actualObject, "");
+            }
+            String actual = seleniumObjectToString(actualObject);
+            if (!actual.equals(expected)) {
+                return new CommandResult(true, "");
+            } else {
+                return new CommandResult(false, "Failed");
+            }
+
+
+        }
+
+        if (command.matches("^verify[A-Z].*")) {
+            Object actualObject;
+            String seleniumCommand = command.replaceFirst("^verify", "");
+            String expected;
+            if (seleniumCommand.equals("Alert") ||
+                    seleniumCommand.equals("AllButtons") ||
+                    seleniumCommand.equals("AllFields") ||
+                    seleniumCommand.equals("AllLinks") ||
+                    seleniumCommand.equals("AllWindowIds") ||
+                    seleniumCommand.equals("AllWindowNames") ||
+                    seleniumCommand.equals("AllWindowTitles") ||
+                    seleniumCommand.equals("BodyText") ||
+                    seleniumCommand.equals("Confirmation") ||
+                    seleniumCommand.equals("Cookie") ||
+                    seleniumCommand.equals("HtmlSource") ||
+                    seleniumCommand.equals("Location") ||
+                    seleniumCommand.equals("MouseSpeed") ||
+                    seleniumCommand.equals("Prompt") ||
+                    seleniumCommand.equals("Speed") ||
+                    seleniumCommand.equals("Title")) {
+                expected = arg1;
+            } else {
+                expected = arg2;
+            }
+
+            expected = expected.replaceAll("([A-Za-z])\\n+([A-Za-z])", "$1 $2").replaceAll("\\n", "");
+            try {
+                actualObject = browserGet(seleniumCommand, arg1, arg2);
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            if (actualObject.getClass().equals(Boolean.class)) {
+                return new CommandResult((Boolean) actualObject, "");
+            }
+            String actual = seleniumObjectToString(actualObject);
+            actual = replaceCharacterEntities(actual)
+                    .replaceAll("([A-Za-z])\\n+([A-Za-z])", "$1 $2").replaceAll("\\n", "");
+            if (actual.equals(expected)) {
+                return new CommandResult(true, "");
+            } else {
+                return new CommandResult(false, "Expected: " + expected + "; Actual: " + actual.replaceAll("\\n", ""));
+            }
+        }
+        if (command.matches("^waitForPageToLoadIfNot[A-Z].*")) {
+            Object actualObject;
+            String expected = arg2.length() > 0 ? arg2 : arg1;
+            try {
+                actualObject = browserGet(command.replaceFirst("^waitForPageToLoadIfNot", ""), arg1, arg2);
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            boolean condition;
+            if (actualObject.getClass().equals(Boolean.class)) {
+                condition = (Boolean) actualObject;
+            } else {
+                String actual = seleniumObjectToString(actualObject);
+                condition = actual.equals(expected);
+            }
+            if (!condition) {
+                browser.waitForPageToLoad();
+            }
+            return new CommandResult(true, "");
+        }
+        if (command.matches("^waitForPageToLoadIf[A-Z].*")) {
+            Object actualObject;
+            String expected = arg2.length() > 0 ? arg2 : arg1;
+            try {
+                actualObject = browserGet(command.replaceFirst("^waitForPageToLoadIf", ""), arg1, arg2);
+            } catch (SeleniumIdeException e) {
+                return new CommandResult(false, "Unimplemented command " + command);
+            }
+            boolean condition;
+            if (actualObject.getClass().equals(Boolean.class)) {
+                condition = (Boolean) actualObject;
+            } else {
+                String actual = seleniumObjectToString(actualObject);
+                condition = actual.equals(expected);
+            }
+            if (condition) {
+                browser.waitForPageToLoad();
+            }
+            return new CommandResult(true, "");
+        }
+        if (command.matches("^waitForNot[A-Z].*")) {
+            Object actualObject;
+            String expected = arg2.length() > 0 ? arg2 : arg1;
+            long start = System.currentTimeMillis();
+            while (true) {
+                try {
+                    actualObject = browserGet(command.replaceFirst("^waitForNot", ""), arg1, arg2);
+                    if (actualObject.getClass().equals(Boolean.class) && !(Boolean) actualObject) {
+                        return new CommandResult(true, "");
+                    }
+                    String actual = seleniumObjectToString(actualObject);
+                    if (!actual.equals(expected)) {
+                        return new CommandResult(true, "");
+                    }
+                } catch (SeleniumIdeException se) {
+                    throw se;
+                }
+                catch (Exception e) {
+                    // try again
+                }
+                if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
+                    return new CommandResult(false, String.format("ERROR: Timed out after %sms", browser.getTimeout()));
+                }
+                browser.pauseInWaitFor(200);
+
+            }
+
+        }
+        if (command.matches("^waitFor[A-Z].*")) {
+            Object actualObject;
+            String expected = arg2.length() > 0 ? arg2 : arg1;
+            long start = System.currentTimeMillis();
+            while (true) {
+                try {
+                    actualObject = browserGet(command.replaceFirst("^waitFor", ""), arg1, arg2);
+                    if (actualObject.getClass().equals(Boolean.class) &&
+                            (Boolean) actualObject) {
+                        return new CommandResult(true, "");
+                    }
+                    String actual = seleniumObjectToString(actualObject);
+                    if (actual.equals(expected)) {
+                        return new CommandResult(true, "");
+                    }
+                } catch (SeleniumIdeException se) {
+                    throw se;
+                }
+                catch (Exception e) {
+                    //try again
+                }
+                if (System.currentTimeMillis() - start > Integer.parseInt(browser.getTimeout())) {
+                    return new CommandResult(false, String.format("ERROR: Timed out after %sms", browser.getTimeout()));
+                }
+                browser.pauseInWaitFor(200);
+
+            }
+
+        }
+        seleniumAction(command, arg1, arg2);
+
+        return new CommandResult(true, "");
     }
 
     private void seleniumAction(String command, String arg1, String arg2) throws SeleniumIdeException {
