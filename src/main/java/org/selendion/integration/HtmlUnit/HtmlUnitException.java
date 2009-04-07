@@ -4,7 +4,9 @@
 
 package org.selendion.integration.HtmlUnit;
 
-public class HtmlUnitException extends RuntimeException {
+import com.thoughtworks.selenium.SeleniumException;
+
+public class HtmlUnitException extends SeleniumException {
     public HtmlUnitException(String s) {
         super(s);
     }
@@ -13,7 +15,7 @@ public class HtmlUnitException extends RuntimeException {
         super(e);
     }
 
-    public HtmlUnitException(Throwable e) {
-        super(e);
-    }
+//    public HtmlUnitException(Throwable e) {
+//        super(e);
+//    }
 }
