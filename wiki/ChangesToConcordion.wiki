@@ -2,7 +2,7 @@
 
 = Introduction =
 
-This code is an extension [http://code.google.com/p/concordion/ Concordion] but with changes: some required to allow the subclass to do what it needs to do; some bug fixes; and some enhancements that belonged more easily or logically in the original class.  The included concordion jar file is the [http://code.google.com/p/concordion/source/detail?r=42 r42] version of concordion with concordion.patch applied.  If you already have a customized version of concordion, then you need to apply this patch to it.
+This code is an extension [http://code.google.com/p/concordion/ Concordion] but with changes: some required to allow the subclass to do what it needs to do; some bug fixes; and some enhancements that belonged more easily or logically in the original class.  The included concordion jar file is the [http://code.google.com/p/concordion/source/detail?r=226 r226] version of concordion with concordion.patch applied.  If you already have a customized version of concordion, then you need to apply this patch to it.
 
 *Note* This is a superset of concordion.  Any concordion tests should run in selendion.
 

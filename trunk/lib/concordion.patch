@@ -1,7 +1,7 @@
 Index: src/test/java/test/concordion/TestRig.java
 ===================================================================
 --- src/test/java/test/concordion/TestRig.java	(revision 226)
-+++ src/test/java/test/concordion/TestRig.java	Fri Mar 27 19:14:53 GMT 2009
++++ src/test/java/test/concordion/TestRig.java	Sun Apr 05 16:53:31 BST 2009
 @@ -6,8 +6,11 @@
  import org.concordion.api.EvaluatorFactory;
  import org.concordion.api.Resource;
@@ -28,21 +28,14 @@ Index: src/test/java/test/concordion/TestRig.java
          withResource(resource, html);
 Index: src/test/resources/spec/examples/NewFeatures.html
 ===================================================================
---- src/test/resources/spec/examples/NewFeatures.html	Fri Mar 27 19:13:23 GMT 2009
-+++ src/test/resources/spec/examples/NewFeatures.html	Fri Mar 27 19:13:23 GMT 2009
-@@ -0,0 +1,69 @@
+--- src/test/resources/spec/examples/NewFeatures.html	Mon Apr 06 21:40:53 BST 2009
++++ src/test/resources/spec/examples/NewFeatures.html	Mon Apr 06 21:40:53 BST 2009
+@@ -0,0 +1,62 @@
 +<html xmlns:concordion="http://www.concordion.org/2007/concordion">
 +<link href="../../concordion.css" rel="stylesheet" type="text/css"/>
 +<body>
 +
 +<h1>New Features</h1>
-+<h2>Nesting inside assertEquals</h2>
-+
-+<div class="example">
-+    <p>Set the variable #blah to <i concordion:set="#blah">Hooray!</i> and then
-+        assert it equals <b concordion:assertEquals="#blah"><i concordion:echo="#blah"></i></b> itself.
-+    </p>
-+</div>
 +
 +<h2>Literal values in set</h2>
 +
@@ -103,7 +96,7 @@ Index: src/test/resources/spec/examples/NewFeatures.html
 Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 ===================================================================
 --- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 226)
-+++ src/main/java/org/concordion/internal/ConcordionBuilder.java	Fri Mar 27 19:14:53 GMT 2009
++++ src/main/java/org/concordion/internal/ConcordionBuilder.java	Sun Apr 05 16:53:31 BST 2009
 @@ -41,21 +41,21 @@
      private static final String PROPERTY_OUTPUT_DIR = "concordion.output.dir";
      private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/concordion/internal/resource/embedded.css";
@@ -160,7 +153,7 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 Index: src/main/java/org/concordion/internal/Table.java
 ===================================================================
 --- src/main/java/org/concordion/internal/Table.java	(revision 226)
-+++ src/main/java/org/concordion/internal/Table.java	Fri Mar 27 19:15:52 GMT 2009
++++ src/main/java/org/concordion/internal/Table.java	Sun Apr 05 16:53:31 BST 2009
 @@ -41,15 +41,23 @@
          }
          return detailRows.toArray(new Row[detailRows.size()]);
@@ -193,7 +186,7 @@ Index: src/main/java/org/concordion/internal/Table.java
 Index: src/main/java/org/concordion/api/Evaluator.java
 ===================================================================
 --- src/main/java/org/concordion/api/Evaluator.java	(revision 226)
-+++ src/main/java/org/concordion/api/Evaluator.java	Fri Mar 27 19:15:52 GMT 2009
++++ src/main/java/org/concordion/api/Evaluator.java	Sun Apr 05 16:53:31 BST 2009
 @@ -1,5 +1,7 @@
  package org.concordion.api;
  
@@ -212,7 +205,7 @@ Index: src/main/java/org/concordion/api/Evaluator.java
 Index: src/test/java/test/concordion/StubEvaluator.java
 ===================================================================
 --- src/test/java/test/concordion/StubEvaluator.java	(revision 226)
-+++ src/test/java/test/concordion/StubEvaluator.java	Fri Mar 27 19:10:19 GMT 2009
++++ src/test/java/test/concordion/StubEvaluator.java	Sun Apr 05 16:53:31 BST 2009
 @@ -3,6 +3,8 @@
  import org.concordion.api.Evaluator;
  import org.concordion.api.EvaluatorFactory;
@@ -233,42 +226,10 @@ Index: src/test/java/test/concordion/StubEvaluator.java
      public Object getVariable(String variableName) {
          return null;
      }
-Index: src/main/java/org/concordion/internal/command/AssertEqualsCommand.java
-===================================================================
---- src/main/java/org/concordion/internal/command/AssertEqualsCommand.java	(revision 226)
-+++ src/main/java/org/concordion/internal/command/AssertEqualsCommand.java	Fri Mar 27 19:14:53 GMT 2009
-@@ -8,6 +8,7 @@
- import org.concordion.api.ResultRecorder;
- import org.concordion.internal.BrowserStyleWhitespaceComparator;
- import org.concordion.internal.CommandCall;
-+import org.concordion.internal.CommandCallList;
- import org.concordion.internal.util.Announcer;
- import org.concordion.internal.util.Check;
- 
-@@ -34,13 +35,16 @@
-     
-     @Override
-     public void verify(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
--        Check.isFalse(commandCall.hasChildCommands(), "Nesting commands inside an 'assertEquals' is not supported");
-+   CommandCallList childCommands = commandCall.getChildren();
--        
-+
-+            childCommands.setUp(evaluator, resultRecorder);
-+        childCommands.execute(evaluator, resultRecorder);
-+        childCommands.verify(evaluator, resultRecorder);
-         Element element = commandCall.getElement();
-         
-         Object actual = evaluator.evaluate(commandCall.getExpression());
-         String expected = element.getText();
--        
-+
-         if (comparator.compare(actual, expected) == 0) {
-             resultRecorder.record(Result.SUCCESS);
-             announceSuccess(element);
 Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
 ===================================================================
 --- src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	(revision 226)
-+++ src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	Fri Mar 27 19:14:52 GMT 2009
++++ src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	Tue Apr 07 01:26:14 BST 2009
 @@ -22,17 +22,19 @@
          
          Element element = event.getElement();
@@ -297,7 +258,7 @@ Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
 Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 ===================================================================
 --- src/test/java/spec/concordion/results/exception/ExceptionTest.java	(revision 226)
-+++ src/test/java/spec/concordion/results/exception/ExceptionTest.java	Fri Mar 27 19:15:52 GMT 2009
++++ src/test/java/spec/concordion/results/exception/ExceptionTest.java	Sun Apr 05 16:53:31 BST 2009
 @@ -9,6 +9,8 @@
  import org.concordion.internal.listener.ThrowableRenderer;
  
@@ -339,7 +300,7 @@ Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 Index: src/test/java/test/concordion/internal/SimpleEvaluatorTest.java
 ===================================================================
 --- src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	(revision 226)
-+++ src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	Fri Mar 27 19:13:23 GMT 2009
++++ src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	Sun Apr 05 16:53:31 BST 2009
 @@ -69,6 +69,7 @@
      public void testAccessInnerVariable() {
          evaluator.setVariable("#result", this);
@@ -350,8 +311,8 @@ Index: src/test/java/test/concordion/internal/SimpleEvaluatorTest.java
      public void testEvaluationsCanCreateVariables() throws Exception {
 Index: src/test/java/test/concordion/internal/TableTest.java
 ===================================================================
---- src/test/java/test/concordion/internal/TableTest.java	Fri Mar 27 19:15:52 GMT 2009
-+++ src/test/java/test/concordion/internal/TableTest.java	Fri Mar 27 19:15:52 GMT 2009
+--- src/test/java/test/concordion/internal/TableTest.java	Sun Apr 05 16:53:31 BST 2009
++++ src/test/java/test/concordion/internal/TableTest.java	Sun Apr 05 16:53:31 BST 2009
 @@ -0,0 +1,72 @@
 +package test.concordion.internal;
 +
@@ -428,7 +389,7 @@ Index: src/test/java/test/concordion/internal/TableTest.java
 Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
 ===================================================================
 --- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 226)
-+++ src/main/java/org/concordion/internal/SimpleEvaluator.java	Fri Mar 27 19:15:52 GMT 2009
++++ src/main/java/org/concordion/internal/SimpleEvaluator.java	Sun Apr 05 16:53:32 BST 2009
 @@ -25,8 +25,8 @@
      private static String PROPERTY_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";
      private static String STRING_PATTERN = "'[^']+'";
@@ -467,10 +428,44 @@ Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
          regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *\\)");
          regexs.add(LHS_VARIABLE_PATTERN + " *= *" + METHOD_NAME_PATTERN + " *\\( *" + RHS_VARIABLE_PATTERN + "(, *" + RHS_VARIABLE_PATTERN + " *)*\\)");
          
+Index: src/main/java/org/concordion/api/Specification.java
+===================================================================
+--- src/main/java/org/concordion/api/Specification.java	(revision 226)
++++ src/main/java/org/concordion/api/Specification.java	Mon Apr 06 22:04:03 BST 2009
+@@ -3,4 +3,5 @@
+ public interface Specification {
+ 
+     void process(Evaluator evaluator, ResultRecorder resultRecorder);
++    org.concordion.internal.CommandCall getCommandCall();
+ }
+Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
+===================================================================
+--- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 226)
++++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Sun Apr 05 16:53:32 BST 2009
+@@ -8,6 +8,8 @@
+ import org.concordion.api.Evaluator;
+ import org.concordion.internal.util.Check;
+ 
++import java.util.Set;
++
+ public class OgnlEvaluator implements Evaluator {
+ 
+     private Object rootObject;
+@@ -35,6 +37,10 @@
+         }
+     }
+ 
++    public Set getKeys() {
++        return ognlContext.keySet();
++    }
++
+     private InvalidExpressionException invalidExpressionException(OgnlException e) {
+         Throwable cause = e;
+         
 Index: src/test/resources/spec/concordion/results/exception/Exception.html
 ===================================================================
 --- src/test/resources/spec/concordion/results/exception/Exception.html	(revision 226)
-+++ src/test/resources/spec/concordion/results/exception/Exception.html	Fri Mar 27 19:10:19 GMT 2009
++++ src/test/resources/spec/concordion/results/exception/Exception.html	Sun Apr 05 16:53:32 BST 2009
 @@ -66,6 +66,8 @@
  &lt;del class="expected"&gt;some text&lt;/del&gt; _
  &lt;/span&gt; _
@@ -496,34 +491,10 @@ Index: src/test/resources/spec/concordion/results/exception/Exception.html
 -</html>
 \ No newline at end of file
 +</html>
-Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
-===================================================================
---- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 226)
-+++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Fri Mar 27 19:10:19 GMT 2009
-@@ -8,6 +8,8 @@
- import org.concordion.api.Evaluator;
- import org.concordion.internal.util.Check;
- 
-+import java.util.Set;
-+
- public class OgnlEvaluator implements Evaluator {
- 
-     private Object rootObject;
-@@ -35,6 +37,10 @@
-         }
-     }
- 
-+    public Set getKeys() {
-+        return ognlContext.keySet();
-+    }
-+
-     private InvalidExpressionException invalidExpressionException(OgnlException e) {
-         Throwable cause = e;
-         
 Index: src/test/java/test/concordion/internal/ExpressionTest.java
 ===================================================================
 --- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 226)
-+++ src/test/java/test/concordion/internal/ExpressionTest.java	Fri Mar 27 19:13:23 GMT 2009
++++ src/test/java/test/concordion/internal/ExpressionTest.java	Sun Apr 05 16:53:32 BST 2009
 @@ -25,7 +25,18 @@
          , "myMethod(#var1, #var2) ? 's1' : 's2'"
          , "#var.myMethod()"
@@ -555,7 +526,7 @@ Index: src/test/java/test/concordion/internal/ExpressionTest.java
 Index: src/main/java/org/concordion/internal/DocumentParser.java
 ===================================================================
 --- src/main/java/org/concordion/internal/DocumentParser.java	(revision 226)
-+++ src/main/java/org/concordion/internal/DocumentParser.java	Fri Mar 27 19:15:52 GMT 2009
++++ src/main/java/org/concordion/internal/DocumentParser.java	Sun Apr 05 16:53:32 BST 2009
 @@ -41,7 +41,7 @@
          return new XMLSpecification(rootCommandCall);
      }
@@ -574,10 +545,24 @@ Index: src/main/java/org/concordion/internal/DocumentParser.java
                  }
              }
          }
+Index: src/main/java/org/concordion/internal/XMLSpecification.java
+===================================================================
+--- src/main/java/org/concordion/internal/XMLSpecification.java	(revision 226)
++++ src/main/java/org/concordion/internal/XMLSpecification.java	Mon Apr 06 22:05:00 BST 2009
+@@ -15,4 +15,8 @@
+     public void process(Evaluator evaluator, ResultRecorder resultRecorder) {
+         rootCommandNode.execute(evaluator, resultRecorder);
+     }
++
++    public CommandCall getCommandCall() {
++        return rootCommandNode;
+-}
++    }
++}
 Index: src/main/java/org/concordion/api/Element.java
 ===================================================================
 --- src/main/java/org/concordion/api/Element.java	(revision 226)
-+++ src/main/java/org/concordion/api/Element.java	Fri Mar 27 19:37:31 GMT 2009
++++ src/main/java/org/concordion/api/Element.java	Sun Apr 05 16:53:32 BST 2009
 @@ -3,10 +3,7 @@
  import java.util.ArrayList;
  import java.util.List;
@@ -637,8 +622,8 @@ Index: src/main/java/org/concordion/api/Element.java
          nu.xom.Element xomParentElement = (nu.xom.Element) xomElement.getParent();
 Index: src/test/java/spec/examples/NewFeaturesTest.java
 ===================================================================
---- src/test/java/spec/examples/NewFeaturesTest.java	Fri Mar 27 19:13:23 GMT 2009
-+++ src/test/java/spec/examples/NewFeaturesTest.java	Fri Mar 27 19:13:23 GMT 2009
+--- src/test/java/spec/examples/NewFeaturesTest.java	Sun Apr 05 16:53:32 BST 2009
++++ src/test/java/spec/examples/NewFeaturesTest.java	Sun Apr 05 16:53:32 BST 2009
 @@ -0,0 +1,10 @@
 +package spec.examples;
 +
