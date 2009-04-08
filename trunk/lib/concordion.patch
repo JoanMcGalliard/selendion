@@ -1,31 +1,3 @@
-Index: src/test/java/test/concordion/TestRig.java
-===================================================================
---- src/test/java/test/concordion/TestRig.java	(revision 226)
-+++ src/test/java/test/concordion/TestRig.java	Sun Apr 05 16:53:31 BST 2009
-@@ -6,8 +6,11 @@
- import org.concordion.api.EvaluatorFactory;
- import org.concordion.api.Resource;
- import org.concordion.api.ResultSummary;
-+import org.concordion.api.Element;
- import org.concordion.internal.ConcordionBuilder;
- import org.concordion.internal.SimpleEvaluatorFactory;
-+import nu.xom.Document;
-+import nu.xom.Nodes;
- 
- 
- public class TestRig {
-@@ -44,7 +47,11 @@
-             throw new RuntimeException("Test rig failed to process specification", e);
-         } 
-     }
-+    public Nodes unwrapFragment(Document document) {
-+        return document.query("/html/body/fragment/*");
- 
-+    }
-+
-     public ProcessingResult process(String html) {
-         Resource resource = new Resource("/testrig");
-         withResource(resource, html);
 Index: src/test/resources/spec/examples/NewFeatures.html
 ===================================================================
 --- src/test/resources/spec/examples/NewFeatures.html	Mon Apr 06 21:40:53 BST 2009
@@ -93,9 +65,37 @@ Index: src/test/resources/spec/examples/NewFeatures.html
 +
 +</body>
 +</html>
+Index: src/test/java/test/concordion/TestRig.java
+===================================================================
+--- src/test/java/test/concordion/TestRig.java	(revision 258)
++++ src/test/java/test/concordion/TestRig.java	Sun Apr 05 16:53:31 BST 2009
+@@ -6,8 +6,11 @@
+ import org.concordion.api.EvaluatorFactory;
+ import org.concordion.api.Resource;
+ import org.concordion.api.ResultSummary;
++import org.concordion.api.Element;
+ import org.concordion.internal.ConcordionBuilder;
+ import org.concordion.internal.SimpleEvaluatorFactory;
++import nu.xom.Document;
++import nu.xom.Nodes;
+ 
+ 
+ public class TestRig {
+@@ -44,7 +47,11 @@
+             throw new RuntimeException("Test rig failed to process specification", e);
+         } 
+     }
++    public Nodes unwrapFragment(Document document) {
++        return document.query("/html/body/fragment/*");
+ 
++    }
++
+     public ProcessingResult process(String html) {
+         Resource resource = new Resource("/testrig");
+         withResource(resource, html);
 Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
 ===================================================================
---- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 226)
+--- src/main/java/org/concordion/internal/ConcordionBuilder.java	(revision 258)
 +++ src/main/java/org/concordion/internal/ConcordionBuilder.java	Sun Apr 05 16:53:31 BST 2009
 @@ -41,21 +41,21 @@
      private static final String PROPERTY_OUTPUT_DIR = "concordion.output.dir";
@@ -152,7 +152,7 @@ Index: src/main/java/org/concordion/internal/ConcordionBuilder.java
          }
 Index: src/main/java/org/concordion/internal/Table.java
 ===================================================================
---- src/main/java/org/concordion/internal/Table.java	(revision 226)
+--- src/main/java/org/concordion/internal/Table.java	(revision 258)
 +++ src/main/java/org/concordion/internal/Table.java	Sun Apr 05 16:53:31 BST 2009
 @@ -41,15 +41,23 @@
          }
@@ -185,7 +185,7 @@ Index: src/main/java/org/concordion/internal/Table.java
          
 Index: src/main/java/org/concordion/api/Evaluator.java
 ===================================================================
---- src/main/java/org/concordion/api/Evaluator.java	(revision 226)
+--- src/main/java/org/concordion/api/Evaluator.java	(revision 258)
 +++ src/main/java/org/concordion/api/Evaluator.java	Sun Apr 05 16:53:31 BST 2009
 @@ -1,5 +1,7 @@
  package org.concordion.api;
@@ -204,7 +204,7 @@ Index: src/main/java/org/concordion/api/Evaluator.java
  }
 Index: src/test/java/test/concordion/StubEvaluator.java
 ===================================================================
---- src/test/java/test/concordion/StubEvaluator.java	(revision 226)
+--- src/test/java/test/concordion/StubEvaluator.java	(revision 258)
 +++ src/test/java/test/concordion/StubEvaluator.java	Sun Apr 05 16:53:31 BST 2009
 @@ -3,6 +3,8 @@
  import org.concordion.api.Evaluator;
@@ -228,7 +228,7 @@ Index: src/test/java/test/concordion/StubEvaluator.java
      }
 Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
 ===================================================================
---- src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	(revision 226)
+--- src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	(revision 258)
 +++ src/main/java/org/concordion/internal/listener/ThrowableRenderer.java	Tue Apr 07 01:26:14 BST 2009
 @@ -22,17 +22,19 @@
          
@@ -257,7 +257,7 @@ Index: src/main/java/org/concordion/internal/listener/ThrowableRenderer.java
  
 Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 ===================================================================
---- src/test/java/spec/concordion/results/exception/ExceptionTest.java	(revision 226)
+--- src/test/java/spec/concordion/results/exception/ExceptionTest.java	(revision 258)
 +++ src/test/java/spec/concordion/results/exception/ExceptionTest.java	Sun Apr 05 16:53:31 BST 2009
 @@ -9,6 +9,8 @@
  import org.concordion.internal.listener.ThrowableRenderer;
@@ -299,7 +299,7 @@ Index: src/test/java/spec/concordion/results/exception/ExceptionTest.java
 +}
 Index: src/test/java/test/concordion/internal/SimpleEvaluatorTest.java
 ===================================================================
---- src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	(revision 226)
+--- src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	(revision 258)
 +++ src/test/java/test/concordion/internal/SimpleEvaluatorTest.java	Sun Apr 05 16:53:31 BST 2009
 @@ -69,6 +69,7 @@
      public void testAccessInnerVariable() {
@@ -388,7 +388,7 @@ Index: src/test/java/test/concordion/internal/TableTest.java
 +}
 Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
 ===================================================================
---- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 226)
+--- src/main/java/org/concordion/internal/SimpleEvaluator.java	(revision 258)
 +++ src/main/java/org/concordion/internal/SimpleEvaluator.java	Sun Apr 05 16:53:32 BST 2009
 @@ -25,8 +25,8 @@
      private static String PROPERTY_NAME_PATTERN = "[a-z][a-zA-Z0-9_]*";
@@ -430,7 +430,7 @@ Index: src/main/java/org/concordion/internal/SimpleEvaluator.java
          
 Index: src/main/java/org/concordion/api/Specification.java
 ===================================================================
---- src/main/java/org/concordion/api/Specification.java	(revision 226)
+--- src/main/java/org/concordion/api/Specification.java	(revision 258)
 +++ src/main/java/org/concordion/api/Specification.java	Mon Apr 06 22:04:03 BST 2009
 @@ -3,4 +3,5 @@
  public interface Specification {
@@ -438,33 +438,9 @@ Index: src/main/java/org/concordion/api/Specification.java
      void process(Evaluator evaluator, ResultRecorder resultRecorder);
 +    org.concordion.internal.CommandCall getCommandCall();
  }
-Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
-===================================================================
---- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 226)
-+++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Sun Apr 05 16:53:32 BST 2009
-@@ -8,6 +8,8 @@
- import org.concordion.api.Evaluator;
- import org.concordion.internal.util.Check;
- 
-+import java.util.Set;
-+
- public class OgnlEvaluator implements Evaluator {
- 
-     private Object rootObject;
-@@ -35,6 +37,10 @@
-         }
-     }
- 
-+    public Set getKeys() {
-+        return ognlContext.keySet();
-+    }
-+
-     private InvalidExpressionException invalidExpressionException(OgnlException e) {
-         Throwable cause = e;
-         
 Index: src/test/resources/spec/concordion/results/exception/Exception.html
 ===================================================================
---- src/test/resources/spec/concordion/results/exception/Exception.html	(revision 226)
+--- src/test/resources/spec/concordion/results/exception/Exception.html	(revision 258)
 +++ src/test/resources/spec/concordion/results/exception/Exception.html	Sun Apr 05 16:53:32 BST 2009
 @@ -66,6 +66,8 @@
  &lt;del class="expected"&gt;some text&lt;/del&gt; _
@@ -491,9 +467,33 @@ Index: src/test/resources/spec/concordion/results/exception/Exception.html
 -</html>
 \ No newline at end of file
 +</html>
+Index: src/main/java/org/concordion/internal/OgnlEvaluator.java
+===================================================================
+--- src/main/java/org/concordion/internal/OgnlEvaluator.java	(revision 258)
++++ src/main/java/org/concordion/internal/OgnlEvaluator.java	Sun Apr 05 16:53:32 BST 2009
+@@ -8,6 +8,8 @@
+ import org.concordion.api.Evaluator;
+ import org.concordion.internal.util.Check;
+ 
++import java.util.Set;
++
+ public class OgnlEvaluator implements Evaluator {
+ 
+     private Object rootObject;
+@@ -35,6 +37,10 @@
+         }
+     }
+ 
++    public Set getKeys() {
++        return ognlContext.keySet();
++    }
++
+     private InvalidExpressionException invalidExpressionException(OgnlException e) {
+         Throwable cause = e;
+         
 Index: src/test/java/test/concordion/internal/ExpressionTest.java
 ===================================================================
---- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 226)
+--- src/test/java/test/concordion/internal/ExpressionTest.java	(revision 258)
 +++ src/test/java/test/concordion/internal/ExpressionTest.java	Sun Apr 05 16:53:32 BST 2009
 @@ -25,7 +25,18 @@
          , "myMethod(#var1, #var2) ? 's1' : 's2'"
@@ -523,9 +523,23 @@ Index: src/test/java/test/concordion/internal/ExpressionTest.java
      }
      
      public void testAllEvaluationExpressions() throws Exception {
+Index: src/main/java/org/concordion/internal/XMLSpecification.java
+===================================================================
+--- src/main/java/org/concordion/internal/XMLSpecification.java	(revision 258)
++++ src/main/java/org/concordion/internal/XMLSpecification.java	Mon Apr 06 22:05:00 BST 2009
+@@ -15,4 +15,8 @@
+     public void process(Evaluator evaluator, ResultRecorder resultRecorder) {
+         rootCommandNode.execute(evaluator, resultRecorder);
+     }
++
++    public CommandCall getCommandCall() {
++        return rootCommandNode;
+-}
++    }
++}
 Index: src/main/java/org/concordion/internal/DocumentParser.java
 ===================================================================
---- src/main/java/org/concordion/internal/DocumentParser.java	(revision 226)
+--- src/main/java/org/concordion/internal/DocumentParser.java	(revision 258)
 +++ src/main/java/org/concordion/internal/DocumentParser.java	Sun Apr 05 16:53:32 BST 2009
 @@ -41,7 +41,7 @@
          return new XMLSpecification(rootCommandCall);
@@ -545,23 +559,9 @@ Index: src/main/java/org/concordion/internal/DocumentParser.java
                  }
              }
          }
-Index: src/main/java/org/concordion/internal/XMLSpecification.java
-===================================================================
---- src/main/java/org/concordion/internal/XMLSpecification.java	(revision 226)
-+++ src/main/java/org/concordion/internal/XMLSpecification.java	Mon Apr 06 22:05:00 BST 2009
-@@ -15,4 +15,8 @@
-     public void process(Evaluator evaluator, ResultRecorder resultRecorder) {
-         rootCommandNode.execute(evaluator, resultRecorder);
-     }
-+
-+    public CommandCall getCommandCall() {
-+        return rootCommandNode;
--}
-+    }
-+}
 Index: src/main/java/org/concordion/api/Element.java
 ===================================================================
---- src/main/java/org/concordion/api/Element.java	(revision 226)
+--- src/main/java/org/concordion/api/Element.java	(revision 258)
 +++ src/main/java/org/concordion/api/Element.java	Sun Apr 05 16:53:32 BST 2009
 @@ -3,10 +3,7 @@
  import java.util.ArrayList;
