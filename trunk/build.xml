@@ -62,7 +62,7 @@
 
         <javac classpathref="compile.classpath"
                destdir="${dir.classes}"
-               srcdir="src/main/java:src/test:spec/examples:spec/concordion-tests/java"
+               srcdir="src/main/java:src/test:spec/examples:spec/concordion/java"
                debug="yes"
                failonerror="yes"
                source="1.5"
