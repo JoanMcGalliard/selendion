@@ -32,16 +32,17 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
     public void removeRunSelendionListener(RunSelendionListener runSelendionListener) {
         listeners.removeListener(runSelendionListener);
     }
-    private boolean hide = true;
+
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
 
         CommandCallList childCommands = commandCall.getChildren();
         childCommands.setUp(evaluator, resultRecorder);
         String htmlFilename;
         Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
+        boolean hide = true;
         if (evaluatedExpression.getClass().equals(String.class)) {
             htmlFilename = (String) evaluatedExpression;
-            hide=true;
+            hide =true;
         } else {
             Object[] params = (Object[]) evaluatedExpression;
             if (params.length > 2) {
