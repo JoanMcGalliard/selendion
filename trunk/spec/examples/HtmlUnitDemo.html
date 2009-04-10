@@ -16,6 +16,8 @@
         for <i concordion:echo="#browser"/>;
         and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
 
+    </div><div class="example">
+
 
     <p>
         If a visitor to the site with these
@@ -88,15 +90,17 @@
             <td>-1</td>
         </tr>
     </table>
-
-    <h2>Finally</h2>
-    <i concordion:stopBrowser="">Close the browser</i>
-
 </div>
 <div class="example">
     <p>Lets just run the <a href="test_data/selenium_coverage/htmlUnitSubset.html"
                             concordion:runSelenium="#HREF">html unit coverage test</a>.</p>
     
+</div>
+<div class="example">
+
+    <h2>Finally</h2>
+    <i concordion:stopBrowser="">Close the browser</i>
+
 </div>
 
 </body>

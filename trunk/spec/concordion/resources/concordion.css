@@ -1,5 +1,5 @@
 * {
-  font-family: Arial;
+  font-family: Arial,sans-serif;
 }
 body {
   padding: 32px;  
@@ -9,7 +9,7 @@ pre {
   background-color: #E8EEF7;
 }
 pre, pre *, code, code *, kbd {
-  font-family: Courier New, Courier;
+  font-family: Courier New, Courier,serif;
   font-size: 10pt;
 }
 h1, h1 * {
