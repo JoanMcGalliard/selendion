@@ -265,6 +265,65 @@
     <RUBY_DOC NAME="NUMBER" VALUE="0" />
   </component>
   <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="https://selendion.googlecode.com/svn/branches">
+                    <value>
+                      <list>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1223207880601" />
+                          <option name="revision" value="14" />
+                          <option name="url" value="https://selendion.googlecode.com/svn/branches/concordion_spike" />
+                        </SvnBranchItem>
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="https://selendion.googlecode.com/svn/tags">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                  <entry key="https://selendion.googlecode.com/svn/wiki">
+                    <value>
+                      <list>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1239145518170" />
+                          <option name="revision" value="135" />
+                          <option name="url" value="https://selendion.googlecode.com/svn/wiki/ChangesToConcordion.wiki" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1238246768358" />
+                          <option name="revision" value="116" />
+                          <option name="url" value="https://selendion.googlecode.com/svn/wiki/QuickStartGuide.wiki" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1228048643338" />
+                          <option name="revision" value="84" />
+                          <option name="url" value="https://selendion.googlecode.com/svn/wiki/SelendionCommands.wiki" />
+                        </SvnBranchItem>
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://selendion.googlecode.com/svn/branches" />
+                  <option value="https://selendion.googlecode.com/svn/tags" />
+                  <option value="https://selendion.googlecode.com/svn/wiki" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://selendion.googlecode.com/svn/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="myVersion" value="124" />
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
