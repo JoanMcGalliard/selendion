@@ -10,9 +10,7 @@
     <property name="dir.selendion.output" value="${dir.test.output}/selendion"/>
     <property name="dir.dist" value="${basedir}/dist"/>
     <property name="selendion.browser" value="*firefox"/>
-    <property name="selendion.browser" value="*firefox"/>
     <property name="selendion.selenium.server.port" value="5555"/>
-
 
 
     <path id="compile.classpath">
@@ -24,7 +22,8 @@
             depends="compile, run.tests, build.jar, build.srczip, build.dependencies.jar"
             />
 
-    <target name="start.selenium">
+    <target name="start.selenium"
+            depends="stop.selenium">
         <java classname="org.openqa.selenium.server.SeleniumServer" fork="true" spawn="true">
             <arg value="-port"/>
             <arg value="${selendion.selenium.server.port}"/>
@@ -37,16 +36,24 @@
     <target name="stop.selenium">
         <waitfor maxwait="3" maxwaitunit="second">
             <not>
-                <http url="http://localhost:${selenium.server.port}/selenium-server/driver/?cmd=shutDown"/>
+                <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDown"/>
             </not>
         </waitfor>
     </target>
-    <target name="start.webserver">
+    <target name="start.webserver"
+            depends="stop.webserver">
         <java classname="testSupport.Fizmez.FizmezWebServer" fork="true" spawn="true">
             <classpath>
-                <pathelement path="${dir.classes}" />
+                <pathelement path="${dir.classes}"/>
             </classpath>
-              </java>
+        </java>
+    </target>
+    <target name="stop.webserver">
+        <waitfor maxwait="3" maxwaitunit="second">
+            <not>
+                <http url="http://localhost:5555?cmd=shutDown"/>
+            </not>
+        </waitfor>
     </target>
 
     <target name="clean">
@@ -181,5 +188,12 @@
              compress="false">
         </zip>
     </target>
+    <target name="zip.example">
+        <delete file="example/lib/selendion*.jar"/>
+        <zip destfile="${dir.dist}/${productName}-example.zip"
+             basedir="example"
+             compress="false"/>
+    </target>
 
 </project>
+
