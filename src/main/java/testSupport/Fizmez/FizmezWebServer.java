@@ -210,7 +210,10 @@ public class FizmezWebServer extends ErrorHandler implements Runnable {
                         // The client aborted
                         notice("The client aborted");
                         headerError = true;
-                    } else {
+                    } else if (line.contains("cmd=shutDown")) {
+                        System.exit(0);
+                    }
+                    else {
                         // The client has not aborted
                         debug("Line [" + lineNumber + "]: received input [" + line + "]");
 
