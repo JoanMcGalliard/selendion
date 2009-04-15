@@ -10,7 +10,7 @@
 
 
     <path id="compile.classpath">
-        <fileset dir="lib" includes="*.jar" excludes="*-src.jar"/>
+        <fileset dir="lib" includes="*.jar"/>
     </path>
 
     <target name="build"
@@ -49,20 +49,14 @@
 
         <javac classpathref="compile.classpath"
                destdir="${dir.classes}"
-               srcdir="src/main/java:src/test:spec/examples:spec/concordion/java"
-               debug="yes"
+               srcdir="acceptance-tests"
                failonerror="yes"
                source="1.5"
                target="1.5"
                 />
 
         <copy todir="${dir.classes}">
-            <fileset dir="src/main/java" excludes="**/*.java"/>
-            <fileset dir="src/main/resources" excludes="**/*.java"/>
-            <fileset dir="src/test" excludes="**/*.java"/>
-            <fileset dir="spec/examples" excludes="**/*.java"/>
-            <fileset dir="spec/concordion/java" excludes="**/*.java"/>
-            <fileset dir="spec/concordion/resources" excludes="**/*.java"/>
+            <fileset dir="acceptance-tests" excludes="**/*.java"/>
         </copy>
     </target>
 
@@ -81,20 +75,6 @@
 
             <formatter type="plain"/>
 
-            <batchtest todir="${dir.test.output}">
-                <fileset dir="src/test">
-                    <include name="**/*Test.java"/>
-                    <exclude name="**/Abstract*"/>
-                </fileset>
-                <fileset dir="spec/examples">
-                    <include name="**/*Test.java"/>
-                    <exclude name="**/Abstract*"/>
-                </fileset>
-                <fileset dir="spec/concordion/java">
-                    <include name="**/*Test.java"/>
-                    <exclude name="**/Abstract*"/>
-                </fileset>
-            </batchtest>
         </junit>
     </target>
 
