@@ -203,9 +203,6 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         if (command.matches(".*IfAvailable$")) {
             String varName = arg2.length() > 0 ? arg2 : arg1;
 
-            if (!varName.matches(VARIABLE_PATTERN)) {
-                return new CommandResult(false, "Illegal variable name: " + varName);
-            }
             String trimmedCommand = command.replaceFirst("IfAvailable$", "");
             try {
                 return executeCommand(trimmedCommand, arg1, arg2);
@@ -215,9 +212,6 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         }
         if (command.matches("^store[A-Z].*IfVisible$")) {
 
-            if (!arg2.matches(VARIABLE_PATTERN)) {
-                return new CommandResult(false, "Illegal variable name: " + arg2);
-            }
             try {
                 Object value = browserGet(command.replaceFirst("^store", "").replaceFirst("IfVisible$", ""), arg1, arg2);
                 if (browser.isVisible(arg1)) {

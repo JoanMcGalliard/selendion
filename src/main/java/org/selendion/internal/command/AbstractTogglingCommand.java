@@ -40,14 +40,14 @@ public abstract class AbstractTogglingCommand extends AbstractCommand {
         return element.getText().replaceAll(" *\\n *", " ").trim();
     }
 
-    void wrapElementInTogglingButton(Element elementToAdd, Element element, String title, boolean result, boolean hide) {
+    void wrapElementInTogglingButton(Element elementToAdd, Element element, String title, String clazz, boolean result, boolean hide) {
         if (hide) {
             String label = title.replaceFirst("\\|.*", "...");
             Element input = new Element("input")
                     .addStyleClass("selendionHideViewButton")
                     .setId("selendionHideViewButton" + buttonId)
                     .addAttribute("type", "button")
-                    .addAttribute("class", result ? "success" : "failure")
+                    .addAttribute("class", (result ? "success" : "failure") + " " + clazz)
                     .addAttribute("onclick", "javascript:toggleSelendionElement('" + buttonId + "', '" + label + "')")
                     .addAttribute("value", label);
 

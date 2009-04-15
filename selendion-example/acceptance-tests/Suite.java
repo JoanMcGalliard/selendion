@@ -1,4 +1,4 @@
 import org.selendion.integration.concordion.SelendionTestCase;
 
-public class SuiteTest extends SelendionTestCase{
+public class Suite extends SelendionTestCase{
 }

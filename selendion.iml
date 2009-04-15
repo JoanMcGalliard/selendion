@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="false" type="JAVA_MODULE" version="4">
+  <component name="AntConfiguration" />
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/classes" />
     <output-test url="file://$MODULE_DIR$/build/test-output" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/example/acceptance-tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/selendion-example/acceptance-tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/spec/concordion/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/spec/concordion/resources" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/spec/examples" isTestSource="true" />
@@ -190,6 +191,5 @@
       </library>
     </orderEntry>
   </component>
-  <component name="SvnBranchConfigurationManager" />
 </module>
 

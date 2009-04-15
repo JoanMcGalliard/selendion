@@ -1,6 +1,6 @@
 <project name="selendion" default="build" basedir=".">
 
-    <property name="version" value="0.5.4"/>
+    <property name="version" value="0.5.6"/>
     <property name="productName" value="selendion"/>
     <property name="ProductName" value="Selendion"/>
 
@@ -13,13 +13,15 @@
     <property name="selendion.selenium.server.port" value="5555"/>
 
 
+    <property name="dir.example" value="${basedir}/selendion-example"/>
+
     <path id="compile.classpath">
         <fileset dir="lib" includes="*.jar" excludes="*-src.jar"/>
     </path>
 
     <target name="build"
             description="Builds everything from scratch"
-            depends="compile, run.tests, build.jar, build.srczip, build.dependencies.jar"
+            depends="compile, run.tests, build.jar, build.srczip, build.dependencies.jar,build.example.zip"
             />
 
     <target name="start.selenium"
@@ -62,6 +64,22 @@
         <delete dir="${dir.selendion.output}"/>
         <delete dir="${dir.classes}"/>
         <delete dir="${dir.dist}"/>
+        <delete>
+            <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
+        </delete>
+
+    </target>
+    <target name="build.example.zip"        >
+            <!--depends="build.dependencies.jar"-->
+        <copy todir="${dir.example}/lib">
+            <fileset file="${dir.dist}/${productName}-${version}-with-dependencies.jar"/>
+        </copy>
+
+        <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="build"/>
+        <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="clean"/>
+        <zip basedir="${dir.example}"
+             excludes=".svn"
+             destfile="${dir.dist}/${productName}-example.zip"/>
     </target>
 
     <target name="compile">
@@ -187,12 +205,6 @@
              basedir="src/main/java"
              compress="false">
         </zip>
-    </target>
-    <target name="zip.example">
-        <delete file="example/lib/selendion*.jar"/>
-        <zip destfile="${dir.dist}/${productName}-example.zip"
-             basedir="example"
-             compress="false"/>
     </target>
 
 </project>
