@@ -91,7 +91,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
                 element.addAttribute("class", "invisible");
                 try {
                     clazz.getMethod("lastExecutionResult").invoke(test);     //throws exception if failed
-                        wrapElementInTogglingButton(div, resultElement, getTitle(element), true, hide);
+                        wrapElementInTogglingButton(div, resultElement, getTitle(element), "selendionButton", true, hide);
                     resultRecorder.record(Result.SUCCESS);
                     if (hide) {
                         div.addAttribute("class", "includedHiddenPassingTest");
@@ -109,7 +109,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
 
                 } catch (Exception e) {
 
-                    wrapElementInTogglingButton(div, resultElement, getTitle(element), false, hide);
+                    wrapElementInTogglingButton(div, resultElement, getTitle(element), "selendionButton", false, hide);
 
                     resultRecorder.record(Result.FAILURE);
                     announceFailure(element);

@@ -39,7 +39,7 @@
         Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html"
                 class="invisible success"&gt;Passing
                 Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton1" type="button"
-                class="success" onclick="javascript:toggleSelendionElement('1', 'Passing Selendion test')"
+                class="success selendionButton" onclick="javascript:toggleSelendionElement('1', 'Passing Selendion test')"
                 value="Passing Selendion test" /&gt; &lt;div id="selendionHideViewElement1"
                 class="includedHiddenPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'"
                 class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
@@ -76,7 +76,7 @@
         Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleFail.html"
     class="invisible failure"&gt;Failing
                 Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton3" type="button"
-    class="failure" onclick="javascript:toggleSelendionElement('3', 'Failing Selendion test')"
+    class="failure selendionButton" onclick="javascript:toggleSelendionElement('3', 'Failing Selendion test')"
     value="Failing Selendion test" /&gt; &lt;div id="selendionHideViewElement3" class="includedHiddenFailingTest"&gt;
     &lt;p&gt; &lt;b concordion:assertEquals="'value'" class="failure"&gt; &lt;del class="expected"&gt;different value&lt;/del&gt;
 &lt;ins class="actual"&gt;value&lt;/ins&gt; &lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;b class="attention"&gt;
@@ -106,7 +106,7 @@
         Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/SimpleException.html"
     class="invisible failure"&gt;Exception
                 Throwing Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton4" type="button"
-    class="failure" onclick="javascript:toggleSelendionElement('4', 'Exception Throwing Selendion test')"
+    class="failure selendionButton" onclick="javascript:toggleSelendionElement('4', 'Exception Throwing Selendion test')"
     value="Exception Throwing Selendion test" /&gt; &lt;div id="selendionHideViewElement4"
     class="includedHiddenFailingTest"&gt; &lt;p&gt;Throw an exception that says &lt;b
     concordion:execute="throwException(#TEXT)"&gt; &lt;span class="failure"&gt; &lt;del class="expected"&gt;OH NOES&lt;/del&gt;
@@ -186,7 +186,7 @@
          Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/NoJavaClass.html"
     class="invisible success"&gt;Selendion
                  Test Without Java File&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton5" type="button"
-    class="success" onclick="javascript:toggleSelendionElement('5', 'Selendion Test Without Java File')"
+    class="success selendionButton" onclick="javascript:toggleSelendionElement('5', 'Selendion Test Without Java File')"
     value="Selendion Test Without Java File" /&gt; &lt;div id="selendionHideViewElement5"
     class="includedHiddenPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'"
     class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
@@ -213,7 +213,7 @@
     &lt;p&gt;
         Let's run this little &lt;a concordion:runSelendion="#HREF" href="/commands/runSelendionScripts/Simple.html"
     class="invisible success"&gt;Passing
-                Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton6" type="button" class="success"
+                Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton6" type="button" class="success selendionButton"
     onclick="javascript:toggleSelendionElement('6', 'Passing Selendion test')" value="Passing Selendion test" /&gt;
     &lt;div id="selendionHideViewElement6" class="includedHiddenPassingTest"&gt; &lt;p&gt; &lt;b
     concordion:assertEquals="'value'" class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
@@ -281,7 +281,7 @@
 
     &lt;p&gt;
         Let's run this little &lt;a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="invisible success"&gt;Passing
-                Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton7" type="button" class="success"
+                Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton7" type="button" class="success selendionButton"
     onclick="javascript:toggleSelendionElement('7', 'Passing Selendion test')" value="Passing Selendion test" /&gt;
     &lt;div id="selendionHideViewElement7" class="includedHiddenPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'"
     class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
