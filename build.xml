@@ -69,8 +69,8 @@
         </delete>
 
     </target>
-    <target name="build.example.zip"        >
-            <!--depends="build.dependencies.jar"-->
+    <target name="build.example.zip"
+            depends="build.dependencies.jar">
         <copy todir="${dir.example}/lib">
             <fileset file="${dir.dist}/${productName}-${version}-with-dependencies.jar"/>
         </copy>
@@ -79,7 +79,7 @@
         <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="clean"/>
         <zip basedir="${dir.example}"
              excludes=".svn"
-             destfile="${dir.dist}/${productName}-example.zip"/>
+             destfile="${dir.dist}/${productName}-${version}-example.zip"/>
     </target>
 
     <target name="compile">
@@ -136,7 +136,7 @@
         </junit>
     </target>
 
-    <target name="build.jar" depends="compile">
+    <target name="build.jar" depends="compile,run.tests">
         <mkdir dir="${dir.dist}"/>
 
         <jar destfile="${dir.dist}/${productName}-${version}.jar"
@@ -159,7 +159,7 @@
             <indexjars/>
         </jar>
     </target>
-    <target name="build.dependencies.jar" depends="compile">
+    <target name="build.dependencies.jar" depends="build.jar">
         <mkdir dir="${dir.dist}"/>
 
         <jar destfile="${dir.dist}/${productName}-${version}-with-dependencies.jar"
