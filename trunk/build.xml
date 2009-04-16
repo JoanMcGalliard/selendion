@@ -1,4 +1,6 @@
 <project name="selendion" default="build" basedir=".">
+    <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="support-lib/ant-googlecode-0.0.1.jar" name="gcupload"/>
+    
 
     <property name="version" value="0.5.6"/>
     <property name="productName" value="selendion"/>
@@ -11,6 +13,7 @@
     <property name="dir.dist" value="${basedir}/dist"/>
     <property name="selendion.browser" value="*firefox"/>
     <property name="selendion.selenium.server.port" value="5555"/>
+    <property file="${basedir}/local.properties" />
 
 
     <property name="dir.example" value="${basedir}/selendion-example"/>
@@ -207,5 +210,38 @@
         </zip>
     </target>
 
+<target  name="release" depends="build" >
+    <gcupload
+        username="${googleUser}"
+        password="${googlePassword}"
+        projectname="${productName}"
+        filename="${dir.dist}/${productName}-${version}.jar"
+        targetfilename="${productName}-${version}.jar"
+        summary="Version ${version} of ${productName}"
+        labels="Featured, Type-Package, OpSys-All" />
+    <gcupload
+        username="${googleUser}"
+        password="${googlePassword}"
+        projectname="${productName}"
+        filename="${dir.dist}/${productName}-${version}-with-dependencies.jar"
+        targetfilename="${productName}-${version}-with-dependencies.jar"
+        summary="Version ${version} of ${productName} with full dependencies"
+        labels="Type-Package, OpSys-All" />
+    <gcupload
+        username="${googleUser}"
+        password="${googlePassword}"
+        projectname="${productName}"
+        filename="${dir.dist}/${productName}-${version}-src.zip"
+        targetfilename="${productName}-${version}-src.zip"
+        summary="Source for Version ${version} of ${productName}"
+        labels="Type-Package, OpSys-All" />
+    <gcupload
+        username="${googleUser}"
+        password="${googlePassword}"
+        projectname="${productName}"
+        filename="${dir.dist}/${productName}-${version}-example.zip"
+        targetfilename="${productName}-${version}-example.zip"
+        summary="Example Selendion ant project to help you get started"
+        labels="Type-Package, OpSys-All" />
+    </target>
 </project>
-
