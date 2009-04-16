@@ -2,15 +2,20 @@
 
 = Introduction =
 
-This code is an extension [http://code.google.com/p/concordion/ Concordion] but with changes: some required to allow the subclass to do what it needs to do; some bug fixes; and some enhancements that belonged more easily or logically in the original class.  The included concordion jar file is the [http://code.google.com/p/concordion/source/detail?r=226 r226] version of concordion with concordion.patch applied.  If you already have a customized version of concordion, then you need to apply this patch to it.
+This code is an extension [http://code.google.com/p/concordion/ Concordion] but with changes: some required to allow the
+subclass to do what it needs to do; some bug fixes; and some enhancements that belonged more easily or logically in the
+original class.  The included concordion jar file is the [http://concordion.googlecode.com/svn/tags/concordion-1.3.1/ (r259)]
+version of concordion with concordion.patch applied.  If you already have a customized version of concordion, then you
+need to apply this patch to it.
 
-*Note* This is a superset of concordion.  Any concordion tests should run in selendion.
+*Note* Selendion is a superset of concordion.  Any concordion tests should run in selendion.
 
 = Details =
 
 The most important changes are access privileges changes to !ConcordionBuilder, to allow the sub class to access methods and members:
 
 {{{  
+
 +    protected SpecificationLocator specificationLocator = new ClassNameBasedSpecificationLocator();
 +    protected Source source = new ClassPathSource();
 +    protected Target target = null;
@@ -24,16 +29,16 @@ The most important changes are access privileges changes to !ConcordionBuilder, 
 +    protected RunCommand runCommand = new RunCommand();
 +    protected VerifyRowsCommand verifyRowsCommand = new VerifyRowsCommand();
 +    protected EchoCommand echoCommand = new EchoCommand();
+
 +    protected ConcordionBuilder withApprovedCommand(String namespaceURI, String commandName, Command command) {
 +    protected File getBaseOutputDir() {
+
 }}} 
 
-There is also one bug fix in this file.  The new command _run_ has all the code in place, but the results aren't coloured.  This one line addition fixed that:
-{{{
-+        runCommand.addRunListener(new RunResultRenderer());
-}}}
 
-Selendion creates tables within tables.  The method in org.concordion.internal.Table, _getRows_, gets all the rows in both the main table and the sub tables, so this is modified to explicitly only get the rows in the table or in thead and tbody if present.
+Selendion creates tables within tables.  The method in org.concordion.internal.Table, _getRows_, gets all the rows in
+both the main table and the sub tables, so this is modified to explicitly only get the rows in the table or in thead
+and tbody if present.
  
 
 {{{
@@ -123,7 +128,8 @@ The new class !TableTest tests the above functionality.
 +}
 }}}
 
-Because Selendion passes variable back and forth between selenium and concordion, we need to know what variables are defined in concordion so we can can set them in selenium.  To do this we need to add a getKeys to the Evaluator:
+Because Selendion passes variable back and forth between selenium and concordion, we need to know what variables are
+defined in concordion so we can can set them in selenium.  To do this we need to add a getKeys to the Evaluator:
 {{{
 +    Set getKeys();
 }}}
@@ -142,7 +148,10 @@ and change !StubEvaluator to allow it to compile:
 +    }
 }}}
 
-In concordion, if a link throws an exception, the view stack button is nearly useless, as it briefly shows the stack, then follows the link.  Most Selendion calls are wrapped around links, so this made debugging a real problem.  The fix was to insert the stack trace after the element that had the problem, instead of inside it.  So first add a method to Element that inserts straight after the current element:
+In concordion, if a link throws an exception, the view stack button is nearly useless, as it briefly shows the stack,
+then follows the link.  Most Selendion calls are wrapped around links, so this made debugging a real problem.  The fix
+was to insert the stack trace after the element that had the problem, instead of inside it.  So first add a method to
+Element that inserts straight after the current element:
 {{{
 +    public void insertAfter(Element insert) {
 +        ParentNode parent = xomElement.getParent();
@@ -173,12 +182,17 @@ And modify the test for the new output:
 }}}
 Because we now need to test not only the element but the one after it, we need to modify !ExceptionTest
 {{{
+
 +        Document document =  new TestRig()
              .processFragment(fragment)
 +            .getXOMDocument();
 +
 +        Element element = new Element((nu.xom.Element) document
-[..]
+             .query("//p")
+             .get(0));
+
+         new ThrowableRenderer().throwableCaught(new ThrowableCaughtEvent(t, element, expression));
+
 +        Nodes nodes = new TestRig().unwrapFragment(document);
 +        String ret = "";
 +        for (int i = 0; i< nodes.size(); i++) {
@@ -193,30 +207,19 @@ And add the new method to !TestRig
 +    public Nodes unwrapFragment(Document document) {
 +        return document.query("/html/body/fragment/*");
 +    }
-+
 }}}
-Because Selendion uses separate selenium files, we need to be able to use save or pass HREF values as parameters, so we added #HREF which is analogous to #TEXT first to !LocalTextDecorator
 
-{{{
-+    private static final String HREF_VARIABLE = "#HREF";
-+        Object savedHrefValue = evaluator.getVariable(HREF_VARIABLE);
-+            String href=commandCall.getElement().getAttributeValue("href");
-+            if (href == null) {
-+                Element a= commandCall.getElement().getFirstChildElement("a");
-+                if (a != null)  {
-+                    href = a.getAttributeValue("href");
-+                }
-+            }
-+            evaluator.setVariable(HREF_VARIABLE, href);
-}}}
-While we are at it, allow literals to be passed as variables, as that can be useful, so we make this change to !SimpleEvaluator
+Allow literals to be passed as variables, as that can be useful, so we make these changes to !SimpleEvaluator
 {{{
 +    private static String RHS_VARIABLE_PATTERN = "(" + LHS_VARIABLE_PATTERN + "|#TEXT|#HREF|'[^']*'|-?[0-9]+\\.?[0-9]*|\\-?.[0-9]*|true|false)";
++        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + LHS_VARIABLE_PATTERN + "(\\." + PROPERTY_NAME_PATTERN +  ")+");
++        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
 +        regexs.add(LHS_VARIABLE_PATTERN + " *= *" + RHS_VARIABLE_PATTERN);
 }}}
 
 And test it in !ExpressionTest:
 {{{
+
 +        , "'string value'"
 +        , "100"
 +        , "0"
@@ -231,51 +234,114 @@ And test it in !ExpressionTest:
 [..]
 +        assertValidSetVariableExpression("#var='bob'");
 }}}
-And finally test this in !NewFeaturesTest
+Also test it in Execute.html
 {{{
-+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
-+<link href="../../concordion.css" rel="stylesheet" type="text/css"/>
-+<body>
++    <div class="example">
++        <h3>Example</h3>
 +
-+<h1>New Features</h1>
++        <p>Variables should be passed in:</p>
++<pre class="html" concordion:execute="process(#TEXT)">
 +
++&lt;p concordion:set="#var"&gt;myVariable&lt;/p&gt;
++&lt;p concordion:execute="myParameterMethod(#var)"&gt;Some text goes here.&lt;/p&gt;
++</pre>
++        <p>
++            Will call <code>myParameterMethod()</code> in the Java fixture code with parameter
++            <span concordion:assertEquals="getParameter()">myVariable</span>.
++        </p>
 +
-+<h2>Literal values in set</h2>
++    </div>
++    <div class="example">
++
++        <h3>Example</h3>
++
++        <p>Literals should be passed in:</p>
++<pre class="html" concordion:execute="process(#TEXT)">
++
++&lt;p concordion:execute="myParameterMethod('myOtherVariable')"&gt;Some text goes here.&lt;/p&gt;
++</pre>
++        <p>
++            Will call <code>myParameterMethod()</code> in the Java fixture code with parameter
++            <span concordion:assertEquals="getParameter()">myOtherVariable</span>.
++        </p>
++
++    </div>
+}}}
+and Set.html
+{{{
++    <div class="example">
++        <p>This should also work with literals:</p>
+
++        <h3>Example</h3>
+
++        <p>The following instrumentation:</p>
++<pre class="html" concordion:set="#fragment">
+
++        &lt;i concordion:set="#value='bob'"&gt;explicitly set #value to 'bob'&lt;/i&gt;
++           should result in
++        &lt;b concordion:assertEquals="#value"&gt;bob&lt;/b&gt;.
++    </pre>
++        <p>
++            should <span concordion:assertEquals="process(#fragment) ? 'succeed' : 'fail'">succeed</span>
++        </p>
++    </div>
 +
 +<div class="example">
-+    <p>In this case we just want to assert that <i concordion:set="#value='bob'">explicitly setting
-+        the value to 'bob'</i> actually results in the value being set to
-+        <b concordion:assertEquals="#value">bob</b>.</p>
-+</div>
-+<div class="example">
-+
-+    <p>
-+        And that explicitly passing 'Bob' as a parameter still gives a greeting of
-+        <b concordion:assertEquals="greetingFor('Bob')">Hello Bob!</b>
-+    </p>
-+</div>
-+
-+
-+<div class="example">
-+    <p>In this case we just want to assert that <a href="Demo.html" concordion:set="#link=#HREF">this link</a> is
-+        <b concordion:assertEquals="#link">Demo.html</b></p>
-+
-+    <p>and similarly in a table:</p>
-+    <table concordion:execute="greetingFor(#val1)">
++    <p>Set should also work in a table:</p>
++    <table concordion:execute="doNothing(#val1)">
 +        <tr>
 +            <th concordion:set="#val1">Set val1</th>
 +            <th concordion:assertEquals="#val1">So val1 should equal this</th>
-+            <th concordion:set="#val2=#TEXT">Set val2 to #TEXT</th>
-+            <th concordion:assertEquals="#val2">So val2 should equal this</th>
-+            <th concordion:set="#val3=#HREF">Set val3 to #HREF</th>
-+            <th concordion:assertEquals="#val3">So val3 should equal this</th>
-+            <th concordion:set="#val4">Set val4</th>
-+            <th concordion:assertEquals="#val4">So val4 should equal this</th>
 +
 +        </tr>
 +        <tr>
 +            <td>text1</td>
 +            <td>text1</td>
++
++
++        </tr>
++    </table>
++
++</div>
+
+}}}
+Concordion just ignores unrecognized concordion tags, but they (similarly to unknown variables) would always represent
+a typo, or using the wrong namespace.  This results in the test being ignored, which means it will pass.  This is fixed
+by throwing an exception in !DocumentParser if an unrecognised tag is seen:
+{{{
++                } else {
++                    throw new RuntimeException("Unknown command " + commandName + " in namespace " + namespaceURI + ".");
+
+}}}
+HREFs can be passed in table columns, so added tests for this in AccessToLinkHref.html
+{{{
++    <div class="example">
++        <h3>Example</h3>
++        <p>Similarly, we should be able to set the value of #HREF to another variable, eg </p>
++<pre class="html" concordion:set="#fragment">
++     &lt;a href="blah.html" concordion:set="#link=#HREF"&gt;this link&lt;/a&gt;
++        &lt;b concordion:assertEquals="#link"&gt;blah.html&lt;/b&gt;
++
++</pre>
++        <p>
++            #link should be set to the value of #HREF (blah.html), and so that the <code>assertEquals</code> should
++            <span concordion:assertEquals="fragmentSucceeds(#fragment) ? 'succeed' : 'fail'">succeed</span>.
++        </p>
++
++    </div>
++<div class="example">
++    <p>In a table, we should be able to set the HREF or TEXT or both to a variable:</p>
++    <table concordion:execute="myMethod(#val1)">
++        <tr>
++            <th concordion:set="#val1=#TEXT">Set val1 to #TEXT</th>
++            <th concordion:assertEquals="#val1">So val1 should equal this</th>
++            <th concordion:set="#val2=#HREF">Set val2 to #HREF</th>
++            <th concordion:assertEquals="#val2">So val2 should equal this</th>
++            <th concordion:set="#val3">Set val3</th>
++            <th concordion:assertEquals="#val3">So val3 should equal this</th>
++
++        </tr>
++        <tr>
 +            <td><a href="href2.html">text2</a></td>
 +            <td>text2</td>
 +            <td><a href="href3.html">text3</a></td>
@@ -285,23 +351,19 @@ And finally test this in !NewFeaturesTest
 +
 +        </tr>
 +    </table>
++
 +</div>
-+
-+
-+<div class="example">
-+    <p>Run the test in <a href="Demo.html" concordion:run="concordion">this link</a>. </p>
-+</div>
-+
-+</body>
-+</html>
 }}}
-Concordion just ignores unrecognized concordion tags, but they (similarly to unknown variables) would always represent a typo, or using the wrong namespace.  This results in the test being ignored, which means it will pass.  This is fixed by throwing an exception in !DocumentParser if an unrecognised tag is seen:
+Selendion has a facility similar to Concordion run command (implemented before that was fully available in Concordion.
+The selendion version (runSelendion) can embed the secondary test in the main output.  To do this, we need to
+be able to access the xml of the secondary file, so the following is added to Specification and XMLSpecification
 {{{
-+                } else {
-+                    throw new RuntimeException("Unknown command " + commandName + " in namespace " + namespaceURI + ".");
-
++    public CommandCall getCommandCall() {
++        return rootCommandNode;
++    }
 }}}
-Finally added a utility method to Element, so that the selenium runner knows if it is being called in a table or not (so it can add the selenium results as a _td_ if it is), and copy to support forEach command:
+Finally added utility methods to Element, so that the selenium runner knows if it is being called in a table or not
+(so it can add the selenium results as a _td_ if it is), and copy and getXomElement to support forEach command:
 {{{
 
 +    public Element getParent() {
@@ -313,5 +375,10 @@ Finally added a utility method to Element, so that the selenium runner knows if 
 -}
 +    }
 +}
+
++    public nu.xom.Element getXomElement () {
++        return this.xomElement;
++    }
+
 
 }}}
