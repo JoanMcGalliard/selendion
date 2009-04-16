@@ -234,7 +234,7 @@
         filename="${dir.dist}/${productName}-${version}-src.zip"
         targetfilename="${productName}-${version}-src.zip"
         summary="Source for Version ${version} of ${productName}"
-        labels="Type-Package, OpSys-All" />
+        labels="Type-Source, OpSys-All" />
     <gcupload
         username="${googleUser}"
         password="${googlePassword}"
@@ -242,6 +242,6 @@
         filename="${dir.dist}/${productName}-${version}-example.zip"
         targetfilename="${productName}-${version}-example.zip"
         summary="Example Selendion ant project to help you get started"
-        labels="Type-Package, OpSys-All" />
+        labels="Type-Archive, OpSys-All" />
     </target>
 </project>
