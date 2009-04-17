@@ -24,7 +24,7 @@
 
     <target name="build"
             description="Builds everything from scratch"
-            depends="compile, run.tests, build.jar, build.srczip, build.dependencies.jar,build.example.zip"
+            depends="compile, run.tests, build.jar, build.srczip, build.dependencies.jar"
             />
 
     <target name="start.selenium"
@@ -210,7 +210,7 @@
         </zip>
     </target>
 
-<target  name="release" depends="build" >
+<target  name="release" depends="build.example.zip" >
     <gcupload
         username="${googleUser}"
         password="${googlePassword}"

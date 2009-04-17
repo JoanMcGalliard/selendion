@@ -101,34 +101,11 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
                 Element resultElement = new Element("span");
 
                 element.insertAfter(resultElement);
-                element.addAttribute("class", "invisible");
-
-
-                /*
-                   if (f.isFile()) {
-            try {
-                Class clazz = loader.findSelendionClass(htmlResource);
-                SelendionTestCase test = (SelendionTestCase) clazz.newInstance();
-                clazz.getMethod("testProcessSpecification", Evaluator.class).invoke(test, evaluator);
-                resultRecorder.record(Result.SUCCESS);
-                announceSuccess(element);
-                if (!(Boolean) clazz.getMethod("isExpectedToPass").invoke(test)) {
-                    Element b = new Element("b");
-                    b.addAttribute("class", "attention");
-                    b.appendText(" (This test is not expected to pass) ");
-                    element.appendChild(b);
+                if (!hide.equals(Hide.LINK)) {
+                    element.addAttribute("class", "invisible");
                 }
-            } catch (Exception e) {
-                announceFailure(element);
-                resultRecorder.record(Result.FAILURE);
-                   Element b = new Element("b");
-                    b.addAttribute("class", "attention");
-                    b.appendText(String.format(" (%s) ", e.getCause().getMessage()) );
-                    element.appendChild(b);
-            }
 
 
-                 */
                 try {
                     clazz.getMethod("lastExecutionResult").invoke(test);     //throws exception if failed
                     wrapElementInTogglingButton(div, resultElement, getTitle(element), "selendionButton", true, hide);
