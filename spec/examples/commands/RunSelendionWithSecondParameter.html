@@ -1,0 +1,123 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<head>
+    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>RunSelendion</title>
+</head>
+<body>
+<h1>RunSelendion</h1>
+
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
+
+
+<p> There is an optional second parameter: <code>immediate</code>, <code>clickable</code> or <code>link</code>.
+    <code>immediate</code> means
+the script will be included directly in the results, <code>clickable</code> means it will be included but hidden, and you have
+to click a button to see the test, and <code>link</code> means the link to the test will be included.  The default value is 
+<code>clickable</code>.</p>
+
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
+
+
+<div class="example">
+
+    <h3>Test runs and passes but is not embedded</h3>
+
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+    Let's run this little &lt;a concordion:runSelendion="#HREF, 'immediate'" href="runSelendionScripts/Simple.html"&gt;Passing
+            Selendion test&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF, 'immediate'" href="runSelendionScripts/Simple.html" class="invisible success"&gt;Passing
+                Selendion test&lt;/a&gt; &lt;span&gt; &lt;div class="includedPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'"
+    class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
+    &lt;/p&gt;
+
+</pre>
+</div>
+<div class="example">
+    <p>
+        Let's run this little <a concordion:runSelendion="#HREF, 'immediate'" href="runSelendionScripts/Simple.html">Passing
+        Selendion test</a>.
+    </p>
+
+</div>
+
+<div class="example">
+
+    <h3>Run shown and hidden</h3>
+
+
+        <pre concordion:set="#snippet">
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF, 'immediate'" href="runSelendionScripts/Simple.html"&gt;Passing
+        Selendion test&lt;/a&gt;.
+    &lt;/p&gt;
+
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF, 'clickable'" href="runSelendionScripts/Simple.html"&gt;Passing
+        Selendion test&lt;/a&gt;.
+    &lt;/p&gt;
+
+</pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF, 'immediate'" href="runSelendionScripts/Simple.html"
+                                 class="invisible success"&gt;Passing
+        Selendion test&lt;/a&gt; &lt;span&gt; &lt;div class="includedPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'"
+                                                                         class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
+    &lt;/p&gt;
+    &lt;p&gt;
+        Let's run this little &lt;a concordion:runSelendion="#HREF, 'clickable'" href="runSelendionScripts/Simple.html"
+                                 class="invisible success"&gt;Passing
+        Selendion test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton1" type="button" class="success selendionButton"
+                                         onclick="javascript:toggleSelendionElement('1', 'Passing Selendion test')"
+                                         value="Passing Selendion test" /&gt;
+       &lt;div id="selendionHideViewElement1" class="includedHiddenPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="'value'"
+                                                                                   class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
+    &lt;/p&gt;
+
+</pre>
+</div>
+
+
+<div class="example">
+    <p>
+        Let's run this little <a concordion:runSelendion="#HREF, 'immediate'" href="runSelendionScripts/Simple.html">Passing
+        Selendion test</a>.
+    </p>
+
+    <p>
+        Let's run this little <a concordion:runSelendion="#HREF, 'clickable'" href="runSelendionScripts/Simple.html">Passing
+        Selendion test</a>.
+    </p>
+
+</div>
+<div class="example">
+    <p>
+        Let's run this little <a concordion:runSelendion="#HREF, 'link'" href="runSelendionScripts/Simple.html">Passing
+        Selendion test</a>.
+    </p>
+
+    <p>
+        Let's run this little <a concordion:runSelendion="#HREF, 'clickable'" href="runSelendionScripts/Simple.html">Passing
+        Selendion test</a>.
+    </p>
+
+</div>
+
+
+</body>
+</html>

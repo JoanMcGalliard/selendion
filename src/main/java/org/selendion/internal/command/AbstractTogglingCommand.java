@@ -16,6 +16,7 @@ public abstract class AbstractTogglingCommand extends AbstractCommand {
     public static void resetButtonCount() {
         buttonId = 1;
     }
+    protected enum Hide { IMMEDIATE, CLICKABLE, LINK }
 
 
     void ensureDocumentHasSeleniumTogglingScript(Element element) {
@@ -40,8 +41,8 @@ public abstract class AbstractTogglingCommand extends AbstractCommand {
         return element.getText().replaceAll(" *\\n *", " ").trim();
     }
 
-    void wrapElementInTogglingButton(Element elementToAdd, Element element, String title, String clazz, boolean result, boolean hide) {
-        if (hide) {
+    void wrapElementInTogglingButton(Element elementToAdd, Element element, String title, String clazz, boolean result, Hide hide) {
+        if (hide.equals(Hide.CLICKABLE)) {
             String label = title.replaceFirst("\\|.*", "...");
             Element input = new Element("input")
                     .addStyleClass("selendionHideViewButton")
@@ -53,7 +54,9 @@ public abstract class AbstractTogglingCommand extends AbstractCommand {
 
             element.appendChild(input);
             elementToAdd.setId("selendionHideViewElement" + buttonId++);
+            element.appendChild(elementToAdd);
+        } else if (hide.equals(Hide.IMMEDIATE)) {
+            element.appendChild(elementToAdd);
         }
-        element.appendChild(elementToAdd);
     }
 }
