@@ -33,23 +33,36 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
         listeners.removeListener(runSelendionListener);
     }
 
+
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
+
 
         CommandCallList childCommands = commandCall.getChildren();
         childCommands.setUp(evaluator, resultRecorder);
         String htmlFilename;
         Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
-        boolean hide = true;
+        Hide hide;
         if (evaluatedExpression.getClass().equals(String.class)) {
             htmlFilename = (String) evaluatedExpression;
-            hide =true;
+            hide = Hide.CLICKABLE;
         } else {
             Object[] params = (Object[]) evaluatedExpression;
             if (params.length > 2) {
                 throw new RuntimeException("Too many params");
             }
             htmlFilename = (String) params[0];
-            hide = (Boolean) params[1];
+            if ( params[1].equals("clickable")) {
+                hide = Hide.CLICKABLE;
+            } else if (params[1].equals("immediate")) {
+                hide = Hide.IMMEDIATE;
+            } else if (params[1].equals("link")) {
+                hide = Hide.LINK;
+            } else {
+                throw new RuntimeException(String.format("Second parameter %s not allowed.  Should be clickable, immediate or link",
+                        (String)params[1]));
+
+            }
+
         }
         String htmlResource;
         if (htmlFilename.startsWith("/")) {
@@ -89,11 +102,38 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
 
                 element.insertAfter(resultElement);
                 element.addAttribute("class", "invisible");
+
+
+                /*
+                   if (f.isFile()) {
+            try {
+                Class clazz = loader.findSelendionClass(htmlResource);
+                SelendionTestCase test = (SelendionTestCase) clazz.newInstance();
+                clazz.getMethod("testProcessSpecification", Evaluator.class).invoke(test, evaluator);
+                resultRecorder.record(Result.SUCCESS);
+                announceSuccess(element);
+                if (!(Boolean) clazz.getMethod("isExpectedToPass").invoke(test)) {
+                    Element b = new Element("b");
+                    b.addAttribute("class", "attention");
+                    b.appendText(" (This test is not expected to pass) ");
+                    element.appendChild(b);
+                }
+            } catch (Exception e) {
+                announceFailure(element);
+                resultRecorder.record(Result.FAILURE);
+                   Element b = new Element("b");
+                    b.addAttribute("class", "attention");
+                    b.appendText(String.format(" (%s) ", e.getCause().getMessage()) );
+                    element.appendChild(b);
+            }
+
+
+                 */
                 try {
                     clazz.getMethod("lastExecutionResult").invoke(test);     //throws exception if failed
-                        wrapElementInTogglingButton(div, resultElement, getTitle(element), "selendionButton", true, hide);
+                    wrapElementInTogglingButton(div, resultElement, getTitle(element), "selendionButton", true, hide);
                     resultRecorder.record(Result.SUCCESS);
-                    if (hide) {
+                    if (hide.equals(Hide.CLICKABLE)) {
                         div.addAttribute("class", "includedHiddenPassingTest");
                     } else {
                         div.addAttribute("class", "includedPassingTest");
@@ -104,7 +144,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
                         Element b = new Element("b");
                         b.addAttribute("class", "attention");
                         b.appendText(" (This test is not expected to pass) ");
-                        element.appendChild(b);
+                        resultElement.appendChild(b);
                     }
 
                 } catch (Exception e) {
@@ -113,7 +153,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
 
                     resultRecorder.record(Result.FAILURE);
                     announceFailure(element);
-                    if (hide) {
+                    if (hide.equals(Hide.CLICKABLE)) {
                         div.addAttribute("class", "includedHiddenFailingTest");
                     } else {
                         div.addAttribute("class", "includedFailingTest");
