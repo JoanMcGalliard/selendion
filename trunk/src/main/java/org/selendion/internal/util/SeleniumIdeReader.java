@@ -13,7 +13,6 @@ import org.concordion.internal.util.Announcer;
 import org.selendion.integration.selenium.SeleniumDriver;
 import org.selendion.integration.BrowserDriver;
 import org.selendion.integration.HtmlUnit.HtmlUnitDriver;
-import org.selendion.integration.HtmlUnit.HtmlUnitException;
 import org.selendion.internal.RunSeleniumListener;
 import org.selendion.internal.command.RunSeleniumFailureEvent;
 import org.selendion.internal.command.RunSeleniumSuccessEvent;
@@ -134,7 +133,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         }
     }
 
-    protected CommandResult execute(String command, String arg1, String arg2) {
+    public CommandResult execute(String command, String arg1, String arg2) {
         try {
             return executeCommand(command, arg1, arg2);
         }
@@ -906,7 +905,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         this.browser = browser;
     }
 
-    protected class CommandResult {
+    public class CommandResult {
         private boolean success;
         private String message;
 

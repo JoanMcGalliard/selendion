@@ -2,8 +2,9 @@
 	Copyright Joan McGalliard, 2008-9
 */
 
+ package examples;
 
-import commands.AbstractTestSupport;
+import examples.commands.AbstractTestSupport;
 
 public class RunSelendionDemoTest extends AbstractTestSupport {
 

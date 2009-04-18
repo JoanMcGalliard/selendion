@@ -1,4 +1,4 @@
-package commands.runSelendionScripts;
+package examples.commands.runSelendionScripts;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 

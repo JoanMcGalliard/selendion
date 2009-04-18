@@ -2,11 +2,7 @@
 	Copyright Joan McGalliard, 2008-9
 */
 
-package commands;
-
-import org.selendion.integration.concordion.SelendionTestCase;
-
-import test.concordion.TestRig;
+package examples.commands;
 
 import java.util.ArrayList;
 

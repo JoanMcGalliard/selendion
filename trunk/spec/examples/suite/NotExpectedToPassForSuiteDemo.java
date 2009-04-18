@@ -1,7 +1,7 @@
 /*
 	Copyright Joan McGalliard, 2008-9
 */
-package suite;
+package examples.suite;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 
