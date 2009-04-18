@@ -4,7 +4,6 @@
 
 package org.selendion.internal.command;
 
-import org.concordion.internal.command.*;
 import org.concordion.internal.*;
 import org.concordion.internal.util.Announcer;
 import org.concordion.api.*;
@@ -41,26 +40,21 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
         childCommands.setUp(evaluator, resultRecorder);
         String htmlFilename;
         Object evaluatedExpression = evaluator.evaluate(commandCall.getExpression());
-        Hide hide;
+        IncludeDisposition hide;
         if (evaluatedExpression.getClass().equals(String.class)) {
             htmlFilename = (String) evaluatedExpression;
-            hide = Hide.CLICKABLE;
+            hide = IncludeDisposition.CLICKABLE;
         } else {
             Object[] params = (Object[]) evaluatedExpression;
             if (params.length > 2) {
                 throw new RuntimeException("Too many params");
             }
             htmlFilename = (String) params[0];
-            if ( params[1].equals("clickable")) {
-                hide = Hide.CLICKABLE;
-            } else if (params[1].equals("immediate")) {
-                hide = Hide.IMMEDIATE;
-            } else if (params[1].equals("link")) {
-                hide = Hide.LINK;
-            } else {
-                throw new RuntimeException(String.format("Second parameter %s not allowed.  Should be clickable, immediate or link",
-                        (String)params[1]));
-
+            try {
+            hide = (IncludeDisposition) params[1];
+            }
+            catch (Exception e) {
+                throw new RuntimeException((String)params[1] + " not allowed.  Allowable values IMMEDIATE, CLICKABLE and LINK");
             }
 
         }
@@ -101,7 +95,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
                 Element resultElement = new Element("span");
 
                 element.insertAfter(resultElement);
-                if (!hide.equals(Hide.LINK)) {
+                if (!hide.equals(IncludeDisposition.LINK)) {
                     element.addAttribute("class", "invisible");
                 }
 
@@ -110,7 +104,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
                     clazz.getMethod("lastExecutionResult").invoke(test);     //throws exception if failed
                     wrapElementInTogglingButton(div, resultElement, getTitle(element), "selendionButton", true, hide);
                     resultRecorder.record(Result.SUCCESS);
-                    if (hide.equals(Hide.CLICKABLE)) {
+                    if (hide.equals(IncludeDisposition.CLICKABLE)) {
                         div.addAttribute("class", "includedHiddenPassingTest");
                     } else {
                         div.addAttribute("class", "includedPassingTest");
@@ -130,7 +124,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
 
                     resultRecorder.record(Result.FAILURE);
                     announceFailure(element);
-                    if (hide.equals(Hide.CLICKABLE)) {
+                    if (hide.equals(IncludeDisposition.CLICKABLE)) {
                         div.addAttribute("class", "includedHiddenFailingTest");
                     } else {
                         div.addAttribute("class", "includedFailingTest");

@@ -15,6 +15,8 @@ public class SelendionEvaluatorTest extends TestCase {
         assertValid("'/aoifjae/faoejfa/hta.html'");
         assertValid("'/aoifjae/faoejfa/hta.html',#test,#TEXT,#HREF");
         assertValid("#HREF");
+        assertValid("#HREF,IMMEDIATE");
+        assertInvalid("#HREF,IMMEDIATELY");
         assertValid("#test");
         assertValid("#rowNameScript,#rowValueScript");
         assertValid("#HREF,true");
