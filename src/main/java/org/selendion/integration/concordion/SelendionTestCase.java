@@ -42,7 +42,8 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
     }
 
     public Element[] testProcessSpecification(Evaluator evaluator, BrowserDriver browser) throws Throwable {
-        Selendion selendion = new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory()).withEvaluator(evaluator).withBrowser(browser).build();
+        Selendion selendion = new SelendionBuilder().withEvaluatorFactory(new SelendionEvaluatorFactory())
+                .withEvaluator(evaluator).withBrowser(browser).withBaseClass(this.getClass()).build();
         resultSummary = selendion.process(this);
         resultSummary.print(System.out, this);
         return resultSummary.getResultSpecification().getCommandCall().getElement().getChildElements("body")[0].getChildElements();

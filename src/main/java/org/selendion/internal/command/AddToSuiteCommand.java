@@ -10,6 +10,7 @@ import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
 import org.selendion.internal.util.TestDescription;
 import org.selendion.internal.util.SelendionClassLoader;
+import org.selendion.integration.concordion.SelendionTestCase;
 
 
 import java.util.Vector;
@@ -24,11 +25,15 @@ import nu.xom.Builder;
 
 public class AddToSuiteCommand extends AbstractCommand {
     private Hashtable suites;
+    private Class<? extends SelendionTestCase> baseClass;
     private SelendionClassLoader loader = new SelendionClassLoader();
 
 
     public AddToSuiteCommand(Hashtable suites) {
         this.suites=suites;
+    }
+    public void setBaseClass (Class<? extends SelendionTestCase> baseClass) {
+        this.baseClass = baseClass;
     }
     private void add(String suiteName, TestDescription testDescription) {
         if (!suites.containsKey(suiteName)) {
@@ -54,7 +59,7 @@ public class AddToSuiteCommand extends AbstractCommand {
         }
         File f = new File(contextClassLoader.getResource(htmlResource).getPath().replaceAll("%20", " "));
         if (f.isFile()) {
-            add(suiteName, new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource),evaluator ));
+            add(suiteName, new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource,baseClass),evaluator ));
 
         } else if (f.isDirectory()) {
             walk(htmlFilename, htmlResource, evaluator, suiteName);
@@ -68,7 +73,7 @@ public class AddToSuiteCommand extends AbstractCommand {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         File f = new File(contextClassLoader.getResource(htmlResource).getPath().replaceAll("%20", " "));
         if (f.isFile() && f.toString().matches(".*\\.html")) {
-            add(suiteName, new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource), evaluator));
+            add(suiteName, new TestDescription(htmlFilename, getTitleOfPage(f.getAbsolutePath()), loader.findSelendionClass(htmlResource,baseClass), evaluator));
 
         }  else if (f.isDirectory()) {
             for (String sub : f.list()) {

@@ -13,6 +13,7 @@ public abstract class AbstractTestSupport extends SelendionTestCase {
         return trimException( new TestRig()
                 .withFixture(this)
                 .withResourceName("/examples/commands/")
+                .withBaseClass(this.getClass())
                 .processFragment(fragment)
                 .getOutputFragmentXML().replaceAll("><", "> <"));
     }

@@ -133,7 +133,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         }
     }
 
-    public CommandResult execute(String command, String arg1, String arg2) {
+    protected CommandResult execute(String command, String arg1, String arg2) {
         try {
             return executeCommand(command, arg1, arg2);
         }
@@ -905,7 +905,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         this.browser = browser;
     }
 
-    public class CommandResult {
+    protected class CommandResult {
         private boolean success;
         private String message;
 

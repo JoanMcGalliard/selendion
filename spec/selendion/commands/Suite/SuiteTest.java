@@ -2,7 +2,7 @@
 	Copyright Joan McGalliard, 2008-9
 */
 
-package examples.commands;
+package selendion.commands.Suite;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 
@@ -16,7 +16,8 @@ public class SuiteTest extends SelendionTestCase {
         Date start = new Date();
         String result= new TestRig()
             .withFixture(this)
-            .withResourceName("/examples/commands/")
+            .withResourceName("/selendion/commands/Suite/")
+            .withBaseClass(this.getClass())
             .processFragment(fragment)
             .getOutputFragmentXML();
         runningTime=(new Date()).getTime() - start.getTime();
@@ -32,4 +33,7 @@ public class SuiteTest extends SelendionTestCase {
     public boolean greaterThan(long a, long b) {
         return a > b;
     }
+    public void method() {
+    }
+    
 }

@@ -126,17 +126,17 @@
     <input type="Submit" id="submit" name="submit" value="Create user">
 </form>
 <p><input type="button" value="Click for popup" id="pop"
-          onClick="javascript:window.open('popup.html','Window1','menubar=no,width=430,height=360,toolbar=no')"></p>
+          onClick="window.open('popup.html','Window1','menubar=no,width=430,height=360,toolbar=no');"></p>
 
 <p><a onClick="confirm('O RLY?');" href="index.html">Click for confirm</a></p>
 
 <p><a href="index.html">Click for this page again</a></p>
 
 <p><a href="" onclick=
-        "alert('O NOES')"
+        "alert('O NOES');"
         >Javascript alert</a>  </p>
 <p><a href="#" onclick=
-        "setTimeout('alert(\'O NOES\')',1000)"
+        "setTimeout('alert(\'O NOES\')',1000);"
         >Javascript alert with 1 sec delay</a>
 </p>
 
@@ -147,9 +147,9 @@
                                                 </select>
 
 
-<p><input type="button" onclick="javascript:prompt('GIMMEH', '')" value="Javascript prompt">
+<p><input type="button" onclick="prompt('GIMMEH', '');" value="Javascript prompt">
 </p>
-<p><div id="invisibleStuff" style="display: none;">Stuff</div> </p>
+<div id="invisibleStuff" style="display: none;">Stuff</div>
 
 <p id="id1">Id tagged paragraph</p>
 <p name="name1">name tagged paragraph</p>

@@ -17,9 +17,12 @@ import org.selendion.internal.listener.RunSeleniumResultRenderer;
 import org.selendion.internal.listener.RunSelendionResultRenderer;
 import org.selendion.Selendion;
 import org.selendion.integration.BrowserDriver;
+import org.selendion.integration.concordion.SelendionTestCase;
 
 import java.util.Hashtable;
 import java.io.File;
+
+import nu.xom.Builder;
 
 
 public class SelendionBuilder extends ConcordionBuilder {
@@ -133,7 +136,9 @@ public class SelendionBuilder extends ConcordionBuilder {
     }
 
 
-
-    
-
+    public SelendionBuilder withBaseClass(Class<? extends SelendionTestCase> aClass) {
+        addToSuiteCommand.setBaseClass(aClass);
+        runSelendionCommand.setBaseClass(aClass);
+        return this;
+    }
 }
