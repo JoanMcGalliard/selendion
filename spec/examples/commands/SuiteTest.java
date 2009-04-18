@@ -2,14 +2,12 @@
 	Copyright Joan McGalliard, 2008-9
 */
 
-package commands;
+package examples.commands;
 
 import org.selendion.integration.concordion.SelendionTestCase;
-import org.concordion.api.Resource;
 
-import test.concordion.TestRig;
+import concordion.test.concordion.TestRig;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class SuiteTest extends SelendionTestCase {
@@ -18,7 +16,7 @@ public class SuiteTest extends SelendionTestCase {
         Date start = new Date();
         String result= new TestRig()
             .withFixture(this)
-            .withResourceName("/commands/")
+            .withResourceName("/examples/commands/")
             .processFragment(fragment)
             .getOutputFragmentXML();
         runningTime=(new Date()).getTime() - start.getTime();

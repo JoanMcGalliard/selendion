@@ -1,4 +1,4 @@
-package commands.assertEquals;
+package selendion.commands.assertEquals;
 
 import org.selendion.integration.concordion.SelendionTestCase;
 

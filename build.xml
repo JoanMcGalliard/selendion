@@ -24,7 +24,7 @@
 
     <target name="build"
             description="Builds everything from scratch"
-            depends="compile, run.tests, build.jar, build.srczip, build.dependencies.jar"
+            depends="clean, compile, run.tests, build.jar, build.srczip, build.dependencies.jar"
             />
 
     <target name="start.selenium"
@@ -90,7 +90,7 @@
 
         <javac classpathref="compile.classpath"
                destdir="${dir.classes}"
-               srcdir="src/main/java:src/test:spec/examples:spec/concordion/java"
+               srcdir="src/main/java:src/test:spec"
                debug="yes"
                failonerror="yes"
                source="1.5"
@@ -101,9 +101,7 @@
             <fileset dir="src/main/java" excludes="**/*.java"/>
             <fileset dir="src/main/resources" excludes="**/*.java"/>
             <fileset dir="src/test" excludes="**/*.java"/>
-            <fileset dir="spec/examples" excludes="**/*.java"/>
-            <fileset dir="spec/concordion/java" excludes="**/*.java"/>
-            <fileset dir="spec/concordion/resources" excludes="**/*.java"/>
+            <fileset dir="spec" excludes="**/*.java"/>
         </copy>
     </target>
 
@@ -113,6 +111,7 @@
 
         <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="yes" showoutput="yes">
             <jvmarg value="-Dselendion.output.dir=${dir.selendion.output}"/>
+            <jvmarg value="-Dconcordion.output.dir=${dir.selendion.output}"/>
             <jvmarg value="-Dselendion.browser=${selendion.browser}"/>
 
             <classpath>
@@ -127,11 +126,7 @@
                     <include name="**/*Test.java"/>
                     <exclude name="**/Abstract*"/>
                 </fileset>
-                <fileset dir="spec/examples">
-                    <include name="**/*Test.java"/>
-                    <exclude name="**/Abstract*"/>
-                </fileset>
-                <fileset dir="spec/concordion/java">
+                <fileset dir="spec">
                     <include name="**/*Test.java"/>
                     <exclude name="**/Abstract*"/>
                 </fileset>
@@ -171,7 +166,6 @@
              filesetmanifest="skip"
              manifest="src/main/resources/MANIFEST.MF">
             <exclude name="examples/**"/>
-            <exclude name="support/**"/>
             <exclude name="spec/**"/>
             <zipfileset src="lib/concordion-1.3.1-patched.jar">
                 <exclude name="META-INF/"/>
