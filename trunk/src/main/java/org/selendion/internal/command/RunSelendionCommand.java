@@ -19,6 +19,8 @@ import java.io.File;
 public class RunSelendionCommand extends AbstractTogglingCommand {
     private Announcer<RunSelendionListener> listeners = Announcer.to(RunSelendionListener.class);
     private SeleniumIdeReader seleniumIdeReader;
+    private Class<? extends SelendionTestCase> baseClass;
+
     public RunSelendionCommand(SeleniumIdeReader seleniumIdeReader) {
         super();
         this.seleniumIdeReader = seleniumIdeReader ;
@@ -79,7 +81,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
             Element div = new Element("div");
 
             try {
-                Class clazz = loader.findSelendionClass(htmlResource);
+                Class clazz = loader.findSelendionClass(htmlResource, baseClass);
                 SelendionTestCase test = (SelendionTestCase) clazz.newInstance();
 
 
@@ -152,4 +154,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
         listeners.announce().failureReported(new RunSelendionFailureEvent(element));
     }
 
+    public void setBaseClass(Class<? extends SelendionTestCase> aClass) {
+        this.baseClass=aClass;
+    }
 }

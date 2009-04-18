@@ -7,10 +7,13 @@ import org.selendion.internal.SelendionBuilder;
 import org.selendion.internal.SelendionEvaluatorFactory;
 import org.selendion.internal.SelendionResultRecorder;
 import org.selendion.Selendion;
+import org.selendion.integration.concordion.SelendionTestCase;
 import org.concordion.api.EvaluatorFactory;
 import org.concordion.api.Resource;
 import nu.xom.Document;
 import nu.xom.Nodes;
+import selendion.commands.Suite.SuiteTest;
+import com.sun.corba.se.impl.encoding.BufferManagerRead;
 
 
 public class TestRig {
@@ -19,6 +22,7 @@ public class TestRig {
     private EvaluatorFactory evaluatorFactory = new SelendionEvaluatorFactory();
     private concordion.test.concordion.StubSource stubSource = new StubSource();
     private String resourceName="/testrig";
+    private Class<? extends SelendionTestCase> baseClass;
 
     public TestRig withFixture(Object fixture) {
         this.fixture = fixture;
@@ -42,6 +46,7 @@ public class TestRig {
             .withSource(stubSource)
             .withEvaluatorFactory(evaluatorFactory)
             .withTarget(stubTarget)
+            .withBaseClass(baseClass)
             .build();
 
         try {
@@ -82,6 +87,11 @@ public class TestRig {
 
     public TestRig withResource(Resource resource, String content) {
         stubSource.addResource(resource, content);
+        return this;
+    }
+
+    public TestRig withBaseClass(Class<? extends SelendionTestCase> aClass) {
+        this.baseClass=aClass;
         return this;
     }
 }

@@ -2,7 +2,7 @@
 	Copyright Joan McGalliard, 2008-9
 */
 
-package selendion.selenium;
+package org.selendion.internal.util;
 
 import org.selendion.internal.SelendionEvaluator;
 import org.selendion.internal.util.SeleniumIdeReader;

@@ -14,7 +14,7 @@ public class SelendionClassLoader extends ClassLoader {
 
 
     @SuppressWarnings("unchecked")
-    public  Class<? extends SelendionTestCase> findSelendionClass (String htmlResource) {
+    public  Class<? extends SelendionTestCase> findSelendionClass (String htmlResource, Class<? extends SelendionTestCase> baseClass) {
         String className = htmlResource;
 
         if (className.endsWith(".html")) {
@@ -35,7 +35,7 @@ public class SelendionClassLoader extends ClassLoader {
                 ClassPool pool = ClassPool.getDefault();
                 CtClass parent;
                 try {
-                    parent = pool.getCtClass("org.selendion.integration.concordion.SelendionTestCase");
+                    parent = pool.getCtClass(baseClass.getCanonicalName());
                 } catch (NotFoundException e2) {
                     throw new RuntimeException("Can't find org.selendion.integration.concordion.SelendionTestCase",e);
                 }
