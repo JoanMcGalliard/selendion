@@ -2,7 +2,7 @@
     <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="support-lib/ant-googlecode-0.0.1.jar" name="gcupload"/>
     
 
-    <property name="version" value="0.5.6"/>
+    <property name="version" value="0.5.7"/>
     <property name="productName" value="selendion"/>
     <property name="ProductName" value="Selendion"/>
 

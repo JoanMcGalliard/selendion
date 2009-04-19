@@ -4,10 +4,7 @@
 
 package org.selendion.integration.HtmlUnit;
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.UnexpectedPage;
-import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.*;
 import org.concordion.api.Evaluator;
 import org.selendion.integration.BrowserDriver;
@@ -16,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,9 +22,13 @@ public class HtmlUnitDriver implements BrowserDriver {
     private Page old_page;
     private String timeout="30000";
     static final String nbsp = String.format("%c", 160);
+    private String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
+    private         final List collectedAlerts = new ArrayList();
 
     public HtmlUnitDriver(String baseUrl) {
         webClient = new WebClient();
+        webClient.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
+
         this.baseUrl = baseUrl;
     }
 
@@ -70,16 +72,16 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public String getEval(String s) {
-        throw new RuntimeException("Not yet implemented: " + "getEval");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getEval");
     }
 
 
     public void waitForCondition(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "waitForCondition");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "waitForCondition");
     }
 
     public void waitForFrameToLoad(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "waitForFrameToLoad");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "waitForFrameToLoad");
     }
 
     public void waitForPageToLoad() {
@@ -99,7 +101,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void waitForPopUp(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "waitForPopUp");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "waitForPopUp");
     }
     public void pauseInWaitFor (int milliseconds) throws InterruptedException {
         long start = System.currentTimeMillis();
@@ -120,35 +122,35 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void allowNativeXpath(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "allowNativeXpath");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "allowNativeXpath");
     }
 
     public void altKeyDown() {
-        throw new RuntimeException("Not yet implemented: " + "altKeyDown");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "altKeyDown");
     }
 
     public void altKeyUp() {
-        throw new RuntimeException("Not yet implemented: " + "altKeyUp");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "altKeyUp");
     }
 
     public void answerOnNextPrompt(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "answerOnNextPrompt");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "answerOnNextPrompt");
     }
 
     public void assignId(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "assignId");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "assignId");
     }
 
     public void check(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "check");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "check");
     }
 
     public void chooseCancelOnNextConfirmation() {
-        throw new RuntimeException("Not yet implemented: " + "chooseCancelOnNextConfirmation");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "chooseCancelOnNextConfirmation");
     }
 
     public void chooseOkOnNextConfirmation() {
-        throw new RuntimeException("Not yet implemented: " + "chooseOkOnNextConfirmation");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "chooseOkOnNextConfirmation");
     }
 
     private HtmlElement getHtmlElement(String key) {
@@ -201,7 +203,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             return null;
         } else if (key.startsWith("dom=") || key.startsWith("css=")
                 || key.startsWith("document")) {
-            throw new RuntimeException("Not yet implemented: " + key);
+            throw new RuntimeException(IMPLEMENTATION_REQUIRED + key);
         } else if (key.startsWith("//")) {
 
             List<?> list = ((HtmlPage) page).getByXPath(key);
@@ -247,7 +249,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             } else if (element.getClass().equals(HtmlOption.class)) {
                 page = ((HtmlOption) element).click();
             } else {
-                throw new RuntimeException("Not yet implemented: click " + element.getClass().getSimpleName());
+                throw new RuntimeException(IMPLEMENTATION_REQUIRED + "click " + element.getClass().getSimpleName());
             }
         } catch (IOException e) {
             throw new HtmlUnitException(e);
@@ -257,23 +259,23 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void clickAt(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "clickAt");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "clickAt");
     }
 
     public void close() {
-        throw new RuntimeException("Not yet implemented: " + "close");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "close");
     }
 
     public void controlKeyDown() {
-        throw new RuntimeException("Not yet implemented: " + "controlKeyDown");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "controlKeyDown");
     }
 
     public void controlKeyUp() {
-        throw new RuntimeException("Not yet implemented: " + "controlKeyUp");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "controlKeyUp");
     }
 
     public void createCookie(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "createCookie");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "createCookie");
     }
 
     public void deleteAllVisibleCookies() {
@@ -281,27 +283,27 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void deleteCookie(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "deleteCookie");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "deleteCookie");
     }
 
     public void doubleClick(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "doubleClick");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "doubleClick");
     }
 
     public void doubleClickAt(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "doubleClickAt");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "doubleClickAt");
     }
 
     public void dragAndDrop(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "dragAndDrop");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "dragAndDrop");
     }
 
     public void dragAndDropToObject(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "dragAndDropToObject");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "dragAndDropToObject");
     }
 
     public void dragdrop(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "dragdrop");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "dragdrop");
     }
 
     public String echo(String arg1) {
@@ -309,11 +311,11 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void fireEvent(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "fireEvent");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "fireEvent");
     }
 
     public String getSpeed() {
-        throw new RuntimeException("Not yet implemented: " + "getSpeed");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSpeed");
     }
 
     public void goBack() {
@@ -322,59 +324,59 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void highlight(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "highlight");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "highlight");
     }
 
     public void keyDown(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "keyDown");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "keyDown");
     }
 
     public void keyPress(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "keyPress");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "keyPress");
     }
 
     public void keyUp(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "keyUp");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "keyUp");
     }
 
     public void metaKeyDown() {
-        throw new RuntimeException("Not yet implemented: " + "metaKeyDown");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "metaKeyDown");
     }
 
     public void metaKeyUp() {
-        throw new RuntimeException("Not yet implemented: " + "metaKeyUp");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "metaKeyUp");
     }
 
     public void mouseDown(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "mouseDown");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "mouseDown");
     }
 
     public void mouseDownAt(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "mouseDownAt");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "mouseDownAt");
     }
 
     public void mouseMove(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "mouseMove");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "mouseMove");
     }
 
     public void mouseMoveAt(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "mouseMoveAt");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "mouseMoveAt");
     }
 
     public void mouseOut(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "mouseOut");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "mouseOut");
     }
 
     public void mouseOver(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "mouseOver");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "mouseOver");
     }
 
     public void mouseUp(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "mouseUp");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "mouseUp");
     }
 
     public void mouseUpAt(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "mouseUpAt");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "mouseUpAt");
     }
 
     public void open(String arg1) {
@@ -392,23 +394,23 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void openWindow(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "openWindow");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "openWindow");
     }
 
     public void refresh() {
-        throw new RuntimeException("Not yet implemented: " + "refresh");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "refresh");
     }
 
     public void removeAllSelections(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "removeAllSelections");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "removeAllSelections");
     }
 
     public void removeSelection(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "removeSelection");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "removeSelection");
     }
 
     public void runScript(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "runScript");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "runScript");
     }
 
     public void select(String arg1, String arg2) {
@@ -435,43 +437,43 @@ public class HtmlUnitDriver implements BrowserDriver {
             System.out.println(page.getEnclosingWindow().getTopWindow().toString());
             page = page.getEnclosingWindow().getTopWindow().getEnclosedPage();
         } else {
-            throw new RuntimeException("Not yet implemented: selectFrame with parameter " + arg1);
+            throw new RuntimeException(IMPLEMENTATION_REQUIRED + "selectFrame with parameter " + arg1);
         }
 
 
     }
 
     public void selectWindow(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "selectWindow");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "selectWindow");
     }
 
     public void setBrowserLogLevel(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "setBrowserLogLevel");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "setBrowserLogLevel");
     }
 
     public void setCursorPosition(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "setCursorPosition");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "setCursorPosition");
     }
 
     public void setMouseSpeed(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "setMouseSpeed");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "setMouseSpeed");
     }
 
     public void setSpeed(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "setSpeed");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "setSpeed");
     }
 
 
     public void shiftKeyDown() {
-        throw new RuntimeException("Not yet implemented: " + "shiftKeyDown");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "shiftKeyDown");
     }
 
     public void shiftKeyUp() {
-        throw new RuntimeException("Not yet implemented: " + "shiftKeyUp");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "shiftKeyUp");
     }
 
     public void submit(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "submit");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "submit");
     }
 
     public void type(String arg1, String arg2) {
@@ -483,53 +485,77 @@ public class HtmlUnitDriver implements BrowserDriver {
         } else if (element.getClass().equals(HtmlTextArea.class)) {
             ((HtmlTextArea)element).setText(arg2);
         } else {
-            throw new RuntimeException("Not yet implemented: type for " + element.getClass());
+            throw new RuntimeException(IMPLEMENTATION_REQUIRED + "type for " + element.getClass());
         }
 
     }
 
     public void typeKeys(String arg1, String arg2) {
-        throw new RuntimeException("Not yet implemented: " + "typeKeys");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "typeKeys");
     }
 
     public void uncheck(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "uncheck");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "uncheck");
     }
 
     public void windowFocus() {
-        throw new RuntimeException("Not yet implemented: " + "windowFocus");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "windowFocus");
     }
 
     public void windowMaximize() {
-        throw new RuntimeException("Not yet implemented: " + "windowMaximize");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "windowMaximize");
     }
 
     public Object getAlert() {
-        throw new RuntimeException("Not yet implemented: " + "getAlert");
+        if (collectedAlerts.isEmpty() ) {
+            throw new RuntimeException("ERROR: There were no alerts");
+        }
+        return  collectedAlerts.remove(collectedAlerts.size()-1);
+
     }
 
     public Object getAllButtons() {
-        throw new RuntimeException("Not yet implemented: " + "getAllButtons");
+        return walkAndFind((HtmlPage)page, "button").replaceFirst(",$","") ;
+    }
+
+    private String walkAndFind(DomNode node, String type) {
+        Iterator<DomNode> children = node.getChildren().iterator();
+        String list = "";
+        if (type.equals("button") && (node.getClass().equals(HtmlSubmitInput.class)
+                || node.getClass().equals(HtmlButtonInput.class) || node.getClass().equals(HtmlButton.class))) {
+            if (node.getAttributes().getNamedItem("id") != null) {
+                list = node.getAttributes().getNamedItem("id").getNodeValue() + ",";
+            }
+            else {
+                list =",";
+            }
+        }
+        while (children.hasNext()) {
+            list += walkAndFind(children.next(), type);
+        }
+//        list = list.replaceFirst(",$", "");
+        return list;
+
     }
 
     public Object getAllFields() {
-        throw new RuntimeException("Not yet implemented: " + "getAllFields");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getAllFields");
     }
 
     public Object getAllLinks() {
-        throw new RuntimeException("Not yet implemented: " + "getAllLinks");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getAllLinks");
     }
 
     public Object getAllWindowIds() {
-        throw new RuntimeException("Not yet implemented: " + "getAllWindowIds");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getAllWindowIds");
     }
 
     public Object getAllWindowNames() {
-        throw new RuntimeException("Not yet implemented: " + "getAllWindowNames");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getAllWindowNames");
     }
 
     public Object getAllWindowTitles() {
-        throw new RuntimeException("Not yet implemented: " + "getAllWindowTitles");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getAllWindowTitles");
     }
 
     public Object getBodyText() {
@@ -538,35 +564,35 @@ public class HtmlUnitDriver implements BrowserDriver {
         }  else if (page.getClass().equals(HtmlPage.class)) {
             return ((HtmlPage)page).getBody().asText().replaceAll("\\n", " ").replaceAll("\\t", " ").replaceAll("  *", " ").trim();
         }
-        throw new RuntimeException("Not yet implemented: getBodyText for " + page.getClass());
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getBodyText for " + page.getClass());
     }
 
     public Object getConfirmation() {
-        throw new RuntimeException("Not yet implemented: " + "getConfirmation");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getConfirmation");
     }
 
     public Object getCookie() {
-        throw new RuntimeException("Not yet implemented: " + "getCookie");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getCookie");
     }
 
     public Object getHtmlSource() {
-        throw new RuntimeException("Not yet implemented: " + "getHtmlSource");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getHtmlSource");
     }
 
     public Object getLocation() {
-        throw new RuntimeException("Not yet implemented: " + "getLocation");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getLocation");
     }
 
     public Object getMouseSpeed() {
-        throw new RuntimeException("Not yet implemented: " + "getMouseSpeed");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getMouseSpeed");
     }
 
     public Object getPrompt() {
-        throw new RuntimeException("Not yet implemented: " + "getPrompt");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getPrompt");
     }
 
     public boolean isAlertPresent() {
-        throw new RuntimeException("Not yet implemented: " + "isAlertPresent");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isAlertPresent");
     }
 
     public Object getTitle() {
@@ -574,11 +600,11 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isConfirmationPresent() {
-        throw new RuntimeException("Not yet implemented: " + "isConfirmationPresent");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isConfirmationPresent");
     }
 
     public boolean isPromptPresent() {
-        throw new RuntimeException("Not yet implemented: " + "isPromptPresent");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isPromptPresent");
     }
 
     private String getAttribute(HtmlElement element, String attribute) {
@@ -610,31 +636,31 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getAttributeFromAllWindows(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getAttributeFromAllWindows");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getAttributeFromAllWindows");
     }
 
     public Object getCursorPosition(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getCursorPosition");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getCursorPosition");
     }
 
     public Object getElementHeight(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getElementHeight");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getElementHeight");
     }
 
     public Object getElementIndex(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getElementIndex");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getElementIndex");
     }
 
     public Object getElementPositionLeft(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getElementPositionLeft");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getElementPositionLeft");
     }
 
     public Object getElementPositionTop(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getElementPositionTop");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getElementPositionTop");
     }
 
     public Object getElementWidth(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getElementWidth");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getElementWidth");
     }
 
     public Object getExpression(String arg1) {
@@ -646,27 +672,27 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getSelectedId(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectedId");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSelectedId");
     }
 
     public Object getSelectedIds(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectedIds");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSelectedIds");
     }
 
     public Object getSelectedIndex(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectedIndex");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSelectedIndex");
     }
 
     public Object getSelectedIndexes(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectedIndexes");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSelectedIndexes");
     }
 
     public Object getSelectedLabel(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectedLabel");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSelectedLabel");
     }
 
     public Object getSelectedLabels(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectedLabels");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSelectedLabels");
     }
 
     public Object getSelectedValue(String arg1) {
@@ -682,7 +708,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getSelectedValues(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getSelectedValues");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSelectedValues");
     }
 
     public Object getSelectOptions(String arg1) {
@@ -695,12 +721,12 @@ public class HtmlUnitDriver implements BrowserDriver {
                       }
                       return str.replaceFirst(",$", "");
                   }
-                      throw new RuntimeException("Not yet implemented: getSelectOptions for " +
+                      throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSelectOptions for " +
                                                element.getClass());
 
               }
     public Object getTable(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getTable");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getTable");
     }
 
     public String getText(String arg1) {
@@ -749,7 +775,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getXpathCount(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "getXpathCount");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getXpathCount");
     }
 
     public boolean isChecked(String arg1) {
@@ -762,11 +788,11 @@ public class HtmlUnitDriver implements BrowserDriver {
             return checkbox.isChecked();
         } 
 
-        throw new RuntimeException("Not yet implemented: isChecked for " + element.getClass());
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isChecked for " + element.getClass());
     }
 
     public boolean isEditable(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "isEditable");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isEditable");
     }
 
     public boolean isElementPresent(String arg1) {
@@ -779,7 +805,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isSomethingSelected(String arg1) {
-        throw new RuntimeException("Not yet implemented: " + "isSomethingSelected");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isSomethingSelected");
     }
 
     public boolean isTextPresent(String arg1) {

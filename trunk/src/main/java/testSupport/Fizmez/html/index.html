@@ -98,7 +98,7 @@
 
         <tr>
             <td>ARA Points:<br>(use -1 for novice)</td>
-            <td valign="top"><input type="Text" size=3 name="ara_points"
+            <td valign="top"><input type="Text" size=3 name="ara_points" id="ara_points"
                                     value=""></td>
 
         </tr>
@@ -106,6 +106,12 @@
             <td>Celine!!</td>
             <td>
                 <input  TYPE="image" SRC="images/celine.jpg" NAME="imagesubmit1"  id="imagesubmit" >
+            </td>
+        </tr>
+        <tr>
+            <td>
+               <input type="button" onclick="prompt('GIMMEH', '');" value="Javascript prompt">
+
             </td>
         </tr>
         <tr>
@@ -128,7 +134,7 @@
 <p><input type="button" value="Click for popup" id="pop"
           onClick="window.open('popup.html','Window1','menubar=no,width=430,height=360,toolbar=no');"></p>
 
-<p><a onClick="confirm('O RLY?');" href="index.html">Click for confirm</a></p>
+<p><a onClick="confirm('O RLY?');" id="orly" href="index.html">Click for confirm</a></p>
 
 <p><a href="index.html">Click for this page again</a></p>
 
