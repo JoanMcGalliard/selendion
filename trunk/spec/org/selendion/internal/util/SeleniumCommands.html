@@ -7,6 +7,9 @@
 <body>
 <h1>Selenium/HtmlUnit Commands Test</h1>
 
+<p>This is to make sure that Selendion can understand all selenium commands from the <a
+        href="http://selenium-core.openqa.org/reference.html">
+    selenium documentation</a> : </p>
 <ol>
 
     <li>
@@ -55,8 +58,12 @@
     <li>verifyTitle</li>
     <li>verifyValue</li>
     <li>waitForPageToLoadIfNotElementPresent</li>
+    <li>waitForPageToLoadIfTextPresent</li>
+    <li>storeNotVisible</li>
+    <li>storeVisible</li>
     <li>assertExpression</li>
     <li>storeEval</li>
+    <li>verifyExpression</li>
     <li>addSelection</li>
     <li>allowNativeXpath</li>
     <li>altKeyDown</li>
@@ -119,11 +126,482 @@
     <li>selectFrame</li>
     <li>openWindow</li>
     <li>deleteAllVisibleCookies</li>
+    <li>addSelection</li>
+    <li>answerOnNextPrompt</li>
+    <li>ara_number</li>
+    <li>assertConfirmation</li>
+    <li>assertErrorOnNext</li>
+    <li>assertFailureOnNext</li>
+    <li>assertSelected</li>
+    <li>click</li>
+    <li>clickAndWait</li>
+    <li>setCursorPosition</li>
+    <li>storeAlert</li>
+    <li>storeAlertPresent</li>
+    <li>storeAllButtons</li>
+    <li>storeAllFields</li>
+    <li>storeAllLinks</li>
+    <li>storeAllWindowIds</li>
+    <li>storeAllWindowNames</li>
+    <li>storeAllWindowTitles</li>
+    <li>storeAttribute</li>
+    <li>storeAttributeFromAllWindows</li>
+    <li>storeBodyText</li>
+    <li>storeChecked</li>
+    <li>storeConfirmation</li>
+    <li>storeConfirmationPresent</li>
+    <li>storeCookie</li>
+    <li>storeEditable</li>
+    <li>storeElementHeight</li>
+    <li>storeElementIndex</li>
+    <li>storeElementPositionLeft</li>
+    <li>storeElementPositionTop</li>
+    <li>storeElementPresent</li>
+    <li>storePrompt</li>
+    <li>storePromptPresent</li>
+    <li>storeSelectOptions</li>
+    <li>storeSelectedId</li>
+    <li>storeSelectedIds</li>
+    <li>storeSelectedIndex</li>
+    <li>storeSelectedIndexes</li>
+    <li>storeSelectedLabel</li>
+    <li>storeSelectedLabels</li>
+    <li>storeSelectedValue</li>
+    <li>storeSelectedValues</li>
+    <li>storeSomethingSelected</li>
+    <li>storeTable</li>
+    <li>storeText</li>
+    <li>storeTextPresent</li>
+    <li>storeTitle</li>
+    <li>storeValue</li>
+    <li>storeVisible</li>
+    <li>storeXpathCount</li>
     
 
 </ol>
 
-<p>For these men:</p>
+
+
+
+  <table>
+
+<tr>
+	<td>click</td>
+	<td>link=Javascript alert</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>O NOES</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Javascript alert</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotAlert</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Javascript alert</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAlert</td>
+	<td>O NOES</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Javascript alert</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyNotAlert</td>
+	<td>NO WAI</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Javascript alert</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>O NOES</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Javascript alert with 1 sec delay</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAlert</td>
+	<td>O NOES</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Javascript alert</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotAlert</td>
+	<td>NO WAI</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAllButtons</td>
+	<td>submit,pop,</td>
+	<td><br /></td>
+</tr>
+<tr>
+	<td>assertNotAllButtons</td>
+	<td>pop,submit,big</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAllButtons</td>
+	<td>submit,pop,</td>
+	<td><br /></td>
+</tr>
+<tr>
+	<td>verifyNotAllButtons</td>
+	<td>submit,pop,big</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAllButtons</td>
+	<td>submit,pop,</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotAllButtons</td>
+	<td>submit,pop,big</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAllFields</td>
+	<td>,,,,,,,</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotAllFields</td>
+	<td>a,b,c,d</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAllFields</td>
+	<td>,,,,,,,</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyNotAllFields</td>
+	<td>a,b,c,d</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAllFields</td>
+	<td>,,,,,,,</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotAllFields</td>
+	<td>xxxx</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAllLinks</td>
+	<td>,,,</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotAllLinks</td>
+	<td>xxxxx</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAllLinks</td>
+	<td>,,,</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyNotAllLinks</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAllLinks</td>
+	<td>,,,</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotAllLinks</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAllWindowIds</td>
+	<td>undefined</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotAllWindowIds</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAllWindowIds</td>
+	<td>undefined</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyNotAllWindowIds</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAllWindowIds</td>
+	<td>undefined</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotAllWindowIds</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAllWindowNames</td>
+	<td>main</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotAllWindowNames</td>
+	<td>xx</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAllWindowNames</td>
+	<td>main</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyNotAllWindowNames</td>
+	<td>xx</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAllWindowNames</td>
+	<td>main</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotAllWindowNames</td>
+	<td>xx</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAllWindowTitles</td>
+	<td>Index.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotAllWindowTitles</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAllWindowTitles</td>
+	<td>Index.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyNotAllWindowTitles</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAllWindowTitles</td>
+	<td>Index.html</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForNotAllWindowTitles</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAttribute</td>
+	<td>id=submit@value</td>
+	<td>Create user</td>
+</tr>
+<tr>
+	<td>assertNotAttribute</td>
+	<td>id=submit@value</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyAttribute</td>
+	<td>id=submit@value</td>
+	<td>Create user</td>
+</tr>
+<tr>
+	<td>verifyNotAttribute</td>
+	<td>id=submit@value</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAttribute</td>
+	<td>id=submit@value</td>
+	<td>Create user</td>
+</tr>
+<tr>
+	<td>waitForNotAttribute</td>
+	<td>id=submit@value</td>
+	<td></td>
+</tr>
+
+
+<tr>
+    <td>setTimeout</td>
+    <td>10000</td>
+    <td></td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/index.html</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>storeText</td>
+    <td>xPath=/html/body/form/table/tbody/tr/td</td>
+    <td>var</td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>Username (required):</td>
+</tr>
+<tr>
+    <td>storeTextIfAvailable</td>
+    <td>xPath=/html/body/form/table/tbody/tr[2]/td</td>
+    <td>var</td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>Password (required):</td>
+</tr>
+<tr>
+    <td>store</td>
+    <td></td>
+    <td>var</td>
+</tr>
+<tr>
+    <td>storeTextIfVisible</td>
+    <td>xPath=/html/body/form/table/tbody/tr[2]/td</td>
+    <td>var</td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>Password (required):</td>
+</tr>
+<tr>
+    <td>store</td>
+    <td>previous value</td>
+    <td>var</td>
+</tr>
+<tr>
+    <td>storeTextIfAvailable</td>
+    <td>xPath=/html/body/form/table/tbody/tr[99]/td</td>
+    <td>var</td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>previous value</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>submit</td>
+    <td></td>
+</tr>
+<tr>
+    <td>waitForPageToLoadIfTextPresent</td>
+    <td>Username</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTitle</td>
+    <td>result</td>
+    <td></td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/index.html</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTitle</td>
+    <td>Index.html</td>
+    <td></td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>submit</td>
+    <td></td>
+</tr>
+<tr>
+    <td>waitForPageToLoadIfNotTextPresent</td>
+    <td>Blah blah</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTitle</td>
+    <td>result</td>
+    <td></td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/index.html</td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeVisible</td>
+    <td>submit</td>
+    <td>var</td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>true</td>
+</tr>
+
+<tr>
+    <td>storeNotVisible</td>
+    <td>submit</td>
+    <td>var</td>
+
+</tr>
+
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>false</td>
+</tr>
+
+
+
+</table>
+
+<p>For these tools:</p>
 <ul concordion:execute="#browserTypes =getList()">
     <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
     <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
@@ -146,137 +624,6 @@
     <th>Remarks</th>
 </tr>
 
-<tr>
-    <td>open</td>
-    <td>/iframe.html</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>set up for next few rows</td>
-</tr>
-<tr>
-    <td>verifyElementPresent</td>
-    <td>Password</td>
-    <td>1</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>verifyElementPresent within a frame</td>
-</tr>
-<tr>
-    <td>type</td>
-    <td>Password</td>
-    <td>1</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>type within a frame</td>
-</tr>
-<tr>
-    <td>clickAndWait</td>
-    <td>//input[@value='Submit']</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>submit within a frame</td>
-</tr>
-<tr>
-    <td>open</td>
-    <td>/iframe.html</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>set up for next few browsing into and out of frames</td>
-</tr>
-<tr>
-    <td>selectFrame</td>
-    <td>index=0</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>storeAttribute</td>
-    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
-    <td>viewName</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>echo</td>
-    <td>${viewName}</td>
-    <td></td>
-    <td>true</td>
-    <td>passwordpage</td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>selectFrame</td>
-    <td>relative=top</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>storeAttribute</td>
-    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
-    <td>viewName</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-</tr>
-<tr>
-    <td>echo</td>
-    <td>${viewName}</td>
-    <td></td>
-    <td>true</td>
-    <td>vbv</td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-</tr>
-
-<tr>
-    <td>open</td>
-    <td>/frames.html</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>set up for next row</td>
-</tr>
- <tr>
-    <td>clickAndWait</td>
-    <td>submit</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>submit within a frame</td>
-</tr>
 
 <tr>
    <td>open</td>
@@ -1358,6 +1705,138 @@
     <td></td>
     <td>test row above</td>
 </tr>
+<tr>
+    <td>open</td>
+    <td>/iframe.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>set up for next few rows</td>
+</tr>
+<tr>
+    <td>verifyElementPresent</td>
+    <td>Password</td>
+    <td>1</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>verifyElementPresent within a frame</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>Password</td>
+    <td>1</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>type within a frame</td>
+</tr>
+<tr>
+    <td>clickAndWait</td>
+    <td>//input[@value='Submit']</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>submit within a frame</td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/iframe.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>set up for next few browsing into and out of frames</td>
+</tr>
+<tr>
+    <td>selectFrame</td>
+    <td>index=0</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeAttribute</td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+    <td>viewName</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${viewName}</td>
+    <td></td>
+    <td>true</td>
+    <td>passwordpage</td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>selectFrame</td>
+    <td>relative=top</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeAttribute</td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+    <td>viewName</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${viewName}</td>
+    <td></td>
+    <td>true</td>
+    <td>vbv</td>
+    <td>false</td>
+    <td></td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>open</td>
+    <td>/frames.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>set up for next row</td>
+</tr>
+ <tr>
+    <td>clickAndWait</td>
+    <td>submit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>submit within a frame</td>
+</tr>
+
 </table>
 
 </div>
