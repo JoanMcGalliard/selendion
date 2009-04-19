@@ -142,7 +142,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         } catch (SeleniumException e) {
             return new CommandResult(false, e.getMessage());
         } catch (Exception e) {
-            return new CommandResult(false, e.toString());
+            return new CommandResult(false, e.getMessage());
 
         }
     }
