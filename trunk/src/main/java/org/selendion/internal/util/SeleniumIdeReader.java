@@ -26,6 +26,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     private BrowserDriver browser;
     private boolean lastTestResult=true;
     private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
+    private String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
 
     public void start(String seleniumHost, int seleniumPort, String browser, String baseUrl) {
         this.browser = new SeleniumDriver(
@@ -200,7 +201,6 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
         }
         if (command.matches(".*IfAvailable$")) {
-            String varName = arg2.length() > 0 ? arg2 : arg1;
 
             String trimmedCommand = command.replaceFirst("IfAvailable$", "");
             try {
@@ -220,7 +220,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 //ignore
             }
             catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             return new CommandResult(true, "");
         }
@@ -236,7 +236,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                     browser.store(varName, !(Boolean) answer);
                 }
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             return new CommandResult(true, "");
         }
@@ -249,7 +249,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 browser.store(varName, browserGet(command.replaceFirst("^store", ""), arg1, arg2));
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             return new CommandResult(true, "");
         }
@@ -259,7 +259,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 actualObject = browserGet(command.replaceFirst("^assertNot", ""), arg1, arg2);
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             if (actualObject.getClass().equals(Boolean.class)) {
                 assertTrue((Boolean) actualObject);
@@ -272,7 +272,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 assertFalse((Boolean) browserGet("TextPresent", arg1, arg2));
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             return new CommandResult(true, "");
         }
@@ -282,7 +282,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 actualObject = browserGet(command.replaceFirst("^assert", ""), arg1, arg2);
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             if (actualObject.getClass().equals(Boolean.class)) {
                 assertTrue((Boolean) actualObject);
@@ -319,7 +319,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 actualObject = browserGet(seleniumCommand, arg1, arg2);
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             if (actualObject.getClass().equals(Boolean.class)) {
                 return new CommandResult(!(Boolean) actualObject, "");
@@ -361,7 +361,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 actualObject = browserGet(seleniumCommand, arg1, arg2);
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             if (actualObject.getClass().equals(Boolean.class)) {
                 return new CommandResult(!(Boolean) actualObject, "");
@@ -405,7 +405,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 actualObject = browserGet(seleniumCommand, arg1, arg2);
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             if (actualObject.getClass().equals(Boolean.class)) {
                 return new CommandResult((Boolean) actualObject, "");
@@ -425,7 +425,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 actualObject = browserGet(command.replaceFirst("^waitForPageToLoadIfNot", ""), arg1, arg2);
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             boolean condition;
             if (actualObject.getClass().equals(Boolean.class)) {
@@ -445,7 +445,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             try {
                 actualObject = browserGet(command.replaceFirst("^waitForPageToLoadIf", ""), arg1, arg2);
             } catch (SeleniumIdeException e) {
-                return new CommandResult(false, "Unimplemented command " + command);
+                return new CommandResult(false, IMPLEMENTATION_REQUIRED + command);
             }
             boolean condition;
             if (actualObject.getClass().equals(Boolean.class)) {
