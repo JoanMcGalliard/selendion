@@ -99,7 +99,6 @@
 
         <copy todir="${dir.classes}">
             <fileset dir="src/main/java" excludes="**/*.java"/>
-            <fileset dir="src/main/resources" excludes="**/*.java"/>
             <fileset dir="src/test" excludes="**/*.java"/>
             <fileset dir="spec" excludes="**/*.java"/>
         </copy>
