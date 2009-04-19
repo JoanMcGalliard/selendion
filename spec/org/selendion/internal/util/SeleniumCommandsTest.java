@@ -5,7 +5,6 @@
 package org.selendion.internal.util;
 
 import org.selendion.internal.SelendionEvaluator;
-import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.integration.concordion.SelendionTestCase;
 
 import java.util.ArrayList;
@@ -42,13 +41,11 @@ public class SeleniumCommandsTest extends SelendionTestCase {
     private boolean exception=false;
     private SeleniumIdeReader.CommandResult result;
 
-    public void setUp(String baseUrl, String page)  {
-    }
     public void runSeleniumIde(String command, String arg1, String arg2)  {
         exception=false;
         try {
-        result = seleniumIdeReader.execute(command, arg1.replaceAll("\\\n *", "\\\n").trim(),
-                arg2.replaceAll("\\\n *", "\\\n").trim()); }
+        result = seleniumIdeReader.execute(command, arg1.replaceAll("\n *", "\\\n").trim(),
+                arg2.replaceAll("\n *", "\\\n").trim()); }
         catch (Throwable e) {
             exception=true;
         }
@@ -65,24 +62,8 @@ public class SeleniumCommandsTest extends SelendionTestCase {
 
     }
     public boolean getSuccess() {
-        if (exception) {
-            return false;
-        } else {
-            return result.getSuccess();
-        }
+        return !exception && result.getSuccess();
 
-    }
-    public void action(String action) throws Exception {
-        if (action.length() == 0 ) {
-            return;
-        }
-        if (action.equals("wait then go back")) {
-            seleniumIdeReader.execute("waitForPageToLoad", "", "");
-             seleniumIdeReader.execute("goBack", "", "");
-             seleniumIdeReader.execute("waitForPageToLoad", "", "");
-        } else {
-            throw new Exception ("Unknown action: " + action);
-        }
     }
 
 }

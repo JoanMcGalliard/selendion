@@ -1,5 +1,4 @@
 <html xmlns:concordion="http://www.selendion.org/2008">
-
 <head>
     <link href="../../../../../css/selendion.css" rel="stylesheet" type="text/css"/>
     <title>Selenium/HtmlUnit Commands Test</title>
@@ -11,16 +10,13 @@
         href="http://selenium-core.openqa.org/reference.html">
     selenium documentation</a> : </p>
 
-
 <p>For these tools:</p>
 <ul concordion:execute="#browserTypes =getList()">
     <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
     <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
 </ul>
-
 <div class="example" concordion:forEach="#browser : #browserTypes">
 The commands in this table work with both selenium and htmlunit.
-
 <p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
     <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
         http://localhost:55555/</a> we expect the following results: </p>
@@ -32,10 +28,8 @@ The commands in this table work with both selenium and htmlunit.
     <th concordion:assertEquals="getSuccess()">Succeeds?</th>
     <th concordion:assertEquals="getMessage()">Message</th>
     <th concordion:assertEquals="getException()">Exception</th>
-    <th concordion:execute="action(#TEXT)">Subsequent action</th>
     <th>Remarks</th>
 </tr>
-
 
 <tr>
     <td><b>open</b></td>
@@ -44,7 +38,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Open main page</td>
 </tr>
 <tr>
@@ -55,7 +48,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>assertNotAllButtons</b></td>
@@ -65,7 +57,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>verifyAllButtons</b></td>
@@ -74,7 +65,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -85,7 +75,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>verifyAllButtons</b></td>
@@ -94,7 +83,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>Expected: blah; Actual: ,submit,pop,</td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -105,7 +93,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>echo</td>
@@ -114,7 +101,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>allbuttons = ,submit,pop,</td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -125,7 +111,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>waitForNotAllButtons</b></td>
@@ -135,9 +120,7 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td><b>assertAlert</b></td>
     <td>O NOES</td>
@@ -145,7 +128,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: There were no alerts</td>
     <td>false</td>
-    <td></td>
     <td>When no alerts present</td>
 </tr>
 <tr>
@@ -155,10 +137,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: There were no alerts</td>
     <td>false</td>
-    <td></td>
     <td>When no alerts present</td>
 </tr>
-
 <tr>
     <td><b>verifyAlert</b></td>
     <td>O NOES</td>
@@ -166,10 +146,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: There were no alerts</td>
     <td>false</td>
-    <td></td>
     <td>When no alerts present</td>
 </tr>
-
 <tr>
     <td><b>verifyNotAlert</b></td>
     <td>NO WAI</td>
@@ -177,7 +155,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: There were no alerts</td>
     <td>false</td>
-    <td></td>
     <td>When no alerts present</td>
 </tr>
 <tr>
@@ -188,9 +165,7 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td><b>assertAlert</b></td>
     <td>O NOES</td>
@@ -198,7 +173,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>When alert <b>O NOES</b> is present</td>
 </tr>
 <tr>
@@ -208,7 +182,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: There were no alerts</td>
     <td>false</td>
-    <td></td>
     <td>Alert was cleared above</td>
 </tr>
 <tr>
@@ -219,7 +192,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>assertNotAlert</b></td>
@@ -228,7 +200,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>When alert <b>O NOES</b> is present</td>
 </tr>
 <tr>
@@ -238,7 +209,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -248,7 +218,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
     <td>true</td>
-    <td></td>
     <td>When alert <b>O NOES</b> is present</td>
 </tr>
 <tr>
@@ -259,9 +228,7 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td><b>verifyAlert</b></td>
     <td>O NOES</td>
@@ -269,7 +236,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>When alert <b>O NOES</b> is present</td>
 </tr>
 <tr>
@@ -280,9 +246,7 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td><b>verifyNotAlert</b></td>
     <td>NO WAI</td>
@@ -290,7 +254,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>When alert <b>O NOES</b> is present</td>
 </tr>
 <tr>
@@ -300,7 +263,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -310,7 +272,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>When alert <b>O NOES</b> is present</td>
 </tr>
 <tr>
@@ -321,7 +282,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>waitForAlert</b></td>
@@ -331,10 +291,7 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
-
 <tr>
     <td><b>select</b></td>
     <td>parkingAvailabilitySelect</td>
@@ -342,9 +299,9 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>testing select</td>
 </tr>
+
 <tr>
     <td><b>assertTextNotPresent</b></td>
     <td>RANDOM STUFF</td>
@@ -352,10 +309,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>text area</td>
 </tr>
-
 <tr>
     <td><b>assertTextNotPresent</b></td>
     <td>Celine!!</td>
@@ -363,7 +318,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
     <td>true</td>
-    <td></td>
     <td>text area</td>
 </tr>
 <tr>
@@ -373,7 +327,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>text area</td>
 </tr>
 <tr>
@@ -383,7 +336,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>text area</td>
 </tr>
 <tr>
@@ -393,7 +345,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>text area</td>
 </tr>
 <tr>
@@ -403,7 +354,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>text area</td>
 </tr>
 <tr>
@@ -413,10 +363,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>text area</td>
 </tr>
-
 <tr>
     <td><b>storeExpression</b></td>
     <td>javascript{(&quot;&quot; + Math.floor(12345.999)).substring(0,3)}</td>
@@ -424,10 +372,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>basic javascript evaluation</td>
 </tr>
-
 <tr>
     <td><b>echo</b></td>
     <td>${numberString}</td>
@@ -435,18 +381,15 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>123</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
 <tr>
     <td><b>verifySelectOptions</b></td>
     <td>colours</td>
     <td>red,green,blue,yellow,black,gold</td>
-
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>basic store text</td>
 </tr>
 <tr>
@@ -456,7 +399,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>basic store text</td>
 </tr>
 <tr>
@@ -466,7 +408,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>ARA number:</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
 <tr>
@@ -476,7 +417,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>clear variable</td>
 </tr>
 <tr>
@@ -486,7 +426,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Store if available, and it is available</td>
 </tr>
 <tr>
@@ -496,7 +435,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>ARA number:</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
 <tr>
@@ -506,7 +444,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>funny characters</td>
 </tr>
 <tr>
@@ -516,7 +453,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>clear variable</td>
 </tr>
 <tr>
@@ -526,7 +462,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Store if available, but it is not available</td>
 </tr>
 <tr>
@@ -536,10 +471,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>(blank)</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>deleteAllVisibleCookies</b></td>
     <td></td>
@@ -547,11 +480,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Just see if it throws an exception</td>
 </tr>
-
-
 <tr>
     <td><b>storeValue</b></td>
     <td>totalsum</td>
@@ -559,7 +489,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>basic storeValue for empty value</td>
 </tr>
 <tr>
@@ -569,10 +498,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td>type</td>
     <td>new_username</td>
@@ -580,7 +507,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>set up for next row</td>
 </tr>
 <tr>
@@ -590,7 +516,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>basic storeValue</td>
 </tr>
 <tr>
@@ -600,7 +525,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>basic waitFor...</td>
 </tr>
 <tr>
@@ -610,7 +534,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>setup for next test</td>
 </tr>
 <tr>
@@ -620,7 +543,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: Timed out after 1000ms</td>
     <td>false</td>
-    <td></td>
     <td>waitFor... something that isn't there</td>
 </tr>
 <tr>
@@ -630,10 +552,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>cleanup for previous test</td>
 </tr>
-
 <tr>
     <td>echo</td>
     <td>${typed_value}</td>
@@ -641,10 +561,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>jem</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>verifyTextPresent</b></td>
     <td>ARA Points:
@@ -654,7 +572,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>vanilla test</td>
 </tr>
 <tr>
@@ -666,10 +583,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>simple fail</td>
 </tr>
-
 <tr>
     <td><b>verifyTextPresent</b></td>
     <td>random text</td>
@@ -677,7 +592,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>simple fail</td>
 </tr>
 <tr>
@@ -687,10 +601,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>vanilla test</td>
 </tr>
-
 <tr>
     <td><b>verifyText</b></td>
     <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
@@ -700,7 +612,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>vanilla test</td>
 </tr>
 <tr>
@@ -710,7 +621,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>Expected: random text; Actual: ARA Points:(use -1 for novice)</td>
     <td>false</td>
-    <td></td>
     <td>fails because of miss-match</td>
 </tr>
 <tr>
@@ -722,7 +632,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: Element //*[@id="madeupid"] not found</td>
     <td>false</td>
-    <td></td>
     <td>fails because element not present</td>
 </tr>
 <tr>
@@ -732,7 +641,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>vanilla test</td>
 </tr>
 <tr>
@@ -742,7 +650,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>should fail</td>
 </tr>
 <tr>
@@ -752,7 +659,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>check box</td>
 </tr>
 <tr>
@@ -762,7 +668,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>check box</td>
 </tr>
 <tr>
@@ -772,18 +677,25 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>set up for next row</td>
 </tr>
 <tr>
-    <td><b>verifyChecked</b></td>
+    <td><b>storeChecked</b></td>
     <td>heavyweight</td>
-    <td></td>
+    <td>hw</td>
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>check box</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${hw}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
 </tr>
 <tr>
     <td><b>verifyValue</b></td>
@@ -792,7 +704,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>radio button values</td>
 </tr>
 <tr>
@@ -802,7 +713,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>setup for next four rows</td>
 </tr>
 <tr>
@@ -812,7 +722,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>Expected: off; Actual: on</td>
     <td>false</td>
-    <td></td>
     <td>radio button values</td>
 </tr>
 <tr>
@@ -822,10 +731,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>radio button values</td>
 </tr>
-
 <tr>
     <td><b>verifyChecked</b></td>
     <td>height</td>
@@ -833,7 +740,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>radio button values</td>
 </tr>
 <tr>
@@ -843,11 +749,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>radio button values</td>
 </tr>
-
-
 <tr>
     <td><b>clickAndWait</b></td>
     <td>imagesubmit</td>
@@ -855,7 +758,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Click on Celine!</td>
 </tr>
 <tr>
@@ -865,7 +767,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Testing above click worked</td>
 </tr>
 <tr>
@@ -875,10 +776,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>result</td>
     <td>false</td>
-    <td></td>
     <td>still testing above click worked</td>
 </tr>
-
 <tr>
     <td>open</td>
     <td>index.html</td>
@@ -886,7 +785,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>make sure nothing is selected for next test</td>
 </tr>
 <tr>
@@ -897,7 +795,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>ERROR: No option selected</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>addSelection</b></td>
@@ -906,7 +803,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>set up for row 2 below</td>
 </tr>
 <tr>
@@ -916,7 +812,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>set up for row below</td>
 </tr>
 <tr>
@@ -927,7 +822,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>ERROR: More than one selected option!</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>addSelection</b></td>
@@ -937,9 +831,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>ERROR: Option with label 'eggplant' not found</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td>select</td>
     <td>sex</td>
@@ -947,7 +839,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>setup next row</td>
 </tr>
 <tr>
@@ -957,7 +848,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>vanilla test</td>
 </tr>
 <tr>
@@ -967,7 +857,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>set up for row below</td>
 </tr>
 <tr>
@@ -977,7 +866,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>basic storeValue</td>
 </tr>
 <tr>
@@ -987,10 +875,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>me</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>assertTextPresent</b></td>
     <td>blah</td>
@@ -998,7 +884,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
     <td>true</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1009,7 +894,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>click</b></td>
@@ -1018,7 +902,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Click a link</td>
 </tr>
 <tr>
@@ -1028,7 +911,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: Element xPath=/html/body/p[300]/a not found</td>
     <td>false</td>
-    <td></td>
     <td>Click non-existant element</td>
 </tr>
 <tr>
@@ -1038,7 +920,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Click non-clickable element</td>
 </tr>
 <tr>
@@ -1048,8 +929,16 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td>wait then go back</td>
     <td>button</td>
+</tr>
+<tr>
+    <td><b>open</b></td>
+    <td>/index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Open main page</td>
 </tr>
 <tr>
     <td><b>click</b></td>
@@ -1058,7 +947,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>checkbox</td>
 </tr>
 <tr>
@@ -1068,7 +956,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>radio button</td>
 </tr>
 <tr>
@@ -1078,7 +965,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>explicit name</td>
 </tr>
 <tr>
@@ -1088,7 +974,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>true</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
 <tr>
@@ -1098,7 +983,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>implicit name</td>
 </tr>
 <tr>
@@ -1108,7 +992,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>true</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
 <tr>
@@ -1118,7 +1001,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>name that isn't in the document</td>
 </tr>
 <tr>
@@ -1128,10 +1010,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>false</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>storeElementPresent</b></td>
     <td>id=id1</td>
@@ -1139,7 +1019,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>explicit id</td>
 </tr>
 <tr>
@@ -1149,10 +1028,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>true</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>storeElementPresent</b></td>
     <td>identifier=id1</td>
@@ -1160,7 +1037,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>explicit identifier</td>
 </tr>
 <tr>
@@ -1170,10 +1046,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>true</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>storeElementPresent</b></td>
     <td>id1</td>
@@ -1181,7 +1055,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>implicit id</td>
 </tr>
 <tr>
@@ -1191,10 +1064,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>true</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>storeElementPresent</b></td>
     <td>id=id2</td>
@@ -1202,7 +1073,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>id that isn't in the document</td>
 </tr>
 <tr>
@@ -1212,10 +1082,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>false</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>storeElementPresent</b></td>
     <td>id=heavyweight</td>
@@ -1223,7 +1091,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>id that is really a name</td>
 </tr>
 <tr>
@@ -1233,11 +1100,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>false</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
-
 <tr>
     <td><b>storeElementPresent</b></td>
     <td>xPath=//p[@name='name1']</td>
@@ -1245,7 +1109,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>explicit xPath</td>
 </tr>
 <tr>
@@ -1255,10 +1118,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>true</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>storeElementPresent</b></td>
     <td>//p[@name='name1']</td>
@@ -1266,7 +1127,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>implicit xPath</td>
 </tr>
 <tr>
@@ -1276,10 +1136,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>true</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
-
 <tr>
     <td><b>storeElementPresent</b></td>
     <td>link=Click for confirm</td>
@@ -1287,7 +1145,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>link</td>
 </tr>
 <tr>
@@ -1297,7 +1154,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>true</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
 <tr>
@@ -1307,7 +1163,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>link</td>
 </tr>
 <tr>
@@ -1317,7 +1172,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>false</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
 <tr>
@@ -1327,7 +1181,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>grab an attribute</td>
 </tr>
 <tr>
@@ -1337,7 +1190,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td>index page</td>
     <td>false</td>
-    <td></td>
     <td>testing row above</td>
 </tr>
 <tr>
@@ -1347,7 +1199,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: Could not find element attribute: xPath=/html/head/meta[@name='pageName']@contentX</td>
     <td>false</td>
-    <td></td>
     <td>existing element, missing attribute</td>
 </tr>
 <tr>
@@ -1357,10 +1208,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: Element xPath=/html/head/meta[@nameX='pageName'] not found</td>
     <td>false</td>
-    <td></td>
     <td>non-existant element</td>
 </tr>
-
 <tr>
     <td><b>storeAttribute</b></td>
     <td>xPath=/html/head/meta[@name='pageName']@empty</td>
@@ -1368,7 +1217,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>ERROR: Could not find element attribute: xPath=/html/head/meta[@name='pageName']@empty</td>
     <td>false</td>
-    <td></td>
     <td>empty (illegal!) element</td>
 </tr>
 <tr>
@@ -1378,10 +1226,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>button</td>
 </tr>
-
 <tr>
     <td><b>storeBodyText</b></td>
     <td>body</td>
@@ -1389,7 +1235,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>store body for a standard page</td>
 </tr>
 <tr>
@@ -1401,7 +1246,6 @@ The commands in this table work with both selenium and htmlunit.
         02088888888 Mobile 07777777777 Sex F Weight L Ara 44444444 Points -1
     </td>
     <td>false</td>
-    <td></td>
     <td>test row above</td>
 </tr>
 <tr>
@@ -1411,7 +1255,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>set up for next few rows</td>
 </tr>
 <tr>
@@ -1421,7 +1264,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>verifyElementPresent within a frame</td>
 </tr>
 <tr>
@@ -1431,7 +1273,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>type within a frame</td>
 </tr>
 <tr>
@@ -1441,7 +1282,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>submit within a frame</td>
 </tr>
 <tr>
@@ -1451,7 +1291,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>set up for next few browsing into and out of frames</td>
 </tr>
 <tr>
@@ -1462,7 +1301,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>storeAttribute</b></td>
@@ -1471,7 +1309,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1482,7 +1319,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>passwordpage</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>selectFrame</b></td>
@@ -1491,7 +1327,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1502,7 +1337,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>echo</td>
@@ -1512,9 +1346,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>vbv</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td>open</td>
     <td>/frames.html</td>
@@ -1522,7 +1354,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>set up for next row</td>
 </tr>
 <tr>
@@ -1532,16 +1363,11 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>submit within a frame</td>
 </tr>
-
 </table>
-
 <p><i concordion:execute="stop()">Close the browser.</i></p>
-
 </div>
-
 <div class="example">
 <p>
     The commands in this table work have only been tested with
@@ -1558,10 +1384,8 @@ The commands in this table work with both selenium and htmlunit.
     <th concordion:assertEquals="getSuccess()">Succeeds?</th>
     <th concordion:assertEquals="getMessage()">Message</th>
     <th concordion:assertEquals="getException()">Exception</th>
-    <th concordion:execute="action(#TEXT)">Subsequent action</th>
     <th>Remarks</th>
 </tr>
-
 <tr>
     <td>open</td>
     <td>index.html</td>
@@ -1570,6 +1394,42 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
+</tr>
+
+<tr>
+	<td>type</td>
+	<td>phone</td>
+	<td>abcde</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td><b>setCursorPosition</b></td>
+	<td>phone</td>
+	<td>3</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td><b>keyPress</b></td>
+	<td>phone</td>
+	<td>3</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>phone</td>
+	<td>abc3de</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
     <td></td>
 </tr>
 
@@ -1582,7 +1442,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>echo</td>
@@ -1592,9 +1451,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>allfields = ,,,,,,ara_points,</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td><b>storeAllLinks</b></td>
     <td>alllinks</td>
@@ -1602,7 +1459,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1613,7 +1469,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>alllinks = orly,,,</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>storeAllWindowIds</b></td>
@@ -1622,7 +1477,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1633,7 +1487,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>allwindowids = undefined</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>storeAllWindowNames</b></td>
@@ -1642,7 +1495,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1653,7 +1505,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>allwindownames = main</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td><b>storeAllWindowTitles</b></td>
@@ -1662,7 +1513,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1673,7 +1523,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>allwindowtitles = Index.html</td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>storeText</td>
@@ -1682,7 +1531,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1693,7 +1541,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>storeTextIfAvailable</td>
@@ -1702,7 +1549,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1713,7 +1559,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>store</td>
@@ -1722,7 +1567,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1733,7 +1577,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>verifyExpression</td>
@@ -1743,7 +1586,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>store</td>
@@ -1752,7 +1594,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1763,7 +1604,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>verifyExpression</td>
@@ -1773,7 +1613,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>click</td>
@@ -1782,7 +1621,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1793,7 +1631,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>verifyTitle</td>
@@ -1803,7 +1640,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>open</td>
@@ -1812,7 +1648,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1823,7 +1658,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>click</td>
@@ -1832,7 +1666,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1843,7 +1676,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>verifyTitle</td>
@@ -1853,7 +1685,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>open</td>
@@ -1862,7 +1693,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
 </tr>
 <tr>
@@ -1873,7 +1703,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
 <tr>
     <td>verifyExpression</td>
@@ -1883,21 +1712,16 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td>storeNotVisible</td>
     <td>submit</td>
     <td>var</td>
-
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
 <tr>
     <td>verifyExpression</td>
     <td>${var}</td>
@@ -1906,17 +1730,13 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
 </tr>
-
-
 </table>
 <p><i concordion:execute="stop()">Close the browser.</i></p>
 </div>
 <div class="example">
 <p>
     The commands in this table work have not yet been verified with either selenium or html unit.</p>
-
 <table>
 <tr>
     <th>Command</th>
@@ -1925,11 +1745,8 @@ The commands in this table work with both selenium and htmlunit.
     <th>Succeeds?</th>
     <th>Message</th>
     <th>Exception</th>
-    <th>Subsequent action</th>
     <th>Remarks</th>
 </tr>
-
-
 <tr>
     <td>open</td>
     <td>/index.html</td>
@@ -1937,17 +1754,14 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td>Back to original page</td>
 </tr>
-
 <tr>
     <td>storeAlert</td>
     <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -1958,7 +1772,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -1967,7 +1780,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -1978,7 +1790,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -1987,7 +1798,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -1998,7 +1808,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2008,10 +1817,8 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
-
 <tr>
     <td>storeAttributeFromAllWindows</td>
     <td></td>
@@ -2019,36 +1826,16 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
-<tr>
-    <td>storeBodyText</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-    <td>comment</td>
-</tr>
-<tr>
-    <td>storeChecked</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-    <td>comment</td>
-</tr>
+
+
 <tr>
     <td>storeConfirmation</td>
     <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2059,7 +1846,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2068,7 +1854,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2079,7 +1864,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2088,7 +1872,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2099,7 +1882,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2108,7 +1890,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2119,7 +1900,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2128,7 +1908,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2139,7 +1918,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2148,7 +1926,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2159,7 +1936,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2168,7 +1944,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2179,7 +1954,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2188,7 +1962,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2199,7 +1972,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2208,7 +1980,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2219,7 +1990,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2228,7 +1998,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2239,7 +2008,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2248,7 +2016,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2259,7 +2026,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2268,7 +2034,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2279,18 +2044,14 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
-
-
 <tr>
     <td>pause</td>
     <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2301,7 +2062,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2310,7 +2070,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2321,7 +2080,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2330,7 +2088,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2341,7 +2098,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2350,7 +2106,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2361,7 +2116,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2370,7 +2124,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2381,7 +2134,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2390,7 +2142,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2401,7 +2152,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2410,7 +2160,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2421,7 +2170,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2430,7 +2178,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2441,7 +2188,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2450,7 +2196,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2461,7 +2206,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2470,7 +2214,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2481,7 +2224,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2490,7 +2232,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2501,7 +2242,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2510,7 +2250,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2521,7 +2260,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2530,7 +2268,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2541,7 +2278,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2550,7 +2286,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2561,7 +2296,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2570,7 +2304,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2581,7 +2314,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2590,7 +2322,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2601,7 +2332,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2610,7 +2340,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2621,7 +2350,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2630,7 +2358,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2641,7 +2368,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2650,7 +2376,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2661,7 +2386,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2670,7 +2394,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2681,7 +2404,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2690,7 +2412,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2701,7 +2422,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2710,7 +2430,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2721,7 +2440,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2730,7 +2448,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2741,7 +2458,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2750,7 +2466,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2761,7 +2476,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2770,7 +2484,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2781,7 +2494,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2790,7 +2502,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2801,7 +2512,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2810,7 +2520,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2821,7 +2530,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2830,7 +2538,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2841,7 +2548,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2850,7 +2556,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2861,26 +2566,15 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
-<tr>
-    <td>setCursorPosition</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-    <td>comment</td>
-</tr>
+
 <tr>
     <td>setMouseSpeed</td>
     <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2891,17 +2585,14 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
-
 <tr>
     <td>shiftKeyDown</td>
     <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2912,7 +2603,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2921,7 +2611,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2932,7 +2621,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2941,7 +2629,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2952,7 +2639,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2962,7 +2648,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2971,7 +2656,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -2982,7 +2666,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -2991,7 +2674,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -3002,7 +2684,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -3011,7 +2692,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -3022,7 +2702,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -3031,7 +2710,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -3042,7 +2720,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -3051,7 +2728,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -3062,7 +2738,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -3071,7 +2746,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -3082,7 +2756,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
     <td>comment</td>
 </tr>
 <tr>
@@ -3091,7 +2764,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>true</td>
     <td></td>
     <td>false</td>
-    <td></td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -3102,6 +2774,14 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>setCursorPosition</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
     <td></td>
     <td>comment</td>
 </tr>
@@ -3112,34 +2792,9 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td></td>
-    <td></td>
-    <td>comment</td>
+    <td>DEPRECATED IN SELENIUM IDE (and thus here)</td>
 </tr>
-<tr>
-    <td>click</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-    <td>comment</td>
-</tr>
-<tr>
-    <td>setCursorPosition</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td></td>
-    <td>comment</td>
-</tr>
-
 </table>
-
 </div>
-
-
 </body>
 </html>
