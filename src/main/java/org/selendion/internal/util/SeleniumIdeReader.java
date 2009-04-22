@@ -21,6 +21,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import java.io.*;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class SeleniumIdeReader extends junit.framework.TestCase {
     private BrowserDriver browser;
@@ -459,13 +461,16 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             }
             return new CommandResult(true, "");
         }
-        if (command.matches("^waitForNot[A-Z].*")) {
+        final Pattern p = Pattern.compile("^waitFor([A-Z].*[a-z]|)Not([A-Z].*)$");
+        Matcher waitForNotMatcher = p.matcher(command);
+        if (waitForNotMatcher.find()) {
+            String browserCommand = waitForNotMatcher.group(1) + waitForNotMatcher.group(2);
             Object actualObject;
             String expected = arg2.length() > 0 ? arg2 : arg1;
             long start = System.currentTimeMillis();
             while (true) {
                 try {
-                    actualObject = browserGet(command.replaceFirst("^waitForNot", ""), arg1, arg2);
+                    actualObject = browserGet(browserCommand, arg1, arg2);
                     if (actualObject.getClass().equals(Boolean.class) && !(Boolean) actualObject) {
                         return new CommandResult(true, "");
                     }

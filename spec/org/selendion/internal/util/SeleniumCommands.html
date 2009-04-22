@@ -31,7 +31,7 @@ The commands in this table work with both selenium and htmlunit.
     <th>Remarks</th>
 </tr>
 
-<tr>
+ <tr>
     <td><b>open</b></td>
     <td>/index.html</td>
     <td></td>
@@ -40,6 +40,62 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>Open main page</td>
 </tr>
+ <tr>
+    <td><b>storeText</b></td>
+    <td>//abbr[@title='available']</td>
+    <td>text</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>using attributes</td>
+</tr>
+<tr>
+    <td><b>echo</b></td>
+    <td>${text}</td>
+    <td></td>
+    <td>true</td>
+    <td>1st available</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+
+
+<tr>
+   <td><b>open</b></td>
+   <td>/index.html</td>
+   <td></td>
+   <td>true</td>
+   <td></td>
+   <td>false</td>
+   <td>Open main page</td>
+</tr><tr>
+   <td><b>waitForElementNotPresent</b></td>
+   <td>blahblah</td>
+   <td></td>
+   <td>true</td>
+   <td></td>
+   <td>false</td>
+   <td>basic NOT test</td>
+</tr><tr>
+<td>verifyElementNotPresent</td>
+<td>imagesubmit</td>
+<td></td>
+
+   <td>false</td>
+   <td></td>
+   <td>false</td>
+   <td>basic NOT test</td>
+</tr><tr>
+   <td><b>verifyElementNotPresent</b></td>
+   <td>blahblah</td>
+   <td></td>
+   <td>true</td>
+   <td></td>
+   <td>false</td>
+   <td>basic NOT test</td>
+</tr>
+
+
 <tr>
     <td><b>assertAllButtons</b></td>
     <td>,submit,pop,</td>
