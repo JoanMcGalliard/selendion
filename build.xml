@@ -1,8 +1,33 @@
 <project name="selendion" default="build" basedir=".">
-    <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="support-lib/ant-googlecode-0.0.1.jar" name="gcupload"/>
-    
+    <property name="dir.support-lib" value="${basedir}/support-lib"/>
 
-    <property name="version" value="0.5.7"/>
+    <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${dir.support-lib}/ant-googlecode-0.0.1.jar" name="gcupload"/>
+    <path id="svnant.classpath">
+      <fileset dir="${dir.support-lib}">
+        <include name="**/*.jar"/>
+      </fileset>
+    </path>
+    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
+
+    <target name="svn.version">
+        <sequential>
+            <svn username="${googleUser}"
+                 password="${googlePassword}">
+                <info target="${basedir}"/>
+            </svn>
+            <property  name="version" value="r${svn.info.rev}"/>
+        </sequential>
+    </target>
+    <target name="svn.commit">
+            <svn username="${googleUser}"
+                 password="${googlePassword}">
+                <commit dir="${basedir}"
+                        message="Committing latest build before release"
+                        recurse="true"/>
+            </svn>
+    </target>
+
+
     <property name="productName" value="selendion"/>
     <property name="ProductName" value="Selendion"/>
 
@@ -56,12 +81,12 @@
     <target name="stop.webserver">
         <waitfor maxwait="3" maxwaitunit="second">
             <not>
-                <http url="http://localhost:5555?cmd=shutDown"/>
+                <http url="http://localhost:55555?cmd=shutDown"/>
             </not>
         </waitfor>
     </target>
 
-    <target name="clean">
+    <target name="clean" depends="stop.selenium, stop.webserver">
         <delete dir="${dir.build}"/>
         <delete dir="${dir.test.output}"/>
         <delete dir="${dir.selendion.output}"/>
@@ -73,7 +98,7 @@
 
     </target>
     <target name="build.example.zip"
-            depends="build.dependencies.jar">
+            depends="svn.version,build.dependencies.jar">
         <copy todir="${dir.example}/lib">
             <fileset file="${dir.dist}/${productName}-${version}-with-dependencies.jar"/>
         </copy>
@@ -133,7 +158,7 @@
         </junit>
     </target>
 
-    <target name="build.jar" depends="compile,run.tests">
+    <target name="build.jar" depends="svn.version,compile,run.tests">
         <mkdir dir="${dir.dist}"/>
 
         <jar destfile="${dir.dist}/${productName}-${version}.jar"
@@ -194,7 +219,7 @@
         </jar>
     </target>
 
-    <target name="build.srczip">
+    <target name="build.srczip" depends="svn.version">
         <mkdir dir="${dir.dist}"/>
 
         <zip destfile="${dir.dist}/${productName}-${version}-src.zip"
@@ -203,7 +228,7 @@
         </zip>
     </target>
 
-<target  name="release" depends="build.example.zip" >
+<target  name="release" depends="svn.commit,svn.version,build.example.zip" >
     <gcupload
         username="${googleUser}"
         password="${googlePassword}"
