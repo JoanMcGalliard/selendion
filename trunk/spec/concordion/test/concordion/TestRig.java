@@ -12,8 +12,6 @@ import org.concordion.api.EvaluatorFactory;
 import org.concordion.api.Resource;
 import nu.xom.Document;
 import nu.xom.Nodes;
-import selendion.commands.Suite.SuiteTest;
-import com.sun.corba.se.impl.encoding.BufferManagerRead;
 
 
 public class TestRig {
@@ -23,6 +21,32 @@ public class TestRig {
     private concordion.test.concordion.StubSource stubSource = new StubSource();
     private String resourceName="/testrig";
     private Class<? extends SelendionTestCase> baseClass;
+
+    public Selendion getSelendion() {
+        if (selendion == null) {
+            selendion = new SelendionBuilder()
+                .withAssertEqualsListener(eventRecorder)
+                .withThrowableListener(eventRecorder)
+                .withSource(stubSource)
+                .withEvaluatorFactory(evaluatorFactory)
+                .withTarget(stubTarget)
+                .withBaseClass(baseClass)
+                .build();
+
+        }
+        return selendion;
+    }
+
+    private Selendion selendion;
+    private  StubTarget stubTarget;
+    private EventRecorder eventRecorder;
+
+
+    public TestRig () {
+        eventRecorder = new EventRecorder();
+        stubTarget = new StubTarget();
+
+    }
 
     public TestRig withFixture(Object fixture) {
         this.fixture = fixture;
@@ -38,19 +62,9 @@ public class TestRig {
     }
 
     public ProcessingResult process(Resource resource) {
-        EventRecorder eventRecorder = new EventRecorder();
-        StubTarget stubTarget = new StubTarget();
-        Selendion selendion = new SelendionBuilder()
-            .withAssertEqualsListener(eventRecorder)
-            .withThrowableListener(eventRecorder)
-            .withSource(stubSource)
-            .withEvaluatorFactory(evaluatorFactory)
-            .withTarget(stubTarget)
-            .withBaseClass(baseClass)
-            .build();
 
         try {
-            SelendionResultRecorder resultSummary = selendion.process(resource, fixture);
+            SelendionResultRecorder resultSummary = getSelendion().process(resource, fixture);
             String xml = stubTarget.getWrittenString(resource);
             return new ProcessingResult(resultSummary, eventRecorder, xml);
         } catch (IOException e) {

@@ -12,12 +12,17 @@ import java.util.Date;
 
 public class SuiteTest extends SelendionTestCase {
     private long runningTime=-1;
-    public String render(String fragment) throws Exception {
-        Date start = new Date();
-        String result= new TestRig()
+    private TestRig testRig;
+    public SuiteTest () {
+        super();
+        testRig = new TestRig()
             .withFixture(this)
             .withResourceName("/selendion/commands/Suite/")
-            .withBaseClass(this.getClass())
+            .withBaseClass(this.getClass());
+    }
+    public String render(String fragment) throws Exception {
+        Date start = new Date();
+        String result= testRig
             .processFragment(fragment)
             .getOutputFragmentXML();
         runningTime=(new Date()).getTime() - start.getTime();
