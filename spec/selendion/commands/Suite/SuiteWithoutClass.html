@@ -31,15 +31,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite1',#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite1',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of
-    &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a concordion:addToSuite="'suite1',#HREF" href="suite/WithoutClass.html"&gt;without class&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite1',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
         </pre>
 </div>
@@ -53,14 +53,14 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClassFail.html"&gt;Test without class that fails&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite2',#HREF" href="suite/WithoutClassFail.html"&gt;Test without class that fails&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite2',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClassFail.html"&gt;Test without class that fails&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClassFail.html" class="failure"&gt;Test that fails&lt;/a&gt;
+<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite2',#HREF" href="suite/WithoutClassFail.html"&gt;Test without class that fails&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite2',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClassFail.html" class="failure"&gt;Test that fails&lt;/a&gt;
     Specification has failure(s). See output HTML for details.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
         </pre>
 </div>
@@ -73,15 +73,15 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite3',#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite3',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of
-    &lt;a concordion:addToSuite="'suite',#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    &lt;a concordion:addToSuite="'suite3',#HREF" href="suite/WithoutClassError.html"&gt;Test without class that throws an exception&lt;/a&gt;
+   and run it in &lt;i concordion:runSuite="'suite3',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/WithoutClassError.html" class="failure"&gt;Test without class that throws an exception&lt;/a&gt;
     Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
   </pre>
