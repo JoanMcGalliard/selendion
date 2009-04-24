@@ -1,5 +1,4 @@
 <html xmlns:concordion="http://www.selendion.org/2008">
-
 <head>
     <link href="../../../../css/selendion.css" rel="stylesheet" type="text/css"/>
     <title>Suite</title>
@@ -11,183 +10,209 @@
    </p>
 
 <p>
-    We can html files and directories to a suite. If a directory is added, then all the html files in that
+    We can add html files and directories to a suite. If a directory is added, then all the html files in that
     directory will become part of the suite. When we run a suite, for each html file it looks for a class
     that has the same name + "Test". If that exists, it is run, otherwise it looks for a class with the same
     name as html file and runs that. If the class is found, it must be a subclass of SelendionTestCase.
     Finally, if neither is found, it <a href="SuiteWithoutClass.html"> creates a class, based on the current class,
     for the test</a>.
-
 </p>
+
+    <H2>addToSuite</H2>
+
 
     
 <p>
-    To add a suite, this is the syntax:
+    To add to a suite, this is the syntax:
  </p> <p>
 <code>
 concordion:addToSuite="<b>suiteName</b>,<b>path</b>" 
 </code>
     </p> <p>
     where <code>suiteName</code> is the the name of the suite (you can create multiple suites and run them separately),
-    and <code>path</code> is the name of the file or directory you want add to the suite.
+    and <code>path</code> is the name of the file or directory you want add to the suite.  Both can be literals, variables
+    or special variables.  The suite name should be a string and the path should be a relative path to a file or a directory,
+    or an absolute path to one within this package.  Suites do not have to be initialized, if a new name is used, a new suite
+    is automatically started.
     </p>
 
 
 <div class="example">
 
-    <h3>Test runs and passes with literal number of threads</h3>
+    <h3>Examples</h3>
+<p>    The following should all successfully added to suite:
+   </p> <ul concordion:execute="#snippets =getList()">
+        <li><code concordion:execute="#snippets.add(#TEXT)">
+Add  &lt;i concordion:addToSuite="'mySuite','suite/Sleep.html'"&gt;Sleep Test&lt;/i&gt; to the suite.
+            </code></li>
+        <li><code concordion:execute="#snippets.add(#TEXT)">
+Add  &lt;a concordion:addToSuite="'mySuite',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; to the suite.
+            </code></li>
+        <li><code concordion:execute="#snippets.add(#TEXT)">
+Add to &lt;i concordion:set="#suiteName"&gt;mySuite&lt;/i&gt;: &lt;a concordion:addToSuite="#suiteName,#HREF"
+            href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;.
+            </code></li>
+    </ul>
+    <span concordion:forEach="#snippet : #snippets">
+<p class="html" concordion:assertEquals="render(#snippet)"><code concordion:echo="#snippet"/></p>
+        </span> 
 
-    <p>
-        If we run a suite containing a simple test that has a test class and it passes:
-    </p>
+    </div>
 
-        <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite1',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
-   &lt;/p&gt;
-        </pre>
 
-    <p>The result should be:</p>
+<H2>runSuite</H2>
+<p>
+To run a suite, this is the syntax:
+ </p>
+<p>
+where <code>suiteName</code> is the the name of the suite,
+and <code>numberOfThreads</code> is the name of the file or directory you want add to the suite.  Both can be literals, variables
+or special variables.  The suite name should be a string, and will be a suite created by one or more <code>addToSuite</code>s
+    and the <code>numberOfThreads</code> should be an integer.  If <code>numberOfThreads</code> is <b>1</b>, then the tests in the
+    suite will be run one after the other.  If it is greater than 1, then it will fork up to that many processes
+    to run each test in parallell.
+    Suites do not have to be initialized, if a new name is used, nothing should be run.
+</p>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">
-    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite1',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
-      &lt;/p&gt;
 
-</pre>
+<div class="example">
+       <h3>Example</h3>
+    <p>A suite with a single, passing test.</p>
+<p>    If we add one test that will pass to a suite:
+ <code concordion:execute="render(#TEXT)">
+    Add  &lt;a concordion:addToSuite="'suite1',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; to the suite.
+    </code>
+</p>
 
-    <pre concordion:set="#snippet">
-&lt;p&gt;
-run it in &lt;i concordion:runSuite="'suite1',1"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
-    </pre>
 
-    <pre class="html" concordion:assertEquals="render(#snippet)">
-    &lt;p&gt;
-       run it in &lt;i concordion:runSuite="'suite1',1"&gt;1&lt;/i&gt; &lt;ol&gt;
-    &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+   <p> And then run that suite:</p>
+    <pre concordion:set="#snippet">&lt;p&gt;run it in &lt;i concordion:runSuite="'suite1',1"&gt;1&lt;/i&gt; thread.&lt;/p&gt; </pre>
 
-</pre>
+    <p>Then we would expect the test to report success:</p>
+    <pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;run it in &lt;i concordion:runSuite="'suite1',1"&gt;1&lt;/i&gt;
+     &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt;
+     thread.&lt;/p&gt;</pre>
+</div>
+<div class="example">
+
+    <h3>Example</h3>
+  <p>An empty suite</p>
+
+   <p>If we try to run a suite without adding any tests</p>
+    <pre concordion:set="#snippet">&lt;p&gt;run it in &lt;i concordion:runSuite="'nonExistentSuite',1"&gt;1&lt;/i&gt; thread.&lt;/p&gt; </pre>
+
+    <p>Then we would expect the test to report success, with no tests executed:</p>
+    <pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;run it in &lt;i concordion:runSuite="'nonExistentSuite',1"&gt;1&lt;/i&gt; &lt;ol /&gt; thread.&lt;/p&gt;</pre>
 </div>
 
 
 <div class="example">
+    <h3>Example</h3>
 
-    <h3>Test runs and passes</h3>
-
+    <p>Test is not a Selendion test</p>
     <p>
-        If we run a suite containing a simple test that has a test class and it passes:
-    </p>
+        If create a suite containing a test class that is not subclassed from SelendionTestCase:
+        </p>
+ <code concordion:execute="render(#TEXT)">
+    Build a suite consisting of &lt;a concordion:addToSuite="'suite3',#HREF" href="suite/Concordion.html"&gt;Test using ConcordionTestCase&lt;/a&gt;
+    </code>
 
-        <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite2',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite2',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
-        </pre>
+   <p> And then run that suite:</p>
+    <pre concordion:set="#snippet">Run it in &lt;i concordion:runSuite="'suite3',#TEXT"&gt;1&lt;/i&gt; thread.</pre>
+
 
     <p>The result should be:</p>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">
-    &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite2',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;
-       and run it in &lt;i concordion:runSuite="'suite2',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt;
-    &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
-
-</pre>
-</div>
-<div class="example">
-
-    <h3>Test is not a Selendion test</h3>
-
-    <p>
-        If we run a suite containing a test that has a test class that is not subclassed from SelendionTestCase,
-        we should get an error message.:
-    </p>
-
-        <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite3',#HREF" href="suite/Concordion.html"&gt;Test using ConcordionTestCase&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite3',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
-        </pre>
-
-    <p>The result should be:</p>
-
-<pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite3',#HREF" href="suite/Concordion.html"&gt;Test using ConcordionTestCase&lt;/a&gt;
-       and run it in &lt;i concordion:runSuite="'suite3',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    
+<pre class="html" concordion:assertEquals="render(#snippet)">Run it in &lt;i concordion:runSuite="'suite3',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt;
-    class selendion.commands.Suite.suite.Concordion is not a SelendionTestCase.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
-
-</pre>
-</div>
+    class selendion.commands.Suite.suite.Concordion is not a SelendionTestCase.&lt;/li&gt; &lt;/ol&gt; thread.</pre></div>
 
 <div class="example">
+    <h3>Example</h3>
 
-    <h3>Test throws an exception</h3>
+    <p>Test throws an exception</p>
 
-    <p>
-        If we run a suite containing a test that has a an error in it so it will throw an exception, we expect to see
-        that exception.:
+    <p> If we add one test that will throws an expection to a suite:
+        <code concordion:execute="render(#TEXT)">
+            Build a suite consisting of &lt;a concordion:addToSuite="'suite4',#HREF" href="suite/Error.html"&gt;Test that throws an exception&lt;/a&gt;
+        </code>
     </p>
 
-        <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite4',#HREF" href="suite/Error.html"&gt;Test that throws an exception&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite4',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
-        </pre>
 
-    <p>The result should be:</p>
+    <p> And then run that suite:</p>
+    <pre concordion:set="#snippet">Run it in &lt;i concordion:runSuite="'suite4',#TEXT"&gt;1&lt;/i&gt; thread.</pre>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">
-            &lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite4',#HREF" href="suite/Error.html"&gt;Test that throws an exception&lt;/a&gt;
-               and run it in &lt;i concordion:runSuite="'suite4',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+
+    <p>Then we would expect to see the exception</p>
+    <pre class="html" concordion:assertEquals="render(#snippet)">Run it in &lt;i concordion:runSuite="'suite4',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt;
-    Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
-        </pre>
+    Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt; &lt;/ol&gt; thread.</pre>
 </div>
-<div class="example">
+<!--<div class="example">
+    <h3>Example</h3>
 
-    <h3>Test that fails but is not expected to pass</h3>
+    <p>?????</p>
 
-    <p>
-        If we run a suite containing a test that has a an failure, but is marked as not expected to pass, then we should see success:
+    <p> If we add one test that will ??? to a suite:
+        <code concordion:execute="render(#TEXT)">
+            ???
+        </code>
     </p>
 
-        <pre concordion:set="#snippet">
-&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite5',#HREF" href="suite/NotExpectedToPass.html"&gt;Not Expected To Pass Demo&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite5',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
-        </pre>
 
-    <p>The result should be:</p>
+    <p> And then run that suite:</p>
+    <pre concordion:set="#snippet">????</pre>
 
-<pre class="html" concordion:assertEquals="render(#snippet)">&lt;p&gt;Build a suite consisting of &lt;a concordion:addToSuite="'suite5',#HREF"
-    href="suite/NotExpectedToPass.html"&gt;Not Expected To Pass Demo&lt;/a&gt;
-   and run it in &lt;i concordion:runSuite="'suite5',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
+    <p>Then we would expect the test to report success:</p>
+    <pre class="html" concordion:assertEquals="render(#snippet)">???</pre>
+</div>-->
+
+<div class="example">
+    <h3>Example</h3>
+
+    <p>Test that fails but is not expected to pass</p>
+
+    <p> If we add one test that has a an failure, but is marked as not expected to pass to a suite:
+        <code concordion:execute="render(#TEXT)">
+            Build a suite consisting of &lt;a concordion:addToSuite="'suite5',#HREF" href="suite/NotExpectedToPass.html"&gt;Not Expected To Pass Demo&lt;/a&gt;
+        </code>
+    </p>
+
+
+    <p> And then run that suite:</p>
+    <pre concordion:set="#snippet">Run it in &lt;i concordion:runSuite="'suite5',#TEXT"&gt;1&lt;/i&gt; thread.</pre>
+
+    <p>Then we would expect the test to report success:</p>
+    <pre class="html" concordion:assertEquals="render(#snippet)">Run it in &lt;i concordion:runSuite="'suite5',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt;
-    &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;  &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
-</pre>
+    &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;  &lt;/li&gt; &lt;/ol&gt; thread.</pre>
 </div>
 <div class="example">
+    <h3>Example</h3>
 
-    <h3>Test that passes but is not expected to pass</h3>
+    <p>Test that passes but is not expected to pass</p>
 
-    <p>
-        If we run a suite containing a test that passes, but is marked as not expected to pass,
-        then we should see failure:
+    <p> If we add one test that that passes, but is marked as not expected to pass to a suite:
+        <code concordion:execute="render(#TEXT)">
+            Add &lt;a href="support/NotExpectedToPassButPassing.html" concordion:addToSuite="'suite6',#HREF"&gt;Not expected to pass but passing&lt;/a&gt; to suite
+
+        </code>
     </p>
 
-        <pre concordion:set="#snippet">
 
-            &lt;p&gt;Add &lt;a href="support/NotExpectedToPassButPassing.html" concordion:addToSuite="'suite6',#HREF"&gt;Not expected to pass but passing&lt;/a&gt; to suite then run in &lt;b concordion:runSuite="'suite6',#TEXT"&gt;1&lt;/b&gt; thread&lt;/p&gt;
+    <p> And then run that suite:</p>
+    <pre concordion:set="#snippet">Run in &lt;b concordion:runSuite="'suite6',#TEXT"&gt;1&lt;/b&gt; thread.
+</pre>
 
-        </pre>
-
-    <p>The result should be:</p>
-
-<pre class="html" concordion:assertEquals="render(#snippet)">
-
-    &lt;p&gt;Add &lt;a href="support/NotExpectedToPassButPassing.html"
-    concordion:addToSuite="'suite6',#HREF"&gt;Not expected to pass but passing&lt;/a&gt;
-    to suite then run in &lt;b concordion:runSuite="'suite6',#TEXT"&gt;1&lt;/b&gt; &lt;ol&gt; &lt;li&gt;
+    <p>Then we would expect the test to report faiure:</p>
+    <pre class="html" concordion:assertEquals="render(#snippet)">Run in &lt;b concordion:runSuite="'suite6',#TEXT"&gt;1&lt;/b&gt; &lt;ol&gt; &lt;li&gt;
     &lt;a href="support/NotExpectedToPassButPassing.html" class="failure"&gt;Not Expected To Pass But Passing&lt;/a&gt;
     &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;
-    Test is not expected to pass, yet is passing&lt;/li&gt; &lt;/ol&gt; thread&lt;/p&gt;
-
-</pre>
+    Test is not expected to pass, yet is passing&lt;/li&gt; &lt;/ol&gt; thread.</pre>
 </div>
+
+
 <div class="example">
 
     <h3>Test that fails and is expected to pass</h3>
@@ -433,11 +458,7 @@ If we clear the suite, all previous tests should be removed     </p>
     &lt;p&gt;Build  &lt;i concordion:set="#suiteName"&gt;suiteA&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; and
                 &lt;i concordion:set="#suiteName"&gt;suiteB&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF" href="suite/WithoutClass.html"&gt;Simple Test&lt;/a&gt; &lt;/p&gt;
        &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suiteA&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
-       &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suiteB&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
-
-
-    
-</pre>
+       &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suiteB&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;</pre>
 </div>
 
 </body>
