@@ -73,6 +73,28 @@ greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)" class=
 
 
 </div>
+<div class="example">
+    So put together, this looks like:
+
+        <ul concordion:execute="#men =getList()">
+            <li concordion:execute="#men.add(#TEXT)">Bob</li>
+            <li concordion:execute="#men.add(#TEXT)">James</li>
+        </ul>
+    <div class="example">
+    
+    <span concordion:forEach="#firstName : #men">
+        <p> When user <i concordion:echo="#firstName"></i> logs in, the
+            greeting will be:
+            <b concordion:assertEquals="greetingFor(#firstName)">Hello Sir!</b>
+        </p>
+    </span>
+    </div>
+    <div class="example">
+
+        <p> When user <i concordion:set="#firstName">Susan</i> logs in, the
+            greeting will be: <b concordion:assertEquals="greetingFor(#firstName)">Hello Madam!</b></p>
+    </div>
+</div>
 
 </body>
 </html>

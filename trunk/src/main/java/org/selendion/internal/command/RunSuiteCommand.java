@@ -74,10 +74,14 @@ public class RunSuiteCommand extends AbstractCommand {
         } else {
             testSuite = new ActiveTestSuiteRestricted(threads);
         }
-        if (suites.get(suiteName) != null) {
-            for (TestDescription test : (Vector<TestDescription>) suites.get(suiteName)) {
-                testSuite.addTestSuite(test.getClazz());
-            }
+        Vector<TestDescription> suite;
+        if (suites.get(suiteName) == null) {
+            suite = new Vector<TestDescription>();
+        } else {
+            suite = (Vector<TestDescription>) suites.get(suiteName);
+        }
+        for (TestDescription test : suite) {
+            testSuite.addTestSuite(test.getClazz());
         }
         TestResult testResult = new TestResult();
         SuiteListener suiteListener = new SuiteListener();
@@ -102,30 +106,28 @@ public class RunSuiteCommand extends AbstractCommand {
         } else {
             list = new Element("ol");
         }
-        if (suites.get(suiteName) != null) {
-            for (TestDescription test : (Vector<TestDescription>) suites.get(suiteName)) {
-                Element anchor = new Element("a");
-                anchor.addAttribute("href", test.getFile());
-                anchor.appendText(test.getTitle());
-                Element li = new Element("li");
-                li.appendChild(anchor);
-                list.appendChild(li);
-                if (!(Boolean) expectedToPass.get(test.getClazz())) {
-                    Element b = new Element("b");
-                    b.addAttribute("class", "attention");
-                    b.appendText(" This test is not expected to pass. ");
-                    li.appendChild(b);
-                }
-                if (failures.containsKey(test.getClazz())) {
-                    resultRecorder.record(Result.FAILURE);
-                    announceFailure(anchor);
-                    li.appendText(" " + failures.get(test.getClazz()));
-                } else {
-                    resultRecorder.record(Result.SUCCESS);
-                    announceSuccess(anchor);
-                }
-
+        for (TestDescription test : suite) {
+            Element anchor = new Element("a");
+            anchor.addAttribute("href", test.getFile());
+            anchor.appendText(test.getTitle());
+            Element li = new Element("li");
+            li.appendChild(anchor);
+            list.appendChild(li);
+            if (!(Boolean) expectedToPass.get(test.getClazz())) {
+                Element b = new Element("b");
+                b.addAttribute("class", "attention");
+                b.appendText(" This test is not expected to pass. ");
+                li.appendChild(b);
             }
+            if (failures.containsKey(test.getClazz())) {
+                resultRecorder.record(Result.FAILURE);
+                announceFailure(anchor);
+                li.appendText(" " + failures.get(test.getClazz()));
+            } else {
+                resultRecorder.record(Result.SUCCESS);
+                announceSuccess(anchor);
+            }
+
         }
         element.insertAfter(list);
     }
