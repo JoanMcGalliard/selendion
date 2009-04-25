@@ -1,0 +1,52 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head>
+    <link href="../../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>Clear Suite Command</title>
+</head>
+<body>
+<h1>Clear Suite Command</h1>
+
+
+<div class="example">
+    <H3>Clear the suite</H3>
+
+    <p>
+        If we clear the suite, all previous tests should be removed </p>
+        <pre concordion:set="#snippet">
+&lt;p&gt;Add the file
+    &lt;a concordion:addToSuite="'suite11',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
+
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite11',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+
+
+&lt;p&gt; Then &lt;i concordion:clearSuite="'suite11'"&gt;clear the suite&lt;/i&gt;.&lt;/p&gt;
+&lt;p&gt;Add the file
+    &lt;a concordion:addToSuite="'suite11',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
+
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite11',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+</pre>
+
+    <p>Looks like this:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+
+    &lt;p&gt;Add the file
+        &lt;a concordion:addToSuite="'suite11',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
+
+    &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite11',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+
+
+    &lt;p&gt; Then &lt;i concordion:clearSuite="'suite11'"&gt;clear the suite&lt;/i&gt;.&lt;/p&gt;
+    &lt;p&gt;Add the file
+        &lt;a concordion:addToSuite="'suite11',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; to the test suite.&lt;/p&gt;
+
+    &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite11',#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
+
+
+
+</pre>
+
+
+</div>
+</body>
+</html> 

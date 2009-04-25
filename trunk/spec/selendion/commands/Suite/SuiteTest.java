@@ -9,13 +9,9 @@ import org.selendion.integration.concordion.SelendionTestCase;
 import concordion.test.concordion.TestRig;
 
 import java.util.Date;
-import java.util.ArrayList;
 
 public class SuiteTest extends SelendionTestCase {
-    public ArrayList getList() {
-        return  new java.util.ArrayList();
-    }
-    
+
     private long runningTime=-1;
     private TestRig testRig;
     public SuiteTest () {

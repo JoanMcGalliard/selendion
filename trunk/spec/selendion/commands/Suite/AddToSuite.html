@@ -1,0 +1,68 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head>
+    <link href="../../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>Add To Suite Command</title>
+</head>
+<body>
+<h1>Add To Suite Command</h1>
+
+
+
+<H2>addToSuite</H2>
+
+
+<p>
+    To add to a suite, this is the syntax:
+</p>
+
+<p>
+    <code>
+        concordion:addToSuite="<b>suiteName</b>,<b>path</b>"
+    </code>
+</p>
+
+<p>
+    where <code>suiteName</code> is the the name of the suite (you can create multiple suites and run them separately),
+    and <code>path</code> is the name of the file or directory you want add to the suite. Both can be literals,
+    variables
+    or special variables. The suite name should be a string and the path should be a relative path to a file or a
+    directory,
+    or an absolute path to one within this package. Suites do not have to be initialized, if a new name is used, a new
+    suite
+    is automatically started.
+</p>
+
+
+<div class="example">
+
+    <h3>Examples</h3>
+
+    <p> The following should all successfully added to suite:
+    </p>
+    <ul concordion:execute="#snippets =getList()">
+        <li><code concordion:execute="#snippets.add(#TEXT)">
+            Add &lt;i concordion:addToSuite="'mySuite','suite/Sleep.html'"&gt;Sleep Test&lt;/i&gt; to the suite.
+        </code></li>
+        <li><code concordion:execute="#snippets.add(#TEXT)">
+            Add &lt;a concordion:addToSuite="'mySuite',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; to the
+            suite.
+        </code></li>
+        <li><code concordion:execute="#snippets.add(#TEXT)">
+            Add to &lt;i concordion:set="#suiteName"&gt;mySuite&lt;/i&gt;: &lt;a
+            concordion:addToSuite="#suiteName,#HREF"
+            href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;.
+        </code></li>
+        <li><code concordion:execute="#snippets.add(#TEXT)">
+            Add to &lt;i concordion:set="#suiteName"&gt;mySuite&lt;/i&gt;: &lt;a
+            concordion:addToSuite="#suiteName,#HREF"
+            href="suite"&gt;Suite Directory&lt;/a&gt;.
+        </code></li>
+    </ul>
+    <span concordion:forEach="#snippet : #snippets">
+<p class="html" concordion:assertEquals="render(#snippet)"><code concordion:echo="#snippet"/></p>
+        </span>
+
+</div>
+
+</body>
+</html> 
