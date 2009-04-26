@@ -21,7 +21,7 @@
     </p>
 
         <pre concordion:set="#snippet">
-&lt;ul concordion:execute="#men =getList()"&gt;
+&lt;ul concordion:execute="#men =newList()"&gt;
         &lt;li concordion:execute="#men.add(#TEXT)"&gt;Bob&lt;/li&gt;
         &lt;li concordion:execute="#men.add(#TEXT)"&gt;James&lt;/li&gt;
         &lt;li concordion:execute="#men.add(#TEXT)"&gt;Mary&lt;/li&gt;
@@ -39,7 +39,7 @@ greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)"&gt;Hel
     <p>Looks like this:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-&lt;ul concordion:execute="#men =getList()"&gt;
+&lt;ul concordion:execute="#men =newList()"&gt;
         &lt;li concordion:execute="#men.add(#TEXT)"&gt;Bob&lt;/li&gt;
         &lt;li concordion:execute="#men.add(#TEXT)"&gt;James&lt;/li&gt;
         &lt;li concordion:execute="#men.add(#TEXT)"&gt;Mary&lt;/li&gt;
@@ -76,7 +76,7 @@ greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)" class=
 <div class="example">
     So put together, this looks like:
 
-        <ul concordion:execute="#men =getList()">
+        <ul concordion:execute="#men =newList()">
             <li concordion:execute="#men.add(#TEXT)">Bob</li>
             <li concordion:execute="#men.add(#TEXT)">James</li>
         </ul>

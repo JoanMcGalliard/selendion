@@ -13,6 +13,8 @@ import org.selendion.internal.SelendionResultRecorder;
 import org.selendion.Selendion;
 import org.selendion.integration.BrowserDriver;
 
+import java.util.ArrayList;
+
 
 public abstract class SelendionTestCase extends ConcordionTestCase {
     public boolean isExpectedToPass() {
@@ -48,6 +50,10 @@ public abstract class SelendionTestCase extends ConcordionTestCase {
         resultSummary.print(System.out, this);
         return resultSummary.getResultSpecification().getCommandCall().getElement().getChildElements("body")[0].getChildElements();
     }
+    public ArrayList newList() {
+        return new java.util.ArrayList();
+    }
+
 
 
 }

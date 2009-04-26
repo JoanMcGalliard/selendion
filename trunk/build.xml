@@ -27,6 +27,13 @@
                     recurse="true"/>
         </svn>
     </target>
+    <target name="svn.htmlMimeTypes">
+        <svn username="${googleUser}"
+             password="${googlePassword}">
+            <propset name="svn:mime-type" path="${basedir}/spec" value="text/html"
+                      recurse="true"/>
+        </svn>
+    </target>
 
 
     <property name="productName" value="selendion"/>

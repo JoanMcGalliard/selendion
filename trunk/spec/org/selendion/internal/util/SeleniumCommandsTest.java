@@ -7,9 +7,6 @@ package org.selendion.internal.util;
 import org.selendion.internal.SelendionEvaluator;
 import org.selendion.integration.concordion.SelendionTestCase;
 
-import java.util.ArrayList;
-
-
 public class SeleniumCommandsTest extends SelendionTestCase {
 
     public void setUp(String browser, String baseUrl, String page)  {
@@ -28,10 +25,7 @@ public class SeleniumCommandsTest extends SelendionTestCase {
         }
 
     }
-    public ArrayList getList() {
-        return  new java.util.ArrayList();
-    }
-    
+
     public void stop() {
         seleniumIdeReader.stop();
     }

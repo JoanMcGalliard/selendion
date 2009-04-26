@@ -4,8 +4,6 @@
 
 package examples.commands;
 
-import java.util.ArrayList;
-
 public class ForEachTest extends AbstractTestSupport {
 
     public String greetingFor(String firstName) {
@@ -16,8 +14,5 @@ public class ForEachTest extends AbstractTestSupport {
         }
     }
 
-    public ArrayList getList() {
-        return new java.util.ArrayList();
-    }
 
 }
