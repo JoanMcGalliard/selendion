@@ -10,7 +10,7 @@ import java.util.HashSet;
 
 public abstract class AbstractTogglingCommand extends AbstractCommand {
     private static final String TOGGLING_SCRIPT_RESOURCE_PATH = "/org/selendion/internal/resource/selenium-visibility-toggler.js";
-    private Set<Element> rootElementsWithScript = new HashSet<Element>();
+    private final Set<Element> rootElementsWithScript = new HashSet<Element>();
     private static int buttonId = 1;
 
     public static void resetButtonCount() {

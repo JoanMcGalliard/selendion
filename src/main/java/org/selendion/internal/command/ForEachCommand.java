@@ -18,7 +18,7 @@ public class ForEachCommand extends AbstractCommand {
 
     // This class is taken from Xcordion
 
-    private DocumentParser documentParser;
+    private final DocumentParser documentParser;
 
     public ForEachCommand(DocumentParser documentParser) {
         this.documentParser = documentParser;

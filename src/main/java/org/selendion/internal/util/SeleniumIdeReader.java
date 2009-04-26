@@ -27,22 +27,22 @@ import java.util.regex.Matcher;
 public class SeleniumIdeReader extends junit.framework.TestCase {
     private BrowserDriver browser;
     private boolean lastTestResult=true;
-    private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
-    private String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
+    private static final String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
+    private final String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
 
-    public void start(String seleniumHost, int seleniumPort, String browser, String baseUrl) {
-        this.browser = new SeleniumDriver(
-                seleniumHost, seleniumPort, browser,
+    public void start(String seleniumHost, int seleniumPort, String browserName, String baseUrl) {
+        browser = new SeleniumDriver(
+                seleniumHost, seleniumPort, browserName,
                 baseUrl);
-        this.browser.start();
+        browser.start();
     }
     public void start(String baseUrl) {
         browser = new HtmlUnitDriver(baseUrl);
-        this.browser.start();        
+        browser.start();
     }
 
     public void stop() {
-            browser.stop();
+        browser.stop();
     }
 
 
@@ -911,8 +911,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     }
 
     protected class CommandResult {
-        private boolean success;
-        private String message;
+        private final boolean success;
+        private final String message;
 
         public CommandResult(boolean success, String message) {
             this.success = success;

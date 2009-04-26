@@ -24,7 +24,7 @@ import junit.framework.TestFailure;
 
 
 public class ClearSuiteCommand extends AbstractCommand {
-    private Hashtable suites;
+    private final Hashtable suites;
 
 
     public ClearSuiteCommand(Hashtable suites) {

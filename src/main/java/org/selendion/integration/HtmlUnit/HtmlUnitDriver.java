@@ -18,13 +18,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HtmlUnitDriver implements BrowserDriver {
-    Page page = null;
+    private Page page = null;
     private Page old_page;
     private String timeout="30000";
-    static final String nbsp = String.format("%c", 160);
-    private String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
-    private         final List collectedAlerts = new ArrayList();
+    static private final String nbsp = String.format("%c", 160);
+    private final String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
+    private final List collectedAlerts = new ArrayList();
 
+    @SuppressWarnings("unchecked")
     public HtmlUnitDriver(String baseUrl) {
         webClient = new WebClient();
         webClient.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
@@ -32,8 +33,8 @@ public class HtmlUnitDriver implements BrowserDriver {
         this.baseUrl = baseUrl;
     }
 
-    private WebClient webClient;
-    private String baseUrl;
+    private final WebClient webClient;
+    private final String baseUrl;
     private Evaluator evaluator;
 
     public void passVariablesIn(Evaluator evaluator) {
@@ -65,9 +66,10 @@ public class HtmlUnitDriver implements BrowserDriver {
         return string;
     }
 
-    private Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
+    private final Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
 
     public void stop() {
+        webClient.closeAllWindows();
 
     }
 
@@ -172,7 +174,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     private HtmlElement getHtmlElement(HtmlPage page, String key) {
 
         if (key.startsWith("xPath=")) {
-            List<?> list = ((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", ""));
+            List<?> list = page.getByXPath(key.replaceFirst("xPath=", ""));
             if (list.size() == 0) {
                 return null;
             }
@@ -185,14 +187,14 @@ public class HtmlUnitDriver implements BrowserDriver {
                 return null;
             }
         } else if (key.startsWith("name=")) {
-            List<HtmlElement> list = ((HtmlPage) page).getHtmlElementsByName(key.replaceFirst("name=", ""));
+            List<HtmlElement> list = page.getElementsByIdAndOrName(key.replaceFirst("^name=", ""));
             if (list.size() == 0) {
                 return null;
             }
 
             return list.get(0);
         } else if (key.startsWith("link=")) {
-            List<HtmlAnchor> anchors = ((HtmlPage) page).getAnchors();
+            List<HtmlAnchor> anchors = page.getAnchors();
             int i = 0;
             while (i < anchors.size()) {
                 if (anchors.get(i).getTextContent().equals(key.replaceFirst("link=", ""))) {
@@ -206,7 +208,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             throw new RuntimeException(IMPLEMENTATION_REQUIRED + key);
         } else if (key.startsWith("//")) {
 
-            List<?> list = ((HtmlPage) page).getByXPath(key);
+            List<?> list = page.getByXPath(key);
             if (list.size() == 0) {
                 return null;
             }
@@ -219,7 +221,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             //pass through
         }
         try {
-            return ((HtmlPage) page).getHtmlElementsByName(key).get(0);
+            return page.getElementsByIdAndOrName(key).get(0);
         }
         catch (Throwable e) {
             return null;
@@ -666,7 +668,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     public Object getExpression(String arg1) {
         Matcher m = Pattern.compile("javascript\\{(.*)\\}").matcher(arg1);
         if (!m.matches()) {
-            throw new RuntimeException("Can't handle getExpression(\""+arg1+"\")");
+            throw new RuntimeException(IMPLEMENTATION_REQUIRED + "Can't handle getExpression(\""+arg1+"\")");
         }
         return ((HtmlPage) page).executeJavaScript(m.group(1)).getJavaScriptResult();
     }
@@ -792,6 +794,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isEditable(String arg1) {
+        
         throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isEditable");
     }
 
@@ -823,7 +826,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         } catch (IOException e) {
             // pass thru
         }
-        throw new RuntimeException("Can't handle isTextPresent " + arg1);
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "Can't handle isTextPresent " + arg1);
     }
 
     private static String slurp(InputStream in) throws IOException {

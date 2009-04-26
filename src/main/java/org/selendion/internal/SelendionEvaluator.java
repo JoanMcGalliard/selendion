@@ -15,7 +15,7 @@ import java.util.Enumeration;
 import ognl.Ognl;
 
 public class SelendionEvaluator extends SimpleEvaluator {
-    private static String PREFIX = "selendion.";
+    private static final String PREFIX = "selendion.";
     public SelendionEvaluator(Object o) {
         super(o);
         Enumeration<?> propertyNames = System.getProperties().propertyNames();

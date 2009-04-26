@@ -24,9 +24,9 @@ import nu.xom.Builder;
 
 
 public class AddToSuiteCommand extends AbstractCommand {
-    private Hashtable suites;
+    private final Hashtable suites;
     private Class<? extends SelendionTestCase> baseClass;
-    private SelendionClassLoader loader = new SelendionClassLoader();
+    private final SelendionClassLoader loader = new SelendionClassLoader();
 
 
     public AddToSuiteCommand(Hashtable suites) {

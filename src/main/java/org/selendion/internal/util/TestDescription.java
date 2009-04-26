@@ -9,12 +9,12 @@ import org.selendion.internal.SelendionEvaluator;
 import org.concordion.api.Evaluator;
 
 public class TestDescription {
-    private String htmlFile;
-    private String title;
-    private Class<? extends SelendionTestCase> clazz;
-    private Evaluator evaluator;
+    private final String htmlFile;
+    private final String title;
+    private final Class<? extends SelendionTestCase> clazz;
+    private final Evaluator evaluator;
 
-    private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
+    private static final String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
 
     public TestDescription(String htmlFile, String title, Class<? extends SelendionTestCase> clazz, Evaluator evaluator) {
         this.htmlFile = htmlFile;

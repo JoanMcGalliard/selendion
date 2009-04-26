@@ -17,7 +17,7 @@ import org.concordion.internal.util.Announcer;
 
 public class AssertEqualsCommand extends AbstractCommand {
 
-    private Announcer<AssertEqualsListener> listeners = Announcer.to(AssertEqualsListener.class);
+    private final Announcer<AssertEqualsListener> listeners = Announcer.to(AssertEqualsListener.class);
     private final Comparator<Object> comparator;
 
     public AssertEqualsCommand() {

@@ -11,7 +11,7 @@ import ognl.Ognl;
 import ognl.OgnlException;
 
 public class StartBrowserCommand extends AbstractCommand {
-    private SeleniumIdeReader seleniumIdeReader;
+    private final SeleniumIdeReader seleniumIdeReader;
 
     public StartBrowserCommand(SeleniumIdeReader seleniumIdeReader) {
         this.seleniumIdeReader = seleniumIdeReader;
