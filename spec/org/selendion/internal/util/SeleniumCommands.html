@@ -5,13 +5,33 @@
 </head>
 <body>
 <h1>Selenium/HtmlUnit Commands Test</h1>
+<p>Selendion takes files generated from the Selenium IDE, and sends them to whatever browser you choose, using either
+Selenium or HtmlUnit.  All standard Selenium IDE commands can be suffixed with <code>IfAvailable</code>.  If this is present,
+then the command will not fail if the element is not found or another error occurs.  If an error occurs, the command will pass
+but nothing will happen.</p>
+
+<p>This allows you to write code like this</p>
+<table border="1">
+    <tr>
+        <td>store</td>
+        <td>loggedInUsername</td>
+        <td>not found</td>
+    </tr>
+    <tr>
+        <td>storeText</td>
+        <td>xPath=/html/body/p/span[3]</td>
+        <td>loggedInUsername</td>
+    </tr>
+</table>
+
+<p>If the </p>
 
 <p>This is to make sure that Selendion can understand all selenium commands from the <a
         href="http://selenium-core.openqa.org/reference.html">
     selenium documentation</a> : </p>
 
 <p>For these tools:</p>
-<ul concordion:execute="#browserTypes =getList()">
+<ul concordion:execute="#browserTypes =newList()">
     <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
     <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
 </ul>

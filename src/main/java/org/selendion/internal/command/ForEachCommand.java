@@ -5,9 +5,7 @@
 package org.selendion.internal.command;
 
 import org.concordion.internal.command.AbstractCommand;
-import org.concordion.internal.command.VerifyRowsListener;
 import org.concordion.internal.util.Check;
-import org.concordion.internal.util.Announcer;
 import org.concordion.internal.*;
 import org.concordion.api.*;
 
@@ -27,8 +25,6 @@ public class ForEachCommand extends AbstractCommand {
     }
 
 
-    @SuppressWarnings("unchecked")
-    @Override
     public void execute(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
         Pattern pattern = Pattern.compile("(#.+?) *: *(.+)");
         Matcher matcher = pattern.matcher(commandCall.getExpression());
@@ -46,7 +42,6 @@ public class ForEachCommand extends AbstractCommand {
 
         Element element = commandCall.getElement();
 
-        Element parent = element.getParent();
         Element placeholder = new Element("span");
 
         Element prototype = element.copy();
