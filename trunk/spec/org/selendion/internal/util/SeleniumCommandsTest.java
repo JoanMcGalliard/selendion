@@ -9,18 +9,18 @@ import org.selendion.integration.concordion.SelendionTestCase;
 
 public class SeleniumCommandsTest extends SelendionTestCase {
 
-    public void setUp(String browser, String baseUrl, String page)  {
+    public void setUp(String browser, String baseUrl, String page) {
         if (browser.equals("SELENIUM")) {
-        seleniumIdeReader= new SeleniumIdeReader();
-        seleniumIdeReader.start( "localhost", 5555, System.getProperty("selendion.browser") , baseUrl);
-        seleniumIdeReader.execute("open", page, "");
-        } else         if (browser.equals("HTMLUNIT")) {
-            seleniumIdeReader= new SeleniumIdeReader();
-            seleniumIdeReader.start(baseUrl );
+            seleniumIdeReader = new SeleniumIdeReader();
+            seleniumIdeReader.start("localhost", 5555, System.getProperty("selendion.browser"), baseUrl);
+            seleniumIdeReader.execute("open", page, "");
+        } else if (browser.equals("HTMLUNIT")) {
+            seleniumIdeReader = new SeleniumIdeReader();
+            seleniumIdeReader.start(baseUrl);
             seleniumIdeReader.execute("open", page, "");
             seleniumIdeReader.getBrowser().passVariablesIn(new SelendionEvaluator(this));
         } else {
-            throw new RuntimeException ("Unknown browser type " + browser);
+            throw new RuntimeException("Unknown browser type " + browser);
 
         }
 

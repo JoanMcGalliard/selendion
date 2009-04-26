@@ -17,8 +17,8 @@ import java.net.URL;
 import java.io.File;
 
 public class RunSelendionCommand extends AbstractTogglingCommand {
-    private Announcer<RunSelendionListener> listeners = Announcer.to(RunSelendionListener.class);
-    private SeleniumIdeReader seleniumIdeReader;
+    private final Announcer<RunSelendionListener> listeners = Announcer.to(RunSelendionListener.class);
+    private final SeleniumIdeReader seleniumIdeReader;
     private Class<? extends SelendionTestCase> baseClass;
 
     public RunSelendionCommand(SeleniumIdeReader seleniumIdeReader) {
@@ -56,7 +56,7 @@ public class RunSelendionCommand extends AbstractTogglingCommand {
             hide = (IncludeDisposition) params[1];
             }
             catch (Exception e) {
-                throw new RuntimeException((String)params[1] + " not allowed.  Allowable values IMMEDIATE, CLICKABLE and LINK");
+                throw new RuntimeException(params[1] + " not allowed.  Allowable values IMMEDIATE, CLICKABLE and LINK");
             }
 
         }

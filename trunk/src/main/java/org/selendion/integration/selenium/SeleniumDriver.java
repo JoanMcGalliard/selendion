@@ -68,7 +68,7 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
         return replaceVariables(arg1) ; 
     }
 
-    private static String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
+    private static final String VARIABLE_PATTERN = "[a-z][A-Za-z0-9_]*";
 
     public void passVariablesIn(Evaluator evaluator) {
            Set keys = evaluator.getKeys();
@@ -140,6 +140,6 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
     }
 
 
-    private Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
+    private final Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
 
 }

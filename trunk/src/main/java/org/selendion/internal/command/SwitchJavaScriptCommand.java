@@ -13,7 +13,7 @@ import org.selendion.internal.util.SeleniumIdeReader;
 
 public class SwitchJavaScriptCommand extends AbstractCommand {
 
-     private SeleniumIdeReader seleniumIdeReader;
+     private final SeleniumIdeReader seleniumIdeReader;
 
     public SwitchJavaScriptCommand(SeleniumIdeReader seleniumIdeReader) {
         this.seleniumIdeReader = seleniumIdeReader;

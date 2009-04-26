@@ -11,7 +11,7 @@ import org.concordion.api.ResultRecorder;
 import org.selendion.internal.util.SeleniumIdeReader;
 
 public class StopSeleniumCommand extends AbstractCommand {
-    private SeleniumIdeReader seleniumIdeReader;
+    private final SeleniumIdeReader seleniumIdeReader;
 
     public StopSeleniumCommand(SeleniumIdeReader seleniumIdeReader) {
         this.seleniumIdeReader=seleniumIdeReader;

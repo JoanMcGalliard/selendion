@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public class RunSeleniumCommand extends AbstractTogglingCommand {
 
-    private SeleniumIdeReader seleniumIdeReader;
-    private Announcer<RunSeleniumListener> listeners = Announcer.to(RunSeleniumListener.class);
+    private final SeleniumIdeReader seleniumIdeReader;
+    private final Announcer<RunSeleniumListener> listeners = Announcer.to(RunSeleniumListener.class);
     private Set<Element> rootElementsWithScript = new HashSet<Element>();
 
 

@@ -10,7 +10,7 @@ import javassist.*;
 import java.util.Hashtable;
 
 public class SelendionClassLoader extends ClassLoader {
-    private static Hashtable classes = new Hashtable();
+    private static final Hashtable classes = new Hashtable();
 
 
     @SuppressWarnings("unchecked")

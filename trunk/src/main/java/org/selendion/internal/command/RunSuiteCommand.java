@@ -41,8 +41,8 @@ public class RunSuiteCommand extends AbstractCommand {
         }
     }
 
-    private Announcer<RunSuiteListener> listeners = Announcer.to(RunSuiteListener.class);
-    private Hashtable suites;
+    private final Announcer<RunSuiteListener> listeners = Announcer.to(RunSuiteListener.class);
+    private final Hashtable suites;
 
 
     public RunSuiteCommand(Hashtable suites) {

@@ -34,12 +34,12 @@ public class SelendionBuilder extends ConcordionBuilder {
     private static final String EMBEDDED_STYLESHEET_RESOURCE = "/org/selendion/internal/resource/embedded.css";
     private Evaluator evaluator;
 
-    protected AssertEqualsCommand assertEqualsCommand = new AssertEqualsCommand();
+    private AssertEqualsCommand assertEqualsCommand = new AssertEqualsCommand();
 
     private StartBrowserCommand startBrowserCommand = new StartBrowserCommand(seleniumIdeReader);
     private RunSeleniumCommand runSeleniumCommand = new RunSeleniumCommand(seleniumIdeReader);
     private StopSeleniumCommand stopSeleniumCommand = new StopSeleniumCommand(seleniumIdeReader);
-    private SpecificationCommand specificationCommand = new SpecificationCommand();    
+    private SpecificationCommand specificationCommand = new SpecificationCommand();
     private AddToSuiteCommand addToSuiteCommand = new AddToSuiteCommand(suites);
     private RunSuiteCommand runSuiteCommand = new RunSuiteCommand(suites);
     private ClearSuiteCommand clearSuiteCommand = new ClearSuiteCommand(suites);
