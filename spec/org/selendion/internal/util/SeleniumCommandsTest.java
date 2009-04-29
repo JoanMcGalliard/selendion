@@ -42,8 +42,8 @@ public class SeleniumCommandsTest extends SelendionTestCase {
         arg2 = seleniumIdeReader.getBrowser().replaceVariables(arg2);
 
         try {
-        result = seleniumIdeReader.execute(command, arg1.replaceAll("\n *", "\\\n").trim(),
-                arg2.replaceAll("\n *", "\\\n").trim()); }
+        result = seleniumIdeReader.execute(command, arg1.trim(),
+                arg2.trim()); }
         catch (Throwable e) {
             exception=true;
         }
