@@ -57,7 +57,7 @@
 
     <target name="build"
             description="Builds everything from scratch"
-            depends="clean, compile, run.tests, build.jar, build.srczip, build.dependencies.jar"
+            depends="clean,compile,run.tests,build.jar,build.srczip,build.dependencies.jar"
             />
 
     <target name="start.selenium"
