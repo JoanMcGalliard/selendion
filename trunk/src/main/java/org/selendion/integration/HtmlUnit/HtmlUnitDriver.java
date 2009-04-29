@@ -90,8 +90,10 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isVisible(String arg1) {
-        StyledElement element = (StyledElement) getHtmlElement(arg1);
-        return ! element.getStyleAttribute().contains("display: none;");
+//        StyledElement element = (StyledElement) getHtmlElement(arg1);
+//        return ! element.getStyleAttribute().contains("display: none;");
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isVisible");
+
     }
 
     public void setTimeout(String timeout) {
@@ -174,7 +176,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     private HtmlElement getHtmlElement(HtmlPage page, String key) {
 
         if (key.startsWith("xPath=")) {
-            List<?> list = page.getByXPath(key.replaceFirst("xPath=", ""));
+            List<?> list = ((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", ""));
             if (list.size() == 0) {
                 return null;
             }
@@ -187,14 +189,14 @@ public class HtmlUnitDriver implements BrowserDriver {
                 return null;
             }
         } else if (key.startsWith("name=")) {
-            List<HtmlElement> list = page.getElementsByIdAndOrName(key.replaceFirst("^name=", ""));
+            List<HtmlElement> list = ((HtmlPage) page).getElementsByIdAndOrName(key.replaceFirst("^name=", ""));
             if (list.size() == 0) {
                 return null;
             }
 
             return list.get(0);
         } else if (key.startsWith("link=")) {
-            List<HtmlAnchor> anchors = page.getAnchors();
+            List<HtmlAnchor> anchors = ((HtmlPage) page).getAnchors();
             int i = 0;
             while (i < anchors.size()) {
                 if (anchors.get(i).getTextContent().equals(key.replaceFirst("link=", ""))) {
@@ -208,7 +210,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             throw new RuntimeException(IMPLEMENTATION_REQUIRED + key);
         } else if (key.startsWith("//")) {
 
-            List<?> list = page.getByXPath(key);
+            List<?> list = ((HtmlPage) page).getByXPath(key);
             if (list.size() == 0) {
                 return null;
             }
@@ -743,7 +745,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             if (node.getClass().equals(HtmlBreak.class)) {
                 str += "\n";
             } else {
-                str += node.getTextContent();
+                str += node.getTextContent() + " ";
             }
         }
         return str.replaceAll(nbsp," ").replaceAll("[    \\t]+", " ").trim();
@@ -818,7 +820,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         try {
             String body = ((HtmlPage) page).getBody().asText().replaceAll("\\n\\n*", " ").
                     replaceAll("\\t\\t*", " ").replaceAll("\\r\\r*", " ").replaceAll("  *", " ").trim();
-            return body.contains(arg1.replaceAll("\\n", " "));
+            return body.contains(arg1.replaceAll("\\\\n", " "));
         }
         catch (ClassCastException cce) {
             // pass through
