@@ -32,7 +32,7 @@ but nothing will happen.</p>
 
 <p>For these tools:</p>
 <ul concordion:execute="#browserTypes =newList()">
-    <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
+  <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
     <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
 </ul>
 <div class="example" concordion:forEach="#browser : #browserTypes">
@@ -72,7 +72,7 @@ The commands in this table work with both selenium and htmlunit.
 
  <tr>
      <td>storeText</td>
-     <td>paraWithLineBreak</td>
+     <td>paraWithTwoLineBreaks</td>
      <td>para</td>
     <td>true</td>
     <td></td>
@@ -80,17 +80,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>Open main page</td>
 </tr>
  <tr>
-    <td><b>verifyText</b></td>
-    <td>paraWithLineBreak</td>
-    <td>first line second line</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>Open main page</td>
-</tr>
- <tr>
      <td>verifyText</td>
-     <td>paraWithLineBreak</td>
+     <td>paraWithTwoLineBreaks</td>
      <td>${para}</td>
     <td>true</td>
     <td></td>

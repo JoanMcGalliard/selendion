@@ -114,7 +114,7 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
     public void store(String name, Object value) {
         Class clazz = value.getClass();
         if (clazz == String.class) {
-            getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", " ").replaceAll("\\\\", "\\\\\\\\").replaceAll("'", "\\\\'")));
+            getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", "\\\\n").replaceAll("'", "\\\\'")));
         } else if (clazz == Boolean.class) {
             getEval(String.format("storedVars['%s']=%s", name, (Boolean) value ? "true" : "false"));
         } else if (clazz == String[].class) {
@@ -136,7 +136,7 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
             string = m.group(1) + getEval(String.format("storedVars['%s']", m.group(2))) + m.group(3);
             m = variablePattern.matcher(string);
         }
-        return string;
+        return string.replaceAll("\\\\n", "\n");
     }
 
 

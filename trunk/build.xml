@@ -16,7 +16,7 @@
                  password="${googlePassword}">
                 <info target="${basedir}"/>
             </svn>
-            <property name="version" value="r${svn.info.rev}"/>
+            <property name="version" value="0.5.${svn.info.rev}"/>
         </sequential>
     </target>
     <target name="svn.commit">

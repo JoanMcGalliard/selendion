@@ -403,7 +403,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 expected = arg2;
             }
 
-            expected = expected.replaceAll("([A-Za-z])\\n+([A-Za-z])", "$1 $2").replaceAll("\\n", "");
+//            expected = expected.replaceAll("([A-Za-z])\\n+([A-Za-z])", "$1 $2").replaceAll("\\n", "");
             try {
                 actualObject = browserGet(seleniumCommand, arg1, arg2);
             } catch (SeleniumIdeException e) {
@@ -413,8 +413,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 return new CommandResult((Boolean) actualObject, "");
             }
             String actual = seleniumObjectToString(actualObject);
-            actual = replaceCharacterEntities(actual)
-                    .replaceAll("([A-Za-z])\\n+([A-Za-z])", "$1 $2").replaceAll("\\n", "");
+            actual = replaceCharacterEntities(actual);
+//                    .replaceAll("([A-Za-z])\\n+([A-Za-z])", "$1 $2").replaceAll("\\n", "");
             if (actual.equals(expected)) {
                 return new CommandResult(true, "");
             } else {

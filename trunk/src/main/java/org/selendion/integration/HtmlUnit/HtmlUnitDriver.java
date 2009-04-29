@@ -63,7 +63,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             string = m.group(1) + evaluator.getVariable("#" + m.group(2)) + m.group(3);
             m = variablePattern.matcher(string);
         }
-        return string;
+        return string.replaceAll("\\n", "\n");
     }
 
     private final Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
