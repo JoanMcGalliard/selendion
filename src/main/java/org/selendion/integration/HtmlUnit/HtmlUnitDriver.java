@@ -386,6 +386,9 @@ public class HtmlUnitDriver implements BrowserDriver {
 
             if (arg1.startsWith("http://")) {
                 page = webClient.getPage(arg1);
+            } else if (!baseUrl.endsWith("/") && !arg1.startsWith("/")){
+                page = webClient.getPage(baseUrl + "/" + arg1);
+
             } else {
                 page = webClient.getPage(baseUrl + arg1);
             }

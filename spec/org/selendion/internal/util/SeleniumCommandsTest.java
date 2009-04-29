@@ -37,6 +37,10 @@ public class SeleniumCommandsTest extends SelendionTestCase {
 
     public void runSeleniumIde(String command, String arg1, String arg2)  {
         exception=false;
+        command = seleniumIdeReader.getBrowser().replaceVariables(command);
+        arg1 = seleniumIdeReader.getBrowser().replaceVariables(arg1);
+        arg2 = seleniumIdeReader.getBrowser().replaceVariables(arg2);
+
         try {
         result = seleniumIdeReader.execute(command, arg1.replaceAll("\n *", "\\\n").trim(),
                 arg2.replaceAll("\n *", "\\\n").trim()); }
