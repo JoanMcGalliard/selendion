@@ -31,7 +31,7 @@
         <svn username="${googleUser}"
              password="${googlePassword}">
             <propset name="svn:mime-type" path="${basedir}/spec" value="text/html"
-                      recurse="true"/>
+                     recurse="true"/>
         </svn>
     </target>
 
@@ -96,15 +96,15 @@
 
     <target name="clean" depends="stop.selenium, stop.webserver">
         <sequential>
-        <delete dir="${dir.build}"/>
-        <delete dir="${dir.test.output}"/>
-        <delete dir="${dir.selendion.output}"/>
-        <delete dir="${dir.classes}"/>
-        <delete dir="${dir.dist}"/>
-        <delete>
-            <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
-        </delete>
-      </sequential>
+            <delete dir="${dir.build}"/>
+            <delete dir="${dir.test.output}"/>
+            <delete dir="${dir.selendion.output}"/>
+            <delete dir="${dir.classes}"/>
+            <delete dir="${dir.dist}"/>
+            <delete>
+                <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
+            </delete>
+        </sequential>
     </target>
     <target name="build.example.zip"
             depends="svn.version,build.dependencies.jar">
@@ -230,16 +230,16 @@
 
     <target name="build.srczip" depends="svn.version">
         <sequential>
-        <mkdir dir="${dir.dist}"/>
+            <mkdir dir="${dir.dist}"/>
 
-        <zip destfile="${dir.dist}/${productName}-${version}-src.zip"
-             basedir="src/main/java"
-             compress="false">
-        </zip>
+            <zip destfile="${dir.dist}/${productName}-${version}-src.zip"
+                 basedir="src/main/java"
+                 compress="false">
+            </zip>
         </sequential>
     </target>
 
-    <target name="release" depends="svn.commit,svn.version,build.example.zip">
+    <target name="release" depends="svn.commit,svn.version,build,build.example.zip">
         <gcupload
                 username="${googleUser}"
                 password="${googlePassword}"
