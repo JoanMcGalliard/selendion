@@ -1,11 +1,87 @@
 
 <tr>
 	<td>open</td>
-	<td>test.html</td>
+	<td>/site/uk/yourdetails</td>
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>systemStatusOnline</td>
-	<td></td>
+
+      <td>verifyVisible</td>
+
+      <td>telephoneInputHelpTextHelpIcon</td>
+
+      <td></td>
+
 </tr>
+
+<tr>
+
+      <td>click</td>
+
+      <td>telephoneInputHelpTextHelpIcon</td>
+
+      <td></td>
+
+</tr>
+
+<tr>
+
+      <td>storeText</td>
+
+      <td>telephoneInputHelpText</td>
+
+      <td>telephoneHelpText</td>
+
+</tr>
+
+<tr>
+
+      <td>waitForVisible</td>
+
+      <td>overlayContent</td>
+
+      <td></td>
+
+</tr>
+
+<tr>
+
+      <td>verifyText</td>
+
+      <td>overlayInnerContent</td>
+
+      <td>${telephoneHelpText}</td>
+
+</tr>
+
+<tr>
+
+      <td>storeText</td>
+
+      <td>overlayInnerContent</td>
+
+      <td>overlayText</td>
+
+</tr>
+
+<tr>
+
+      <td>verifyTextPresent</td>
+
+      <td>${telephoneHelpText}</td>
+
+      <td></td>
+
+</tr>
+
+<tr>
+
+      <td>verifyTextPresent</td>
+
+      <td>${overlayText}</td>
+
+      <td></td>
+
+</tr>
+
+
