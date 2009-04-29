@@ -95,6 +95,7 @@
     </target>
 
     <target name="clean" depends="stop.selenium, stop.webserver">
+        <sequential>
         <delete dir="${dir.build}"/>
         <delete dir="${dir.test.output}"/>
         <delete dir="${dir.selendion.output}"/>
@@ -103,7 +104,7 @@
         <delete>
             <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
         </delete>
-
+      </sequential>
     </target>
     <target name="build.example.zip"
             depends="svn.version,build.dependencies.jar">
@@ -228,12 +229,14 @@
     </target>
 
     <target name="build.srczip" depends="svn.version">
+        <sequential>
         <mkdir dir="${dir.dist}"/>
 
         <zip destfile="${dir.dist}/${productName}-${version}-src.zip"
              basedir="src/main/java"
              compress="false">
         </zip>
+        </sequential>
     </target>
 
     <target name="release" depends="svn.commit,svn.version,build.example.zip">
@@ -269,5 +272,6 @@
                 targetfilename="${productName}-${version}-example.zip"
                 summary="Example Selendion ant project to help you get started"
                 labels="Type-Archive, OpSys-All"/>
+
     </target>
 </project>
