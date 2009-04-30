@@ -239,7 +239,7 @@
         </sequential>
     </target>
 
-    <target name="release" depends="svn.commit,svn.version,build,build.example.zip">
+    <target name="release" depends="clean,compile,run.tests,svn.commit,svn.version,build,build.example.zip">
         <gcupload
                 username="${googleUser}"
                 password="${googlePassword}"

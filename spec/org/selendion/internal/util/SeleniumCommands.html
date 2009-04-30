@@ -61,6 +61,53 @@ The commands in this table work with both selenium and htmlunit.
     <td>Test open without /</td>
 </tr>
  <tr>
+	<td>verifyText</td>
+	<td>title</td>
+	<td>Select ... Mr Mrs Miss Ms Doctor</td>
+
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Test open without /</td>
+</tr>
+ <tr>
+
+	<td>verifyText</td>
+	<td>sex</td>
+	<td>Male Female</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Test open without /</td>
+</tr>
+<tr>
+    <td><b>verifyTextPresent</b></td>
+    <td>ARA Points:\n(use -1 for novice)</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td><b>verifyTextNotPresent</b></td>
+    <td>ARA Points:\n(use -1 for novice)</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td>simple fail</td>
+</tr>
+ <tr>
+    <td><b>verifyText</b></td>
+    <td>tableBr</td>
+    <td>X: blah 1\nX: blah 2</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>selenium/htmlunit match</td>
+</tr>
+ <tr>
     <td><b>storeText</b></td>
     <td>errorList</td>
     <td>errorList</td>
@@ -87,29 +134,11 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>Open main page</td>
 </tr>
-<tr>
-    <td><b>verifyTextPresent</b></td>
-    <td>ARA Points:\n(use -1 for novice)</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>vanilla test</td>
-</tr>
-<tr>
-    <td><b>verifyTextNotPresent</b></td>
-    <td>ARA Points:\n(use -1 for novice)</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>false</td>
-    <td>simple fail</td>
-</tr>
+
 <tr>
     <td><b>verifyText</b></td>
     <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
-    <td> ARA Points:
-        (use -1 for novice)</td>
+    <td>Height</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -120,7 +149,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
     <td>random text</td>
     <td>false</td>
-    <td>Expected: random text; Actual: ARA Points:(use -1 for novice)</td>
+    <td>Expected: random text; Actual: Height</td>
     <td>false</td>
     <td>fails because of miss-match</td>
 </tr>
@@ -546,7 +575,7 @@ The commands in this table work with both selenium and htmlunit.
 <tr>
     <td><b>storeText</b></td>
     <td>//table[@id='input_table']/tbody/tr[10]/td[1]</td>
-    <td>ara_label</td>
+    <td>weight_label</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -554,17 +583,17 @@ The commands in this table work with both selenium and htmlunit.
 </tr>
 <tr>
     <td>echo</td>
-    <td>${ara_label}</td>
+    <td>${weight_label}</td>
     <td></td>
     <td>true</td>
-    <td>ARA number:</td>
+    <td>Weight:</td>
     <td>false</td>
     <td>testing row above</td>
 </tr>
 <tr>
     <td><b>store</b></td>
     <td>(blank)</td>
-    <td>ara_label</td>
+    <td>weight_label</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -573,7 +602,7 @@ The commands in this table work with both selenium and htmlunit.
 <tr>
     <td><b>storeTextIfAvailable</b></td>
     <td>//table[@id='input_table']/tbody/tr[10]/td[1]</td>
-    <td>ara_label</td>
+    <td>weight_label</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -581,10 +610,10 @@ The commands in this table work with both selenium and htmlunit.
 </tr>
 <tr>
     <td>echo</td>
-    <td>${ara_label}</td>
+    <td>${weight_label}</td>
     <td></td>
     <td>true</td>
-    <td>ARA number:</td>
+    <td>Weight:</td>
     <td>false</td>
     <td>testing row above</td>
 </tr>
@@ -600,7 +629,7 @@ The commands in this table work with both selenium and htmlunit.
 <tr>
     <td>store</td>
     <td>(blank)</td>
-    <td>ara_label</td>
+    <td>weight_label</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -609,7 +638,7 @@ The commands in this table work with both selenium and htmlunit.
 <tr>
     <td><b>storeTextIfAvailable</b></td>
     <td>//table[@id='input_table']/tbody/tr[10]/td[44]</td>
-    <td>ara_label</td>
+    <td>weight_label</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -617,7 +646,7 @@ The commands in this table work with both selenium and htmlunit.
 </tr>
 <tr>
     <td>echo</td>
-    <td>${ara_label}</td>
+    <td>${weight_label}</td>
     <td></td>
     <td>true</td>
     <td>(blank)</td>
@@ -2915,6 +2944,7 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>DEPRECATED IN SELENIUM IDE (and thus here)</td>
 </tr>
+-->
 </table>
 </div>
 </body>
