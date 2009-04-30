@@ -63,7 +63,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             string = m.group(1) + evaluator.getVariable("#" + m.group(2)) + m.group(3);
             m = variablePattern.matcher(string);
         }
-        return string.replaceAll("\\n", "\n");
+        return string.replaceAll("\\\\n", "\n");
     }
 
     private final Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
@@ -820,7 +820,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         try {
             String body = ((HtmlPage) page).getBody().asText().replaceAll("\\n\\n*", " ").
                     replaceAll("\\t\\t*", " ").replaceAll("\\r\\r*", " ").replaceAll("  *", " ").trim();
-            return body.contains(arg1.replaceAll("\\\\n", " "));
+            return body.contains(arg1.replaceAll("\\\n", " "));
         }
         catch (ClassCastException cce) {
             // pass through

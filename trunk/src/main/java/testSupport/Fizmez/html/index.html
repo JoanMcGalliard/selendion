@@ -5,7 +5,7 @@
     <title>Index.html</title>
     <meta content="index page" name="pageName" empty=""/>
     <script>
-        function statusChanged(){
+        function statusChanged() {
             this.document.forms[0].submit();
         }
     </script>
@@ -63,6 +63,23 @@
 
                 <option value="F">Female</option>
             </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Title:</td>
+
+            <td>
+                <select id="title">
+                    <option value="">Select ...</option>
+                    <option value="Mr">Mr</option>
+                    <option value="Mrs">Mrs</option>
+                    <option value="Miss">Miss</option>
+                    <option value="Ms">Ms</option>
+                    <option value="Doctor">Doctor</option>
+                </select>
+            </td>
+        </tr>
+
         <tr>
             <td>Weight:</td>
             <td><input type=checkbox name="heavyweight">
@@ -110,12 +127,12 @@
         <tr>
             <td>Celine!!</td>
             <td>
-                <input  TYPE="image" SRC="images/celine.jpg" NAME="imagesubmit1"  id="imagesubmit" >
+                <input TYPE="image" SRC="images/celine.jpg" NAME="imagesubmit1" id="imagesubmit">
             </td>
         </tr>
         <tr>
             <td>
-               <input type="button" onclick="prompt('GIMMEH', '');" value="Javascript prompt">
+                <input type="button" onclick="prompt('GIMMEH', '');" value="Javascript prompt">
 
             </td>
         </tr>
@@ -128,15 +145,15 @@
         <tr>
             <td>text area</td>
             <td>
-                <textarea id="reasonInput" cols="25" rows="2" name="reason"> starting value </textarea> 
+                <textarea id="reasonInput" cols="25" rows="2" name="reason"> starting value </textarea>
             </td>
         </tr>
         <td>
-            <input id="online" type="radio" name="systemStatusOnline" value="true" onClick="statusChanged();" >
+            <input id="online" type="radio" name="systemStatusOnline" value="true" onClick="statusChanged();">
             <label for="online">Switch to On-line</label>
 
         </td>
-        
+
     </table>
 
     <input type="Submit" id="submit" name="submit" value="Create user">
@@ -150,7 +167,8 @@
 
 <p><a href="" onclick=
         "alert('O NOES');"
-        >Javascript alert</a>  </p>
+        >Javascript alert</a></p>
+
 <p><a href="#" onclick=
         "setTimeout('alert(\'O NOES\')',1000);"
         >Javascript alert with 1 sec delay</a>
@@ -158,36 +176,49 @@
 
 <select id="parkingAvailabilitySelect" name="prospect.propertyDetails.parkingAvailability">
 
-                                                    <option value="-1">Select</option>
-                                                    <option value="Parking available">Parking available</option><option value="Off Road parking available">Off Road parking available</option><option value="Metered parking available">Metered parking available</option><option value="Permit holders only">Permit holders only</option><option value="No parking near the property">No parking near the property</option><option value="Property is on a red route">Property is on a red route</option><option value="Other">Other</option>
-                                                </select>
+    <option value="-1">Select</option>
+    <option value="Parking available">Parking available</option>
+    <option value="Off Road parking available">Off Road parking available</option>
+    <option value="Metered parking available">Metered parking available</option>
+    <option value="Permit holders only">Permit holders only</option>
+    <option value="No parking near the property">No parking near the property</option>
+    <option value="Property is on a red route">Property is on a red route</option>
+    <option value="Other">Other</option>
+</select>
 
 
 <p><input type="button" onclick="prompt('GIMMEH', '');" value="Javascript prompt">
 </p>
+
 <div id="invisibleStuff" style="display: none;">Stuff</div>
 
 <p id="id1">Id tagged paragraph</p>
+
 <p name="name1">name tagged paragraph</p>
+
 <p name="name1">2nd name tagged paragraph - we shouldn't see this</p>
+
 <p name="name">2nd name tagged paragraph - we shouldn't see this</p>
-<p>looking for special character <span  id="specialChar">&#151;</span> that looks like a hyphen
-   </p>
+
+<p>looking for special character <span id="specialChar">&#151;</span> that looks like a hyphen
+</p>
 
 <p id="paraWithTwoLineBreaks">first line
     <br/>
     <br/>
     second line</p>
-<p>  <abbr title="available">1st available</abbr></p>
-<p>  <abbr title="available">2nd available</abbr></p>
+
+<p><abbr title="available">1st available</abbr></p>
+
+<p><abbr title="available">2nd available</abbr></p>
 
 <ul id="errorList" title="List containing links to field errors">
 
-						      <li>&ndash; <a href="#emailAnchor">Contact email address</a></li>
+    <li>&ndash; <a href="#emailAnchor">Contact email address</a></li>
 
-						      <li>&ndash; <a href="#repeatEmailAnchor">Repeat email address</a></li>
+    <li>&ndash; <a href="#repeatEmailAnchor">Repeat email address</a></li>
 
-						</ul>
+</ul>
 
 <table>
     <td id="tableBr" colspan="4">X: blah 1<br/>X: blah 2</td>
