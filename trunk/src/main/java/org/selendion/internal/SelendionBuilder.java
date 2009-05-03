@@ -11,6 +11,7 @@ import org.concordion.internal.util.IOUtil;
 import org.concordion.internal.command.*;
 import org.selendion.internal.command.*;
 import org.selendion.internal.command.AssertEqualsCommand;
+import org.selendion.internal.command.SetCommand;
 import org.selendion.internal.util.SeleniumIdeReader;
 import org.selendion.internal.listener.RunSuiteResultRenderer;
 import org.selendion.internal.listener.RunSeleniumResultRenderer;

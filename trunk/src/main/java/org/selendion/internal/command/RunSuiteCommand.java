@@ -65,15 +65,9 @@ public class RunSuiteCommand extends AbstractCommand {
             threads = Integer.parseInt((String) params[1]);
         }
 
-        TestSuite testSuite;
+        ActiveTestSuiteRestricted testSuite;
         expectedToPass = new Hashtable();
-
-
-        if (threads == 1) {
-            testSuite = new TestSuite();
-        } else {
-            testSuite = new ActiveTestSuiteRestricted(threads);
-        }
+        testSuite = new ActiveTestSuiteRestricted(threads);
         Vector<TestDescription> suite;
         if (suites.get(suiteName) == null) {
             suite = new Vector<TestDescription>();

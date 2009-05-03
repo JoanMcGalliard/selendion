@@ -41,16 +41,16 @@
     </p>
     <ul concordion:execute="#snippets =newList()">
         <li><code concordion:execute="#snippets.add(#TEXT)">
-            Add &lt;i concordion:addToSuite="'mySuite','suite/Sleep.html'"&gt;Sleep Test&lt;/i&gt; to the suite.
+            Add &lt;i concordion:addToSuite="'mySuite','support/Sleep.html'"&gt;Sleep Test&lt;/i&gt; to the suite.
         </code></li>
         <li><code concordion:execute="#snippets.add(#TEXT)">
-            Add &lt;a concordion:addToSuite="'mySuite',#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; to the
+            Add &lt;a concordion:addToSuite="'mySuite',#HREF" href="support/Sleep.html"&gt;Sleep Test&lt;/a&gt; to the
             suite.
         </code></li>
         <li><code concordion:execute="#snippets.add(#TEXT)">
             Add to &lt;i concordion:set="#suiteName"&gt;mySuite&lt;/i&gt;: &lt;a
             concordion:addToSuite="#suiteName,#HREF"
-            href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt;.
+            href="support/Sleep.html"&gt;Sleep Test&lt;/a&gt;.
         </code></li>
         <li><code concordion:execute="#snippets.add(#TEXT)">
             Add to &lt;i concordion:set="#suiteName"&gt;mySuite&lt;/i&gt;: &lt;a

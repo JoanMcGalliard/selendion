@@ -18,8 +18,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HtmlUnitDriver implements BrowserDriver {
-    private HtmlPage page = null;
-    private HtmlPage old_page;
+    private Page page = null;
+    private Page old_page;
     private String timeout="30000";
     static private final String nbsp = String.format("%c", 160);
     private final String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
@@ -110,7 +110,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     public void pauseInWaitFor (int milliseconds) throws InterruptedException {
         long start = System.currentTimeMillis();
         try {
-            page = (HtmlPage)page.refresh();
+            page = ((HtmlPage)page).refresh();
         } catch (IOException e) {
             throw new HtmlUnitException(e);
         }
@@ -158,12 +158,12 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     private HtmlElement getHtmlElement(String key) {
-        HtmlElement element =  getHtmlElement(page, key);
+        HtmlElement element =  getHtmlElement((HtmlPage) page, key);
         if (element != null) {
             return element;
         }
         else {
-             List<FrameWindow> window = page.getFrames();
+             List<FrameWindow> window = ((HtmlPage) page).getFrames();
              for (int i =0; i < window.size(); i++) {
                  element = getHtmlElement((HtmlPage) window.get(i).getEnclosedPage(), key);
                  if (element != null) {
@@ -176,7 +176,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     private HtmlElement getHtmlElement(HtmlPage page, String key) {
 
         if (key.startsWith("xPath=")) {
-            List<?> list = page.getByXPath(key.replaceFirst("xPath=", ""));
+            List<?> list = ((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", ""));
             if (list.size() == 0) {
                 return null;
             }
@@ -189,14 +189,14 @@ public class HtmlUnitDriver implements BrowserDriver {
                 return null;
             }
         } else if (key.startsWith("name=")) {
-            List<HtmlElement> list = page.getElementsByIdAndOrName(key.replaceFirst("^name=", ""));
+            List<HtmlElement> list = ((HtmlPage) page).getElementsByIdAndOrName(key.replaceFirst("^name=", ""));
             if (list.size() == 0) {
                 return null;
             }
 
             return list.get(0);
         } else if (key.startsWith("link=")) {
-            List<HtmlAnchor> anchors = page.getAnchors();
+            List<HtmlAnchor> anchors = ((HtmlPage) page).getAnchors();
             int i = 0;
             while (i < anchors.size()) {
                 if (anchors.get(i).getTextContent().equals(key.replaceFirst("link=", ""))) {
@@ -210,7 +210,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             throw new RuntimeException(IMPLEMENTATION_REQUIRED + key);
         } else if (key.startsWith("//")) {
 
-            List<?> list = page.getByXPath(key);
+            List<?> list = ((HtmlPage) page).getByXPath(key);
             if (list.size() == 0) {
                 return null;
             }
@@ -241,7 +241,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             } else if (element.getClass().equals(HtmlCheckBoxInput.class)) {
                 page = ((HtmlCheckBoxInput) element).click();
             } else if (element.getClass().equals(HtmlImage.class)) {
-                page = (HtmlPage)((HtmlImage) element).click();
+                page = ((HtmlImage) element).click();
             } else if (element.getClass().equals(HtmlAnchor.class)) {
                 page = ((HtmlAnchor) element).click();
             } else if (element.getClass().equals(HtmlTextInput.class)) {
@@ -249,7 +249,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             } else if (element.getClass().equals(HtmlRadioButtonInput.class)) {
                 page = ((HtmlRadioButtonInput) element).click();
             } else if (element.getClass().equals(HtmlImageInput.class)) {
-                page = (HtmlPage)((HtmlImageInput) element).click();
+                page = ((HtmlImageInput) element).click();
             } else if (element.getClass().equals(HtmlOption.class)) {
                 page = ((HtmlOption) element).click();
             } else {
@@ -428,7 +428,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             if (option.getTextContent().equals(label)) {
                 old_page = page;
 
-                page = (HtmlPage)select.setSelectedAttribute(option.getValueAttribute(), true);
+                page = select.setSelectedAttribute(option.getValueAttribute(), true);
                 return;
             }
 
@@ -438,11 +438,11 @@ public class HtmlUnitDriver implements BrowserDriver {
 
     public void selectFrame(String arg1) {
         if (arg1.startsWith("index=")) {
-            List<FrameWindow> window = page.getFrames();
-            page = (HtmlPage)window.get(Integer.parseInt(arg1.replaceFirst("^index=", ""))).getEnclosedPage();
+            List<FrameWindow> window = ((HtmlPage) page).getFrames();
+            page = window.get(Integer.parseInt(arg1.replaceFirst("^index=", ""))).getEnclosedPage();
         } else if (arg1.equals("relative=top")) {
             System.out.println(page.getEnclosingWindow().getTopWindow().toString());
-            page = (HtmlPage)page.getEnclosingWindow().getTopWindow().getEnclosedPage();
+            page = page.getEnclosingWindow().getTopWindow().getEnclosedPage();
         } else {
             throw new RuntimeException(IMPLEMENTATION_REQUIRED + "selectFrame with parameter " + arg1);
         }
@@ -522,7 +522,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getAllButtons() {
-        return walkAndFind(page, "button").replaceFirst(",$","") ;
+        return walkAndFind((HtmlPage)page, "button").replaceFirst(",$","") ;
     }
 
     private String walkAndFind(DomNode node, String type) {
@@ -569,7 +569,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         if (page.getClass().equals(UnexpectedPage.class)) {
              return page.getWebResponse().getContentAsString();
         }  else if (page.getClass().equals(HtmlPage.class)) {
-            return page.getBody().asText().replaceAll("\\n", " ").replaceAll("\\t", " ").replaceAll("  *", " ").trim();
+            return ((HtmlPage)page).getBody().asText().replaceAll("\\n", " ").replaceAll("\\t", " ").replaceAll("  *", " ").trim();
         }
         throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getBodyText for " + page.getClass());
     }
@@ -603,7 +603,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getTitle() {
-        return page.getTitleText();
+        return ((HtmlPage) page).getTitleText();
     }
 
     public boolean isConfirmationPresent() {
@@ -675,7 +675,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         if (!m.matches()) {
             throw new RuntimeException(IMPLEMENTATION_REQUIRED + "Can't handle getExpression(\""+arg1+"\")");
         }
-        return page.executeJavaScript(m.group(1)).getJavaScriptResult();
+        return ((HtmlPage) page).executeJavaScript(m.group(1)).getJavaScriptResult();
     }
 
     public Object getSelectedId(String arg1) {
@@ -818,19 +818,19 @@ public class HtmlUnitDriver implements BrowserDriver {
 
     public boolean isTextPresent(String arg1) {
         try {
-            String body = page.getBody().asText().replaceAll("\\n\\n*", " ").
+            String body = ((HtmlPage) page).getBody().asText().replaceAll("\\n\\n*", " ").
                     replaceAll("\\t\\t*", " ").replaceAll("\\r\\r*", " ").replaceAll("  *", " ").trim();
             return body.contains(arg1.replaceAll("\\\n", " "));
         }
         catch (ClassCastException cce) {
             // pass through
         }
-//        try {
-//            InputStream stream = ((UnexpectedPage) page).getInputStream();
-//            return slurp(stream).contains(arg1);
-//        } catch (IOException e) {
-//            // pass thru
-//        }
+        try {
+            InputStream stream = ((UnexpectedPage) page).getInputStream();
+            return slurp(stream).contains(arg1);
+        } catch (IOException e) {
+            // pass thru
+        }
         throw new RuntimeException(IMPLEMENTATION_REQUIRED + "Can't handle isTextPresent " + arg1);
     }
 
