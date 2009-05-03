@@ -27,168 +27,76 @@
 </p>
 
 
-
-
-
 <div class="example">
-    <H3>Run the suite in a single thread</H3>
+    <h2>Multiple Threads</h2>
 
-    <p>
-        Adding this all together, if we run a suite where we add both individual files and a directory, we should see
-        all the results together
+    <p>Because selenium scripts run slowly, we want to run more than one of them at the same time. This, combined -
+        perhaps - with SElenium Grid, will speed up your test running times. To test this is working correctly,
+        we build a suite that has a test that sleeps included in it 4 times. We would expect the results of
+        running the tests in 2, 3 and unlimited threads to be the same, except that it would be faster each time.
     </p>
 
-        <pre concordion:set="#snippet">
-            &lt;a concordion:addToSuite="'suite8',#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
-              &lt;a concordion:addToSuite="'suite8',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite8',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
+    <p>Here is our suite:</p>
+    <pre concordion:execute="render(#TEXT)">
+        &lt;a concordion:addToSuite="'mySuite',#HREF" href="support/Sleep.html"&gt;&lt;/a&gt; to the test suite and then add
+          &lt;a concordion:addToSuite="'mySuite',#HREF" href="support/Sleep.html"&gt;Sleep test&lt;/a&gt; again and
+          &lt;a concordion:addToSuite="'mySuite',#HREF" href="support/Sleep.html"&gt;Sleep test&lt;/a&gt; again.
+          &lt;a concordion:addToSuite="'mySuite',#HREF" href="support/Sleep.html"&gt;Sleep test&lt;/a&gt; again.
+          &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'mySuite',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
+    </pre>
 
-            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite8',#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
+    <p>Run the suite in</p>
+    <ul concordion:execute="#numbersOfThreads =newList()">
+        <li concordion:execute="#numbersOfThreads.add(#TEXT)">2</li>
+        <li concordion:execute="#numbersOfThreads.add(#TEXT)">3</li>
+        <li concordion:execute="#numbersOfThreads.add(0)">unlimited</li>
+    </ul>
+    <p>Each time we run the suite we expect it to be faster than the previous time. Let's set a base line for the first
+        test
+        to be <i concordion:set="#previousTime">5000</i> milliseconds.</p>
+
+    <div class="example" concordion:forEach="#numberOfThreads : #numbersOfThreads">
+        <h3>Run the test in <span concordion:echo="#numberOfThreads"/> threads</h3>
+    <pre concordion:set="#snippet">
+            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'mySuite',#TEXT"&gt;<span
+            concordion:echo="#numberOfThreads"/>&lt;/i&gt; thread.&lt;/p&gt;
         </pre>
 
-    <p>Looks like this:</p>
+        <p>Looks like this:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-
-    &lt;a concordion:addToSuite="'suite8',#HREF" href="support/Simple.html" /&gt; to the test suite and then add
-                &lt;a concordion:addToSuite="'suite8',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite8',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
-
-
-
-&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite8',#TEXT"&gt;1&lt;/i&gt;
-    &lt;ol&gt;
-        &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
+&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'mySuite',#TEXT"&gt;<span concordion:echo="#numberOfThreads"/>&lt;/i&gt;
+    &lt;ul&gt;
+        &lt;li&gt; &lt;a href="support/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt;
+        &lt;li&gt; &lt;a href="support/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt;
+        &lt;li&gt; &lt;a href="support/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt;
+        &lt;li&gt; &lt;a href="support/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt; class selendion.commands.Suite.suite.Concordion is not a SelendionTestCase.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
+        &lt;li&gt; &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt;
+                    Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;  &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/SimpleFail.html" class="failure"&gt;Simple Fail&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/subSuite/Simple.html" class="success"&gt;Simple test in sub-suite&lt;/a&gt; &lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/WithoutClassError.html" class="failure"&gt;Test without class that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/WithoutClassFail.html" class="failure"&gt;Test that fails&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
-    &lt;/ol&gt;
-thread.&lt;/p&gt;
-
-
-</pre>
-
-
-</div>
-<div class="example">
-    <H3>Run the suite in a two threads</H3>
-
-    <p>
-        If we run the same test in 2 threads, (remembering the time of the <i
-            concordion:set="#previousTime=getRunningTimeOfLastTest()">last test</i>) then the result should be the same:
-    </p>
-
-        <pre concordion:set="#snippet">
-
-              &lt;a concordion:addToSuite="'suite9',#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
-              &lt;a concordion:addToSuite="'suite9',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite9',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
-
-            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite9',#TEXT"&gt;2&lt;/i&gt; thread.&lt;/p&gt;
-
-        </pre>
-
-    <p>Looks like this:</p>
-
-<pre class="html" concordion:assertEquals="render(#snippet)">
-
-
-
-    &lt;a concordion:addToSuite="'suite9',#HREF" href="support/Simple.html" /&gt; to the test suite and then add
-                &lt;a concordion:addToSuite="'suite9',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite9',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
-
-
-
-&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite9',#TEXT"&gt;2&lt;/i&gt;
-    &lt;ul&gt;
-        &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt; class selendion.commands.Suite.suite.Concordion is not a SelendionTestCase.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/SimpleFail.html" class="failure"&gt;Simple Fail&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/subSuite/Simple.html" class="success"&gt;Simple test in sub-suite&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/WithoutClassError.html" class="failure"&gt;Test without class that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
+        &lt;li&gt; &lt;a href="suite/WithoutClassError.html" class="failure"&gt;Test without class that throws an exception&lt;/a&gt;
+                    Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
         &lt;li&gt; &lt;a href="suite/WithoutClassFail.html" class="failure"&gt;Test that fails&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
     &lt;/ul&gt;
 thread.&lt;/p&gt;
-
-
-
 </pre>
-    <p>if we compare the running time of <i concordion:set="#currentTime=getRunningTimeOfLastTest()">this test</i> to
-        the previous it should
-        run <b concordion:assertTrue="greaterThan(#previousTime, #currentTime)">faster</b> (<b
-                concordion:echo="#currentTime"></b> vs <b concordion:echo="#previousTime"></b>) </p>
+
+        <p>if we compare the running time of <i concordion:set="#currentTime=getRunningTimeOfLastTest()">this test</i>
+            to
+            the previous it should
+            run <b concordion:assertTrue="greaterThan(#previousTime, #currentTime)">faster</b> (<b
+                    concordion:echo="#currentTime"> </b> vs <b concordion:echo="#previousTime"> </b>) </p>
+
+        <p>Save the running time of this test to <i concordion:set="#previousTime"><span
+                concordion:echo="#currentTime"/></i>.</p>
+    </div>
 
 
 </div>
-<div class="example">
-    <H3>Run the suite in a unlimited threads</H3>
-
-    <p>
-        If we run the same test in unlimited threads, , (remembering the time of the <i
-            concordion:set="#previousTime=getRunningTimeOfLastTest()">last test</i>) then the result should be the same:
-    </p>
-
-        <pre concordion:set="#snippet">
-
-              &lt;a concordion:addToSuite="'suite10',#HREF" href="support/Simple.html"&gt;&lt;/a&gt; to the test suite and then add
-              &lt;a concordion:addToSuite="'suite10',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-              &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite10',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
-
-            &lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite10',#TEXT"&gt;0&lt;/i&gt; thread.&lt;/p&gt;
-        </pre>
-
-    <p>Looks like this:</p>
-
-<pre class="html" concordion:assertEquals="render(#snippet)">
-
-    &lt;a concordion:addToSuite="'suite10',#HREF" href="support/Simple.html" /&gt; to the test suite and then add
-                &lt;a concordion:addToSuite="'suite10',#HREF" href="support/Simple.html"&gt;Simple test&lt;/a&gt; again.
-                &lt;p&gt;Add the directory &lt;a concordion:addToSuite="'suite10',#HREF" href="suite/"&gt;suite&lt;/a&gt; to the test suite&lt;/p&gt;
-
-
-
-&lt;p&gt;Run the test suite in &lt;i concordion:runSuite="'suite10',#TEXT"&gt;0&lt;/i&gt;
-    &lt;ul&gt;
-        &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/Concordion.html" class="failure"&gt;Test using ConcordionTestCase&lt;/a&gt; class selendion.commands.Suite.suite.Concordion is not a SelendionTestCase.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/Error.html" class="failure"&gt;Test that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/NotExpectedToPass.html" class="success"&gt;Not Expected To Pass Demo&lt;/a&gt; &lt;b class="attention"&gt; This test is not expected to pass. &lt;/b&gt;  &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/SimpleFail.html" class="failure"&gt;Simple Fail&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/subSuite/Simple.html" class="success"&gt;Simple test in sub-suite&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/WithoutClassError.html" class="failure"&gt;Test without class that throws an exception&lt;/a&gt; Unknown command blahdeblah in namespace http://www.selendion.org/2008.&lt;/li&gt;
-        &lt;li&gt; &lt;a href="suite/WithoutClassFail.html" class="failure"&gt;Test that fails&lt;/a&gt; Specification has failure(s). See output HTML for details.&lt;/li&gt;
-    &lt;/ul&gt;
-thread.&lt;/p&gt;
-
-
-
-</pre>
-    <p>if we compare the running time of <i concordion:set="#currentTime=getRunningTimeOfLastTest()">this test</i> to
-        the previous it should
-        run <b concordion:assertTrue="greaterThan(#previousTime, #currentTime)">faster still</b> (<b
-                concordion:echo="#currentTime"></b>
-        vs <b concordion:echo="#previousTime"></b>) </p>
-
-
-</div>
-
-
 
 
 <div class="example">
@@ -196,12 +104,12 @@ thread.&lt;/p&gt;
     <h3>Two suites</h3>
 
     <p>
-        If we run a suite containing a simple test that has a test class and it passes:
+        If we create 2 suites, then they should run when they are invoked.
     </p>
 
         <pre concordion:set="#snippet">
 &lt;p&gt;Build  &lt;i concordion:set="#suiteName"&gt;suiteA&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF"
-            href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; and
+            href="support/Simple.html"&gt;Simple Test outside suite&lt;/a&gt; and
             &lt;i concordion:set="#suiteName"&gt;suiteB&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF"
             href="suite/WithoutClass.html"&gt;Simple Test&lt;/a&gt; &lt;/p&gt;
    &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suiteA&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; thread.&lt;/p&gt;
@@ -211,10 +119,17 @@ thread.&lt;/p&gt;
     <p>The result should be:</p>
 
 <pre class="html" concordion:assertEquals="render(#snippet)">
-    &lt;p&gt;Build  &lt;i concordion:set="#suiteName"&gt;suiteA&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF" href="suite/Sleep.html"&gt;Sleep Test&lt;/a&gt; and
+    &lt;p&gt;Build  &lt;i concordion:set="#suiteName"&gt;suiteA&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF" href="support/Simple.html"&gt;Simple Test outside suite&lt;/a&gt; and
                 &lt;i concordion:set="#suiteName"&gt;suiteB&lt;/i&gt; consisting of &lt;a concordion:addToSuite="#suiteName,#HREF" href="suite/WithoutClass.html"&gt;Simple Test&lt;/a&gt; &lt;/p&gt;
-       &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suiteA&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/Sleep.html" class="success"&gt;Sleep Test&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;
-       &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suiteB&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt; &lt;ol&gt; &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt; &lt;/ol&gt; thread.&lt;/p&gt;</pre>
+    &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suiteA&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt;
+            &lt;ol&gt;
+                &lt;li&gt; &lt;a href="support/Simple.html" class="success"&gt;Simple Test outside suite&lt;/a&gt; &lt;/li&gt;
+            &lt;/ol&gt;
+       thread.&lt;/p&gt;
+    &lt;p&gt;Run &lt;i concordion:set="#suiteName"&gt;suiteB&lt;/i&gt; in &lt;i concordion:runSuite="#suiteName,#TEXT"&gt;1&lt;/i&gt;
+        &lt;ol&gt;
+            &lt;li&gt; &lt;a href="suite/WithoutClass.html" class="success"&gt;Without class&lt;/a&gt; &lt;/li&gt;
+        &lt;/ol&gt; thread.&lt;/p&gt;</pre>
 </div>
 
 </body>
