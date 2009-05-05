@@ -8,26 +8,27 @@
 <h2>Setup </h2>
 
 <div class="example">
-    <h2>SELENIUM</h2>
-
-<p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, '*firefox', #baseUrl">Start a browser with:
-    host <i concordion:set="#seleniumServerHost">localhost</i>;
-    port <i concordion:set="#seleniumServerport">5555</i>;
-    for <i concordion:echo="#browser"/>;
-    and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:9190">localhost, port 9090</a>.</p>
 
 
+
+         ``
 
 
 <p>
-    <a concordion:runSelenium="#HREF" href="test_data/temp.html">blah blah</a>.
+    <a concordion:set="#blah=hashtable()">blah blah</a>.
     </p>
+    <p><span concordion:assertEquals="#blah.get('blah')">blahresponse</span></p>
 
 
-
+    <table concordion:execute="doNothing()">
+        <tr>
+            <th concordion:set="#id">key</th>
+            <th concordion:assertEquals="#blah.get(#id)">value</th>
+        </tr>
+        <tr><td>blah</td><td>blahresponse</td></tr>
+    </table>
 
 <h2>Finally</h2>
-<i concordion:stopBrowser="">Close the browser</i>
  </div>
 </body>
 </html>

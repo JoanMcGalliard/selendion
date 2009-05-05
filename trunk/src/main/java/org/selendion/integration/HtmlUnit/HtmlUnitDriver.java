@@ -69,6 +69,19 @@ public class HtmlUnitDriver implements BrowserDriver {
     private final Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
 
     public void stop() {
+
+//        final List topWindows = new ArrayList();
+//        for (final Iterator iter = webClient.getWebWindows().iterator();
+//             iter.hasNext();) {
+//            final WebWindow window = (WebWindow) iter.next();
+//            if (window instanceof TopLevelWindow) {
+//                topWindows.add(window);
+//            }
+//        }
+//        for (final Iterator iter = topWindows.iterator(); iter.hasNext();) {
+//            final TopLevelWindow window = (TopLevelWindow) iter.next();
+//            window.close();
+//        }
         webClient.closeAllWindows();
 
     }
