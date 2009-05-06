@@ -84,7 +84,7 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
                    String valueString;
                    if (value == null) {
                        valueString = "";
-                   } else if (!value.getClass().equals(String.class)) {
+                   } else if (!value.getClass().equals(String.class) && !value.getClass().equals(Character.class)) {
                        continue;
                    } else {
                        valueString = value.toString();

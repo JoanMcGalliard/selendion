@@ -10,13 +10,15 @@
 
     <h3>Setup </h3>
 
-    <p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a browser
+    <p concordion:startBrowser="'SELENIUM',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl">Start a SELENIUM browser
         with:
         host <i concordion:set="#seleniumServerHost">localhost</i>;
         port <i concordion:set="#seleniumServerport">5555</i>;
         for <span concordion:echo="#browser"/>;
         and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
 
+
+    
     <h3>Simple Test</h3>
 
     <p>First set var1 to be <i concordion:set="#var1">Variable 1</i> and var2 to be
@@ -65,6 +67,14 @@
       <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
           this script</a> then var1 should be <b concordion:assertEquals="#var1">2</b>.
     </p> 
+    <H3>Passing literals betwen selenium and concordion</H3>
+
+      <p>First set var2 to be <span concordion:set="#var2='2'">'2'</span>, and var1 to be <span concordion:set="#var1"/>blank.</p>
+
+
+      <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
+          this script</a> then var1 should be <b concordion:assertEquals="#var1">2</b>.
+    </p>
 
 
     <H3>Tear Down</H3>
