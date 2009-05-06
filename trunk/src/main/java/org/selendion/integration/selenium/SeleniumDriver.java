@@ -80,12 +80,12 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
                String keyString = (String) key;
                if (keyString.matches(VARIABLE_PATTERN)) {
                    Object value = evaluator.getVariable("#" + keyString);
-                   if (!value.getClass().equals(String.class))  {
-                       continue;
-                   }
+
                    String valueString;
                    if (value == null) {
                        valueString = "";
+                   } else if (!value.getClass().equals(String.class)) {
+                       continue;
                    } else {
                        valueString = value.toString();
                    }
