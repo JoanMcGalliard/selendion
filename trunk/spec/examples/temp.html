@@ -14,20 +14,8 @@
          ``
 
 
-<p>
-    <a concordion:set="#blah=hashtable()">blah blah</a>.
-    </p>
-    <p><span concordion:assertEquals="#blah.get('blah')">blahresponse</span></p>
 
-
-    <table concordion:execute="doNothing()">
-        <tr>
-            <th concordion:set="#id">key</th>
-            <th concordion:assertEquals="#blah.get(#id)">value</th>
-        </tr>
-        <tr><td>blah</td><td>blahresponse</td></tr>
-    </table>
-
+    <a concordion:echo="readFile(#HREF)" href="blah.html"/>
 <h2>Finally</h2>
  </div>
 </body>
