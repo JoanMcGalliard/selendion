@@ -23,7 +23,6 @@ import org.selendion.integration.concordion.SelendionTestCase;
 import java.util.Hashtable;
 import java.io.File;
 
-import nu.xom.Builder;
 
 
 public class SelendionBuilder extends ConcordionBuilder {
