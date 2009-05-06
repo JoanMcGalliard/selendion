@@ -36,7 +36,7 @@
       <p>First set var2 to be <i concordion:set="#var2">String with, comma in it</i>.</p>
 
 
-      <p>after running <a href="test_data/vars.html" concordion:runSelenium="#HREF">
+      <p>After running <a href="test_data/vars.html" concordion:runSelenium="#HREF">
           this script</a> then var1 should be <b concordion:assertEquals="#var1">String with, comma in it</b> and var2
           should still be
           <b concordion:assertEquals="#var2">String with, comma in it</b>. Var3 should now be <b
@@ -45,7 +45,7 @@
 
     <H3>Passing variables with carriage returns,  line feed and backslashes betwen selenium and concordion</H3>
 
-      <p>First set var2 to be <pre concordion:set="#var2">String with \ line feed &#x000A; and carriage return &#x000D; in it</pre>.</p>
+      <p>First set var2 to be</p> <pre concordion:set="#var2">String with \ line feed &#x000A; and carriage return &#x000D; in it</pre>
 
 
       <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
@@ -57,10 +57,20 @@
       Run a selenium script <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
           again</a> without any errors.</p>
 
+    <H3>Passing numbers betwen selenium and concordion</H3>
+
+      <p>First set var2 to be <span concordion:set="#var2">2</span>, and var1 to be <span concordion:set="#var1"/>blank.</p>
+
+
+      <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
+          this script</a> then var1 should be <b concordion:assertEquals="#var1">2</b>.
+    </p> 
+
 
     <H3>Tear Down</H3>
 
     <p>Finally <i concordion:stopBrowser="">close the browser</i></p>
+
 </div>
 <div class="example">
      <H2>runSelendion: Tests variable handed back between Concordion and Concordion</H2>
