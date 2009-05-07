@@ -15,7 +15,9 @@
 
 
 
-    <a concordion:echo="readFile(#HREF)" href="blah.html"/>
+    <a concordion:set="#accountDetails=readFile(#HREF)" href="blah.html"/>
+    viewingCard <b concordion:echo="#accountDetails.viewingCard"/>
+   accountNumber <b concordion:echo="#accountDetails.accountNumber"/>
 <h2>Finally</h2>
  </div>
 </body>
