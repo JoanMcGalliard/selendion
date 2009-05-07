@@ -67,13 +67,30 @@
       <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
           this script</a> then var1 should be <b concordion:assertEquals="#var1">2</b>.
     </p> 
-    <H3>Passing literals betwen selenium and concordion</H3>
+    <H3>Passing literal numbers betwen selenium and concordion</H3>
 
-      <p>First set var2 to be <span concordion:set="#var2='2'">'2'</span>, and var1 to be <span concordion:set="#var1"/>blank.</p>
+      <p>First set var2 to be <span concordion:set="#var2=2">2</span>, and var1 to be <span concordion:set="#var1"/>blank.</p>
 
 
       <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
           this script</a> then var1 should be <b concordion:assertEquals="#var1">2</b>.
+    </p>
+    <H3>Passing literals characters betwen selenium and concordion</H3>
+
+      <p>First set var2 to be <span concordion:set="#var2='a'">'a'</span>, and var1 to be <span concordion:set="#var1"/>blank.</p>
+
+
+      <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
+          this script</a> then var1 should be <b concordion:assertEquals="#var1">a</b>.
+    </p>
+
+   <H3>Passing literals strings betwen selenium and concordion</H3>
+
+      <p>First set var2 to be <span concordion:set="#var2='abc'">'abc'</span>, and var1 to be <span concordion:set="#var1"/>blank.</p>
+
+
+      <p>After running <a href="test_data/vars2.html" concordion:runSelenium="#HREF">
+          this script</a> then var1 should be <b concordion:assertEquals="#var1">abc</b>.
     </p>
 
 

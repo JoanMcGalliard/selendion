@@ -6,20 +6,37 @@ import java.io.*;
 import java.net.URL;
 
 public class temp extends SelendionTestCase {
-    public String readFile(String filename) throws Exception {
-        String line = getNext(filename);
-        System.out.println(line);
-        return line;
+
+
+    private class AccountDetails {
+        public String getAccountNumber() {
+            return accountNumber;
+        }
+
+        public String getViewingCard() {
+            return viewingCard;
+        }
+
+        private String accountNumber;
+        private String viewingCard;
+
+
+
+        public AccountDetails(String line) {
+            String[] split = line.split(" ");
+             viewingCard =split[0];
+            accountNumber=split[1];
+        }
+
     }
 
-
-    public String getNext(String pathname) throws Exception {
+    public AccountDetails readFile(String filename) throws Exception {
         String firstLine = null;
         BufferedWriter bw = null;
         // open input file
-        URL url = this.getClass().getResource(pathname);
+        URL url = this.getClass().getResource(filename);
         if (url == null) {
-            throw new RuntimeException("couldn't find " + pathname);
+            throw new RuntimeException("couldn't find " + filename);
         }
         String result;
         File file = new File (url.getPath());
@@ -47,6 +64,6 @@ public class temp extends SelendionTestCase {
         // close output file
         bw.close();
         bw = null;
-        return firstLine;
+        return new AccountDetails(firstLine);
     }
 }
