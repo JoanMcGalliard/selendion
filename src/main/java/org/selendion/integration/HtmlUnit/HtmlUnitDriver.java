@@ -23,10 +23,11 @@ public class HtmlUnitDriver implements BrowserDriver {
     private String timeout="30000";
     static private final String nbsp = String.format("%c", 160);
     private final String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
-    private final List collectedAlerts = new ArrayList();
+    private final List collectedAlerts;
 
     @SuppressWarnings("unchecked")
     public HtmlUnitDriver(String baseUrl) {
+        collectedAlerts = new ArrayList();
         webClient = new WebClient();
         webClient.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
 
