@@ -30,6 +30,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         collectedAlerts = new ArrayList();
         webClient = new WebClient();
         webClient.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
+        webClient.setRefreshHandler(new WaitingRefreshHandler());
 
         this.baseUrl = baseUrl;
     }
@@ -111,8 +112,9 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void setTimeout(String timeout) {
-        Integer.parseInt(timeout);
+        webClient.setRefreshHandler(new WaitingRefreshHandler(Integer.parseInt(timeout)/1000));
         this.timeout=timeout;
+
     }
     public String getTimeout() {
         return timeout;
