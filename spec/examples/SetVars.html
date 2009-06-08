@@ -18,7 +18,7 @@
         and base url <a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555">localhost, port 55555</a>.</p>
 
 
-    
+
     <h3>Simple Test</h3>
 
     <p>First set var1 to be <i concordion:set="#var1">Variable 1</i> and var2 to be
@@ -134,6 +134,52 @@
                    variable</b>.</p>
  </div>
 
+
+
+<!--
+<div class="example">
+     <H2>runSuite: Variables should be passed into suite, but not out again</H2>
+     <p>First create a suite of 3 tests (all the same): <a concordion:addToSuite="'mySuite',#HREF" href="SetValue.html">Set value</a>
+     and <a concordion:addToSuite="'mySuite',#HREF"
+href="SetValue.html">Set value</a> and
+     <a concordion:addToSuite="'mySuite',#HREF"
+href="SetValue.html">Set value</a>.</p>
+       <p>We're going to run the suite in</p>
+     <ul concordion:execute="#numbersOfThreads =newList()">
+         <li concordion:execute="#numbersOfThreads.add(#TEXT)">1</li>
+         <li concordion:execute="#numbersOfThreads.add(#TEXT)">2</li>
+li>
+        <li
+concordion:execute="#numbersOfThreads.add(0)">unlimited</li>
+     </ul>
+     <p>First set svar1 to be <i concordion:set="#svar1">Variable 1</i> and svar2 to be
+               <i concordion:set="#svar2">Variable 2</i> and  svar4
+<i concordion:set="#svar4=nullVal()">null</i>
+           </p>
+
+
+
+     <div class="example" concordion:forEach="#numberOfThreads :
+#numbersOfThreads">
+
+      <p>Before running the script svar1 should be <b concordion:assertEquals="#svar1">Variable 1</b>, svar 2
+                      should be <b
+concordion:assertEquals="#svar2">Variable 2</b> and svar 4
+                      should be <b
+concordion:assertEquals="#svar4">(null)</b></p>
+
+      <p>after running the suite in <span concordion:echo="#numberOfThreads"></span>
+          <span  concordion:runSuite="'mySuite',1"></span> all tests should pass and
+         var1 should be <b concordion:assertEquals="#svar1">Variable
+1</b>, svar 2
+                      should be <b
+concordion:assertEquals="#svar2">Variable 2</b> and svar 4
+                      should be <b
+concordion:assertEquals="#svar4">(null)</b></p>
+  </div>
+
+</div>
+-->
 
 </body>
 </html>

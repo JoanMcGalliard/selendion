@@ -1,24 +1,12 @@
 <html xmlns:concordion="http://www.selendion.org/2008">
-<head><title>blah blah</title></head>
 <link href="../../css/selendion.css" rel="stylesheet" type="text/css"/>
+
+<head><title>Generate Order SQl</title></head>
+
 <body>
-
-<h1>blah blah</h1>
-
-<h2>Setup </h2>
-
-<div class="example">
+<pre concordion:echo="generateSqlFromDb()"></pre>
 
 
 
-         ``
-
-
-
-    <a concordion:set="#accountDetails=readFile(#HREF)" href="blah.html"/>
-    viewingCard <b concordion:echo="#accountDetails.viewingCard"/>
-   accountNumber <b concordion:echo="#accountDetails.accountNumber"/>
-<h2>Finally</h2>
- </div>
 </body>
 </html>
