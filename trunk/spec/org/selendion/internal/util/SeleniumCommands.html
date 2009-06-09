@@ -5,10 +5,13 @@
 </head>
 <body>
 <h1>Selenium/HtmlUnit Commands Test</h1>
+
 <p>Selendion takes files generated from the Selenium IDE, and sends them to whatever browser you choose, using either
-Selenium or HtmlUnit.  All standard Selenium IDE commands can be suffixed with <code>IfAvailable</code>.  If this is present,
-then the command will not fail if the element is not found or another error occurs.  If an error occurs, the command will pass
-but nothing will happen.</p>
+    Selenium or HtmlUnit. All standard Selenium IDE commands can be suffixed with <code>IfAvailable</code>. If this is
+    present,
+    then the command will not fail if the element is not found or another error occurs. If an error occurs, the command
+    will pass
+    but nothing will happen.</p>
 
 <p>This allows you to write code like this</p>
 <table border="1">
@@ -32,7 +35,7 @@ but nothing will happen.</p>
 
 <p>For these tools:</p>
 <ul concordion:execute="#browserTypes =newList()">
-  <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
+    <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
     <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
 </ul>
 <div class="example" concordion:forEach="#browser : #browserTypes">
@@ -51,7 +54,7 @@ The commands in this table work with both selenium and htmlunit.
     <th>Remarks</th>
 </tr>
 
- <tr>
+<tr>
     <td><b>open</b></td>
     <td>index.html</td>
     <td></td>
@@ -60,21 +63,67 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>Test open without /</td>
 </tr>
+<tr>
+    <td>setTimeout</td>
+    <td>200</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>setup for next test</td>
+</tr>
  <tr>
-	<td>verifyText</td>
-	<td>title</td>
-	<td>Select ... Mr Mrs Miss Ms Doctor</td>
+    <td><b>waitForTextPresentIfAvailable</b></td>
+    <td>something that isn't on the page</td>
+    <td></td>
+    <td>true</td>
+    <td>ERROR: Timed out after 200ms</td>
+    <td>false</td>
+    <td>This will wait for 200ms or until the text appears</td>
+</tr>
+ <tr>
+    <td><b>waitForTextPresentIfAvailable</b></td>
+    <td>ARA Points:\n(use -1 for novice)</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>should pass as text is there</td>
+</tr>
+<tr>
+    <td><b>waitForValue</b></td>
+    <td>new_username</td>
+    <td>bob</td>
+    <td>false</td>
+    <td>ERROR: Timed out after 200ms</td>
+    <td>false</td>
+    <td>waitFor... something that isn't there</td>
+</tr>
+<tr>
+    <td>setTimeout</td>
+    <td>30000</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>setup for next test</td>
+</tr>
+
+<tr>
+    <td>verifyText</td>
+    <td>title</td>
+    <td>Select ... Mr Mrs Miss Ms Doctor</td>
 
     <td>true</td>
     <td></td>
     <td>false</td>
     <td>Test open without /</td>
 </tr>
- <tr>
+<tr>
 
-	<td>verifyText</td>
-	<td>sex</td>
-	<td>Male Female</td>
+    <td>verifyText</td>
+    <td>sex</td>
+    <td>Male Female</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -98,7 +147,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>simple fail</td>
 </tr>
- <tr>
+<tr>
     <td><b>verifyText</b></td>
     <td>tableBr</td>
     <td>X: blah 1\nX: blah 2</td>
@@ -107,7 +156,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>selenium/htmlunit match</td>
 </tr>
- <tr>
+<tr>
     <td><b>storeText</b></td>
     <td>errorList</td>
     <td>errorList</td>
@@ -116,7 +165,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>htmlunit/selenium = same?</td>
 </tr>
- <tr>
+<tr>
     <td>echo</td>
     <td>${errorList}</td>
     <td></td>
@@ -125,7 +174,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>htmlunit/selenium = same?</td>
 </tr>
- <tr>
+<tr>
     <td><b>open</b></td>
     <td>/index.html</td>
     <td></td>
@@ -163,25 +212,25 @@ The commands in this table work with both selenium and htmlunit.
     <td>fails because element not present</td>
 </tr>
 
- <tr>
-     <td>storeText</td>
-     <td>paraWithTwoLineBreaks</td>
-     <td>para</td>
+<tr>
+    <td>storeText</td>
+    <td>paraWithTwoLineBreaks</td>
+    <td>para</td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td>Open main page</td>
 </tr>
- <tr>
-     <td>verifyText</td>
-     <td>paraWithTwoLineBreaks</td>
-     <td>${para}</td>
+<tr>
+    <td>verifyText</td>
+    <td>paraWithTwoLineBreaks</td>
+    <td>${para}</td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td>Open main page</td>
 </tr>
- <tr>
+<tr>
     <td><b>storeText</b></td>
     <td>//abbr[@title='available']</td>
     <td>text</td>
@@ -202,38 +251,41 @@ The commands in this table work with both selenium and htmlunit.
 
 
 <tr>
-   <td><b>open</b></td>
-   <td>/index.html</td>
-   <td></td>
-   <td>true</td>
-   <td></td>
-   <td>false</td>
-   <td>Open main page</td>
-</tr><tr>
-   <td><b>waitForElementNotPresent</b></td>
-   <td>blahblah</td>
-   <td></td>
-   <td>true</td>
-   <td></td>
-   <td>false</td>
-   <td>basic NOT test</td>
-</tr><tr>
-<td>verifyElementNotPresent</td>
-<td>imagesubmit</td>
-<td></td>
+    <td><b>open</b></td>
+    <td>/index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Open main page</td>
+</tr>
+<tr>
+    <td><b>waitForElementNotPresent</b></td>
+    <td>blahblah</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic NOT test</td>
+</tr>
+<tr>
+    <td>verifyElementNotPresent</td>
+    <td>imagesubmit</td>
+    <td></td>
 
-   <td>false</td>
-   <td></td>
-   <td>false</td>
-   <td>basic NOT test</td>
-</tr><tr>
-   <td><b>verifyElementNotPresent</b></td>
-   <td>blahblah</td>
-   <td></td>
-   <td>true</td>
-   <td></td>
-   <td>false</td>
-   <td>basic NOT test</td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td>basic NOT test</td>
+</tr>
+<tr>
+    <td><b>verifyElementNotPresent</b></td>
+    <td>blahblah</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic NOT test</td>
 </tr>
 
 
@@ -707,33 +759,9 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>basic waitFor...</td>
 </tr>
-<tr>
-    <td><b>setTimeout</b></td>
-    <td>1000</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>setup for next test</td>
-</tr>
-<tr>
-    <td><b>waitForValue</b></td>
-    <td>new_username</td>
-    <td>bob</td>
-    <td>false</td>
-    <td>ERROR: Timed out after 1000ms</td>
-    <td>false</td>
-    <td>waitFor... something that isn't there</td>
-</tr>
-<tr>
-    <td>setTimeout</td>
-    <td>30000</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>cleanup for previous test</td>
-</tr>
+
+
+
 <tr>
     <td>echo</td>
     <td>${typed_value}</td>
@@ -763,7 +791,6 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>vanilla test</td>
 </tr>
-
 
 
 <tr>
@@ -1529,36 +1556,36 @@ The commands in this table work with both selenium and htmlunit.
 </tr>
 
 <tr>
-	<td>type</td>
-	<td>phone</td>
-	<td>abcde</td>
+    <td>type</td>
+    <td>phone</td>
+    <td>abcde</td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td><b>setCursorPosition</b></td>
-	<td>phone</td>
-	<td>3</td>
+    <td><b>setCursorPosition</b></td>
+    <td>phone</td>
+    <td>3</td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td><b>keyPress</b></td>
-	<td>phone</td>
-	<td>3</td>
+    <td><b>keyPress</b></td>
+    <td>phone</td>
+    <td>3</td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td>verifyValue</td>
-	<td>phone</td>
-	<td>abc3de</td>
+    <td>verifyValue</td>
+    <td>phone</td>
+    <td>abc3de</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -1596,7 +1623,7 @@ The commands in this table work with both selenium and htmlunit.
 <tr>
     <td>echo</td>
     <td>alllinks = ${alllinks}</td>
-    <td><br/></td>                  
+    <td><br/></td>
     <td>true</td>
     <td>alllinks = orly,,,,,</td>
     <td>false</td>
@@ -2944,7 +2971,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>DEPRECATED IN SELENIUM IDE (and thus here)</td>
 </tr>
--->
 </table>
 </div>
 </body>
