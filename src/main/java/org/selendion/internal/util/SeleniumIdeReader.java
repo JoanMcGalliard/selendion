@@ -206,7 +206,9 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
             String trimmedCommand = command.replaceFirst("IfAvailable$", "");
             try {
-                return executeCommand(trimmedCommand, arg1, arg2);
+                CommandResult result = executeCommand(trimmedCommand, arg1, arg2);
+                result.setSuccess(true);
+                return result;
             } catch (SeleniumException se) {
                 return new CommandResult(true, "");
             }
@@ -911,7 +913,11 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
     }
 
     protected class CommandResult {
-        private final boolean success;
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
+
+        private boolean success;
         private final String message;
 
         public CommandResult(boolean success, String message) {
