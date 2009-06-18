@@ -1555,6 +1555,25 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
 </tr>
 <tr>
+	<td>storeEval</td>
+	<td>selenium.browserbot.getUserWindow().hitbox_pn == 'Error'</td>
+	<td>hitboxTagPresent</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>echo</td>
+    <td>hitboxTagPresent = ${hitboxTagPresent}</td>
+    <td><br/></td>
+    <td>true</td>
+    <td>hitboxTagPresent = true</td>
+    <td>false</td>
+    <td>testing above row</td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>pop</td>
 	<td></td>
@@ -1706,7 +1725,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>allwindowids = ${allwindowids}</td>
     <td><br/></td>
     <td>true</td>
-    <td>allwindowids = undefined</td>
+    <td>allwindowids = undefined,undefined</td>
     <td>false</td>
     <td></td>
 </tr>
@@ -1724,7 +1743,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>allwindownames = ${allwindownames}</td>
     <td><br/></td>
     <td>true</td>
-    <td>allwindownames = selenium_main_app_window</td>
+    <td>allwindownames = selenium_main_app_window,null</td>
     <td>false</td>
     <td></td>
 </tr>
