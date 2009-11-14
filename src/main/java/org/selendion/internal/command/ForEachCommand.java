@@ -45,20 +45,20 @@ public class ForEachCommand extends AbstractCommand {
         Element placeholder = new Element("span");
 
         Element prototype = element.copy();
-
+        element.insertAfter(placeholder);
+        
         for (Object loopVar : iterable) {
             Element newContent = prototype.copy();
             placeholder.appendChild(newContent);
 
             CommandCall dummy = new CommandCall(ForEachCommand.this, newContent, commandCall.getExpression(), commandCall.getResource());
             documentParser.generateCommandCallTree(newContent.getXomElement(), dummy, commandCall.getResource());
-            CommandCall duplicateOfThisVerifyRowsCommand = dummy.getChildren().get(0);
-            CommandCallList children = duplicateOfThisVerifyRowsCommand.getChildren();
+            CommandCall duplicateOfThisCommand = dummy.getChildren().get(0);
+            CommandCallList children = duplicateOfThisCommand.getChildren();
 
             evaluator.setVariable(loopVariableName, loopVar);
             children.processSequentially(evaluator, resultRecorder);
         }
-        element.insertAfter(placeholder);
         element.addAttribute("class", "invisible");
     }
 }

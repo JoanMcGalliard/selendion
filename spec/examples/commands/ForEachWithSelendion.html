@@ -1,0 +1,31 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<head>
+    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>For Each</title>
+</head>
+<body>
+
+<h1>For each</h1>
+
+<p>
+    For each means the element should be repeated for each value in the list
+</p>
+
+        <ul concordion:execute="#men =newList()">
+            <li concordion:execute="#men.add(#TEXT)">Bob</li>
+            <li concordion:execute="#men.add(#TEXT)">James</li>
+        </ul>
+    <div class="example">
+    
+    <span concordion:forEach="#firstName : #men">
+        <p>
+            Let's run this little <a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html">Passing
+            Selendion test</a>.
+        </p>
+      
+    </span>
+    </div>
+
+</body>
+</html>
