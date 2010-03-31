@@ -334,6 +334,10 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException(IMPLEMENTATION_REQUIRED + "fireEvent");
     }
 
+    public void focus(String arg1) {
+        throw new RuntimeException(IMPLEMENTATION_REQUIRED + "focus");
+    }
+
     public String getSpeed() {
         throw new RuntimeException(IMPLEMENTATION_REQUIRED + "getSpeed");
     }

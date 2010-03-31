@@ -60,6 +60,7 @@ public interface BrowserDriver {
     public abstract void dragdrop(String arg1, String arg2);
     public abstract String echo(String arg1);
     public abstract void fireEvent(String arg1, String arg2);
+    public abstract void focus(String arg1);
     public abstract String getSpeed();
     public abstract void goBack();
     public abstract void highlight(String arg1);

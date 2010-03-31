@@ -659,6 +659,8 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             browser.windowFocus();
         } else if (command.equals("windowMaximize")) {
             browser.windowMaximize();
+        } else if (command.equals("focus")) {
+            browser.focus(arg1);
         } else {
             // maybe it's a js extension
             String js = "Selenium.prototype.do" + command.substring(0, 1).toUpperCase() + command.substring(1);
