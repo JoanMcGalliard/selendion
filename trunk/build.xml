@@ -13,8 +13,7 @@
     <target name="svn.version">
         <sequential>
             <svn username="${googleUser}"
-                 password="${googlePassword}"
-                    javahl="true">
+                 password="${googlePassword}">
                 <info target="${basedir}"/>
             </svn>
             <property name="version" value="0.5.${svn.info.rev}"/>
@@ -75,7 +74,7 @@
     <target name="stop.selenium">
         <waitfor maxwait="3" maxwaitunit="second">
             <not>
-                <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDown"/>
+                <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
             </not>
         </waitfor>
     </target>
