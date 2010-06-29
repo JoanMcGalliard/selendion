@@ -127,7 +127,7 @@ public class SeleniumDriver extends DefaultSelenium implements BrowserDriver {
             }
             valueStr = valueStr.replaceFirst("[ ,]*$", "");
             getEval(String.format("storedVars['%s']=%s", name, "[" + valueStr + "]"));
-        } else if (clazz == Number.class) {
+        } else if (clazz.getSuperclass() == Number.class ) {
             getEval(String.format("storedVars['%s']=%s", name, value.toString()));
             getEval(String.format("storedVars['%s']=%s", name, value.toString()));
         }

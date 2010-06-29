@@ -67,15 +67,18 @@
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
         <option name="myLocal" value="false" />
+        <inspection_tool class="CheckEmptyScriptTag" enabled="false" level="WARNING" enabled_by_default="false" />
+        <inspection_tool class="HtmlPresentationalElement" enabled="false" level="WARNING" enabled_by_default="false" />
         <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="myValues">
             <value>
-              <list size="5">
+              <list size="6">
                 <item index="0" class="java.lang.String" itemvalue="concordion:runselenium" />
                 <item index="1" class="java.lang.String" itemvalue="concordion:assertequals" />
                 <item index="2" class="java.lang.String" itemvalue="concordion:set" />
                 <item index="3" class="java.lang.String" itemvalue="concordion:echo" />
                 <item index="4" class="java.lang.String" itemvalue="concordion:execute" />
+                <item index="5" class="java.lang.String" itemvalue="concordion:runselendion" />
               </list>
             </value>
           </option>
