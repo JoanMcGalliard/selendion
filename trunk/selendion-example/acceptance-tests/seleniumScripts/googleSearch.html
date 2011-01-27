@@ -11,6 +11,7 @@
 <thead>
 <tr><td rowspan="1" colspan="3">googleSearch</td></tr>
 </thead><tbody>
+
 <tr>
 	<td>open</td>
 	<td>/</td>
@@ -22,8 +23,18 @@
 	<td>${query}</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>btnG</td>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickIfAvailable</td>
+	<td>//input[@name='btnG']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//div[@id='resultStats']</td>
 	<td></td>
 </tr>
 <tr>
