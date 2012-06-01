@@ -17,15 +17,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/selenium-server.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/xom-1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -54,15 +45,6 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/cssparser-0.9.5.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/selenium-java-client-driver.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -219,6 +201,17 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/selenium-server-standalone-2.22.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/selenium-server-standalone-2.22.0.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>

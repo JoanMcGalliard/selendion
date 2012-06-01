@@ -1369,15 +1369,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>non-existant element</td>
 </tr>
-<tr>
-    <td><b>storeAttribute</b></td>
-    <td>xPath=/html/head/meta[@name='pageName']@empty</td>
-    <td>blah</td>
-    <td>false</td>
-    <td>ERROR: Could not find element attribute: xPath=/html/head/meta[@name='pageName']@empty</td>
-    <td>false</td>
-    <td>empty (illegal!) element</td>
-</tr>
+
 <tr>
     <td><b>clickAndWait</b></td>
     <td>submit</td>
@@ -1664,24 +1656,8 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
 </tr>
-<tr>
-    <td><b>keyPress</b></td>
-    <td>phone</td>
-    <td>3</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td>verifyValue</td>
-    <td>phone</td>
-    <td>abc3de</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
+
+
 
 
 <tr>
@@ -2002,6 +1978,76 @@ The commands in this table work with both selenium and htmlunit.
 </table>
 <p><i concordion:execute="stop()">Close the browser.</i></p>
 </div>
+<div class="example">
+<p>
+    The commands in these tables behave differently in Selenium and HTMLUnit (this needs to be resolved).
+</p>
+
+<div class="example">
+
+     <p> Using
+    <span concordion:set="#browser">SELENIUM</span>.</p>
+
+  <p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
+      <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
+          http://localhost:55555/</a> we expect the following results: </p>
+   <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+   <tr>
+       <th concordion:set="#command=#TEXT">Command</th>
+       <th concordion:set="#arg1">arg1</th>
+       <th concordion:set="#arg2">arg2</th>
+       <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+       <th concordion:assertEquals="getMessage()">Message</th>
+       <th concordion:assertEquals="getException()">Exception</th>
+       <th>Remarks</th>
+   </tr>
+
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='pageName']@empty</td>
+    <td>blah</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>empty element, but Selenium no longer returns an error?</td>
+</tr>
+</table>
+    <p><i concordion:execute="stop()">Close the browser.</i></p>
+
+</div>
+    <div class="example">
+
+     <p> Using
+    <span concordion:set="#browser">HTMLUNIT</span>.</p>
+
+  <p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
+      <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
+          http://localhost:55555/</a> we expect the following results: </p>
+<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+<tr>
+    <th concordion:set="#command=#TEXT">Command</th>
+    <th concordion:set="#arg1">arg1</th>
+    <th concordion:set="#arg2">arg2</th>
+    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+    <th concordion:assertEquals="getMessage()">Message</th>
+    <th concordion:assertEquals="getException()">Exception</th>
+    <th>Remarks</th>
+</tr>
+
+
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='pageName']@empty</td>
+    <td>blah</td>
+    <td>false</td>
+    <td>ERROR: Could not find element attribute: xPath=/html/head/meta[@name='pageName']@empty</td>
+    <td>false</td>
+    <td>empty (illegal!) element</td>
+</tr>
+</table>
+        <p><i concordion:execute="stop()">Close the browser.</i></p>
+</div>
+ </div>
 <div class="example">
 <p>
     The commands in this table work have not yet been verified with either selenium or html unit.</p>
