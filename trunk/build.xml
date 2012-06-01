@@ -66,7 +66,7 @@
             <arg value="-port"/>
             <arg value="${selendion.selenium.server.port}"/>
             <classpath>
-                <pathelement location="lib/selenium-server.jar"/>
+                <pathelement location="lib/selenium-server-standalone-2.22.0.jar"/>
                 <pathelement location="lib/junit-4.5.jar"/>
             </classpath>
         </java>
@@ -167,7 +167,7 @@
         </junit>
     </target>
 
-    <target name="build.jar" depends="svn.version,compile,run.tests">
+    <target name="build.jar" depends="svn.version">
         <mkdir dir="${dir.dist}"/>
 
         <jar destfile="${dir.dist}/${productName}-${version}.jar"
@@ -181,10 +181,7 @@
             <zipfileset src="lib/concordion-1.3.1-patched.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/selenium-java-client-driver.jar">
-                <exclude name="META-INF/"/>
-            </zipfileset>
-            <zipfileset src="lib/selenium-server.jar">
+            <zipfileset src="lib/selenium-server-standalone-2.22.0.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <indexjars/>
@@ -204,10 +201,7 @@
             <zipfileset src="lib/concordion-1.3.1-patched.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/selenium-java-client-driver.jar">
-                <exclude name="META-INF/"/>
-            </zipfileset>
-            <zipfileset src="lib/selenium-server.jar">
+            <zipfileset src="lib/selenium-server-standalone-2.22.0.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <zipfileset src="lib/javassist_3.9.0.jar">
