@@ -2,7 +2,7 @@
     <property name="dir.support-lib" value="${basedir}/support-lib"/>
 
     <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask"
-             classpath="${dir.support-lib}/ant-googlecode-0.0.2.jar" name="gcupload"/>
+             classpath="${dir.support-lib}/ant-googlecode-0.0.3.jar" name="gcupload"/>
     <path id="svnant.classpath">
         <fileset dir="${dir.support-lib}">
             <include name="**/*.jar"/>
