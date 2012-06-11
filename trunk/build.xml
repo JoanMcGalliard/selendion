@@ -272,6 +272,14 @@
                 username="${googleUser}"
                 password="${googlePassword}"
                 projectname="${productName}"
+                filename="${dir.dist}/${productName}-${version}-src.zip"
+                targetfilename="${productName}-${version}-src.zip"
+                summary="Source for Version ${version} of ${productName}"
+                labels="Type-Source, OpSys-All"/>
+        <gcupload
+                username="${googleUser}"
+                password="${googlePassword}"
+                projectname="${productName}"
                 filename="${dir.dist}/${productName}-${version}.jar"
                 targetfilename="${productName}-${version}.jar"
                 summary="Version ${version} of ${productName}"
@@ -284,14 +292,6 @@
                 targetfilename="${productName}-${version}-with-dependencies.jar"
                 summary="Version ${version} of ${productName} with full dependencies"
                 labels="Type-Package, OpSys-All"/>
-        <gcupload
-                username="${googleUser}"
-                password="${googlePassword}"
-                projectname="${productName}"
-                filename="${dir.dist}/${productName}-${version}-src.zip"
-                targetfilename="${productName}-${version}-src.zip"
-                summary="Source for Version ${version} of ${productName}"
-                labels="Type-Source, OpSys-All"/>
         <gcupload
                 username="${googleUser}"
                 password="${googlePassword}"
