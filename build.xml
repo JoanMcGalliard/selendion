@@ -108,7 +108,8 @@
         </sequential>
     </target>
     <target name="build.example.zip"
-            depends="svn.version,build.dependencies.jar">
+            depends="svn.version">
+        <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="stop.selenium"/>
         <copy todir="${dir.example}/lib">
             <fileset file="${dir.dist}/${productName}-${version}-with-dependencies.jar"/>
         </copy>
