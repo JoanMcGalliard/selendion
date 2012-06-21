@@ -33,6 +33,7 @@
             <classpath refid="classpath.test.acceptance"/>
            
         </java>
+        <sleep milliseconds="1000"/>
     </target>
     <target name="stop.selenium">
         <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="stop.selenium.timeout">
