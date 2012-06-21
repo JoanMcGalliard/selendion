@@ -66,17 +66,18 @@
             <arg value="-port"/>
             <arg value="${selendion.selenium.server.port}"/>
             <classpath>
-                <pathelement location="lib/selenium-server-standalone-2.22.0.jar"/>
+                <pathelement location="lib/selenium-server-standalone-2.24.1.jar"/>
                 <pathelement location="lib/junit-4.5.jar"/>
             </classpath>
         </java>
     </target>
     <target name="stop.selenium">
-        <waitfor maxwait="3" maxwaitunit="second">
+        <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="stop.selenium.timeout">
             <not>
                 <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
             </not>
         </waitfor>
+        <fail if="stop.selenium.timeout" message="Selenium failed to shutdown"/>
     </target>
     <target name="start.webserver"
             depends="stop.webserver">
@@ -181,7 +182,7 @@
             <zipfileset src="lib/concordion-1.3.1-patched.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/selenium-server-standalone-2.22.0.jar">
+            <zipfileset src="lib/selenium-server-standalone-2.24.1.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <indexjars/>
@@ -201,7 +202,7 @@
             <zipfileset src="lib/concordion-1.3.1-patched.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/selenium-server-standalone-2.22.0.jar">
+            <zipfileset src="lib/selenium-server-standalone-2.24.1.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <zipfileset src="lib/javassist_3.9.0.jar">

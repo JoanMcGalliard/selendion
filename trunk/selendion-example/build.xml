@@ -35,13 +35,13 @@
         </java>
     </target>
     <target name="stop.selenium">
-        <waitfor maxwait="3" maxwaitunit="second">
+        <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="stop.selenium.timeout">
             <not>
-                <http url="http://${selendion.selenium.server}:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDown"/>
+                <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
             </not>
         </waitfor>
+        <fail if="stop.selenium.timeout" message="Selenium failed to shutdown"/>
     </target>
-
     <target name="clean">
         <delete dir="${dir.build}"/>
         <delete dir="${dir.test.output}"/>
