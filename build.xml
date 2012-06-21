@@ -167,6 +167,7 @@
                 </fileset>
             </batchtest>
         </junit>
+        <ant target="stop.selenium"/>
     </target>
 
     <target name="build.jar" depends="svn.version">
