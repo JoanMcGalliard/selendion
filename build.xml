@@ -46,6 +46,7 @@
     <property name="dir.dist" value="${basedir}/dist"/>
     <property name="selendion.browser" value="*firefox"/>
     <property name="selendion.selenium.server.port" value="5555"/>
+    <property name="webserver.server.port" value="55555"/>
     <property file="${basedir}/local.properties"/>
 
 
@@ -70,6 +71,12 @@
                 <pathelement location="lib/junit-4.5.jar"/>
             </classpath>
         </java>
+
+        <waitfor maxwait="10" maxwaitunit="second" timeoutproperty="start.selenium.timeout">
+            <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=getNewBrowserSession"/>
+        </waitfor>
+        <fail if="start.selenium.timeout" message="Selenium failed to start"/>
+
     </target>
     <target name="stop.selenium">
         <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="stop.selenium.timeout">
@@ -86,11 +93,18 @@
                 <pathelement path="${dir.classes}"/>
             </classpath>
         </java>
+
+        <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="start.webserver.timeout">
+                <http url="http://localhost:${webserver.server.port}/"/>
+        </waitfor>
+        <fail if="start.webserver.timeout" message="Web server failed to start"/>
+
+
     </target>
     <target name="stop.webserver">
         <waitfor maxwait="3" maxwaitunit="second">
             <not>
-                <http url="http://localhost:55555?cmd=shutDown"/>
+                <http url="http://localhost:${webserver.server.port}?cmd=shutDown"/>
             </not>
         </waitfor>
     </target>
@@ -140,7 +154,7 @@
         </copy>
     </target>
 
-    <target name="run.tests" depends="start.webserver, start.selenium">
+    <target name="run.tests" depends="compile,start.webserver, start.selenium">
         <mkdir dir="${dir.test.output}"/>
         <mkdir dir="${dir.selendion.output}"/>
 

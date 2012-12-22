@@ -5,7 +5,6 @@
     <property name="dir.test.output" value="${dir.build}/test-output"/>
     <property name="dir.selendion.output" value="${dir.test.output}/selendion"/>
     <property name="test.acceptance.src.dir" value="acceptance-tests"/>
-    <property name="selendion.browser" value="*firefox"/>
     <property name="selendion.selenium.server.port" value="5555"/>
     <property name="selendion.selenium.server" value="localhost"/>
 
@@ -33,7 +32,11 @@
             <classpath refid="classpath.test.acceptance"/>
            
         </java>
-        <sleep milliseconds="1000"/>
+        <waitfor maxwait="10" maxwaitunit="second" timeoutproperty="start.selenium.timeout">
+            <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=getNewBrowserSession"/>
+        </waitfor>
+        <fail if="start.selenium.timeout" message="Selenium failed to start"/>
+
     </target>
     <target name="stop.selenium">
         <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="stop.selenium.timeout">
