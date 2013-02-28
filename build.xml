@@ -16,7 +16,7 @@
                  password="${googlePassword}">
                 <info target="${basedir}"/>
             </svn>
-            <property name="version" value="0.5.${svn.info.rev}"/>
+            <property name="version" value="0.6.${svn.info.rev}"/>
         </sequential>
     </target>
     <target name="svn.commit">
@@ -58,8 +58,16 @@
 
     <target name="build"
             description="Builds everything from scratch"
-            depends="clean,compile,run.tests,build.jar,build.srczip,build.dependencies.jar"
+            depends="clean,compile,run.tests,maven,build.jar,build.srczip,build.dependencies.jar"
             />
+    <target name="maven" >
+        <exec executable="mvn" failonerror="true">
+
+          <arg value="test"/>
+
+        </exec>
+    </target>
+
 
     <target name="start.selenium"
         depends="stop.selenium">
@@ -140,8 +148,8 @@
                srcdir="src/main/java:src/test/java"
                debug="yes"
                failonerror="yes"
-               source="1.5"
-               target="1.5"
+               source="1.7"
+               target="1.7"
                 />
 
         <copy todir="${dir.classes}">
