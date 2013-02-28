@@ -60,17 +60,17 @@
             description="Builds everything from scratch"
             depends="clean,compile,run.tests,maven,build.jar,build.srczip,build.dependencies.jar"
             />
-    <target name="maven" >
+    <target name="maven">
         <exec executable="mvn" failonerror="true">
 
-          <arg value="test"/>
+            <arg value="test"/>
 
         </exec>
     </target>
 
 
     <target name="start.selenium"
-        depends="stop.selenium">
+            depends="stop.selenium">
         <java classname="org.openqa.selenium.server.SeleniumServer" fork="true" spawn="true">
             <arg value="-port"/>
             <arg value="${selendion.selenium.server.port}"/>
@@ -102,7 +102,7 @@
         </java>
 
         <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="start.webserver.timeout">
-                <http url="http://localhost:${webserver.server.port}/"/>
+            <http url="http://localhost:${webserver.server.port}/"/>
         </waitfor>
         <fail if="start.webserver.timeout" message="Web server failed to start"/>
     </target>
@@ -158,7 +158,7 @@
         </copy>
     </target>
 
-    <target name="run.tests" depends="start.webserver, start.selenium"> 
+    <target name="run.tests" depends="start.webserver, start.selenium">
         <mkdir dir="${dir.test.output}"/>
         <mkdir dir="${dir.selendion.output}"/>
 
