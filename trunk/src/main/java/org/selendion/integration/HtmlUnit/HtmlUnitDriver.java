@@ -1,5 +1,5 @@
 /*
-	Copyright Joan McGalliard, 2008-9
+	Copyright Joan McGalliard, 2008-2013
 */
 
 package org.selendion.integration.HtmlUnit;
