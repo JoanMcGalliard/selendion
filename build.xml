@@ -16,7 +16,7 @@
                  password="${googlePassword}">
                 <info target="${basedir}"/>
             </svn>
-            <property name="version" value="0.6.${svn.info.rev}"/>
+            <property name="version" value="0.7.${svn.info.rev}"/>
         </sequential>
     </target>
     <target name="svn.commit">
@@ -44,9 +44,11 @@
     <property name="dir.test.output" value="${dir.build}/test-output"/>
     <property name="dir.selendion.output" value="${dir.test.output}/selendion"/>
     <property name="dir.dist" value="${basedir}/dist"/>
+    <property name="dir.lib" value="${basedir}/lib"/>
     <property name="selendion.browser" value="*firefox"/>
     <property name="selendion.selenium.server.port" value="5555"/>
     <property name="webserver.server.port" value="55555"/>
+    <property name="concordion.file.name" value="concordion-1.3.2-patched.jar"/>
     <property file="${basedir}/local.properties"/>
 
 
@@ -58,13 +60,11 @@
 
     <target name="build"
             description="Builds everything from scratch"
-            depends="clean,compile,run.tests,maven,build.jar,build.srczip,build.dependencies.jar"
+            depends="clean,compile,run.tests,build.jar,build.srczip,build.dependencies.jar,maven"
             />
     <target name="maven">
         <exec executable="mvn" failonerror="true">
-
             <arg value="test"/>
-
         </exec>
     </target>
 
@@ -75,8 +75,8 @@
             <arg value="-port"/>
             <arg value="${selendion.selenium.server.port}"/>
             <classpath>
-                <pathelement location="lib/selenium-server-standalone-2.24.1.jar"/>
-                <pathelement location="lib/junit-4.5.jar"/>
+                <pathelement location="${dir.lib}/selenium-server-standalone-2.24.1.jar"/>
+                <pathelement location="${dir.lib}/junit-4.5.jar"/>
             </classpath>
         </java>
 
@@ -127,17 +127,42 @@
         </sequential>
     </target>
     <target name="build.example.zip"
-            depends="svn.version">
-        <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="stop.selenium"/>
-        <copy todir="${dir.example}/lib">
-            <fileset file="${dir.dist}/${productName}-${version}-with-dependencies.jar"/>
-        </copy>
+            depends="build.mvn.example.zip,build.ant.example.zip"/>
 
-        <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="build"/>
-        <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="clean"/>
-        <zip basedir="${dir.example}"
-             excludes=".svn"
-             destfile="${dir.dist}/${productName}-${version}-example.zip"/>
+    <target name="build.ant.example.zip" depends="svn.version">
+        <sequential>
+            <delete>
+                <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
+            </delete>
+            <copy todir="${dir.example}/lib" file="${dir.dist}/${productName}-${version}-with-dependencies.jar"/>
+            <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="stop.selenium"/>
+            <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="build"/>
+            <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="clean"/>
+            <zip basedir="${dir.example}"
+                 excludes=".svn"
+                 destfile="${dir.dist}/${productName}-${version}-ant-example.zip"/>
+        </sequential>
+    </target>
+    <target name="build.mvn.example.zip" depends="svn.version">
+        <sequential>
+            <delete>
+                <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
+            </delete>
+            <echo message="${dir.dist}/${productName}-${version}.jar"/>
+            <echo message="${dir.dist}/${concordion.file.name}"/>
+            <echo message="${dir.example}/lib"/>
+            <copy todir="${dir.example}/lib" file="${dir.dist}/${productName}-${version}.jar"/>
+            <copy todir="${dir.example}/lib" file="${dir.dist}/${concordion.file.name}"/>
+
+            <exec executable="mvn" failonerror="true" dir="${dir.example}">
+                <arg value="clean"/>
+                <arg value="test"/>
+                <arg value="clean"/>
+            </exec>
+            <zip basedir="${dir.example}"
+                 excludes=".svn"
+                 destfile="${dir.dist}/${productName}-${version}-mvn-example.zip"/>
+        </sequential>
     </target>
 
     <target name="compile">
@@ -194,14 +219,9 @@
              manifest="src/main/java/MANIFEST.MF">
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
-            <zipfileset src="lib/concordion-1.3.2-patched.jar">
-                <exclude name="META-INF/"/>
-            </zipfileset>
-            <zipfileset src="lib/selenium-server-standalone-2.24.1.jar">
-                <exclude name="META-INF/"/>
-            </zipfileset>
             <indexjars/>
         </jar>
+        <copy file="${dir.lib}/${concordion.file.name}" todir="${dir.dist}"/>
     </target>
     <target name="build.dependencies.jar" depends="build.jar">
 
@@ -213,58 +233,58 @@
              filesetmanifest="skip"
              manifest="src/main/java/MANIFEST.MF">
             <exclude name="examples/**"/>
-            <zipfileset src="lib/concordion-1.3.2-patched.jar">
+            <zipfileset src="${dir.lib}/${concordion.file.name}">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/selenium-server-standalone-2.24.1.jar">
+            <zipfileset src="${dir.lib}/selenium-server-standalone-2.24.1.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/javassist_3.9.0.jar">
+            <zipfileset src="${dir.lib}/javassist_3.9.0.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/junit-4.5.jar">
+            <zipfileset src="${dir.lib}/junit-4.5.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/ognl-2.6.9.jar">
+            <zipfileset src="${dir.lib}/ognl-2.6.9.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/tagsoup-1.2.jar">
+            <zipfileset src="${dir.lib}/tagsoup-1.2.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/xom-1.1.jar">
+            <zipfileset src="${dir.lib}/xom-1.1.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/htmlunit-2.4.jar">
+            <zipfileset src="${dir.lib}/htmlunit-2.4.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/htmlunit-core-js-2.4.jar">
+            <zipfileset src="${dir.lib}/htmlunit-core-js-2.4.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/commons-httpclient-3.1.jar">
+            <zipfileset src="${dir.lib}/commons-httpclient-3.1.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/cssparser-0.9.5.jar">
+            <zipfileset src="${dir.lib}/cssparser-0.9.5.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/sac-1.3.jar">
+            <zipfileset src="${dir.lib}/sac-1.3.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/commons-io-1.4.jar">
+            <zipfileset src="${dir.lib}/commons-io-1.4.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/commons-collections-3.2.1.jar">
+            <zipfileset src="${dir.lib}/commons-collections-3.2.1.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/commons-lang-2.4.jar">
+            <zipfileset src="${dir.lib}/commons-lang-2.4.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/nekohtml-1.9.12.jar">
+            <zipfileset src="${dir.lib}/nekohtml-1.9.12.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/xalan-2.7.1.jar">
+            <zipfileset src="${dir.lib}/xalan-2.7.1.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="lib/xercesImpl-2.8.1.jar">
+            <zipfileset src="${dir.lib}/xercesImpl-2.8.1.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <indexjars/>
@@ -311,9 +331,25 @@
                 username="${googleUser}"
                 password="${googlePassword}"
                 projectname="${productName}"
-                filename="${dir.dist}/${productName}-${version}-example.zip"
-                targetfilename="${productName}-${version}-example.zip"
+                filename="${dir.dist}/${productName}-${version}-ant-example.zip"
+                targetfilename="${productName}-${version}-ant-example.zip"
                 summary="Example Selendion ant project to help you get started"
+                labels="Type-Archive, OpSys-All"/>
+        <gcupload
+                username="${googleUser}"
+                password="${googlePassword}"
+                projectname="${productName}"
+                filename="${dir.dist}/${productName}-${version}-mvn-example.zip"
+                targetfilename="${productName}-${version}-mvn-example.zip"
+                summary="Example Selendion ant project to help you get started"
+                labels="Type-Archive, OpSys-All"/>
+        <gcupload
+                username="${googleUser}"
+                password="${googlePassword}"
+                projectname="${productName}"
+                filename="${dir.dist}/${concordion.file.name}"
+                targetfilename="${concordion.file.name}"
+                summary="Modified Concordion jar that Selendion extends"
                 labels="Type-Archive, OpSys-All"/>
 
     </target>

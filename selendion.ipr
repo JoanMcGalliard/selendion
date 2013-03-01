@@ -49,6 +49,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="selendion" />
+        <module name="selendion (1)" />
       </profile>
     </annotationProcessing>
   </component>
@@ -126,6 +127,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/selendion-example/pom.xml" />
       </list>
     </option>
   </component>
@@ -263,6 +265,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/selendion.iml" filepath="$PROJECT_DIR$/selendion.iml" />
+      <module fileurl="file://$PROJECT_DIR$/selendion-example/selendion (1).iml" filepath="$PROJECT_DIR$/selendion-example/selendion (1).iml" />
     </modules>
   </component>
   <component name="ProjectResources">
@@ -839,6 +842,13 @@
       <SOURCES>
         <root url="jar://$MAVEN_REPOSITORY$/org/yaml/snakeyaml/1.8/snakeyaml-1.8-sources.jar!/" />
       </SOURCES>
+    </library>
+    <library name="Maven: selendion:selendion:0.6.213">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/selendion-example/lib/selendion-0.6.213.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
     </library>
     <library name="Maven: xalan:xalan:2.7.0">
       <CLASSES>
