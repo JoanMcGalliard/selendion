@@ -4,7 +4,8 @@
     <property name="dir.classes" value="${dir.build}/classes"/>
     <property name="dir.test.output" value="${dir.build}/test-output"/>
     <property name="dir.selendion.output" value="${dir.test.output}/selendion"/>
-    <property name="test.acceptance.src.dir" value="acceptance-tests"/>
+    <property name="test.acceptance.src.dir" value="src/test/java"/>
+    <property name="test.acceptance.resource.dir" value="src/test/resources"/>
     <property name="selendion.selenium.server.port" value="5555"/>
     <property name="selendion.selenium.server" value="localhost"/>
 
@@ -58,14 +59,14 @@
 
         <javac classpathref="compile.classpath"
                destdir="${dir.classes}"
-               srcdir="acceptance-tests"
+               srcdir="${test.acceptance.src.dir}"
                failonerror="yes"
                source="1.5"
                target="1.5"
                 />
 
         <copy todir="${dir.classes}">
-            <fileset dir="acceptance-tests" excludes="**/*.java"/>
+            <fileset dir="${test.acceptance.resource.dir}" excludes="**/*.java"/>
         </copy>
     </target>
     <path id="classpath.test.acceptance">
@@ -83,7 +84,6 @@
         <sequential>
             <junit fork="yes" printsummary="yes" haltonfailure="true" showoutput="true">
                 <jvmarg value="-Dselendion.output.dir=${dir.selendion.output}"/>
-		<jvmarg value="-Dselendion.webappServer=http://google.com"/>
                 <jvmarg value="-Dselendion.testSupport=SELENIUM"/>
                 <jvmarg value="-Dselendion.seleniumBrowser=*firefox"/>
                 <jvmarg value="-Dselendion.seleniumServerHost=${selendion.selenium.server}"/>
@@ -104,7 +104,7 @@
             depends="compile"
             description="compile source and test files run all the acceptance tests">
         <run.acceptance.tests
-                test.pattern="**/Suite.java"/>
+                test.pattern="**/*Test.java"/>
     </target>
 
     <target name="ensure.test.name" unless="test">

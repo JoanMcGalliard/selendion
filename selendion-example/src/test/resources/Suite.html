@@ -1,0 +1,22 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<head>
+    <link href="../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>Suite</title>
+</head>
+<body>
+<h1>Suite</h1>
+
+<p>Build a suite consisting of <br/>
+    <a concordion:addToSuite="'concurrent',#HREF" href="tests/google/GoogleImagesTitle.html">Google Images Search
+        Title</a><br/>
+    <a concordion:addToSuite="'concurrent',#HREF" href="tests/google/GoogleWebTitle.html">Google web Search
+        Title</a><br/>
+</p>
+<p>Run the concurrent tests in <i concordion:runSuite="'concurrent',#numberOfThreads"><span
+        concordion:echo="#numberOfThreads"/></i> threads.
+</p>
+
+
+</body>
+</html>
