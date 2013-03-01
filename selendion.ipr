@@ -420,7 +420,7 @@
     </library>
     <library name="Maven: concordion:concordion:1.3.2">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/concordion-1.3.2-patched.jar!/" />
+        <root url="jar://$PROJECT_DIR$/selendion-example/lib/concordion-1.3.2-patched.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -843,9 +843,9 @@
         <root url="jar://$MAVEN_REPOSITORY$/org/yaml/snakeyaml/1.8/snakeyaml-1.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: selendion:selendion:0.6.213">
+    <library name="Maven: selendion:selendion:0.7">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/selendion-example/lib/selendion-0.6.213.jar!/" />
+        <root url="jar://$PROJECT_DIR$/selendion-example/lib/selendion.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
