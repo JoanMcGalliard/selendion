@@ -1,0 +1,42 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head><title>Google Images Search Title</title></head>
+<link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+<body>
+
+<h1>Google Images Search Title</h1>
+
+<h2>Setup </h2>
+
+<p concordion:startBrowser="#testSupport,#seleniumServerHost,#seleniumServerPort, #seleniumBrowser, #baseUrl">Start a browser
+    with:
+    testSupport <i concordion:echo="#testSupport"/>;
+    host <i concordion:echo="#seleniumBrowser"/>;
+    port <i concordion:echo="#seleniumServerPort"/>;
+    for <i concordion:echo="#seleniumBrowser"/>
+    and base url <a concordion:execute="#baseUrl=#HREF" href="http://google.com">http://google.com</a>.</p>
+
+
+    <table concordion:runSelenium="'../../seleniumScripts/googleSearch.html'">
+    <tr>
+        <th concordion:set="#query">Search term</th>
+        <th concordion:echo="#totalMatches">Number of hits</th>
+        <th concordion:assertEquals="#title">Page title</th>
+    </tr>
+        <tr>
+            <td>Gordon Brown</td>
+            <td></td>
+            <td>gordon brown - Google Search</td>
+        </tr>
+        <tr>
+            <td>Grigori Rasputin</td>
+            <td></td>
+            <td>grigori rasputin - Google Search</td>
+        </tr>
+    </table>
+
+
+<h2>Finally</h2>
+<i concordion:stopBrowser="">Close the browser</i>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head><title>Google Web Search Title</title></head>
+<link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+<body>
+
+<h1>Google Web Search Title</h1>
+
+<h2>Setup </h2>
+
+<p concordion:startBrowser="#testSupport,#seleniumServerHost,#seleniumServerPort, #seleniumBrowser, #baseUrl">Start a browser
+    with:
+    testSupport <i concordion:echo="#testSupport"/>;
+    host <i concordion:echo="#seleniumBrowser"/>;
+    port <i concordion:echo="#seleniumServerPort"/>;
+    for <i concordion:echo="#seleniumBrowser"/>
+    and base url <a concordion:execute="#baseUrl=#HREF" href="http://google.com">http://google.com</a>.</p>
+
+
+    <table concordion:runSelenium="'../../seleniumScripts/googleSearch.html'">
+    <tr>
+        <th concordion:set="#query">Search term</th>
+        <th concordion:echo="#totalMatches">Number of hits</th>
+        <th concordion:assertEquals="#title">Page title</th>
+    </tr>
+        <tr>
+            <td>joan</td>
+            <td></td>
+            <td>joan - Google Search</td>
+        </tr>
+        <tr>
+            <td>Don't you see, Mister Brown,
+Cried the youth with a frown.
+How wrong the whole thing is,
+How flattened the head is, how jammed down the neck is
+In short the whole owl, what and ignorant wreck it is;
+I make no apology;
+I've passed days and nights in a hundred collections,
+And cannot be blinded to any deflections
+Arising from unskillful fingers that fail
+To stuff a bird right, from the beak to his tail,
+Mister Brown ! Mister Brow !
+Do take that bird down,
+Or you'll soon be the laughing-stock al over town!"
+And the barber kept on shaving.</td>
+            <td></td>
+            <td>don't you see, mister brown,
+cried the youth with a frown.
+how wrong the whole thing is,
+how flattened the head is, how jammed down the neck is
+in short the whole owl, what and ignorant wreck it is;
+i make no apology;
+i've passed days and nights in a hundred collections,
+and cannot be blinded to any deflections
+arising from unskillful fingers that fail
+to stuff a bird right, from the beak to his tail,
+mister brown ! mister brow !
+do take that bird down,
+or you'll soon be the laughing-stock al over town!"
+and the barber kept on shaving. - Google Search</td>
+        </tr>
+    </table>
+
+
+<h2>Finally</h2>
+<i concordion:stopBrowser="">Close the browser</i>
+
+</body>
+</html>
