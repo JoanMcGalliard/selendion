@@ -151,7 +151,7 @@
             <echo message="${dir.dist}/${productName}-${version}.jar"/>
             <echo message="${dir.dist}/${concordion.file.name}"/>
             <echo message="${dir.example}/lib"/>
-            <copy todir="${dir.example}/lib" file="${dir.dist}/${productName}-${version}.jar"/>
+            <copy tofile="${dir.example}/lib/${productName}.jar" file="${dir.dist}/${productName}-${version}.jar"/>
             <copy todir="${dir.example}/lib" file="${dir.dist}/${concordion.file.name}"/>
 
             <exec executable="mvn" failonerror="true" dir="${dir.example}">

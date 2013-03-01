@@ -115,9 +115,9 @@
         <dependency>
             <groupId>selendion</groupId>
             <artifactId>selendion</artifactId>
-            <version>0.6.213</version>
+            <version>0.7</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/selendion-0.6.213.jar</systemPath>
+            <systemPath>${project.basedir}/lib/selendion.jar</systemPath>
         </dependency>
 
         <dependency>
