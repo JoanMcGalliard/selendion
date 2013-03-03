@@ -29,6 +29,8 @@ public class HtmlUnitDriver implements BrowserDriver {
     public HtmlUnitDriver(String baseUrl) {
         collectedAlerts = new ArrayList();
         webClient = new WebClient();
+        webClient.getOptions().setJavaScriptEnabled(true);
+
         webClient.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
         webClient.setRefreshHandler(new WaitingRefreshHandler());
 
@@ -173,8 +175,8 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException(IMPLEMENTATION_REQUIRED + "chooseOkOnNextConfirmation");
     }
 
-    private HtmlElement getHtmlElement(String key) {
-        HtmlElement element =  getHtmlElement((HtmlPage) page, key);
+    private DomElement getHtmlElement(String key) {
+        DomElement element =  getHtmlElement((HtmlPage) page, key);
         if (element != null) {
             return element;
         }
@@ -189,7 +191,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         }
         throw new HtmlUnitException("ERROR: Element " + key + " not found");
     }
-    private HtmlElement getHtmlElement(HtmlPage page, String key) {
+    private DomElement getHtmlElement(HtmlPage page, String key) {
 
         if (key.startsWith("xPath=")) {
             List<?> list = ((HtmlPage) page).getByXPath(key.replaceFirst("xPath=", ""));
@@ -205,7 +207,7 @@ public class HtmlUnitDriver implements BrowserDriver {
                 return null;
             }
         } else if (key.startsWith("name=")) {
-            List<HtmlElement> list = ((HtmlPage) page).getElementsByIdAndOrName(key.replaceFirst("^name=", ""));
+            List<DomElement> list = ((HtmlPage) page).getElementsByIdAndOrName(key.replaceFirst("^name=", ""));
             if (list.size() == 0) {
                 return null;
             }
@@ -247,7 +249,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void click(String arg1) {
-        HtmlElement element = getHtmlElement(arg1);
+        DomElement element = getHtmlElement(arg1);
         try {
 
             old_page = page;
@@ -443,7 +445,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     public void select(String arg1, String arg2) {
         String label = arg2.replaceFirst("label=", "").replaceFirst("value=", "");
         HtmlSelect select = (HtmlSelect) getHtmlElement(arg1);
-        for (HtmlElement htmlElement : select.getAllHtmlChildElements()) {
+        for (HtmlElement htmlElement : select.getHtmlElementDescendants()) {
             HtmlOption option = (HtmlOption) htmlElement;
             if (option.getTextContent().equals(label)) {
                 old_page = page;
@@ -504,7 +506,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public void type(String arg1, String arg2) {
-        HtmlElement element = getHtmlElement(arg1);
+        DomElement element = getHtmlElement(arg1);
         if (element.getClass().equals(HtmlTextInput.class)) {
             ((HtmlTextInput)element).setValueAttribute(arg2);
         } else if (element.getClass().equals(HtmlPasswordInput.class)) {
@@ -634,7 +636,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         throw new RuntimeException(IMPLEMENTATION_REQUIRED + "isPromptPresent");
     }
 
-    private String getAttribute(HtmlElement element, String attribute) {
+    private String getAttribute(DomElement element, String attribute) {
         String result = element.getAttribute(attribute);
         if (result.length() > 0) {
             return result;
@@ -651,7 +653,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         if (!m.matches()) {
             throw new HtmlUnitException("ERROR: Attribute " + arg1 + " not found");
         }
-        HtmlElement element = getHtmlElement(m.group(1));
+        DomElement element = getHtmlElement(m.group(1));
         try {
             return getAttribute(element, m.group(2));
         }
@@ -723,7 +725,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getSelectedValue(String arg1) {
-        HtmlElement element = getHtmlElement(arg1);
+        DomElement element = getHtmlElement(arg1);
         List<HtmlOption> options = ((HtmlSelect) element).getSelectedOptions();
         if (options.size() == 1) {
             return options.get(0).getAttribute("value");
@@ -739,9 +741,9 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getSelectOptions(String arg1) {
-                  HtmlElement element = getHtmlElement(arg1);
+                  DomElement element = getHtmlElement(arg1);
                   if (element.getClass().equals(HtmlSelect.class)) {
-                      Iterator it =  getHtmlElement(arg1).getAllHtmlChildElements().iterator();
+                      Iterator it =  getHtmlElement(arg1).getHtmlElementDescendants().iterator();
                       String str="";
                       while (it.hasNext()) {
                           str += ((HtmlElement) it.next()).getTextContent() + ",";
@@ -757,7 +759,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public String getText(String arg1) {
-        HtmlElement element = getHtmlElement(arg1);
+        DomElement element = getHtmlElement(arg1);
         Iterator<DomNode> it = element.getChildren().iterator();
         String str="";
         while (it.hasNext()) {
@@ -774,7 +776,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public Object getValue(String arg1) {
-        HtmlElement element = getHtmlElement(arg1);
+        DomElement element = getHtmlElement(arg1);
         if (element.getClass().equals(HtmlRadioButtonInput.class)) {
             HtmlRadioButtonInput button = (HtmlRadioButtonInput) element;
             if (button.getCheckedAttribute().length() == 0) {
@@ -806,7 +808,7 @@ public class HtmlUnitDriver implements BrowserDriver {
     }
 
     public boolean isChecked(String arg1) {
-        HtmlElement element = getHtmlElement(arg1);
+        DomElement element = getHtmlElement(arg1);
         if (element.getClass().equals(HtmlCheckBoxInput.class)) {
             HtmlCheckBoxInput checkbox = (HtmlCheckBoxInput) element;
             return checkbox.isChecked();
@@ -863,7 +865,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         return out.toString();
     }
     public void setJavaScriptEnabled(boolean bool) {
-        webClient.setJavaScriptEnabled(bool);
+        webClient.getOptions().setJavaScriptEnabled(bool);
     }
 
 
