@@ -111,6 +111,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/concordion-1.3.2-patched.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>selendion</groupId>
+            <artifactId>selendion</artifactId>
+            <version>0.7</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/selendion.jar</systemPath>
+        </dependency>
 
         <dependency>
             <groupId>org.ccil.cowan.tagsoup</groupId>
