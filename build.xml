@@ -259,6 +259,9 @@
             <zipfileset src="${dir.lib}/htmlunit-2.11.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
+            <zipfileset src="${dir.lib}/xml-apis-1.4.01.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
             <indexjars/>
         </jar>
     </target>
