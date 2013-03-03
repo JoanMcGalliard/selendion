@@ -130,11 +130,19 @@
     <target name="build.example.zip"
             depends="build.mvn.example.zip,build.ant.example.zip"/>
 
-    <target name="build.ant.example.zip" depends="svn.version">
+    <target name="clean.example.dir">
+        <delete>
+            <fileset dir="${dir.example}/lib" includes="**/*.jar" erroronmissingdir="false"/>
+        </delete>
+        <delete>
+            <dirset dir="${dir.example}/build" erroronmissingdir="false"/>
+        </delete>
+        <delete>
+            <dirset dir="${dir.example}/target" erroronmissingdir="false"/>
+        </delete>
+    </target>
+    <target name="build.ant.example.zip" depends="clean.example.dir,svn.version">
         <sequential>
-            <delete>
-                <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
-            </delete>
             <copy todir="${dir.example}/lib" file="${dir.dist}/${productName}-${version}-with-dependencies.jar"/>
             <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="stop.selenium"/>
             <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="build"/>
@@ -144,11 +152,8 @@
                  destfile="${dir.dist}/${productName}-${version}-ant-example.zip"/>
         </sequential>
     </target>
-    <target name="build.mvn.example.zip" depends="svn.version">
+    <target name="build.mvn.example.zip" depends="clean.example.dir,svn.version">
         <sequential>
-            <delete>
-                <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
-            </delete>
             <echo message="${dir.dist}/${productName}-${version}.jar"/>
             <echo message="${dir.dist}/${concordion.file.name}"/>
             <echo message="${dir.example}/lib"/>
@@ -215,11 +220,12 @@
 
         <jar destfile="${dir.dist}/${productName}-${version}.jar"
              basedir="${dir.classes}"
-             compress="false"
+             compress="true"
              filesetmanifest="skip"
              manifest="src/main/java/MANIFEST.MF">
             <exclude name="examples/**"/>
             <exclude name="support/**"/>
+            <exclude name=".svn/**"/>
             <indexjars/>
         </jar>
         <copy file="${dir.lib}/${concordion.file.name}" todir="${dir.dist}"/>
@@ -231,10 +237,11 @@
 
         <jar destfile="${dir.dist}/${productName}-${version}-with-dependencies.jar"
              basedir="${dir.classes}"
-             compress="false"
+             compress="true"
              filesetmanifest="skip"
              manifest="src/main/java/MANIFEST.MF">
             <exclude name="examples/**"/>
+            <exclude name=".svn/**"/>
             <zipfileset src="${dir.lib}/${concordion.file.name}">
                 <exclude name="META-INF/"/>
             </zipfileset>
