@@ -77,7 +77,6 @@
             <!--<arg value="-singleWindow"/>-->
             <classpath>
                 <pathelement location="${dir.lib}/selenium-server-standalone-2.31.0.jar"/>
-                <pathelement location="${dir.lib}/junit-4.5.jar"/>
             </classpath>
         </java>
 
@@ -325,14 +324,15 @@
                 targetfilename="${productName}-${version}-mvn-example.zip"
                 summary="Example Selendion ant project to help you get started"
                 labels="Type-Archive, OpSys-All"/>
-        <gcupload
-                username="${googleUser}"
-                password="${googlePassword}"
-                projectname="${productName}"
-                filename="${dir.dist}/${concordion.file.name}"
-                targetfilename="${concordion.file.name}"
-                summary="Modified Concordion jar that Selendion extends"
-                labels="Type-Archive, OpSys-All"/>
+<!-- only works if you remove the existing one first -->
+        <!--<gcupload-->
+                <!--username="${googleUser}"-->
+                <!--password="${googlePassword}"-->
+                <!--projectname="${productName}"-->
+                <!--filename="${dir.dist}/${concordion.file.name}"-->
+                <!--targetfilename="${concordion.file.name}"-->
+                <!--summary="Modified Concordion jar that Selendion extends"-->
+                <!--labels="Type-Archive, OpSys-All"/>-->
 
     </target>
 </project>
