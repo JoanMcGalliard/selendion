@@ -4,11 +4,13 @@
 
 package org.selendion.integration.selenium;
 
-import com.thoughtworks.selenium.DefaultSelenium;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.selendion.integration.BrowserDriver;
 import org.concordion.api.Evaluator;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,24 +18,28 @@ public class SeleniumDriver implements BrowserDriver {
 
     private String timeout = "30000";
     private boolean started = false;
-    private DefaultSelenium selenium;
+    private final WebDriver driver;
+//    private String baseUrl;
+    private final String IMPLEMENTATION_REQUIRED = "Not yet implemented (please report to selendion.org): ";
+    private final WebDriverBackedSelenium selenium;
 
-    public SeleniumDriver(String string, int i, String string2,
-                String url) {
-        System.out.println("SeleniumDriver constructor: string "+ string + "; i " + i + "; string2 "+string2 + "; url " + url);
-        selenium = new DefaultSelenium(string, i, string2, url);
-        }
+    public SeleniumDriver(String seleniumHost, int seleniumPort, String browserName,
+                          String baseUrl) {
+        System.out.println("SeleniumDriver constructor: seleniumHost " + seleniumHost + "; seleniumPort " + seleniumPort + "; browserName " + browserName + "; baseUrl " + baseUrl);
+        driver = new FirefoxDriver();
+        WebDriver driver = new FirefoxDriver();
+         selenium = new WebDriverBackedSelenium(driver, baseUrl);
+
+    }
     public void start() {
         if (!isStarted()) {
             System.out.println("INFO: Starting Selenium.");
-            started = true;
-            selenium.start();
         }
 
     }
      public void stop(){
          started=false;
-         selenium.stop();
+         driver.quit();
      }
 
     public String getEval(String s) {
@@ -558,10 +564,13 @@ public class SeleniumDriver implements BrowserDriver {
     }
 
        public void passVariablesOut(Evaluator evaluator) {
-           String COMMA = "###COMMA###";
-           String[] storedVars = getEval("var arr = [];for (var name in storedVars) {arr.push('#'+name+' '+storedVars[name]);};arr").replaceAll("\\\\,", COMMA).split(",");
+           String SEPARATOR = "###SEPARATOR###";
+           String[] storedVars = getEval("var arr = '';for (var name in storedVars) {arr=arr+'#'+name+' '+storedVars[name]+'"+SEPARATOR+"';};arr").split(SEPARATOR);
            for (String var : storedVars) {
-               String[] nvp = var.replaceAll(COMMA, ",").split(" ", 2);
+               String[] nvp = var.trim().split(" ", 2);
+               if (nvp.length ==1 ) {
+                   nvp = new String[] {nvp[0], ""};
+               }
                if (nvp[0].matches("#" + VARIABLE_PATTERN)) {
                    evaluator.setVariable(nvp[0], nvp[1]);
                }
@@ -588,15 +597,33 @@ public class SeleniumDriver implements BrowserDriver {
 
     }
     public String replaceVariables(String string) {
+        Pattern listPattern = Pattern.compile("\\[.*\\]");
+
         Matcher m = variablePattern.matcher(string);
         while (m.matches()) {
-            string = m.group(1) + getEval(String.format("storedVars['%s']", m.group(2))) + m.group(3);
+            try {
+                String val = getEval(String.format("storedVars['%s']", m.group(2)));
+                if (listPattern.matcher(val).matches()) {
+                    val=val.replaceAll("^\\[", "").replaceAll("\\]$","").replaceAll(", ", ",");
+                }
+
+            string = m.group(1) + val + m.group(3);
             m = variablePattern.matcher(string);
+            }
+            catch (Exception e )   {
+                e.printStackTrace();
+
+            }
         }
         return string.replaceAll("\\\\n", "\n");
     }
 
 
     private final Pattern variablePattern = Pattern.compile("(.*)\\$\\{([^}]*)\\}(.*)");
+    public static String getMethodName()
+    {
+      final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 
+      return ste[ste.length - 1].getMethodName();
+    }
 }

@@ -371,177 +371,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
 </tr>
 <tr>
-    <td><b>assertAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>When no alerts present</td>
-</tr>
-<tr>
-    <td><b>assertNotAlert</b></td>
-    <td></td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>When no alerts present</td>
-</tr>
-<tr>
-    <td><b>verifyAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>When no alerts present</td>
-</tr>
-<tr>
-    <td><b>verifyNotAlert</b></td>
-    <td>NO WAI</td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>When no alerts present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>assertAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td><b>assertAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>Alert was cleared above</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>assertNotAlert</b></td>
-    <td></td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>assertNotAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>true</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>verifyAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>verifyNotAlert</b></td>
-    <td>NO WAI</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>waitForNotAlert</b></td>
-    <td>NO WAI</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert with 1 sec delay</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>waitForAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
     <td><b>select</b></td>
     <td>parkingAvailabilitySelect</td>
     <td>value=Parking available</td>
@@ -596,24 +425,6 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td>text area</td>
-</tr>
-<tr>
-    <td><b>storeExpression</b></td>
-    <td>javascript{(&quot;&quot; + Math.floor(12345.999)).substring(0,3)}</td>
-    <td>numberString</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>basic javascript evaluation</td>
-</tr>
-<tr>
-    <td><b>echo</b></td>
-    <td>${numberString}</td>
-    <td></td>
-    <td>true</td>
-    <td>123</td>
-    <td>false</td>
-    <td>testing row above</td>
 </tr>
 <tr>
     <td><b>verifySelectOptions</b></td>
@@ -1520,6 +1331,217 @@ The commands in this table work with both selenium and htmlunit.
 <p><i concordion:execute="stop()">Close the browser.</i></p>
 </div>
 <div class="example">
+    <p>These tests worked with DefaultSeleniuma but aren't working with WebDriverBackedSelenium, so currently only running
+        with <span concordion:set="#browser">HTMLUNIT</span>.</p>
+<p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
+    <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
+        http://localhost:55555/</a> we expect the following results: </p>
+<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+<tr>
+    <th concordion:set="#command=#TEXT">Command</th>
+    <th concordion:set="#arg1">arg1</th>
+    <th concordion:set="#arg2">arg2</th>
+    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+    <th concordion:assertEquals="getMessage()">Message</th>
+    <th concordion:assertEquals="getException()">Exception</th>
+    <th>Remarks</th>
+</tr>
+    <tr>
+        <td><b>storeExpression</b></td>
+        <td>javascript{(&quot;&quot; + Math.floor(12345.999)).substring(0,3)}</td>
+        <td>numberString</td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td>basic javascript evaluation</td>
+    </tr>
+    <tr>
+        <td><b>echo</b></td>
+        <td>${numberString}</td>
+        <td></td>
+        <td>true</td>
+        <td>123</td>
+        <td>false</td>
+        <td>testing row above</td>
+    </tr>
+  <tr>
+    <td><b>assertAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>When no alerts present</td>
+</tr>
+<tr>
+    <td><b>assertNotAlert</b></td>
+    <td></td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>When no alerts present</td>
+</tr>
+<tr>
+    <td><b>verifyAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>When no alerts present</td>
+</tr>
+<tr>
+    <td><b>verifyNotAlert</b></td>
+    <td>NO WAI</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>When no alerts present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>assertAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td><b>assertAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>Alert was cleared above</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>assertNotAlert</b></td>
+    <td></td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>assertNotAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>true</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>verifyAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>verifyNotAlert</b></td>
+    <td>NO WAI</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>waitForNotAlert</b></td>
+    <td>NO WAI</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert with 1 sec delay</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>waitForAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+
+</table>
+</div>
+
+
+
+<div class="example">
 <p>
     The commands in this table work have only been tested with
     <span concordion:set="#browser">SELENIUM</span>.</p>
@@ -2071,23 +2093,24 @@ The commands in this table work with both selenium and htmlunit.
     <td>Back to original page</td>
 </tr>
 <tr>
-    <td>storeAlert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>comment</td>
-</tr>
-<tr>
-    <td>storeAlertPresent</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>comment</td>
-</tr>
+      <td>storeAlert</td>
+      <td></td>
+      <td>true</td>
+      <td></td>
+      <td>false</td>
+      <td></td>
+      <td>comment</td>
+  </tr>
+  <tr>
+      <td>storeAlertPresent</td>
+      <td></td>
+      <td>true</td>
+      <td></td>
+      <td>false</td>
+      <td></td>
+      <td>comment</td>
+  </tr>
+
 <tr>
     <td>storeAllFields</td>
     <td></td>

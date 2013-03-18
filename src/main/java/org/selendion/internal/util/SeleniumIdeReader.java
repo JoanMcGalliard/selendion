@@ -81,7 +81,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
                 if (!exception) {
                     CommandResult rowResponse;
                     try {
-                        rowResponse = execute(command[0], command[1], command[2]);
+                        rowResponse = execute(command[0], command[1], command[2], evaluator);
 
                         td.appendText(rowResponse.getMessage());
                         if (rowResponse.getSuccess()) {
@@ -136,25 +136,21 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
         }
     }
 
-    protected CommandResult execute(String command, String arg1, String arg2) {
+    protected CommandResult execute(String command, String arg1, String arg2, Evaluator evaluator) {
         try {
-            return executeCommand(command, arg1, arg2);
+            return executeCommand(command, arg1, arg2, evaluator);
         }
-        catch (SeleniumIdeException e) {
-            return new CommandResult(false, e.getMessage());
-        } catch (SeleniumException e) {
-            return new CommandResult(false, e.getMessage());
-        } catch (Exception e) {
-            return new CommandResult(false, e.getMessage());
+        catch (Exception e) {
+            return new CommandResult(false, "ERROR: "+ e.getMessage());
 
         }
     }
 
 
-    private CommandResult executeCommand(String command, String arg1, String arg2) throws Exception {
-        if (!browser.isStarted()) {
-            throw new RuntimeException("Please start browser before running scripts.");
-        }
+    private CommandResult executeCommand(String command, String arg1, String arg2, Evaluator evaluator) throws Exception {
+//        if (!browser.isStarted()) {
+//            throw new RuntimeException("Please start browser before running scripts.");
+//        }
 
         if (command.equals("echo")) {
             return new CommandResult(true, browser.echo(arg1));
@@ -191,7 +187,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
         if (command.matches(".*AndWait$")) {
             try {
-                seleniumAction(command.replaceFirst("AndWait$", ""), arg1, arg2);
+                seleniumAction(command.replaceFirst("AndWait$", ""), arg1, arg2, evaluator);
                 browser.waitForPageToLoad();
                 return new CommandResult(true, "");
             } catch (SeleniumException se) {
@@ -206,7 +202,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
             String trimmedCommand = command.replaceFirst("IfAvailable$", "");
             try {
-                CommandResult result = executeCommand(trimmedCommand, arg1, arg2);
+                CommandResult result = executeCommand(trimmedCommand, arg1, arg2, evaluator);
                 result.setSuccess(true);
                 return result;
             } catch (SeleniumException se) {
@@ -523,12 +519,12 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             }
 
         }
-        seleniumAction(command, arg1, arg2);
-
+        seleniumAction(command, arg1, arg2, evaluator);
         return new CommandResult(true, "");
     }
 
-    private void seleniumAction(String command, String arg1, String arg2) throws SeleniumIdeException {
+    private void seleniumAction(String command, String arg1, String arg2, Evaluator evaluator) throws SeleniumIdeException {
+        browser.passVariablesOut(evaluator);
         if (command.equals("addSelection")) {
             browser.addSelection(arg1, arg2);
         } else if (command.equals("allowNativeXpath")) {
@@ -555,6 +551,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             browser.clickAt(arg1, arg2);
         } else if (command.equals("close")) {
             browser.close();
+            browser.selectWindow(null); // move focus back to main window.
         } else if (command.equals("controlKeyDown")) {
             browser.controlKeyDown();
         } else if (command.equals("controlKeyUp")) {
@@ -675,6 +672,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
 
             }
         }
+        browser.passVariablesIn(evaluator);
     }
 
     //selenium accessors

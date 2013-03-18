@@ -189,7 +189,7 @@ public class HtmlUnitDriver implements BrowserDriver {
                  }
              }
         }
-        throw new HtmlUnitException("ERROR: Element " + key + " not found");
+        throw new HtmlUnitException("Element " + key + " not found");
     }
     private DomElement getHtmlElement(HtmlPage page, String key) {
 
@@ -455,7 +455,7 @@ public class HtmlUnitDriver implements BrowserDriver {
             }
 
         }
-        throw new HtmlUnitException("ERROR: Option with label '" + label + "' not found");
+        throw new HtmlUnitException("Option with label '" + label + "' not found");
     }
 
     public void selectFrame(String arg1) {
@@ -537,7 +537,7 @@ public class HtmlUnitDriver implements BrowserDriver {
 
     public Object getAlert() {
         if (collectedAlerts.isEmpty() ) {
-            throw new RuntimeException("ERROR: There were no alerts");
+            throw new RuntimeException("There were no alerts");
         }
         return  collectedAlerts.remove(collectedAlerts.size()-1);
 
@@ -641,7 +641,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         if (result.length() > 0) {
             return result;
         } else {
-            throw new HtmlUnitException("ERROR: Could not find element attribute: "
+            throw new HtmlUnitException("Could not find element attribute: "
                     + element + attribute);
 
         }
@@ -651,14 +651,14 @@ public class HtmlUnitDriver implements BrowserDriver {
     public Object getAttribute(String arg1) {
         Matcher m = Pattern.compile("(.*)@([^@]*)$").matcher(arg1);
         if (!m.matches()) {
-            throw new HtmlUnitException("ERROR: Attribute " + arg1 + " not found");
+            throw new HtmlUnitException("Attribute " + arg1 + " not found");
         }
         DomElement element = getHtmlElement(m.group(1));
         try {
             return getAttribute(element, m.group(2));
         }
         catch (HtmlUnitException e) {
-            throw new HtmlUnitException("ERROR: Could not find element attribute: "
+            throw new HtmlUnitException("Could not find element attribute: "
                     + arg1);
 
         }
@@ -730,9 +730,9 @@ public class HtmlUnitDriver implements BrowserDriver {
         if (options.size() == 1) {
             return options.get(0).getAttribute("value");
         } else if (options.size() == 0) {
-            throw new HtmlUnitException("ERROR: No option selected");
+            throw new HtmlUnitException("No option selected");
         } else {
-            throw new HtmlUnitException("ERROR: More than one selected option!");
+            throw new HtmlUnitException("More than one selected option!");
         }
     }
 
