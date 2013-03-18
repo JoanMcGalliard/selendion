@@ -1,0 +1,144 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>selendion_example</groupId>
+    <artifactId>selendion_example</artifactId>
+    <version>0.7</version>
+    <properties>
+        <selendion.selenium.server>localhost</selendion.selenium.server>
+        <selendion.output.dir>target/selendion</selendion.output.dir>
+        <selendion.browser>*firefox</selendion.browser>
+        <selendion.selenium.server.port>5555</selendion.selenium.server.port>
+    </properties>
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.5</version>
+
+                <configuration>
+
+                    <argLine>-Dselendion.output.dir=${selendion.output.dir} -Dselendion.testSupport=SELENIUM -Dselendion.seleniumBrowser=${selendion.browser} -Dselendion.seleniumServerHost=${selendion.selenium.server} -Dselendion.seleniumServerPort=${selendion.selenium.server.port} -Dselendion.numberOfThreads=3</argLine>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>spec/**Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/Abstract*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>selenium-maven-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>start-server</goal>
+                        </goals>
+                        <configuration>
+                            <background>true</background>
+                            <port>5555</port>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <target name="stop.selenium">
+                                <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="stop.selenium.timeout">
+                                    <not>
+                                        <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
+                                    </not>
+                                </waitfor>
+                                <fail if="stop.selenium.timeout" message="Selenium failed to shutdown"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+        </dependency>
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-server</artifactId>
+            <version>2.31.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.9.0.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ognl</groupId>
+            <artifactId>ognl</artifactId>
+            <version>2.6.9</version>
+        </dependency>
+        <dependency>
+            <groupId>concordion</groupId>
+            <artifactId>concordion</artifactId>
+            <version>1.3.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/concordion-1.3.2-patched.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>selendion</groupId>
+            <artifactId>selendion</artifactId>
+            <version>0.7</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/selendion.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ccil.cowan.tagsoup</groupId>
+            <artifactId>tagsoup</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>2.11</version>
+        </dependency>
+        <dependency>
+        	<groupId>xml-apis</groupId>
+        	<artifactId>xml-apis</artifactId>
+        	<version>2.0.2</version>
+        </dependency>
+    </dependencies>
+    <scm>
+        <connection>scm:svn:http://selendion.googlecode.com/svn/trunk/</connection>
+        <developerConnection>scm:svn:https://selendion.googlecode.com/svn/trunk/</developerConnection>
+        <url>http://selendion.googlecode.com/svn/trunk/</url>
+    </scm>
+
+</project>

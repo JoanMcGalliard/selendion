@@ -1,0 +1,156 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<head>
+    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>RunSelendion</title>
+</head>
+<body>
+<h1>RunSelendion</h1>
+
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
+
+<p> There is an optional second parameter: <code>IMMEDIATE</code>, <code>CLICKABLE</code> or <code>LINK</code>.
+    <code>IMMEDIATE</code> means
+    the script will be included directly in the results, <code>CLICKABLE</code> means it will be included but hidden,
+    and you have
+    to click a button to see the test, and <code>LINK</code> means the link to the test will be included. The default
+    value is
+    <code>CLICKABLE</code>.</p>
+
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
+
+<div class="example">
+
+    <h3>IMMEDIATE include test</h3>
+
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+    Let's run an IMMEDIATE test: &lt;a concordion:runSelendion="#HREF, IMMEDIATE" href="runSelendionScripts/Simple.html"&gt;(the test)&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;
+        Let's run an IMMEDIATE test:  &lt;a concordion:runSelendion="#HREF, IMMEDIATE"
+                href="runSelendionScripts/Simple.html" class="invisible success"&gt;(the test)&lt;/a&gt;
+        &lt;span&gt;
+            &lt;div class="includedPassingTest"&gt;
+                &lt;p&gt; &lt;b concordion:assertEquals="getValue()" class="success"&gt;value&lt;/b&gt; &lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/span&gt;.
+    &lt;/p&gt;
+
+</pre>
+</div>
+
+
+<div class="example">
+
+    <h3>CLICKABLE include test</h3>
+
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+      Let's run a &lt;a concordion:runSelendion="#HREF, CLICKABLE" href="runSelendionScripts/Simple.html"&gt;CLICKABLE test&lt;/a&gt;.
+&lt;/p&gt;
+
+
+</pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;
+        Let's run a &lt;a concordion:runSelendion="#HREF, CLICKABLE" href="runSelendionScripts/Simple.html"
+                                 class="invisible success"&gt;CLICKABLE test&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton1" type="button" class="success selendionButton"
+                                         onclick="javascript:toggleSelendionElement('1', 'CLICKABLE test')"
+                                         value="CLICKABLE test" /&gt;
+       &lt;div id="selendionHideViewElement1" class="includedHiddenPassingTest"&gt; &lt;p&gt; &lt;b concordion:assertEquals="getValue()"
+                                                                                   class="success"&gt;value&lt;/b&gt; &lt;/p&gt; &lt;/div&gt; &lt;/span&gt;.
+    &lt;/p&gt;
+
+</pre>
+</div>
+<div class="example">
+
+    <h3>LINK include test</h3>
+
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+      Let's run a &lt;a concordion:runSelendion="#HREF, LINK" href="runSelendionScripts/Simple.html"&gt;linked test&lt;/a&gt;.
+&lt;/p&gt;
+
+
+</pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;
+        Let's run a &lt;a concordion:runSelendion="#HREF, LINK" href="runSelendionScripts/Simple.html"
+                                 class="success"&gt;linked test&lt;/a&gt;
+    &lt;span /&gt;.
+    &lt;/p&gt;
+
+</pre>
+</div>
+
+<div class="example">
+
+    <h3>Put them all together ....</h3>
+
+
+    <p>
+        Let's run an IMMEDIATE test: <a concordion:runSelendion="#HREF, IMMEDIATE"
+                                        href="runSelendionScripts/Simple.html">(the test)</a>.
+    </p>
+
+    <p>
+        Let's run a <a concordion:runSelendion="#HREF, CLICKABLE" href="runSelendionScripts/Simple.html">CLICKABLE
+        test</a>.
+    </p>
+
+    <p>
+        Let's run a <a concordion:runSelendion="#HREF, LINK" href="runSelendionScripts/Simple.html">linked test</a>.
+    </p>
+
+</div>
+
+<div class="example">
+
+    <h3>Literal instead of contant</h3>
+
+    If a literal string (eg 'LINK') is used instead of a constant (eg LINK), there should be an error message.
+
+        <pre concordion:set="#snippet">
+&lt;p&gt;
+    Let's run an IMMEDIATE test: &lt;a concordion:runSelendion="#HREF, 'IMMEDIATE'" href="runSelendionScripts/Simple.html"&gt;(the test)&lt;/a&gt;.
+&lt;/p&gt;
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+    &lt;p&gt;
+        Let's run an IMMEDIATE test: &lt;a concordion:runSelendion="#HREF, 'IMMEDIATE'" href="runSelendionScripts/Simple.html"&gt;
+            &lt;span class="failure"&gt;
+                &lt;del class="expected"&gt;(the test)&lt;/del&gt;
+            &lt;/span&gt; &lt;/a&gt;
+            &lt;div&gt;
+                &lt;span class="exceptionMessage"&gt;IMMEDIATE not allowed.  Allowable values IMMEDIATE, CLICKABLE and LINK&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;span&gt; &lt;input class="stackTraceButton" ...
+    &lt;/p&gt;
+
+</pre>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head>
+    <link href="../../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>Suite</title>
+</head>
+<body>
+<h1>Suite</h1>
+
+<p> You can run Selendion tests in suites by adding then to a suite and subsequently running that suite.
+</p>
+
+<p>
+    We can add html files and directories to a suite. If a directory is added, then all the html files in that
+    directory will become part of the suite. When we run a suite, for each html file it looks for a class
+    that has the same name + "Test". If that exists, it is run, otherwise it looks for a class with the same
+    name as html file and runs that. If the class is found, it must be a subclass of SelendionTestCase.
+    Finally, if neither is found, it <a href="SuiteWithoutClass.html"> creates a class, based on the current class,
+    for the test</a>.
+</p>
+
+<h4>Commands</h4>
+<ol>
+    <li>
+        <a href="AddToSuite.html">addToSuite</a>
+    </li>
+    <li>
+        <a href="RunSuite.html">runSuite</a>
+    </li>
+    <li>
+        <a href="RunSuiteMultiple.html">runSuite (special cases)</a>
+    </li>
+    <li>
+        <a href="ClearSuite.html">clearSuite</a>
+    </li>
+</ol>
+
+
+</body>
+</html>

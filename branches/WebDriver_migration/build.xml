@@ -1,0 +1,339 @@
+<project name="selendion" default="build" basedir=".">
+    <property name="dir.support-lib" value="${basedir}/support-lib"/>
+
+    <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask"
+             classpath="${dir.support-lib}/ant-googlecode-0.0.3.jar" name="gcupload"/>
+    <path id="svnant.classpath">
+        <fileset dir="${dir.support-lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath"/>
+
+    <target name="svn.version">
+        <sequential>
+            <svn username="${googleUser}"
+                 password="${googlePassword}">
+                <info target="${basedir}"/>
+            </svn>
+            <property name="version" value="0.7.${svn.info.rev}"/>
+        </sequential>
+    </target>
+    <target name="svn.commit">
+        <svn username="${googleUser}"
+             password="${googlePassword}">
+            <commit dir="${basedir}"
+                    message="Committing latest build before release"
+                    recurse="true"/>
+        </svn>
+    </target>
+    <target name="svn.htmlMimeTypes">
+        <svn username="${googleUser}"
+             password="${googlePassword}">
+            <propset name="svn:mime-type" path="${basedir}/src/test/java/spec" value="text/html"
+                     recurse="true"/>
+        </svn>
+    </target>
+
+
+    <property name="productName" value="selendion"/>
+    <property name="ProductName" value="Selendion"/>
+
+    <property name="dir.build" value="${basedir}/build"/>
+    <property name="dir.classes" value="${dir.build}/classes"/>
+    <property name="dir.test.output" value="${dir.build}/test-output"/>
+    <property name="dir.selendion.output" value="${dir.test.output}/selendion"/>
+    <property name="dir.dist" value="${basedir}/dist"/>
+    <property name="dir.lib" value="${basedir}/lib"/>
+    <property name="selendion.browser" value="*firefox"/>
+    <property name="selendion.selenium.server.port" value="5555"/>
+    <property name="webserver.server.port" value="55555"/>
+    <property name="concordion.file.name" value="concordion-1.3.2-patched.jar"/>
+    <property file="${basedir}/local.properties"/>
+
+
+    <property name="dir.example" value="${basedir}/selendion-example"/>
+
+    <path id="compile.classpath">
+        <fileset dir="lib" includes="*.jar" excludes="*-src.jar"/>
+    </path>
+
+    <target name="build"
+            description="Builds everything from scratch"
+            depends="clean,compile,run.tests,build.jar,build.srczip,build.dependencies.jar,maven"
+            />
+    <target name="maven">
+        <exec executable="mvn" failonerror="true">
+            <arg value="test"/>
+        </exec>
+    </target>
+
+
+    <target name="start.selenium"
+            depends="stop.selenium">
+        <java classname="org.openqa.selenium.server.SeleniumServer" fork="true" spawn="true">
+            <arg value="-port"/>
+            <arg value="${selendion.selenium.server.port}"/>
+            <!--<arg value="-singleWindow"/>-->
+            <classpath>
+                <pathelement location="${dir.lib}/selenium-server-standalone-2.31.0.jar"/>
+            </classpath>
+        </java>
+
+        <waitfor maxwait="10" maxwaitunit="second" timeoutproperty="start.selenium.timeout">
+            <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=getNewBrowserSession"/>
+        </waitfor>
+        <fail if="start.selenium.timeout" message="Selenium failed to start"/>
+    </target>
+    <target name="stop.selenium">
+        <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="stop.selenium.timeout">
+            <not>
+                <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
+            </not>
+        </waitfor>
+        <fail if="stop.selenium.timeout" message="Selenium failed to shutdown"/>
+    </target>
+    <target name="start.webserver"
+            depends="stop.webserver">
+        <java classname="testSupport.Fizmez.FizmezWebServer" fork="true" spawn="true">
+            <classpath>
+                <pathelement path="${dir.classes}"/>
+            </classpath>
+        </java>
+
+        <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="start.webserver.timeout">
+            <http url="http://localhost:${webserver.server.port}/"/>
+        </waitfor>
+        <fail if="start.webserver.timeout" message="Web server failed to start"/>
+    </target>
+    <target name="stop.webserver">
+        <waitfor maxwait="3" maxwaitunit="second">
+            <not>
+                <http url="http://localhost:${webserver.server.port}?cmd=shutDown"/>
+            </not>
+        </waitfor>
+    </target>
+
+    <target name="clean" depends="stop.selenium, stop.webserver">
+        <sequential>
+            <delete dir="${dir.build}"/>
+            <delete dir="${dir.test.output}"/>
+            <delete dir="${dir.selendion.output}"/>
+            <delete dir="${dir.classes}"/>
+            <delete dir="${dir.dist}"/>
+            <delete>
+                <fileset dir="${dir.example}/lib" includes="**/*.jar"/>
+            </delete>
+        </sequential>
+    </target>
+    <target name="build.example.zip"
+            depends="build.mvn.example.zip,build.ant.example.zip"/>
+
+    <target name="clean.example.dir">
+        <delete>
+            <fileset dir="${dir.example}/lib" includes="**/*.jar" erroronmissingdir="false"/>
+        </delete>
+        <delete>
+            <dirset dir="${dir.example}/build" erroronmissingdir="false"/>
+        </delete>
+        <delete>
+            <dirset dir="${dir.example}/target" erroronmissingdir="false"/>
+        </delete>
+    </target>
+    <target name="build.ant.example.zip" depends="clean.example.dir,svn.version">
+        <sequential>
+            <copy todir="${dir.example}/lib" file="${dir.dist}/${productName}-${version}-with-dependencies.jar"/>
+            <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="stop.selenium"/>
+            <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="build"/>
+            <ant inheritall="false" antfile="build.xml" dir="${dir.example}" target="clean"/>
+            <zip basedir="${dir.example}"
+                 excludes=".svn"
+                 destfile="${dir.dist}/${productName}-${version}-ant-example.zip"/>
+        </sequential>
+    </target>
+    <target name="build.mvn.example.zip" depends="clean.example.dir,svn.version">
+        <sequential>
+            <echo message="${dir.dist}/${productName}-${version}.jar"/>
+            <echo message="${dir.dist}/${concordion.file.name}"/>
+            <echo message="${dir.example}/lib"/>
+            <copy tofile="${dir.example}/lib/${productName}.jar" file="${dir.dist}/${productName}-${version}.jar"/>
+            <copy todir="${dir.example}/lib" file="${dir.dist}/${concordion.file.name}"/>
+
+            <exec executable="mvn" failonerror="true" dir="${dir.example}">
+                <arg value="clean"/>
+                <arg value="test"/>
+                <arg value="clean"/>
+            </exec>
+            <zip basedir="${dir.example}"
+                 excludes=".svn"
+                 destfile="${dir.dist}/${productName}-${version}-mvn-example.zip"/>
+        </sequential>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${dir.classes}"/>
+
+        <javac classpathref="compile.classpath"
+               destdir="${dir.classes}"
+               srcdir="src/main/java:src/test/java"
+               debug="yes"
+               failonerror="yes"
+               source="1.7"
+               target="1.7"
+                />
+
+        <copy todir="${dir.classes}">
+            <fileset dir="src/main/java" excludes="**/*.java"/>
+            <fileset dir="src/test/java" excludes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="run.tests" depends="start.webserver, start.selenium">
+        <mkdir dir="${dir.test.output}"/>
+        <mkdir dir="${dir.selendion.output}"/>
+
+        <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="yes" showoutput="yes">
+            <jvmarg value="-Dselendion.output.dir=${dir.selendion.output}"/>
+            <jvmarg value="-Dconcordion.output.dir=${dir.selendion.output}"/>
+            <jvmarg value="-Dselendion.browser=${selendion.browser}"/>
+
+            <classpath>
+                <path refid="compile.classpath"/>
+                <pathelement location="${dir.classes}"/>
+            </classpath>
+
+            <formatter type="plain"/>
+
+            <batchtest todir="${dir.test.output}">
+                <fileset dir="src/test/java">
+                    <include name="**/*Test.java"/>
+                    <exclude name="**/Abstract*"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <ant target="stop.selenium"/>
+    </target>
+
+    <target name="build.jar" depends="svn.version">
+        <mkdir dir="${dir.dist}"/>
+
+        <jar destfile="${dir.dist}/${productName}-${version}.jar"
+             basedir="${dir.classes}"
+             compress="true"
+             filesetmanifest="skip"
+             manifest="src/main/java/MANIFEST.MF">
+            <exclude name="examples/**"/>
+            <exclude name="support/**"/>
+            <exclude name=".svn/**"/>
+            <indexjars/>
+        </jar>
+        <copy file="${dir.lib}/${concordion.file.name}" todir="${dir.dist}"/>
+    </target>
+    <target name="build.dependencies.jar"
+            depends="build.jar">
+
+        <mkdir dir="${dir.dist}"/>
+
+        <jar destfile="${dir.dist}/${productName}-${version}-with-dependencies.jar"
+             basedir="${dir.classes}"
+             compress="true"
+             filesetmanifest="skip"
+             manifest="src/main/java/MANIFEST.MF">
+            <exclude name="examples/**"/>
+            <exclude name=".svn/**"/>
+            <zipfileset src="${dir.lib}/${concordion.file.name}">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="${dir.lib}/selenium-server-standalone-2.31.0.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="${dir.lib}/javassist_3.9.0.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="${dir.lib}/junit-4.5.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="${dir.lib}/ognl-2.6.9.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="${dir.lib}/tagsoup-1.2.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="${dir.lib}/xom-1.1.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="${dir.lib}/htmlunit-2.11.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <zipfileset src="${dir.lib}/xml-apis-1.4.01.jar">
+                <exclude name="META-INF/"/>
+            </zipfileset>
+            <indexjars/>
+        </jar>
+    </target>
+
+    <target name="build.srczip" depends="svn.version">
+        <sequential>
+            <mkdir dir="${dir.dist}"/>
+
+            <zip destfile="${dir.dist}/${productName}-${version}-src.zip"
+                 basedir="src/main/java"
+                 compress="false">
+            </zip>
+        </sequential>
+    </target>
+
+    <target name="release" depends="clean,compile,run.tests,svn.commit,svn.version,build,build.example.zip">
+        <gcupload
+                username="${googleUser}"
+                password="${googlePassword}"
+                projectname="${productName}"
+                filename="${dir.dist}/${productName}-${version}-src.zip"
+                targetfilename="${productName}-${version}-src.zip"
+                summary="Source for Version ${version} of ${productName}"
+                labels="Type-Source, OpSys-All"/>
+        <gcupload
+                username="${googleUser}"
+                password="${googlePassword}"
+                projectname="${productName}"
+                filename="${dir.dist}/${productName}-${version}.jar"
+                targetfilename="${productName}-${version}.jar"
+                summary="Version ${version} of ${productName}"
+                labels="Featured, Type-Package, OpSys-All"/>
+        <gcupload
+                username="${googleUser}"
+                password="${googlePassword}"
+                projectname="${productName}"
+                filename="${dir.dist}/${productName}-${version}-with-dependencies.jar"
+                targetfilename="${productName}-${version}-with-dependencies.jar"
+                summary="Version ${version} of ${productName} with full dependencies"
+                labels="Type-Package, OpSys-All"/>
+        <gcupload
+                username="${googleUser}"
+                password="${googlePassword}"
+                projectname="${productName}"
+                filename="${dir.dist}/${productName}-${version}-ant-example.zip"
+                targetfilename="${productName}-${version}-ant-example.zip"
+                summary="Example Selendion ant project to help you get started"
+                labels="Type-Archive, OpSys-All"/>
+        <gcupload
+                username="${googleUser}"
+                password="${googlePassword}"
+                projectname="${productName}"
+                filename="${dir.dist}/${productName}-${version}-mvn-example.zip"
+                targetfilename="${productName}-${version}-mvn-example.zip"
+                summary="Example Selendion ant project to help you get started"
+                labels="Type-Archive, OpSys-All"/>
+<!-- only works if you remove the existing one first -->
+        <!--<gcupload-->
+                <!--username="${googleUser}"-->
+                <!--password="${googlePassword}"-->
+                <!--projectname="${productName}"-->
+                <!--filename="${dir.dist}/${concordion.file.name}"-->
+                <!--targetfilename="${concordion.file.name}"-->
+                <!--summary="Modified Concordion jar that Selendion extends"-->
+                <!--labels="Type-Archive, OpSys-All"/>-->
+
+    </target>
+</project>
+

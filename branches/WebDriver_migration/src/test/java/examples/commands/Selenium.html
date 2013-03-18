@@ -1,0 +1,195 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<head>
+    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>Selenium </title>
+</head>
+<body>
+<h1>Selenium </h1>
+
+<p>
+    This is to verify the output for running different selenium tests from selendion.
+
+</p>
+
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
+
+<div class="example">
+
+    <h3>Running selenium within columns of table </h3>
+
+    <p>
+        If there is a runSelenium command in the column of the table, we would expect the
+        table command to be run first, then the selenium command for the column. The output should appear
+        in the row/column.
+    </p>
+
+
+
+          <p>
+              Run this <a concordion:set="#script=#HREF" href="seleniumScripts/openIndex.html">script</a> for each row.
+          </p>
+
+
+
+        <pre concordion:set="#snippet">
+
+  &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+             host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+             port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+             for &lt;i concordion:echo="#browser"/&gt;
+             and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+  &lt;table concordion:runSelenium="'seleniumScripts/openIndex.html'"&gt;
+        &lt;tr&gt;
+            &lt;th concordion:runSelenium="#HREF"&gt;Verify Text&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;a href="seleniumScripts/verifyText1.html"&gt;Verify text script&lt;/a&gt; &lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;a href="seleniumScripts/verifyText2.html"&gt;Verify text script&lt;/a&gt; &lt;/td&gt;
+        &lt;/tr&gt;
+
+    &lt;/table&gt;
+
+  &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+  &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+             host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+             port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+             for  &lt;i concordion:echo="#browser"&gt;*firefox&lt;/i&gt;
+
+
+             and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+
+  &lt;table concordion:runSelenium="'seleniumScripts/openIndex.html'"&gt;
+           &lt;tr&gt;
+               &lt;th concordion:runSelenium="#HREF"&gt;Verify Text&lt;/th&gt;
+           &lt;td&gt;Selenium&lt;/td&gt; &lt;/tr&gt;
+           &lt;tr&gt;
+               &lt;td class="invisible"&gt;
+    &lt;a href="seleniumScripts/verifyText1.html"&gt;Verify text script&lt;/a&gt;
+    &lt;/td&gt; &lt;td&gt;
+    &lt;input id="selendionHideViewButton2" type="button" class="success seleniumButton" onclick="javascript:toggleSelendionElement('2', 'Verify text script')" value="Verify text script" /&gt; &lt;table class="seleniumTable" id="selendionHideViewElement2"&gt; &lt;tr&gt; &lt;th colspan="4"&gt;Verify text script&lt;br /&gt; &lt;/th&gt; &lt;/tr&gt; &lt;tr class="success"&gt; &lt;td&gt;verifyText&lt;/td&gt; &lt;td&gt;//table[@id='input_table']/tbody/tr[2]/td[1]&lt;/td&gt; &lt;td&gt;Password (required):&lt;/td&gt; &lt;td /&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/td&gt;
+           &lt;td&gt;
+    &lt;input id="selendionHideViewButton1" type="button" class="success seleniumButton" onclick="javascript:toggleSelendionElement('1', 'openIndex')" value="openIndex" /&gt;
+    &lt;table class="seleniumTable" id="selendionHideViewElement1"&gt; &lt;tr&gt;
+    &lt;th colspan="4"&gt;openIndex&lt;br /&gt; &lt;/th&gt; &lt;/tr&gt;
+    &lt;tr class="success"&gt; &lt;td&gt;open&lt;/td&gt; &lt;td&gt;/index.html&lt;/td&gt;
+    &lt;td /&gt; &lt;td /&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+
+           &lt;tr&gt;
+               &lt;td class="invisible"&gt;
+    &lt;a href="seleniumScripts/verifyText2.html"&gt;Verify text script&lt;/a&gt;
+    &lt;/td&gt; &lt;td&gt;
+    &lt;input id="selendionHideViewButton4" type="button" class="success seleniumButton" onclick="javascript:toggleSelendionElement('4', 'Verify text script')" value="Verify text script" /&gt;
+    &lt;table class="seleniumTable" id="selendionHideViewElement4"&gt;
+    &lt;tr&gt; &lt;th colspan="4"&gt;Verify text script&lt;br /&gt;
+    &lt;/th&gt; &lt;/tr&gt; &lt;tr class="success"&gt; &lt;td&gt;verifyText&lt;/td&gt;
+    &lt;td&gt;//table[@id='input_table']/tbody/tr[11]/td[1]&lt;/td&gt;
+    &lt;td&gt;ARA number:&lt;/td&gt; &lt;td /&gt; &lt;/tr&gt;
+    &lt;/table&gt; &lt;/td&gt;
+           &lt;td&gt;
+    &lt;input id="selendionHideViewButton3" type="button" class="success seleniumButton" onclick="javascript:toggleSelendionElement('3', 'openIndex')" value="openIndex" /&gt;
+    &lt;table class="seleniumTable" id="selendionHideViewElement3"&gt; &lt;tr&gt;
+    &lt;th colspan="4"&gt;openIndex&lt;br /&gt; &lt;/th&gt; &lt;/tr&gt;
+    &lt;tr class="success"&gt; &lt;td&gt;open&lt;/td&gt; &lt;td&gt;/index.html&lt;/td&gt;
+    &lt;td /&gt; &lt;td /&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+
+       &lt;/table&gt;
+    &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+</pre>
+</div>
+
+<div class="example">
+
+    <h3>Running selenium</h3>
+
+    <p>
+        runSelenium in a ANCHOR should execute.
+    </p>
+
+
+        <pre concordion:set="#snippet">
+
+  &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+             host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+             port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+             for &lt;i concordion:echo="#browser"/&gt;
+             and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+  &lt;p&gt; Run this &lt;a concordion:runSelenium="#HREF" href="seleniumScripts/openIndex.html"&gt;script&lt;/a&gt; &lt;/p&gt;
+
+  &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+   &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+                 host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+                 port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+                 for &lt;i concordion:echo="#browser"&gt;*firefox&lt;/i&gt;
+
+                 and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+      &lt;p&gt; Run this &lt;a concordion:runSelenium="#HREF" href="seleniumScripts/openIndex.html" class="invisible"&gt;script&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton5" type="button" class="success seleniumButton" onclick="javascript:toggleSelendionElement('5', 'script')" value="script" /&gt; &lt;table class="seleniumTable" id="selendionHideViewElement5"&gt; &lt;tr&gt; &lt;th colspan="4"&gt;script&lt;br /&gt; &lt;/th&gt; &lt;/tr&gt; &lt;tr class="success"&gt; &lt;td&gt;open&lt;/td&gt; &lt;td&gt;/index.html&lt;/td&gt; &lt;td /&gt; &lt;td /&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/span&gt; &lt;/p&gt;
+
+      &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+
+</pre>
+</div>
+<div class="example">
+
+    <h3>Running selenium with absolute path</h3>
+
+    <p>
+        runSelenium in a ANCHOR should execute.
+    </p>
+
+
+        <pre concordion:set="#snippet">
+
+  &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+             host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+             port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+             for &lt;i concordion:echo="#browser"/&gt;
+             and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+  &lt;p&gt; Run this &lt;a concordion:runSelenium="#HREF" href="/examples/commands/seleniumScripts/openIndex.html"&gt;script&lt;/a&gt; &lt;/p&gt;
+
+  &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+        </pre>
+
+    <p>The result should be:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+   &lt;p concordion:startBrowser="'HTMLUNIT',#seleniumServerHost,#seleniumServerport, #browser, #baseUrl"&gt;Start a browser with:
+                 host &lt;i concordion:set="#seleniumServerHost"&gt;localhost&lt;/i&gt;;
+                 port &lt;i concordion:set="#seleniumServerport"&gt;5555&lt;/i&gt;;
+                 for &lt;i concordion:echo="#browser"&gt;*firefox&lt;/i&gt;
+
+                 and base url &lt;a concordion:execute="#baseUrl=#HREF" href="http://localhost:55555"&gt;localhost, port 55555&lt;/a&gt;.&lt;/p&gt;
+      &lt;p&gt; Run this &lt;a concordion:runSelenium="#HREF" href="/examples/commands/seleniumScripts/openIndex.html" class="invisible"&gt;script&lt;/a&gt; &lt;span&gt; &lt;input id="selendionHideViewButton6" type="button" class="success seleniumButton" onclick="javascript:toggleSelendionElement('6', 'script')" value="script" /&gt; &lt;table class="seleniumTable" id="selendionHideViewElement6"&gt; &lt;tr&gt; &lt;th colspan="4"&gt;script&lt;br /&gt; &lt;/th&gt; &lt;/tr&gt; &lt;tr class="success"&gt; &lt;td&gt;open&lt;/td&gt; &lt;td&gt;/index.html&lt;/td&gt; &lt;td /&gt; &lt;td /&gt; &lt;/tr&gt; &lt;/table&gt; &lt;/span&gt; &lt;/p&gt;
+
+      &lt;i concordion:stopBrowser=""&gt;Close the browser&lt;/i&gt;
+
+
+</pre>
+</div>
+
+
+
+
+
+</body>
+</html>

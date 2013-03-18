@@ -1,0 +1,56 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head><title>Create Contract; Receive, Move And Sell Stock</title></head>
+<link href="../../css/selendion.css" rel="stylesheet" type="text/css"/>
+<body>
+
+<h1>Create Contract; Receive, Move And Sell Stock</h1>
+
+<h3>Preamble</h3>
+
+
+<h3>Setup </h3>
+
+<p concordion:startBrowser="#testSupport,#seleniumServerHost,#seleniumServerPort, #seleniumBrowser, #baseUrl">
+    Start a browser
+    with:
+    testSupport <i concordion:set="#testSupport">SELENIUM</i>;
+    host <i concordion:set="#seleniumServerHost">localhost</i>;
+    port <i concordion:set="#seleniumServerPort">5560</i>;
+    for <i concordion:set="#seleniumBrowser">*firefox</i>
+    and base url <span concordion:set="#baseUrl">http://localhost:80</span>.</p>
+
+<p>Use these <a href="junk/Defaults.html" concordion:runSelendion="#HREF">defaults</a>.</p>
+<p>Set business area is <a href="junk/SetBusinessAreaToBase.html" concordion:runSelenium="#HREF">base</a>.</p>
+
+
+<p>Get the
+    <a href="junk/GetNumberOfItems.html" concordion:runSelenium="#HREF">number of items</a>
+    from the home page <b concordion:echo="#numberOfItems"></b>.</p>
+
+
+<div concordion:forEach="#dummy : newList(#numberOfItems)">
+    <p>User
+         clicks the <i concordion:set="#rowNum">1</i>st
+        <a href="junk/GoFromDiaryPpr.html" concordion:runSelenium="#HREF">Go</a>
+        s
+        <a concordion:runSelenium="#HREF" href="junk/CompletePpr.html">
+            complete the ppr</a>, then
+        selects the <b concordion:set="#level0Item">Home</b>
+        <a href="junk/GoToLevel0MenuItem.html" concordion:runSelenium="#HREF">menu</a>
+    </p>
+
+</div>
+
+
+
+
+
+<p>Get the
+    <a href="junk/GetNumberOfItems.html" concordion:runSelenium="#HREF">number of items</a>
+     which should now be <b concordion:assertEquals="#numberOfItems">0</b>.</p>
+
+<!--<p><i concordion:stopBrowser="">Close the browser</i></p>-->
+
+
+</body>
+</html>

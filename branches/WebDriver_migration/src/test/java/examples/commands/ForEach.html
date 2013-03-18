@@ -1,0 +1,100 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+
+<head>
+    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>For Each</title>
+</head>
+<body>
+
+<h1>For each</h1>
+
+<p>
+    For each means the element should be repeated for each value in the list
+</p>
+
+<div class="example">
+
+    <h3>Example</h3>
+
+    <p>
+        The output of running this:
+    </p>
+
+        <pre concordion:set="#snippet">
+&lt;ul concordion:execute="#men =newList()"&gt;
+        &lt;li concordion:execute="#men.add(#TEXT)"&gt;Bob&lt;/li&gt;
+        &lt;li concordion:execute="#men.add(#TEXT)"&gt;James&lt;/li&gt;
+        &lt;li concordion:execute="#men.add(#TEXT)"&gt;Mary&lt;/li&gt;
+&lt;/ul&gt;
+&lt;span concordion:forEach="#firstName : #men"&gt;
+    &lt;p&gt; When user &lt;i concordion:echo="#firstName"&gt;&lt;/i&gt; logs in, the
+        greeting will be:
+            &lt;b concordion:assertEquals="greetingFor(#firstName)"&gt;Hello Sir!&lt;/b&gt;
+    &lt;/p&gt;
+&lt;/span&gt;
+&lt;p&gt; When user &lt;i concordion:set="#firstName"&gt;Susan&lt;/i&gt; logs in, the
+greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)"&gt;Hello Madam!&lt;/b&gt; &lt;/p&gt;
+        </pre>
+
+    <p>Looks like this:</p>
+
+<pre class="html" concordion:assertEquals="render(#snippet)">
+&lt;ul concordion:execute="#men =newList()"&gt;
+        &lt;li concordion:execute="#men.add(#TEXT)"&gt;Bob&lt;/li&gt;
+        &lt;li concordion:execute="#men.add(#TEXT)"&gt;James&lt;/li&gt;
+        &lt;li concordion:execute="#men.add(#TEXT)"&gt;Mary&lt;/li&gt;
+&lt;/ul&gt;
+&lt;span concordion:forEach="#firstName : #men" class="invisible"&gt;
+    &lt;p&gt; When user &lt;i concordion:echo="#firstName" /&gt; logs in, the
+        greeting will be:
+            &lt;b concordion:assertEquals="greetingFor(#firstName)"&gt;Hello Sir!&lt;/b&gt;
+    &lt;/p&gt;
+&lt;/span&gt; &lt;span&gt; &lt;span concordion:forEach="#firstName : #men"&gt;
+    &lt;p&gt; When user &lt;i concordion:echo="#firstName"&gt;Bob&lt;/i&gt; logs in, the
+        greeting will be:
+            &lt;b concordion:assertEquals="greetingFor(#firstName)" class="success"&gt;Hello Sir!&lt;/b&gt;
+    &lt;/p&gt;
+&lt;/span&gt; &lt;span concordion:forEach="#firstName : #men"&gt;
+    &lt;p&gt; When user &lt;i concordion:echo="#firstName"&gt;James&lt;/i&gt; logs in, the
+        greeting will be:
+            &lt;b concordion:assertEquals="greetingFor(#firstName)" class="success"&gt;Hello Sir!&lt;/b&gt;
+    &lt;/p&gt;
+&lt;/span&gt; &lt;span concordion:forEach="#firstName : #men"&gt;
+    &lt;p&gt; When user &lt;i concordion:echo="#firstName"&gt;Mary&lt;/i&gt; logs in, the
+        greeting will be:
+            &lt;b concordion:assertEquals="greetingFor(#firstName)" class="failure"&gt; &lt;del class="expected"&gt;Hello Sir!&lt;/del&gt;
+&lt;ins class="actual"&gt;Hello Madam!&lt;/ins&gt; &lt;/b&gt;
+    &lt;/p&gt;
+&lt;/span&gt; &lt;/span&gt;
+&lt;p&gt; When user &lt;i concordion:set="#firstName"&gt;Susan&lt;/i&gt; logs in, the
+greeting will be: &lt;b concordion:assertEquals="greetingFor(#firstName)" class="success"&gt;Hello Madam!&lt;/b&gt; &lt;/p&gt;
+
+</pre>
+
+
+</div>
+<div class="example">
+    So put together, this looks like:
+
+        <ul concordion:execute="#men =newList()">
+            <li concordion:execute="#men.add(#TEXT)">Bob</li>
+            <li concordion:execute="#men.add(#TEXT)">James</li>
+        </ul>
+    <div class="example">
+    
+    <span concordion:forEach="#firstName : #men">
+        <p> When user <i concordion:echo="#firstName"></i> logs in, the
+            greeting will be:
+            <b concordion:assertEquals="greetingFor(#firstName)">Hello Sir!</b>
+        </p>
+    </span>
+    </div>
+    <div class="example">
+
+        <p> When user <i concordion:set="#firstName">Susan</i> logs in, the
+            greeting will be: <b concordion:assertEquals="greetingFor(#firstName)">Hello Madam!</b></p>
+    </div>
+</div>
+
+</body>
+</html>

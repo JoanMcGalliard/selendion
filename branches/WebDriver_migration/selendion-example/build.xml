@@ -1,0 +1,136 @@
+<project name="selendion-example" default="build" basedir=".">
+
+    <property name="dir.build" value="${basedir}/build"/>
+    <property name="dir.classes" value="${dir.build}/classes"/>
+    <property name="dir.test.output" value="${dir.build}/test-output"/>
+    <property name="dir.selendion.output" value="${dir.test.output}/selendion"/>
+    <property name="test.acceptance.src.dir" value="src/test/java"/>
+    <property name="test.acceptance.resource.dir" value="src/test/resources"/>
+    <property name="selendion.selenium.server.port" value="5555"/>
+    <property name="selendion.selenium.server" value="localhost"/>
+
+    <echo  message="basedir ${basedir}"/>
+                <echo message="dir.build ${dir.build} ${basedir}/build"/>
+             <echo message="dir.test.output ${dir.test.output}"/>
+             <echo message="dir.selendion.output ${dir.selendion.output}"/>
+             <echo message="dir.classes ${dir.classes}"/>
+
+    <path id="compile.classpath">
+        <fileset dir="lib" includes="*.jar"/>
+    </path>
+
+    <target name="build"
+            description="Builds everything from scratch"
+            depends="start.selenium,clean,init,compile, test.acceptance,stop.selenium"
+            />
+
+    <target name="start.selenium"
+            depends="stop.selenium">
+
+        <java classname="org.openqa.selenium.server.SeleniumServer" fork="true" spawn="true">
+            <arg value="-port"/>
+            <arg value="${selendion.selenium.server.port}"/>
+            <classpath refid="classpath.test.acceptance"/>
+           
+        </java>
+        <waitfor maxwait="10" maxwaitunit="second" timeoutproperty="start.selenium.timeout">
+            <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=getNewBrowserSession"/>
+        </waitfor>
+        <fail if="start.selenium.timeout" message="Selenium failed to start"/>
+
+    </target>
+    <target name="stop.selenium">
+        <waitfor maxwait="3" maxwaitunit="second" timeoutproperty="stop.selenium.timeout">
+            <not>
+                <http url="http://localhost:${selendion.selenium.server.port}/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
+            </not>
+        </waitfor>
+        <fail if="stop.selenium.timeout" message="Selenium failed to shutdown"/>
+    </target>
+    <target name="clean">
+        <delete dir="${dir.build}"/>
+        <delete dir="${dir.test.output}"/>
+        <delete dir="${dir.selendion.output}"/>
+        <delete dir="${dir.classes}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${dir.classes}"/>
+
+        <javac classpathref="compile.classpath"
+               destdir="${dir.classes}"
+               srcdir="${test.acceptance.src.dir}"
+               failonerror="yes"
+               source="1.5"
+               target="1.5"
+                />
+
+        <copy todir="${dir.classes}">
+            <fileset dir="${test.acceptance.resource.dir}" excludes="**/*.java"/>
+        </copy>
+    </target>
+    <path id="classpath.test.acceptance">
+        <path location="${dir.classes}"/>
+        <fileset dir="lib">
+                <include name="**/*.jar"/>
+              </fileset>
+
+
+    </path>
+
+
+    <macrodef name="run.acceptance.tests">
+        <attribute name="test.pattern"/>
+        <sequential>
+            <junit fork="yes" printsummary="yes" haltonfailure="true" showoutput="true">
+                <jvmarg value="-Dselendion.output.dir=${dir.selendion.output}"/>
+                <jvmarg value="-Dselendion.testSupport=SELENIUM"/>
+                <jvmarg value="-Dselendion.seleniumBrowser=*firefox"/>
+                <jvmarg value="-Dselendion.seleniumServerHost=${selendion.selenium.server}"/>
+                <jvmarg value="-Dselendion.seleniumServerPort=${selendion.selenium.server.port}"/>
+                <jvmarg value="-Dselendion.numberOfThreads=3"/>
+                <classpath refid="classpath.test.acceptance"/>
+                <formatter type="xml"/>
+                <batchtest fork="yes" todir="${dir.test.output}">
+                    <fileset dir="${test.acceptance.src.dir}">
+                        <include name="@{test.pattern}"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+
+        </sequential>
+    </macrodef>
+    <target name="test.acceptance"
+            depends="compile"
+            description="compile source and test files run all the acceptance tests">
+        <run.acceptance.tests
+                test.pattern="**/*Test.java"/>
+    </target>
+
+    <target name="ensure.test.name" unless="test">
+        <fail message="You must run this target with -Dtest=TestName"/>
+    </target>
+    <target name="runtest" description="Compiles, starts the app and runs the test you specify on the command
+         line with -Dtest="
+            depends="compile,start.selenium,ensure.test.name,runtest.only,stop.selenium">
+    </target>
+    <target name="runtest.only" description="Runs the test you specify on the command
+         line with -Dtest=" depends="compile">
+        <run.acceptance.tests
+                test.pattern="**/${test}.java"/>
+
+    </target>
+    <target name="init">
+        <init.dir dir="${dir.test.output}" />
+    </target>
+
+
+    <!-- Macros -->
+	<macrodef name="init.dir">
+		<attribute name="dir" />
+		<sequential>
+			<delete dir="@{dir}" includeemptydirs="true" />
+			<mkdir dir="@{dir}" />
+		</sequential>
+	</macrodef>
+</project>

@@ -1,0 +1,18 @@
+
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head><title>Nesting inside assertEquals</title></head>
+<link href="../../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+<body>
+<h2>Nesting inside assertEquals</h2>
+
+<div class="example">
+    <p>Set the variable #blah to <i concordion:set="#blah">Hooray!</i>, then set the variable
+        #blahblah to #blah x 2 <i concordion:set="#blahblah"><span concordion:echo="#blah"/> <span concordion:echo="#blah"/></i>
+        then
+        assert it equals <b concordion:assertEquals="#blahblah">Hooray! Hooray!</b>.
+    </p>
+</div>
+
+
+</body>
+</html>

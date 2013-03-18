@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns:concordion="http://www.selendion.org/2008">
+
+<head><script type="text/javascript">/* Selenium Table Toggling */
+
+function getElementById(id) {
+  if (document.getElementById) { // standard
+    return document.getElementById(id);
+  } else if (document.all) { // old IE versions
+    return document.all[id];
+  } else if (document.layers) { // nn4
+    return document.layers[id];
+  }
+  alert("Sorry, but your web browser is not supported by Concordion.");
+    return null;
+}
+
+function isVisible(element) {
+  return element.style.display;
+}
+
+function makeVisible(element) {
+  element.style.display = "block";
+}
+
+function makeInvisible(element) {
+  element.style.display = "";
+}
+
+function toggleSelendionElement(selendionHideViewElementNumber, selendionHideViewButtonTitle) {
+  var selendionHideViewElement = getElementById("selendionHideViewElement" + selendionHideViewElementNumber);
+  var selendionHideViewButton = getElementById("selendionHideViewButton" + selendionHideViewElementNumber);
+  if (isVisible(selendionHideViewElement)) {
+    makeInvisible(selendionHideViewElement);
+    selendionHideViewButton.value = selendionHideViewButtonTitle.replace(/\|/g,"\n");
+  } else {
+    makeVisible(selendionHideViewElement);
+    selendionHideViewButton.value = "hide";
+  }
+}
+function toggleStackTrace(stackTraceNumber) {
+  var stackTrace = getElementById("stackTrace" + stackTraceNumber);
+  var stackTraceButton = getElementById("stackTraceButton" + stackTraceNumber);
+  if (isVisible(stackTrace)) {
+    makeInvisible(stackTrace);
+    stackTraceButton.value = "View Stack";
+  } else {
+    makeVisible(stackTrace);
+    stackTraceButton.value = "Hide Stack";
+  }
+}
+
+</script><style>* {
+  font-family: Arial,sans-serif;
+}
+body {
+  padding: 32px;
+}
+pre {
+  padding: 6px 28px 6px 28px;
+  background-color: #E8EEF7;
+}
+pre, pre *, code, kbd {
+  font-family: Courier New, Courier,serif;
+  font-size: 10pt;
+}
+h1, h1 * {
+  font-size: 24pt;
+}
+
+p, li {
+  line-height: 140%;
+}
+table {
+  border-collapse: collapse;
+  empty-cells: show;
+  margin: 8px 0 8px 0;
+}
+th, td {
+  border: 1px solid black;
+  padding: 3px;
+}
+td {
+  background-color: white;
+  vertical-align: top;
+}
+th {
+  background-color: #C3D9FF;
+}
+li {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+
+.example {
+  padding: 2px 12px 6px 12px;
+  border: 1px solid #C3D9FF;
+  margin: 6px 0 28px 0;
+  background-color: #F5F9FD;
+}
+.example h3 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 12pt;
+}
+
+
+.success, .success * {
+  background-color: #afa !important;
+}
+.success pre {
+  background-color: #bbffbb;
+}
+
+
+
+ins {
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+
+.tight li {
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+.invisible {
+    display: none;
+}
+
+.includedHiddenPassingTest {
+    padding: 2px 12px 6px 12px;
+    border: 1px solid #C3D9FF;
+    margin: 6px 10% 28px;
+
+    display: none;
+    background-color: #E0FFDD;
+
+}
+.includedPassingTest {
+    padding: 2px 12px 6px 12px;
+    border: 1px solid #C3D9FF;
+    margin: 6px 10% 28px;
+
+    display: block;
+    background-color: #E0FFDD;
+
+}
+
+
+</style>
+    <link href="../../../css/selendion.css" rel="stylesheet" type="text/css" />
+    <title>RunSelendion</title>
+</head>
+<body>
+<h1>RunSelendion</h1>
+
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
+
+<p>
+
+    Run Selendion runs a selendion script when it is called. If the script has errors or exceptions, it will appear
+    as a failed test. If it pass, hooray!. If it doesn't exist, an error message will be shown. If it exists but has
+    no matching java file, it will be run as a basic selendion test.
+</p>
+
+<p>Setup: <i concordion:execute="resetButtonCount()">reset the button id count</i>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="example">
+    <p>
+        Let's run this little <a concordion:runSelendion="#HREF, false" href="runSelendionScripts/Simple.html" class="invisible success">Passing
+        Selendion test</a><span><div class="includedPassingTest"><p><b concordion:assertEquals="'value'" class="success">value</b></p></div></span>.
+    </p>
+
+</div>
+
+<p>
+       Let's run this little <a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="invisible success">Passing
+               Selendion test</a> <span> <input id="selendionHideViewButton7" type="button" class="success"
+   onclick="javascript:toggleSelendionElement('7', 'Passing Selendion test')" value="Passing Selendion test" />
+   <div id="selendionHideViewElement7" class="includedHiddenPassingTest"> <p> <b concordion:assertEquals="'value'"
+   class="success">value</b> </p> </div> </span>.
+   </p>
+    
+
+
+<div class="example">
+    <p>
+        Let's run this little <a concordion:runSelendion="#HREF" href="runSelendionScripts/Simple.html" class="invisible success">Passing
+        Selendion test</a><span><div class="includedPassingTest"><p><b concordion:assertEquals="'value'" class="success">value</b></p></div></span>.
+    </p>
+
+</div>
+</body>
+
+</html>

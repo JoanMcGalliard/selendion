@@ -1,0 +1,15 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<link href="../../css/selendion.css" rel="stylesheet" type="text/css" />
+<body>
+(this test is designed to be called from SetVars.html)
+
+    <h1>Set Value</h1>
+<p>   When starting, #svar1 should be <b concordion:assertEquals="#svar1">Variable 1</b>
+     set #svar1 to the value of <b concordion:set="#svar1=#svar2">#svar2  </b>
+    then set #svar4 to <b concordion:set="#svar4">new variable</b>.
+</p>
+<p>Test we have loaded the correct class by executing the <b concordion:assertEquals="theSetValueDoNothingMethod()">
+ theSetValueDoNothingMethod
+</b>.</p>
+</body>
+</html>

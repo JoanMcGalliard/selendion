@@ -1,0 +1,1 @@
+Identical to concordion test suite, to make sure selendion can run concordion tests.

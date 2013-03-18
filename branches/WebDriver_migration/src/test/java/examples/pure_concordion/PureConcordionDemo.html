@@ -1,0 +1,34 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<link href="../../../css/selendion.css" rel="stylesheet" type="text/css" />
+<head><title>Pure Concordinon Demo</title></head>
+
+<body>
+
+    <h1>Pure Concordinon Demo</h1>
+
+    <p>
+    	After a user logs into the system, a greeting is
+    	displayed saying "Hello [user's first name]!"
+    </p>
+
+    <div class="example">
+
+		<h3>Example</h3>
+		
+        <p>
+            When user <i concordion:set="#firstName">Bob</i>
+            logs in, the greeting will be:
+            <b concordion:assertEquals="greetingFor(#firstName)">Hello Bob!</b>
+        </p>
+        
+        <p>
+            The first name <span concordion:assertTrue="#firstName.startsWith(#letter)">starts 
+            with <i concordion:set="#letter">B</i></span>.
+        </p>
+
+        <p>Note we can also <span concordion:execute="greetingFor(#firstName)">execute commands</span>.</p>
+        
+    </div>
+
+</body>
+</html>

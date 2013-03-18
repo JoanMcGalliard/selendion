@@ -1,0 +1,2 @@
+This is a stripped down version of fizmez web server
+(http://fizmez.com/?useCase=viewProduct&product=webServer) to support running the unit tests.

@@ -1,0 +1,63 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+		<meta name="ViewName" content="systemStatus"/>
+		<title>OCP System Status</title>
+		<script>
+			function statusChanged(){
+				this.document.forms[0].submit();
+			}
+		</script>
+
+	</head>
+
+	<body>
+		<div class="head">
+			<img src="/images/agent/gif/lgo_sky.gif" alt="Sky Logo" class="logo" />
+		</div>
+		<div>
+			<form action="/admin/systemStatus/invoke" method="post">
+				<fieldset>
+					<legend>OCP System Status</legend>
+
+					<table align="center" border=0 style="height: 120px; width: 520px">
+						<tr>
+							<td colspan="2">
+								<b>System running in
+									<font color="green"></font>
+									<font color="red">OFF-LINE</font>
+									Mode since </b><i>Wed Apr 29 07:23:11 BST 2009</i>
+							</td>
+
+						</tr>
+						<tr>
+							<td colspan="2">&nbsp;</td>
+						</tr>
+						<tr>
+							<td>
+								<input id="online" type="radio" name="systemStatusOnline" value="true" onClick="statusChanged();" >
+								<label for="online">Switch to On-line</label>
+
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input id="offline" type="radio" name="systemStatusOnline" value="false" onClick="statusChanged()" checked="checked">
+								<label for="offline">Switch to Off-line</label>
+							</td>
+						</tr>
+
+						<tr>
+							<td colspan="2">&nbsp;</td>
+						</tr>
+					</table>
+				</fieldset>
+			</form>
+		</div>
+	</body>
+</html>

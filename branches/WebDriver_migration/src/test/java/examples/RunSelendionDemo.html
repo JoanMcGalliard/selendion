@@ -1,0 +1,30 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head><title>runSelendion Demo</title></head>
+<link href="../../css/selendion.css" rel="stylesheet" type="text/css"/>
+<body>
+
+<h1>runSelendion Demo</h1>
+
+
+<div class="example">
+    <p>Because of the failing script, this test is <i class="attention" concordion:execute="setExpectedToPass(false)">
+        not expected to pass</i>.
+    </p>
+
+    <p>Run this <a href="commands/runSelendionScripts/Simple.html" concordion:runSelendion="#HREF">
+        passing script</a>, this <a href="commands/runSelendionScripts/NotExpectedToPass.html"
+                                    concordion:runSelendion="#HREF">
+        not expected to pass script</a>,
+        this <a href="commands/runSelendionScripts/NotExpectedToPassButPassing.html" concordion:runSelendion="#HREF">
+            passing not expected to pass script</a>, this
+        <a href="commands/runSelendionScripts/SimpleFail.html" concordion:runSelendion="#HREF">
+            failing script</a>, this
+        <a href="commands/runSelendionScripts/Embedded.html" concordion:runSelendion="#HREF">script that has an
+            embedded test</a> and  this
+        <a href="commands/runSelendionScripts/DoubleEmbedded.html" concordion:runSelendion="#HREF">script that has an
+            embedded test with an embedded test</a>.</p>
+</div>
+
+
+</body>
+</html>

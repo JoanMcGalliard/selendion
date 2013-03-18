@@ -1,0 +1,3137 @@
+<html xmlns:concordion="http://www.selendion.org/2008">
+<head>
+    <link href="../../../../../../../css/selendion.css" rel="stylesheet" type="text/css"/>
+    <title>Selenium/HtmlUnit Commands Test</title>
+</head>
+<body>
+<h1>Selenium/HtmlUnit Commands Test</h1>
+
+<p>Selendion takes files generated from the Selenium IDE, and sends them to whatever browser you choose, using either
+    Selenium or HtmlUnit. All standard Selenium IDE commands can be suffixed with <code>IfAvailable</code>. If this is
+    present,
+    then the command will not fail if the element is not found or another error occurs. If an error occurs, the command
+    will pass
+    but nothing will happen.</p>
+
+<p>This allows you to write code like this</p>
+<table border="1">
+    <tr>
+        <td>store</td>
+        <td>loggedInUsername</td>
+        <td>not found</td>
+    </tr>
+    <tr>
+        <td>storeText</td>
+        <td>xPath=/html/body/p/span[3]</td>
+        <td>loggedInUsername</td>
+    </tr>
+</table>
+
+<p>If the </p>
+
+<p>This is to make sure that Selendion can understand all selenium commands from the <a
+        href="http://selenium-core.openqa.org/reference.html">
+    selenium documentation</a> : </p>
+
+<p>For these tools:</p>
+<ul concordion:execute="#browserTypes =newList()">
+    <li concordion:execute="#browserTypes.add(#TEXT)">HTMLUNIT</li>
+    <li concordion:execute="#browserTypes.add(#TEXT)">SELENIUM</li>
+</ul>
+<div class="example" concordion:forEach="#browser : #browserTypes">
+The commands in this table work with both selenium and htmlunit.
+<p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
+    <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
+        http://localhost:55555/</a> we expect the following results: </p>
+<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+<tr>
+    <th concordion:set="#command=#TEXT">Command</th>
+    <th concordion:set="#arg1">arg1</th>
+    <th concordion:set="#arg2">arg2</th>
+    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+    <th concordion:assertEquals="getMessage()">Message</th>
+    <th concordion:assertEquals="getException()">Exception</th>
+    <th>Remarks</th>
+</tr>
+
+<tr>
+    <td><b>open</b></td>
+    <td>index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Test open without /</td>
+</tr>
+<tr>
+    <td>setTimeout</td>
+    <td>200</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>setup for next test</td>
+</tr>
+ <tr>
+    <td><b>waitForTextPresentIfAvailable</b></td>
+    <td>something that isn't on the page</td>
+    <td></td>
+    <td>true</td>
+    <td>ERROR: Timed out after 200ms</td>
+    <td>false</td>
+    <td>This will wait for 200ms or until the text appears</td>
+</tr>
+ <tr>
+    <td><b>waitForTextPresentIfAvailable</b></td>
+    <td>ARA Points:\n(use -1 for novice)</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>should pass as text is there</td>
+</tr>
+<tr>
+    <td><b>waitForValue</b></td>
+    <td>new_username</td>
+    <td>bob</td>
+    <td>false</td>
+    <td>ERROR: Timed out after 200ms</td>
+    <td>false</td>
+    <td>waitFor... something that isn't there</td>
+</tr>
+<tr>
+    <td>setTimeout</td>
+    <td>30000</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>setup for next test</td>
+</tr>
+
+<tr>
+    <td>verifyText</td>
+    <td>title</td>
+    <td>Select ... Mr Mrs Miss Ms Doctor</td>
+
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Test open without /</td>
+</tr>
+<tr>
+
+    <td>verifyText</td>
+    <td>sex</td>
+    <td>Male Female</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Test open without /</td>
+</tr>
+<tr>
+    <td><b>verifyTextPresent</b></td>
+    <td>ARA Points:\n(use -1 for novice)</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td><b>verifyTextNotPresent</b></td>
+    <td>ARA Points:\n(use -1 for novice)</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td>simple fail</td>
+</tr>
+<tr>
+    <td><b>verifyText</b></td>
+    <td>tableBr</td>
+    <td>X: blah 1\nX: blah 2</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>selenium/htmlunit match</td>
+</tr>
+<tr>
+    <td><b>storeText</b></td>
+    <td>errorList</td>
+    <td>errorList</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>htmlunit/selenium = same?</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${errorList}</td>
+    <td></td>
+    <td>true</td>
+    <td>&#8211; Contact email address &#8211; Repeat email address</td>
+    <td>false</td>
+    <td>htmlunit/selenium = same?</td>
+</tr>
+<tr>
+    <td><b>open</b></td>
+    <td>/index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Open main page</td>
+</tr>
+
+<tr>
+    <td><b>verifyText</b></td>
+    <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
+    <td>Height</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td><b>verifyText</b></td>
+    <td>//table[@id='input_table']/tbody/tr[13]/td[1]</td>
+    <td>random text</td>
+    <td>false</td>
+    <td>Expected: random text; Actual: Height</td>
+    <td>false</td>
+    <td>fails because of miss-match</td>
+</tr>
+<tr>
+    <td><b>verifyText</b></td>
+    <td>//*[@id="madeupid"]</td>
+    <td> ARA Points: (use -1 for novice)</td>
+    <td>false</td>
+    <td>ERROR: Element //*[@id="madeupid"] not found</td>
+    <td>false</td>
+    <td>fails because element not present</td>
+</tr>
+
+<tr>
+    <td>storeText</td>
+    <td>paraWithTwoLineBreaks</td>
+    <td>para</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Open main page</td>
+</tr>
+<tr>
+    <td>verifyText</td>
+    <td>paraWithTwoLineBreaks</td>
+    <td>${para}</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Open main page</td>
+</tr>
+<tr>
+    <td><b>storeText</b></td>
+    <td>//abbr[@title='available']</td>
+    <td>text</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>using attributes</td>
+</tr>
+<tr>
+    <td><b>echo</b></td>
+    <td>${text}</td>
+    <td></td>
+    <td>true</td>
+    <td>1st available</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+
+
+<tr>
+    <td><b>open</b></td>
+    <td>/index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Open main page</td>
+</tr>
+<tr>
+    <td><b>waitForElementNotPresent</b></td>
+    <td>blahblah</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic NOT test</td>
+</tr>
+<tr>
+    <td>verifyElementNotPresent</td>
+    <td>imagesubmit</td>
+    <td></td>
+
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td>basic NOT test</td>
+</tr>
+<tr>
+    <td><b>verifyElementNotPresent</b></td>
+    <td>blahblah</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic NOT test</td>
+</tr>
+
+
+<tr>
+    <td><b>assertAllButtons</b></td>
+    <td>,submit,pop,</td>
+    <td><br/></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>assertNotAllButtons</b></td>
+    <td>pop,submit,big</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>verifyAllButtons</b></td>
+    <td>,submit,pop,</td>
+    <td><br/></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>verifyNotAllButtons</b></td>
+    <td>,submit,pop,big</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>verifyAllButtons</b></td>
+    <td>blah</td>
+    <td><br/></td>
+    <td>false</td>
+    <td>Expected: blah; Actual: ,submit,pop,</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>storeAllButtons</b></td>
+    <td>allbuttons</td>
+    <td><br/></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>allbuttons = ${allbuttons}</td>
+    <td><br/></td>
+    <td>true</td>
+    <td>allbuttons = ,submit,pop,</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>waitForAllButtons</b></td>
+    <td>,submit,pop,</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>waitForNotAllButtons</b></td>
+    <td>,submit,pop,big</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>select</b></td>
+    <td>parkingAvailabilitySelect</td>
+    <td>value=Parking available</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>testing select</td>
+</tr>
+
+<tr>
+    <td><b>assertTextNotPresent</b></td>
+    <td>RANDOM STUFF</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>text area</td>
+</tr>
+<tr>
+    <td><b>assertTextNotPresent</b></td>
+    <td>Celine!!</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>true</td>
+    <td>text area</td>
+</tr>
+<tr>
+    <td><b>storeExpression</b></td>
+    <td>javascript{'Article'+(new Date()).getTime()}</td>
+    <td>jSValue1</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>text area</td>
+</tr>
+<tr>
+    <td><b>type</b></td>
+    <td>new_username</td>
+    <td>javascript{storedVars['jSValue1'].toUpperCase()}</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>text area</td>
+</tr>
+
+<tr>
+    <td>type</td>
+    <td>reasonInput</td>
+    <td>textarea value</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>text area</td>
+</tr>
+<tr>
+    <td><b>verifySelectOptions</b></td>
+    <td>colours</td>
+    <td>red,green,blue,yellow,black,gold</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic store text</td>
+</tr>
+<tr>
+    <td><b>storeText</b></td>
+    <td>//table[@id='input_table']/tbody/tr[10]/td[1]</td>
+    <td>weight_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic store text</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${weight_label}</td>
+    <td></td>
+    <td>true</td>
+    <td>Weight:</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>store</b></td>
+    <td>(blank)</td>
+    <td>weight_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>clear variable</td>
+</tr>
+<tr>
+    <td><b>storeTextIfAvailable</b></td>
+    <td>//table[@id='input_table']/tbody/tr[10]/td[1]</td>
+    <td>weight_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Store if available, and it is available</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${weight_label}</td>
+    <td></td>
+    <td>true</td>
+    <td>Weight:</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>typeIfAvailable</b></td>
+    <td>new_username</td>
+    <td>a789a&#8364;0123</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>funny characters</td>
+</tr>
+<tr>
+    <td>store</td>
+    <td>(blank)</td>
+    <td>weight_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>clear variable</td>
+</tr>
+<tr>
+    <td><b>storeTextIfAvailable</b></td>
+    <td>//table[@id='input_table']/tbody/tr[10]/td[44]</td>
+    <td>weight_label</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Store if available, but it is not available</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${weight_label}</td>
+    <td></td>
+    <td>true</td>
+    <td>(blank)</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>deleteAllVisibleCookies</b></td>
+    <td></td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Just see if it throws an exception</td>
+</tr>
+<tr>
+    <td><b>storeValue</b></td>
+    <td>totalsum</td>
+    <td>totalsum</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic storeValue for empty value</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${totalsum}</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>new_username</td>
+    <td>jem</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>set up for next row</td>
+</tr>
+<tr>
+    <td><b>storeValue</b></td>
+    <td>new_username</td>
+    <td>typed_value</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic storeValue</td>
+</tr>
+<tr>
+    <td><b>waitForValue</b></td>
+    <td>new_username</td>
+    <td>jem</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic waitFor...</td>
+</tr>
+
+
+
+<tr>
+    <td>echo</td>
+    <td>${typed_value}</td>
+    <td></td>
+    <td>true</td>
+    <td>jem</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+
+
+<tr>
+    <td><b>verifyTextPresent</b></td>
+    <td>random text</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td>simple fail</td>
+</tr>
+<tr>
+    <td><b>verifyTextNotPresent</b></td>
+    <td>random text</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>vanilla test</td>
+</tr>
+
+
+<tr>
+    <td><b>verifyElementPresent</b></td>
+    <td>//*[@id="imagesubmit"]</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td><b>verifyElementPresent</b></td>
+    <td>//*[@id="madeupid"]</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td>should fail</td>
+</tr>
+<tr>
+    <td><b>verifyNotChecked</b></td>
+    <td>heavyweight</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>check box</td>
+</tr>
+<tr>
+    <td><b>verifyChecked</b></td>
+    <td>heavyweight</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td>check box</td>
+</tr>
+<tr>
+    <td><b>click</b></td>
+    <td>heavyweight</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>set up for next row</td>
+</tr>
+<tr>
+    <td><b>storeChecked</b></td>
+    <td>heavyweight</td>
+    <td>hw</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>check box</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${hw}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>verifyValue</b></td>
+    <td>height</td>
+    <td>off</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>radio button values</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>height</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>setup for next four rows</td>
+</tr>
+<tr>
+    <td><b>verifyValue</b></td>
+    <td>height</td>
+    <td>off</td>
+    <td>false</td>
+    <td>Expected: off; Actual: on</td>
+    <td>false</td>
+    <td>radio button values</td>
+</tr>
+<tr>
+    <td><b>verifyValue</b></td>
+    <td>height</td>
+    <td>on</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>radio button values</td>
+</tr>
+<tr>
+    <td><b>verifyChecked</b></td>
+    <td>height</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>radio button values</td>
+</tr>
+<tr>
+    <td><b>verifyNotChecked</b></td>
+    <td>height</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>false</td>
+    <td>radio button values</td>
+</tr>
+<tr>
+    <td><b>clickAndWait</b></td>
+    <td>imagesubmit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Click on Celine!</td>
+</tr>
+<tr>
+    <td><b>storeTitle</b></td>
+    <td>title</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Testing above click worked</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${title}</td>
+    <td></td>
+    <td>true</td>
+    <td>result</td>
+    <td>false</td>
+    <td>still testing above click worked</td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>make sure nothing is selected for next test</td>
+</tr>
+<tr>
+    <td><b>storeSelectedValue</b></td>
+    <td>colours</td>
+    <td>blah</td>
+    <td>false</td>
+    <td>ERROR: No option selected</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>addSelection</b></td>
+    <td>colours</td>
+    <td>label=red</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>set up for row 2 below</td>
+</tr>
+<tr>
+    <td><b>addSelection</b></td>
+    <td>colours</td>
+    <td>label=green</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>set up for row below</td>
+</tr>
+<tr>
+    <td><b>storeSelectedValue</b></td>
+    <td>colours</td>
+    <td>blah</td>
+    <td>false</td>
+    <td>ERROR: More than one selected option!</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>addSelection</b></td>
+    <td>colours</td>
+    <td>label=eggplant</td>
+    <td>false</td>
+    <td>ERROR: Option with label 'eggplant' not found</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>select</td>
+    <td>sex</td>
+    <td>label=Female</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>setup next row</td>
+</tr>
+<tr>
+    <td><b>verifySelectedValue</b></td>
+    <td>sex</td>
+    <td>F</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>vanilla test</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>new_username</td>
+    <td>me</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>set up for row below</td>
+</tr>
+<tr>
+    <td>storeValue</td>
+    <td>new_username</td>
+    <td>username</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>basic storeValue</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${username}</td>
+    <td></td>
+    <td>true</td>
+    <td>me</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>assertTextPresent</b></td>
+    <td>text that is not present</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>assertTextPresent</b></td>
+    <td>Username (required):</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>click</b></td>
+    <td>xPath=/html/body/p[3]/a</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Click a link</td>
+</tr>
+<tr>
+    <td><b>click</b></td>
+    <td>xPath=/html/body/p[300]/a</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: Element xPath=/html/body/p[300]/a not found</td>
+    <td>false</td>
+    <td>Click non-existant element</td>
+</tr>
+<tr>
+    <td><b>click</b></td>
+    <td>xPath=/html/body/form/table/tbody/tr[10]/td[2]/input</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Click non-clickable element</td>
+</tr>
+<tr>
+    <td><b>click</b></td>
+    <td>submit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>button</td>
+</tr>
+<tr>
+    <td><b>open</b></td>
+    <td>/index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Open main page</td>
+</tr>
+<tr>
+    <td><b>click</b></td>
+    <td>heavyweight</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>checkbox</td>
+</tr>
+<tr>
+    <td><b>click</b></td>
+    <td>//input[@name='height' and @value='medium']</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>radio button</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>name=heavyweight</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>explicit name</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>heavyweight</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>implicit name</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>name=name2</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>name that isn't in the document</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>false</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>id=id1</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>explicit id</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>identifier=id1</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>explicit identifier</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>id1</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>implicit id</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>id=id2</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>id that isn't in the document</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>false</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>id=heavyweight</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>id that is really a name</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>false</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>xPath=//p[@name='name1']</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>explicit xPath</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>//p[@name='name1']</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>implicit xPath</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>link=Click for confirm</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>link</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>true</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeElementPresent</b></td>
+    <td>link=Non-existant link</td>
+    <td>present</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>link</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${present}</td>
+    <td></td>
+    <td>true</td>
+    <td>false</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='pageName']@content</td>
+    <td>blah</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>grab an attribute</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${blah}</td>
+    <td></td>
+    <td>true</td>
+    <td>index page</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='pageName']@contentX</td>
+    <td>blah</td>
+    <td>false</td>
+    <td>ERROR: Could not find element attribute: xPath=/html/head/meta[@name='pageName']@contentX</td>
+    <td>false</td>
+    <td>existing element, missing attribute</td>
+</tr>
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@nameX='pageName']@content</td>
+    <td>blah</td>
+    <td>false</td>
+    <td>ERROR: Element xPath=/html/head/meta[@nameX='pageName'] not found</td>
+    <td>false</td>
+    <td>non-existant element</td>
+</tr>
+
+<tr>
+    <td><b>clickAndWait</b></td>
+    <td>submit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>button</td>
+</tr>
+<tr>
+    <td><b>storeBodyText</b></td>
+    <td>body</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>store body for a standard page</td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${body}</td>
+    <td></td>
+    <td>true</td>
+    <td>Name Value New Username brian New Password Password1 Name Joan McGalliard Email joan@example.com Phone
+        02088888888 Mobile 07777777777 Sex F Weight L Ara 44444444 Points -1
+    </td>
+    <td>false</td>
+    <td>test row above</td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/iframe.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>set up for next few rows</td>
+</tr>
+<tr>
+    <td><b>verifyElementPresent</b></td>
+    <td>Password</td>
+    <td>1</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>verifyElementPresent within a frame</td>
+</tr>
+<tr>
+    <td>type</td>
+    <td>Password</td>
+    <td>1</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>type within a frame</td>
+</tr>
+<tr>
+    <td><b>clickAndWait</b></td>
+    <td>//input[@value='Submit']</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>submit within a frame</td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/iframe.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>set up for next few browsing into and out of frames</td>
+</tr>
+<tr>
+    <td><b>selectFrame</b></td>
+    <td>index=0</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+    <td>viewName</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${viewName}</td>
+    <td></td>
+    <td>true</td>
+    <td>passwordpage</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>selectFrame</b></td>
+    <td>relative=top</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='ViewName']@content</td>
+    <td>viewName</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>${viewName}</td>
+    <td></td>
+    <td>true</td>
+    <td>vbv</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/frames.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>set up for next row</td>
+</tr>
+<tr>
+    <td><b>clickAndWait</b></td>
+    <td>submit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>submit within a frame</td>
+</tr>
+</table>
+<p><i concordion:execute="stop()">Close the browser.</i></p>
+</div>
+<div class="example">
+    <p>These tests worked with DefaultSeleniuma but aren't working with WebDriverBackedSelenium, so currently only running
+        with <span concordion:set="#browser">HTMLUNIT</span>.</p>
+<p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
+    <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
+        http://localhost:55555/</a> we expect the following results: </p>
+<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+<tr>
+    <th concordion:set="#command=#TEXT">Command</th>
+    <th concordion:set="#arg1">arg1</th>
+    <th concordion:set="#arg2">arg2</th>
+    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+    <th concordion:assertEquals="getMessage()">Message</th>
+    <th concordion:assertEquals="getException()">Exception</th>
+    <th>Remarks</th>
+</tr>
+    <tr>
+        <td><b>storeExpression</b></td>
+        <td>javascript{(&quot;&quot; + Math.floor(12345.999)).substring(0,3)}</td>
+        <td>numberString</td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td>basic javascript evaluation</td>
+    </tr>
+    <tr>
+        <td><b>echo</b></td>
+        <td>${numberString}</td>
+        <td></td>
+        <td>true</td>
+        <td>123</td>
+        <td>false</td>
+        <td>testing row above</td>
+    </tr>
+  <tr>
+    <td><b>assertAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>When no alerts present</td>
+</tr>
+<tr>
+    <td><b>assertNotAlert</b></td>
+    <td></td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>When no alerts present</td>
+</tr>
+<tr>
+    <td><b>verifyAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>When no alerts present</td>
+</tr>
+<tr>
+    <td><b>verifyNotAlert</b></td>
+    <td>NO WAI</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>When no alerts present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>assertAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td><b>assertAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>false</td>
+    <td>ERROR: There were no alerts</td>
+    <td>false</td>
+    <td>Alert was cleared above</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>assertNotAlert</b></td>
+    <td></td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>assertNotAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>true</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>verifyAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>verifyNotAlert</b></td>
+    <td>NO WAI</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>waitForNotAlert</b></td>
+    <td>NO WAI</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>When alert <b>O NOES</b> is present</td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>link=Javascript alert with 1 sec delay</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>waitForAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+
+</table>
+</div>
+
+
+
+<div class="example">
+<p>
+    The commands in this table work have only been tested with
+    <span concordion:set="#browser">SELENIUM</span>.</p>
+
+<p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
+    <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
+        http://localhost:55555/</a> we expect the following results: </p>
+<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+<tr>
+    <th concordion:set="#command=#TEXT">Command</th>
+    <th concordion:set="#arg1">arg1</th>
+    <th concordion:set="#arg2">arg2</th>
+    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+    <th concordion:assertEquals="getMessage()">Message</th>
+    <th concordion:assertEquals="getException()">Exception</th>
+    <th>Remarks</th>
+</tr>
+<tr>
+    <td>open</td>
+    <td>index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>focus</td>
+    <td>//table</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>selenium.browserbot.getUserWindow().hitbox_pn == 'Error'</td>
+	<td>hitboxTagPresent</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>echo</td>
+    <td>hitboxTagPresent = ${hitboxTagPresent}</td>
+    <td><br/></td>
+    <td>true</td>
+    <td>hitboxTagPresent = true</td>
+    <td>false</td>
+    <td>testing above row</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>pop</td>
+	<td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td>Window1</td>
+	<td>30000</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>Window1</td>
+	<td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td>verifyTitle</td>
+	<td>Popup</td>
+	<td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td>close</td>
+	<td></td>
+	<td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td></td>
+	<td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+	<td>verifyTitle</td>
+	<td>Index.html</td>
+	<td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td>type</td>
+    <td>phone</td>
+    <td>abcde</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>setCursorPosition</b></td>
+    <td>phone</td>
+    <td>3</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+
+
+
+
+<tr>
+    <td><b>storeAllFields</b></td>
+    <td>allfields</td>
+    <td><br/></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>allfields = ${allfields}</td>
+    <td><br/></td>
+    <td>true</td>
+    <td>allfields = ,,,,,,ara_points,</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>storeAllLinks</b></td>
+    <td>alllinks</td>
+    <td><br/></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>alllinks = ${alllinks}</td>
+    <td><br/></td>
+    <td>true</td>
+    <td>alllinks = orly,,,,,</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>storeAllWindowIds</b></td>
+    <td>allwindowids</td>
+    <td><br/></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>allwindowids = ${allwindowids}</td>
+    <td><br/></td>
+    <td>true</td>
+    <td>allwindowids = undefined</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>storeAllWindowNames</b></td>
+    <td>allwindownames</td>
+    <td><br/></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>allwindownames = ${allwindownames}</td>
+    <td><br/></td>
+    <td>true</td>
+    <td>allwindownames = selenium_main_app_window</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>storeAllWindowTitles</b></td>
+    <td>allwindowtitles</td>
+    <td><br/></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>echo</td>
+    <td>allwindowtitles = ${allwindowtitles}</td>
+    <td><br/></td>
+    <td>true</td>
+    <td>allwindowtitles = Index.html</td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeText</td>
+    <td>xPath=/html/body/form/table/tbody/tr/td</td>
+    <td>var</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>Username (required):</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeTextIfAvailable</td>
+    <td>xPath=/html/body/form/table/tbody/tr[2]/td</td>
+    <td>var</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>Password (required):</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>store</td>
+    <td></td>
+    <td>var</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td><b>waitForNotVisible</b></td>
+    <td>invisibleStuff</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>text area</td>
+</tr>
+<tr>
+    <td><b>verifyNotVisible</b></td>
+    <td>invisibleStuff</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>text area</td>
+</tr>
+<tr>
+    <td>storeTextIfVisible</td>
+    <td>xPath=/html/body/form/table/tbody/tr[2]/td</td>
+    <td>var</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>Password (required):</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>store</td>
+    <td>previous value</td>
+    <td>var</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeTextIfAvailable</td>
+    <td>xPath=/html/body/form/table/tbody/tr[99]/td</td>
+    <td>var</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>previous value</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>submit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>waitForPageToLoadIfTextPresent</td>
+    <td>Username</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTitle</td>
+    <td>result</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTitle</td>
+    <td>Index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>click</td>
+    <td>submit</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>waitForPageToLoadIfNotTextPresent</td>
+    <td>text that is not present</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyTitle</td>
+    <td>result</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeVisible</td>
+    <td>submit</td>
+    <td>var</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>true</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>storeNotVisible</td>
+    <td>submit</td>
+    <td>var</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td>${var}</td>
+    <td>false</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+</table>
+<p><i concordion:execute="stop()">Close the browser.</i></p>
+</div>
+<div class="example">
+<p>
+    The commands in these tables behave differently in Selenium and HTMLUnit (this needs to be resolved).
+</p>
+
+<div class="example">
+
+     <p> Using
+    <span concordion:set="#browser">SELENIUM</span>.</p>
+
+  <p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
+      <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
+          http://localhost:55555/</a> we expect the following results: </p>
+   <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+   <tr>
+       <th concordion:set="#command=#TEXT">Command</th>
+       <th concordion:set="#arg1">arg1</th>
+       <th concordion:set="#arg2">arg2</th>
+       <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+       <th concordion:assertEquals="getMessage()">Message</th>
+       <th concordion:assertEquals="getException()">Exception</th>
+       <th>Remarks</th>
+   </tr>
+
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='pageName']@empty</td>
+    <td>blah</td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>empty element, but Selenium no longer returns an error?</td>
+</tr>
+</table>
+    <p><i concordion:execute="stop()">Close the browser.</i></p>
+
+</div>
+    <div class="example">
+
+     <p> Using
+    <span concordion:set="#browser">HTMLUNIT</span>.</p>
+
+  <p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
+      <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
+          http://localhost:55555/</a> we expect the following results: </p>
+<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
+<tr>
+    <th concordion:set="#command=#TEXT">Command</th>
+    <th concordion:set="#arg1">arg1</th>
+    <th concordion:set="#arg2">arg2</th>
+    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+    <th concordion:assertEquals="getMessage()">Message</th>
+    <th concordion:assertEquals="getException()">Exception</th>
+    <th>Remarks</th>
+</tr>
+
+
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='pageName']@empty</td>
+    <td>blah</td>
+    <td>false</td>
+    <td>ERROR: Could not find element attribute: xPath=/html/head/meta[@name='pageName']@empty</td>
+    <td>false</td>
+    <td>empty (illegal!) element</td>
+</tr>
+</table>
+        <p><i concordion:execute="stop()">Close the browser.</i></p>
+</div>
+ </div>
+<div class="example">
+<p>
+    The commands in this table work have not yet been verified with either selenium or html unit.</p>
+<table>
+<tr>
+    <th>Command</th>
+    <th>arg1</th>
+    <th>arg2</th>
+    <th>Succeeds?</th>
+    <th>Message</th>
+    <th>Exception</th>
+    <th>Remarks</th>
+</tr>
+<tr>
+    <td>open</td>
+    <td>/index.html</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td>Back to original page</td>
+</tr>
+<tr>
+      <td>storeAlert</td>
+      <td></td>
+      <td>true</td>
+      <td></td>
+      <td>false</td>
+      <td></td>
+      <td>comment</td>
+  </tr>
+  <tr>
+      <td>storeAlertPresent</td>
+      <td></td>
+      <td>true</td>
+      <td></td>
+      <td>false</td>
+      <td></td>
+      <td>comment</td>
+  </tr>
+
+<tr>
+    <td>storeAllFields</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeAllLinks</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeAllWindowIds</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeAllWindowNames</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeAllWindowTitles</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeAttributeFromAllWindows</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+
+
+<tr>
+    <td>storeConfirmation</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeConfirmationPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeCookie</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeEditable</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeElementHeight</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeElementIndex</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeElementPositionLeft</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeElementPositionTop</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeElementPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storePrompt</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storePromptPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectOptions</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectedId</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectedIds</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectedIndex</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectedIndexes</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectedLabel</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectedLabels</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectedValue</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSelectedValues</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeSomethingSelected</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeTable</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeTextPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeXpathCount</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>pause</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>setTimeout</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>store</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeTextIfAvailable</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeTextIfVisible</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeTextPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>verifyChecked</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>verifyTextPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>verifyTitle</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>verifyValue</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>waitForPageToLoadIfNotElementPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>waitForPageToLoadIfTextPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeNotVisible</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>assertExpression</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeEval</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>verifyExpression</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>addSelection</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>allowNativeXpath</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>altKeyDown</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>altKeyUp</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>answerOnNextPrompt</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>assignId</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>check</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>chooseCancelOnNextConfirmation</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>chooseOkOnNextConfirmation</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>clickAt</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>controlKeyDown</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>controlKeyUp</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>createCookie</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>deleteCookie</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>doubleClick</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>doubleClickAt</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>dragAndDrop</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>dragAndDropToObject</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>dragdrop</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>fireEvent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>getSpeed</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>goBack</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>highlight</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>keyDown</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>keyPress</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>keyUp</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>metaKeyDown</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>metaKeyUp</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>mouseDown</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>mouseDownAt</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>mouseMove</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>mouseMoveAt</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>mouseOut</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>mouseOver</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>mouseUp</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>mouseUpAt</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>refresh</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>removeAllSelections</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>removeSelection</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>runScript</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>select</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>setBrowserLogLevel</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+
+<tr>
+    <td>setMouseSpeed</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>setSpeed</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>shiftKeyDown</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>shiftKeyUp</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>typeKeys</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>uncheck</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>waitForCondition</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>waitForFrameToLoad</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>waitForPopUp</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>selectWindow</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>close</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>selectWindow</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>windowFocus</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>windowMaximize</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>selectFrame</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>openWindow</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>deleteAllVisibleCookies</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>addSelection</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>answerOnNextPrompt</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>ara_number</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>assertConfirmation</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>assertErrorOnNext</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>assertFailureOnNext</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>setCursorPosition</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>assertSelected</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>DEPRECATED IN SELENIUM IDE (and thus here)</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

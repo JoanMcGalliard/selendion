@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Index.html</title>
+    <meta content="index page" name="pageName" empty=""/>
+    <script>
+        function statusChanged() {
+            this.document.forms[0].submit();
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+            var hitbox_pn = "Error";
+        </script>
+
+    
+
+
+</head>
+<body>
+
+
+<font color="red"> </font>
+
+<form method="get" action="result.html" id="form">
+
+
+    <table id="input_table" border=0>
+        <tr>
+            <td>Username (required):</td>
+            <td><input type="Text" size=30
+                       name="new_username" value=""></td>
+        </tr>
+        <tr>
+            <td>Password (required):</td>
+            <td><input type="password" size=20
+                       name="new_password" value=""></td>
+        </tr>
+        <tr>
+            <td>Password (re-type):</td>
+            <td><input type="password" size=20
+                       name="password2" value=""></td>
+        </tr>
+        <tr>
+            <td>Full name:</td>
+
+            <td><input type="Text" size=30
+                       name="name" value=""></td>
+        </tr>
+        <tr>
+            <td>Email Address:</td>
+            <td><input type="Text" size=30 name="email" value=""></td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+
+            <td><input type="Text" name="phone" value=""></td>
+        </tr>
+        <tr>
+            <td>Mobile:</td>
+            <td><input type="Text" name="mobile" value=""></td>
+        </tr>
+        <tr>
+            <td>Sex:</td>
+
+            <td><select name="sex">
+                <option value="M">Male</option>
+
+                <option value="F">Female</option>
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Title:</td>
+
+            <td>
+                <select id="title">
+                    <option value="">Select ...</option>
+                    <option value="Mr">Mr</option>
+                    <option value="Mrs">Mrs</option>
+                    <option value="Miss">Miss</option>
+                    <option value="Ms">Ms</option>
+                    <option value="Doctor">Doctor</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Weight:</td>
+            <td><input type=checkbox name="heavyweight">
+
+                Heavyweight
+            </td>
+
+        <tr>
+            <td>ARA number:</td>
+            <td><input type="Text" size=15 name="ara_number"
+                       value=""></td>
+        </tr>
+        <tr>
+            <td>Favourite colours</td>
+
+            <td><select multiple size=5 name="colours">
+                <option value="red">red</option>
+                <option value="green">green</option>
+                <option value="blue">blue</option>
+                <option value="yellow">yellow</option>
+                <option value="black">black</option>
+
+                <option value="gold">gold</option>
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Height</td>
+
+            <td>
+
+                <input type="radio" name="height" value="short"/>short<br/>
+                <input type="radio" name="height" value="medium"/>medium<br/>
+                <input type="radio" name="height" value="tall"/>tall<br/>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>ARA Points:<br>(use -1 for novice)</td>
+            <td valign="top"><input type="Text" size=3 name="ara_points" id="ara_points"
+                                    value=""></td>
+
+        </tr>
+        <tr>
+            <td>Celine!!</td>
+            <td>
+                <input TYPE="image" SRC="images/celine.jpg" NAME="imagesubmit1" id="imagesubmit">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="prompt('GIMMEH', '');" value="Javascript prompt">
+
+            </td>
+        </tr>
+        <tr>
+            <td>Alt text field</td>
+            <td>
+                <input class="altTextField" readonly="readonly" size="4" name="totalsum" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td>text area</td>
+            <td>
+                <textarea id="reasonInput" cols="25" rows="2" name="reason"> starting value </textarea>
+            </td>
+        </tr>
+        <td>
+            <input id="online" type="radio" name="systemStatusOnline" value="true" onClick="statusChanged();">
+            <label for="online">Switch to On-line</label>
+
+        </td>
+
+    </table>
+
+    <input type="Submit" id="submit" name="submit" value="Create user">
+</form>
+<p><input type="button" value="Click for popup" id="pop"
+          onClick="window.open('popup.html','Window1','menubar=no,width=430,height=360,toolbar=no');"></p>
+
+<p><a onClick="confirm('O RLY?');" id="orly" href="index.html">Click for confirm</a></p>
+
+<p><a href="index.html">Click for this page again</a></p>
+
+<p><a href="" onclick=
+        "alert('O NOES');"
+        >Javascript alert</a></p>
+
+<p><a href="#" onclick=
+        "setTimeout('alert(\'O NOES\')',1000);"
+        >Javascript alert with 1 sec delay</a>
+</p>
+
+<select id="parkingAvailabilitySelect" name="prospect.propertyDetails.parkingAvailability">
+
+    <option value="-1">Select</option>
+    <option value="Parking available">Parking available</option>
+    <option value="Off Road parking available">Off Road parking available</option>
+    <option value="Metered parking available">Metered parking available</option>
+    <option value="Permit holders only">Permit holders only</option>
+    <option value="No parking near the property">No parking near the property</option>
+    <option value="Property is on a red route">Property is on a red route</option>
+    <option value="Other">Other</option>
+</select>
+
+
+<p><input type="button" onclick="prompt('GIMMEH', '');" value="Javascript prompt">
+</p>
+
+<div id="invisibleStuff" style="display: none;">Stuff</div>
+
+<p id="id1">Id tagged paragraph</p>
+
+<p name="name1">name tagged paragraph</p>
+
+<p name="name1">2nd name tagged paragraph - we shouldn't see this</p>
+
+<p name="name">2nd name tagged paragraph - we shouldn't see this</p>
+
+<p>looking for special character <span id="specialChar">&#151;</span> that looks like a hyphen
+</p>
+
+<p id="paraWithTwoLineBreaks">first line
+    <br/>
+    <br/>
+    second line</p>
+
+<p><abbr title="available">1st available</abbr></p>
+
+<p><abbr title="available">2nd available</abbr></p>
+
+<ul id="errorList" title="List containing links to field errors">
+
+    <li>&ndash; <a href="#emailAnchor">Contact email address</a></li>
+
+    <li>&ndash; <a href="#repeatEmailAnchor">Repeat email address</a></li>
+
+</ul>
+
+<table>
+    <td id="tableBr" colspan="4">X: blah 1<br/>X: blah 2</td>
+
+
+</table>
+</body>
+</html>
