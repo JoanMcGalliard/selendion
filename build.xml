@@ -16,7 +16,7 @@
                  password="${googlePassword}">
                 <info target="${basedir}"/>
             </svn>
-            <property name="version" value="0.7.${svn.info.rev}"/>
+            <property name="version" value="0.8.${svn.info.rev}"/>
         </sequential>
     </target>
     <target name="svn.commit">
@@ -244,7 +244,7 @@
             <zipfileset src="${dir.lib}/${concordion.file.name}">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="${dir.lib}/selenium-server-standalone-2.31.0.jar">
+            <zipfileset src="${dir.lib}/selenium-server-standalone-2.35.0.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <zipfileset src="${dir.lib}/javassist_3.9.0.jar">
