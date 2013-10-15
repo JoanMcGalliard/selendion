@@ -76,7 +76,7 @@
             <arg value="${selendion.selenium.server.port}"/>
             <!--<arg value="-singleWindow"/>-->
             <classpath>
-                <pathelement location="${dir.lib}/selenium-server-standalone-2.31.0.jar"/>
+                <pathelement location="${dir.lib}/selenium-server-standalone-2.35.0.jar"/>
             </classpath>
         </java>
 
@@ -244,7 +244,7 @@
             <zipfileset src="${dir.lib}/${concordion.file.name}">
                 <exclude name="META-INF/"/>
             </zipfileset>
-            <zipfileset src="${dir.lib}/selenium-server-standalone-2.31.0.jar">
+            <zipfileset src="${dir.lib}/selenium-server-standalone-2.35.0.jar">
                 <exclude name="META-INF/"/>
             </zipfileset>
             <zipfileset src="${dir.lib}/javassist_3.9.0.jar">

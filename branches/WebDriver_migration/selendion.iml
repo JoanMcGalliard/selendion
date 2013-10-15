@@ -94,6 +94,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="selenium-server-standalone-2.35.0" level="project" />
   </component>
 </module>
 

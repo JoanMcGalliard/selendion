@@ -4,13 +4,13 @@
 
 package org.selendion.integration.selenium;
 
-import org.openqa.selenium.*;
+import org.concordion.api.Evaluator;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.selendion.integration.BrowserDriver;
-import org.concordion.api.Evaluator;
 
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,8 +27,7 @@ public class SeleniumDriver implements BrowserDriver {
                           String baseUrl) {
         System.out.println("SeleniumDriver constructor: seleniumHost " + seleniumHost + "; seleniumPort " + seleniumPort + "; browserName " + browserName + "; baseUrl " + baseUrl);
         driver = new FirefoxDriver();
-        WebDriver driver = new FirefoxDriver();
-         selenium = new WebDriverBackedSelenium(driver, baseUrl);
+        selenium = new WebDriverBackedSelenium(driver, baseUrl);
 
     }
     public void start() {
@@ -578,23 +577,28 @@ public class SeleniumDriver implements BrowserDriver {
        }
 
     public void store(String name, Object value) {
-        Class clazz = value.getClass();
-        if (clazz == String.class) {
-            getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", "\\\\n").replaceAll("'", "\\\\'")));
-        } else if (clazz == Boolean.class) {
-            getEval(String.format("storedVars['%s']=%s", name, (Boolean) value ? "true" : "false"));
-        } else if (clazz == String[].class) {
-            String valueStr = "";
-            for (String str : (String[]) value) {
-                valueStr = valueStr + "'" + str + "', ";
-            }
-            valueStr = valueStr.replaceFirst("[ ,]*$", "");
-            getEval(String.format("storedVars['%s']=%s", name, "[" + valueStr + "]"));
-        } else if (clazz.getSuperclass() == Number.class ) {
-            getEval(String.format("storedVars['%s']=%s", name, value.toString()));
-            getEval(String.format("storedVars['%s']=%s", name, value.toString()));
-        }
+        Class clazz;
+        if (value==null) {
+            getEval(String.format("storedVars['%s']='%s'", name, null));
+        } else {
+            clazz = value.getClass();
 
+            if (clazz == String.class) {
+                getEval(String.format("storedVars['%s']='%s'", name, ((String) value).replaceAll("\\n", "\\\\n").replaceAll("'", "\\\\'")));
+            } else if (clazz == Boolean.class) {
+                getEval(String.format("storedVars['%s']=%s", name, (Boolean) value ? "true" : "false"));
+            } else if (clazz == String[].class) {
+                String valueStr = "";
+                for (String str : (String[]) value) {
+                    valueStr = valueStr + "'" + str + "', ";
+                }
+                valueStr = valueStr.replaceFirst("[ ,]*$", "");
+                getEval(String.format("storedVars['%s']=%s", name, "[" + valueStr + "]"));
+            } else if (clazz.getSuperclass() == Number.class) {
+                getEval(String.format("storedVars['%s']=%s", name, value.toString()));
+                getEval(String.format("storedVars['%s']=%s", name, value.toString()));
+            }
+        }
     }
     public String replaceVariables(String string) {
         Pattern listPattern = Pattern.compile("\\[.*\\]");
