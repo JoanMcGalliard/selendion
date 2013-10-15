@@ -53,8 +53,7 @@ The commands in this table work with both selenium and htmlunit.
     <th concordion:assertEquals="getException()">Exception</th>
     <th>Remarks</th>
 </tr>
-
-<tr>
+ <tr>
     <td><b>open</b></td>
     <td>index.html</td>
     <td></td>
@@ -72,7 +71,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>setup for next test</td>
 </tr>
- <tr>
+<tr>
     <td><b>waitForTextPresentIfAvailable</b></td>
     <td>something that isn't on the page</td>
     <td></td>
@@ -81,7 +80,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>This will wait for 200ms or until the text appears</td>
 </tr>
- <tr>
+<tr>
     <td><b>waitForTextPresentIfAvailable</b></td>
     <td>ARA Points:\n(use -1 for novice)</td>
     <td></td>
@@ -762,7 +761,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>colours</td>
     <td>blah</td>
     <td>false</td>
-    <td>ERROR: No option selected</td>
+    <td>ERROR: No options are selected: colours</td>
     <td>false</td>
     <td></td>
 </tr>
@@ -775,24 +774,26 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>set up for row 2 below</td>
 </tr>
-<tr>
-    <td><b>addSelection</b></td>
-    <td>colours</td>
-    <td>label=green</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>set up for row below</td>
-</tr>
+
 <tr>
     <td><b>storeSelectedValue</b></td>
     <td>colours</td>
-    <td>blah</td>
-    <td>false</td>
-    <td>ERROR: More than one selected option!</td>
+    <td>value</td>
+    <td>true</td>
+    <td></td>
     <td>false</td>
     <td></td>
 </tr>
+<tr>
+    <td>echo</td>
+    <td>value=${value}</td>
+    <td></td>
+    <td>true</td>
+    <td>value=red</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+
 <tr>
     <td><b>addSelection</b></td>
     <td>colours</td>
@@ -1165,12 +1166,22 @@ The commands in this table work with both selenium and htmlunit.
 <tr>
     <td><b>storeAttribute</b></td>
     <td>xPath=/html/head/meta[@name='pageName']@contentX</td>
-    <td>blah</td>
-    <td>false</td>
-    <td>ERROR: Could not find element attribute: xPath=/html/head/meta[@name='pageName']@contentX</td>
+    <td>attribute</td>
+    <td>true</td>
+    <td></td>
     <td>false</td>
     <td>existing element, missing attribute</td>
 </tr>
+<tr>
+    <td>echo</td>
+    <td>attribute=${attribute}</td>
+    <td></td>
+    <td>true</td>
+    <td>attribute=null</td>
+    <td>false</td>
+    <td>testing row above</td>
+</tr>
+
 <tr>
     <td><b>storeAttribute</b></td>
     <td>xPath=/html/head/meta[@nameX='pageName']@content</td>
@@ -1218,6 +1229,15 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>false</td>
     <td>set up for next few rows</td>
+</tr>
+<tr>
+    <td><b>selectFrame</b></td>
+    <td>index=0</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
 </tr>
 <tr>
     <td><b>verifyElementPresent</b></td>
@@ -1319,6 +1339,16 @@ The commands in this table work with both selenium and htmlunit.
     <td>set up for next row</td>
 </tr>
 <tr>
+    <td><b>selectFrame</b></td>
+    <td>index=0</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+
+<tr>
     <td><b>clickAndWait</b></td>
     <td>submit</td>
     <td></td>
@@ -1327,25 +1357,36 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td>submit within a frame</td>
 </tr>
+<tr>
+    <td><b>storeAttribute</b></td>
+    <td>xPath=/html/head/meta[@name='pageName']@empty</td>
+    <td>blah</td>
+    <td>false</td>
+    <td>ERROR: Element xPath=/html/head/meta[@name='pageName'] not found</td>
+    <td>false</td>
+    <td>empty (illegal!) element</td>
+</tr>
 </table>
 <p><i concordion:execute="stop()">Close the browser.</i></p>
 </div>
+
 <div class="example">
-    <p>These tests worked with DefaultSeleniuma but aren't working with WebDriverBackedSelenium, so currently only running
-        with <span concordion:set="#browser">HTMLUNIT</span>.</p>
+
+<p>These tests worked with DefaultSelenium but aren't working with WebDriverBackedSelenium, so currently only running
+    with <span concordion:set="#browser">HTMLUNIT</span>.</p>
 <p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
     <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
         http://localhost:55555/</a> we expect the following results: </p>
 <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
-<tr>
-    <th concordion:set="#command=#TEXT">Command</th>
-    <th concordion:set="#arg1">arg1</th>
-    <th concordion:set="#arg2">arg2</th>
-    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
-    <th concordion:assertEquals="getMessage()">Message</th>
-    <th concordion:assertEquals="getException()">Exception</th>
-    <th>Remarks</th>
-</tr>
+    <tr>
+        <th concordion:set="#command=#TEXT">Command</th>
+        <th concordion:set="#arg1">arg1</th>
+        <th concordion:set="#arg2">arg2</th>
+        <th concordion:assertEquals="getSuccess()">Succeeds?</th>
+        <th concordion:assertEquals="getMessage()">Message</th>
+        <th concordion:assertEquals="getException()">Exception</th>
+        <th>Remarks</th>
+    </tr>
     <tr>
         <td><b>storeExpression</b></td>
         <td>javascript{(&quot;&quot; + Math.floor(12345.999)).substring(0,3)}</td>
@@ -1364,181 +1405,171 @@ The commands in this table work with both selenium and htmlunit.
         <td>false</td>
         <td>testing row above</td>
     </tr>
-  <tr>
-    <td><b>assertAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>When no alerts present</td>
-</tr>
-<tr>
-    <td><b>assertNotAlert</b></td>
-    <td></td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>When no alerts present</td>
-</tr>
-<tr>
-    <td><b>verifyAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>When no alerts present</td>
-</tr>
-<tr>
-    <td><b>verifyNotAlert</b></td>
-    <td>NO WAI</td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>When no alerts present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>assertAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td><b>assertAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>false</td>
-    <td>ERROR: There were no alerts</td>
-    <td>false</td>
-    <td>Alert was cleared above</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>assertNotAlert</b></td>
-    <td></td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>assertNotAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>true</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>verifyAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>verifyNotAlert</b></td>
-    <td>NO WAI</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>waitForNotAlert</b></td>
-    <td>NO WAI</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>When alert <b>O NOES</b> is present</td>
-</tr>
-<tr>
-    <td>click</td>
-    <td>link=Javascript alert with 1 sec delay</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>waitForAlert</b></td>
-    <td>O NOES</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
+    <tr>
+        <td><b>assertAlert</b></td>
+        <td>O NOES</td>
+        <td></td>
+        <td>false</td>
+        <td>ERROR: There were no alerts</td>
+        <td>false</td>
+        <td>When no alerts present</td>
+    </tr>
+    <tr>
+        <td><b>assertNotAlert</b></td>
+        <td></td>
+        <td></td>
+        <td>false</td>
+        <td>ERROR: There were no alerts</td>
+        <td>false</td>
+        <td>When no alerts present</td>
+    </tr>
+    <tr>
+        <td><b>verifyAlert</b></td>
+        <td>O NOES</td>
+        <td></td>
+        <td>false</td>
+        <td>ERROR: There were no alerts</td>
+        <td>false</td>
+        <td>When no alerts present</td>
+    </tr>
+    <tr>
+        <td><b>verifyNotAlert</b></td>
+        <td>NO WAI</td>
+        <td></td>
+        <td>false</td>
+        <td>ERROR: There were no alerts</td>
+        <td>false</td>
+        <td>When no alerts present</td>
+    </tr>
+    <tr>
+        <td>click</td>
+        <td>link=Javascript alert</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>assertAlert</b></td>
+        <td>O NOES</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td>When alert <b>O NOES</b> is present</td>
+    </tr>
+    <tr>
+        <td><b>assertAlert</b></td>
+        <td>O NOES</td>
+        <td></td>
+        <td>false</td>
+        <td>ERROR: There were no alerts</td>
+        <td>false</td>
+        <td>Alert was cleared above</td>
+    </tr>
+    <tr>
+        <td>click</td>
+        <td>link=Javascript alert</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>assertNotAlert</b></td>
+        <td></td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td>When alert <b>O NOES</b> is present</td>
+    </tr>
+    <tr>
+        <td>click</td>
+        <td>link=Javascript alert</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>assertNotAlert</b></td>
+        <td>O NOES</td>
+        <td></td>
+        <td>false</td>
+        <td></td>
+        <td>true</td>
+        <td>When alert <b>O NOES</b> is present</td>
+    </tr>
+    <tr>
+        <td>click</td>
+        <td>link=Javascript alert</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>verifyAlert</b></td>
+        <td>O NOES</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td>When alert <b>O NOES</b> is present</td>
+    </tr>
+    <tr>
+        <td>click</td>
+        <td>link=Javascript alert</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>verifyNotAlert</b></td>
+        <td>NO WAI</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td>When alert <b>O NOES</b> is present</td>
+    </tr>
+    <tr>
+        <td>click</td>
+        <td>link=Javascript alert</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><b>waitForNotAlert</b></td>
+        <td>NO WAI</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td>When alert <b>O NOES</b> is present</td>
+    </tr>
+    <tr>
+        <td>click</td>
+        <td>link=Javascript alert with 1 sec delay</td>
+        <td></td>
+        <td>true</td>
+        <td></td>
+        <td>false</td>
+        <td></td>
+    </tr>
 
 </table>
 </div>
-
 
 
 <div class="example">
@@ -1578,9 +1609,9 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
 </tr>
 <tr>
-	<td>storeEval</td>
-	<td>selenium.browserbot.getUserWindow().hitbox_pn == 'Error'</td>
-	<td>hitboxTagPresent</td>
+    <td>storeEval</td>
+    <td>selenium.browserbot.getUserWindow().hitbox_pn == 'Error'</td>
+    <td>hitboxTagPresent</td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -1597,63 +1628,63 @@ The commands in this table work with both selenium and htmlunit.
     <td>testing above row</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>pop</td>
-	<td></td>
+    <td>click</td>
+    <td>pop</td>
+    <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td>waitForPopUp</td>
-	<td>Window1</td>
-	<td>30000</td>
+    <td>waitForPopUp</td>
+    <td>Window1</td>
+    <td>30000</td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td>selectWindow</td>
-	<td>Window1</td>
-	<td></td>
+    <td>selectWindow</td>
+    <td>Window1</td>
+    <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td>verifyTitle</td>
-	<td>Popup</td>
-	<td></td>
+    <td>verifyTitle</td>
+    <td>Popup</td>
+    <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td>close</td>
-	<td></td>
-	<td></td>
+    <td>close</td>
+    <td></td>
+    <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td>selectWindow</td>
-	<td></td>
-	<td></td>
+    <td>selectWindow</td>
+    <td></td>
+    <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
 </tr>
 <tr>
-	<td>verifyTitle</td>
-	<td>Index.html</td>
-	<td></td>
+    <td>verifyTitle</td>
+    <td>Index.html</td>
+    <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
@@ -1669,15 +1700,7 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
 </tr>
-<tr>
-    <td><b>setCursorPosition</b></td>
-    <td>phone</td>
-    <td>3</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
+
 
 
 
@@ -1715,42 +1738,6 @@ The commands in this table work with both selenium and htmlunit.
     <td><br/></td>
     <td>true</td>
     <td>alllinks = orly,,,,,</td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>storeAllWindowIds</b></td>
-    <td>allwindowids</td>
-    <td><br/></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td>echo</td>
-    <td>allwindowids = ${allwindowids}</td>
-    <td><br/></td>
-    <td>true</td>
-    <td>allwindowids = undefined</td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td><b>storeAllWindowNames</b></td>
-    <td>allwindownames</td>
-    <td><br/></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-</tr>
-<tr>
-    <td>echo</td>
-    <td>allwindownames = ${allwindownames}</td>
-    <td><br/></td>
-    <td>true</td>
-    <td>allwindownames = selenium_main_app_window</td>
     <td>false</td>
     <td></td>
 </tr>
@@ -1997,79 +1984,11 @@ The commands in this table work with both selenium and htmlunit.
     <td>false</td>
     <td></td>
 </tr>
+
 </table>
 <p><i concordion:execute="stop()">Close the browser.</i></p>
 </div>
-<div class="example">
-<p>
-    The commands in these tables behave differently in Selenium and HTMLUnit (this needs to be resolved).
-</p>
 
-<div class="example">
-
-     <p> Using
-    <span concordion:set="#browser">SELENIUM</span>.</p>
-
-  <p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
-      <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
-          http://localhost:55555/</a> we expect the following results: </p>
-   <table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
-   <tr>
-       <th concordion:set="#command=#TEXT">Command</th>
-       <th concordion:set="#arg1">arg1</th>
-       <th concordion:set="#arg2">arg2</th>
-       <th concordion:assertEquals="getSuccess()">Succeeds?</th>
-       <th concordion:assertEquals="getMessage()">Message</th>
-       <th concordion:assertEquals="getException()">Exception</th>
-       <th>Remarks</th>
-   </tr>
-
-<tr>
-    <td><b>storeAttribute</b></td>
-    <td>xPath=/html/head/meta[@name='pageName']@empty</td>
-    <td>blah</td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td>empty element, but Selenium no longer returns an error?</td>
-</tr>
-</table>
-    <p><i concordion:execute="stop()">Close the browser.</i></p>
-
-</div>
-    <div class="example">
-
-     <p> Using
-    <span concordion:set="#browser">HTMLUNIT</span>.</p>
-
-  <p>If we are using <i concordion:echo="#browser"/> and visiting <i concordion:set="#page">index.html</i> on
-      <a concordion:execute="setUp(#browser, #HREF, #page)" href="http://localhost:55555/">
-          http://localhost:55555/</a> we expect the following results: </p>
-<table concordion:execute="runSeleniumIde(#command,#arg1,#arg2)">
-<tr>
-    <th concordion:set="#command=#TEXT">Command</th>
-    <th concordion:set="#arg1">arg1</th>
-    <th concordion:set="#arg2">arg2</th>
-    <th concordion:assertEquals="getSuccess()">Succeeds?</th>
-    <th concordion:assertEquals="getMessage()">Message</th>
-    <th concordion:assertEquals="getException()">Exception</th>
-    <th>Remarks</th>
-</tr>
-
-
-<tr>
-    <td><b>storeAttribute</b></td>
-    <td>xPath=/html/head/meta[@name='pageName']@empty</td>
-    <td>blah</td>
-    <td>false</td>
-    <td>ERROR: Could not find element attribute: xPath=/html/head/meta[@name='pageName']@empty</td>
-    <td>false</td>
-    <td>empty (illegal!) element</td>
-</tr>
-</table>
-        <p><i concordion:execute="stop()">Close the browser.</i></p>
-</div>
- </div>
 <div class="example">
 <p>
     The commands in this table work have not yet been verified with either selenium or html unit.</p>
@@ -2093,23 +2012,23 @@ The commands in this table work with both selenium and htmlunit.
     <td>Back to original page</td>
 </tr>
 <tr>
-      <td>storeAlert</td>
-      <td></td>
-      <td>true</td>
-      <td></td>
-      <td>false</td>
-      <td></td>
-      <td>comment</td>
-  </tr>
-  <tr>
-      <td>storeAlertPresent</td>
-      <td></td>
-      <td>true</td>
-      <td></td>
-      <td>false</td>
-      <td></td>
-      <td>comment</td>
-  </tr>
+    <td>storeAlert</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
+<tr>
+    <td>storeAlertPresent</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+    <td>comment</td>
+</tr>
 
 <tr>
     <td>storeAllFields</td>
@@ -2138,15 +2057,7 @@ The commands in this table work with both selenium and htmlunit.
     <td></td>
     <td>comment</td>
 </tr>
-<tr>
-    <td>storeAllWindowNames</td>
-    <td></td>
-    <td>true</td>
-    <td></td>
-    <td>false</td>
-    <td></td>
-    <td>comment</td>
-</tr>
+
 <tr>
     <td>storeAllWindowTitles</td>
     <td></td>
@@ -3114,13 +3025,23 @@ The commands in this table work with both selenium and htmlunit.
     <td>comment</td>
 </tr>
 <tr>
+    <td><b>waitForAlert</b></td>
+    <td>O NOES</td>
+    <td></td>
+    <td>true</td>
+    <td></td>
+    <td>false</td>
+    <td></td>
+</tr>
+
+<tr>
     <td>setCursorPosition</td>
     <td></td>
     <td>true</td>
     <td></td>
     <td>false</td>
     <td></td>
-    <td>comment</td>
+    <td>Deprecated in webdriver</td>
 </tr>
 <tr>
     <td>assertSelected</td>

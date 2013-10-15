@@ -657,9 +657,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         try {
             return getAttribute(element, m.group(2));
         }
-        catch (HtmlUnitException e) {
-            throw new HtmlUnitException("Could not find element attribute: "
-                    + arg1);
+        catch (HtmlUnitException e) {return null;
 
         }
     }
@@ -730,7 +728,7 @@ public class HtmlUnitDriver implements BrowserDriver {
         if (options.size() == 1) {
             return options.get(0).getAttribute("value");
         } else if (options.size() == 0) {
-            throw new HtmlUnitException("No option selected");
+            throw new HtmlUnitException("No options are selected: " + arg1);
         } else {
             throw new HtmlUnitException("More than one selected option!");
         }

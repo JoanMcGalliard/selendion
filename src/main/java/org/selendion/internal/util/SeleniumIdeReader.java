@@ -141,7 +141,7 @@ public class SeleniumIdeReader extends junit.framework.TestCase {
             return executeCommand(command, arg1, arg2, evaluator);
         }
         catch (Exception e) {
-            return new CommandResult(false, "ERROR: "+ e.getMessage());
+            return new CommandResult(false, "ERROR: "+ e.getMessage().replaceAll("[\n ]*Command duration or timeout(\n|.)*", ""));
 
         }
     }
