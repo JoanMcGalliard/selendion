@@ -1,0 +1,1 @@
+Selendion is a tool to allow non-programmers to develop acceptance criteria/tests written in business language for web based applications.  It combines the existing tools selenium and concordion.
